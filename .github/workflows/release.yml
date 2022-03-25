@@ -3,7 +3,7 @@ name: Release pipeline
 on:
   push:
     branches:
-      - master
+      - main
       - "feature/**"
       - "hotfix/**"
 
@@ -49,7 +49,7 @@ jobs:
     name: Build, Deploy to GitHub pages, Release npm package
     needs: [linting, tests]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master' # Trigger release process only on master
+    if: github.ref == 'refs/heads/main' # Trigger release process only on main
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -67,6 +67,6 @@ jobs:
       - name: 📃 Deploy
         uses: JamesIves/github-pages-deploy-action@v4.2.5
         with:
-          branch: master
+          branch: main
           folder: storybook-static
           target-folder: docs
