@@ -1,0 +1,72 @@
+name: Release pipeline
+
+on:
+  push:
+    branches:
+      - master
+      - "feature/**"
+      - "hotfix/**"
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+jobs:
+  linting:
+    name: Linting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '17.x'
+      - name: Install deps
+        run: npm ci
+      - name: Run linter
+        run: npm run lint
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '17.x'
+      - name: Install deps
+        run: npm ci
+      - name: Run tests
+        run: npm run test
+      - name: Run storybook build
+        run: npm run build-storybook
+  build-and-deploy:
+    name: Build, Deploy to GitHub pages, Release npm package
+    needs: [linting, tests]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' # Trigger release process only on master
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '17.x'
+      - name: 🛠 Install & Build
+        run: |
+          npm ci
+          npm run build-storybook
+          npm run build-package
+      - name: 📃 Deploy
+        uses: JamesIves/github-pages-deploy-action@v4.2.5
+        with:
+          branch: master
+          folder: storybook-static
+          target-folder: docs

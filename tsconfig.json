@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "declaration": true,
+    "declarationDir": "types",
+    "sourceMap": true,
+    "outDir": "dist",
+    "emitDeclarationOnly": true,
+    "plugins": [{ "name": "typescript-plugin-css-modules", "options": { "customMatcher": "\\.(c|sc)ss$" } }],
+    "baseUrl": "."
+  },
+  "exclude": ["node_modules", "dist", "docs"],
+  "include": [
+    "src",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "css-modules.d.ts",
+    "react-app-env.d.ts",
+    "rollup.config.js",
+    ".eslintrc.js",
+    "commitlint.config.js"
+  ]
+}
