@@ -70,3 +70,16 @@ jobs:
           branch: main
           folder: storybook-static
           target-folder: docs
+      - name: 🚀 Release npm package
+        uses: cycjimmy/semantic-release-action@v3
+        with:
+          dry_run: true
+          extra_plugins: |
+            @semantic-release/git
+          branches: |
+            [
+              'main'
+            ]
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
