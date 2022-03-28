@@ -7,7 +7,7 @@ export interface ExhibitProps {
   /**
    * Path to `.glb` file.
    */
-  glbUrl: string;
+  glbUrl?: string;
   /**
    * Size of the rendered GLB model.
    */
@@ -26,7 +26,9 @@ export interface ExhibitProps {
  * Interactive presentation of any GLB file.
  */
 const Exhibit: FC<ExhibitProps> = ({ glbUrl, scale, backgroundColor, environment }) => {
-  const isValidGlbUrl = typeof glbUrl === 'string' && glbUrl.endsWith('.glb');
+  const isValidGlbFormat =
+    typeof glbUrl === 'string' &&
+    (glbUrl.endsWith('.glb') || glbUrl.startsWith('data:application/octet-stream;base64'));
 
   return (
     <BaseCanvas background={backgroundColor}>
@@ -41,7 +43,7 @@ const Exhibit: FC<ExhibitProps> = ({ glbUrl, scale, backgroundColor, environment
           polar={[-Math.PI / 3, Math.PI / 3]}
           azimuth={[-Math.PI / 1.4, Math.PI / 2]}
         >
-          {isValidGlbUrl && <ExhibitModel glbUrl={glbUrl} scale={scale} />}
+          {isValidGlbFormat && <ExhibitModel glbUrl={glbUrl} scale={scale} />}
         </PresentationControls>
         <ContactShadows
           rotation-x={Math.PI / 2}
@@ -61,7 +63,8 @@ const Exhibit: FC<ExhibitProps> = ({ glbUrl, scale, backgroundColor, environment
 Exhibit.defaultProps = {
   scale: 1.0,
   backgroundColor: '#ffffff',
-  environment: 'city'
+  environment: 'city',
+  glbUrl: ''
 };
 
 export default Exhibit;
