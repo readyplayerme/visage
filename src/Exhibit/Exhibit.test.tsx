@@ -6,7 +6,7 @@ import { act } from '@react-three/fiber';
 describe('Exhibit component', () => {
   it('should mount without errors', async () => {
     let renderer: RenderResult = null!;
-    await act(() => {
+    act(() => {
       renderer = render(<Exhibit glbUrl="https://www.__test__.it/works.glb" />);
     });
 
@@ -19,7 +19,7 @@ describe('Exhibit component', () => {
     };
 
     let renderer: RenderResult = null!;
-    await act(() => {
+    act(() => {
       renderer = render(<Exhibit glbUrl="" backgroundColor={teal.hex} />);
     });
 
