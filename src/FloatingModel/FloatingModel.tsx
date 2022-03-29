@@ -3,12 +3,12 @@ import { GLTFLoader } from 'three-stdlib';
 import { useFrame, useLoader } from '@react-three/fiber';
 import type { Group } from 'three';
 
-interface PresentationModelProps {
+interface FloatingModelProps {
   glbUrl: string;
   scale?: number;
 }
 
-const ExhibitModel: FC<PresentationModelProps> = ({ glbUrl, scale }) => {
+const FloatingModel: FC<FloatingModelProps> = ({ glbUrl, scale }) => {
   const ref = useRef<Group>();
   const gltf = useLoader(GLTFLoader, glbUrl);
 
@@ -28,8 +28,8 @@ const ExhibitModel: FC<PresentationModelProps> = ({ glbUrl, scale }) => {
   );
 };
 
-ExhibitModel.defaultProps = {
+FloatingModel.defaultProps = {
   scale: 1.0
 };
 
-export default ExhibitModel;
+export default FloatingModel;

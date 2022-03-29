@@ -1,7 +1,8 @@
 import React, { Suspense, FC } from 'react';
 import { PresentationControls, Environment, ContactShadows } from '@react-three/drei';
-import { BaseCanvas, ExhibitModel } from 'src/components';
 import type { PresetsType } from '@react-three/drei/helpers/environment-assets';
+import { BaseCanvas } from '../BaseCanvas';
+import { FloatingModel } from '../FloatingModel';
 
 export interface ExhibitProps {
   /**
@@ -24,6 +25,11 @@ export interface ExhibitProps {
 
 /**
  * Interactive presentation of any GLB file.
+ * Interactive presentation of any GLB file.
+ * Interactive presentation of any GLB file.
+ * Interactive presentation of any GLB file.
+ * Interactive presentation of any GLB file.
+ * Interactive presentation of any GLB file.
  */
 const Exhibit: FC<ExhibitProps> = ({ glbUrl, scale, backgroundColor, environment }) => {
   const isValidGlbUrl = typeof glbUrl === 'string' && glbUrl.endsWith('.glb');
@@ -41,7 +47,7 @@ const Exhibit: FC<ExhibitProps> = ({ glbUrl, scale, backgroundColor, environment
           polar={[-Math.PI / 3, Math.PI / 3]}
           azimuth={[-Math.PI / 1.4, Math.PI / 2]}
         >
-          {isValidGlbUrl && <ExhibitModel glbUrl={glbUrl} scale={scale} />}
+          {isValidGlbUrl && <FloatingModel glbUrl={glbUrl} scale={scale} />}
         </PresentationControls>
         <ContactShadows
           rotation-x={Math.PI / 2}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Exhibit } from './components';
+import { Exhibit } from '../Exhibit';
 
 function App() {
   return (
