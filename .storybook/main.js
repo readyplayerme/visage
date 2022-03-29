@@ -1,6 +1,6 @@
 module.exports = {
   staticDirs: ['../public'],
-  stories: ['../src/**/*.stories.@(js|jsx|ts|tsx)'],
+  stories: ['../src/**/*.stories.@(tsx|mdx)'],
   addons: ['@storybook/addon-essentials', '@storybook/preset-create-react-app'],
   typescript: {
     check: true
