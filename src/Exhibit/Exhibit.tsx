@@ -25,14 +25,9 @@ export interface ExhibitProps {
 
 /**
  * Interactive presentation of any GLB file.
- * Interactive presentation of any GLB file.
- * Interactive presentation of any GLB file.
- * Interactive presentation of any GLB file.
- * Interactive presentation of any GLB file.
- * Interactive presentation of any GLB file.
  */
-const Exhibit: FC<ExhibitProps> = ({ glbUrl, scale, backgroundColor, environment }) => {
-  const isValidGlbUrl = typeof glbUrl === 'string' && glbUrl.endsWith('.glb');
+const Exhibit: FC<ExhibitProps> = ({ glbUrl, scale = 1.0, backgroundColor = '#ffffff', environment = 'city' }) => {
+  const isValidGlbUrl = glbUrl.endsWith('.glb');
 
   return (
     <BaseCanvas background={backgroundColor}>
@@ -62,12 +57,6 @@ const Exhibit: FC<ExhibitProps> = ({ glbUrl, scale, backgroundColor, environment
       </Suspense>
     </BaseCanvas>
   );
-};
-
-Exhibit.defaultProps = {
-  scale: 1.0,
-  backgroundColor: '#ffffff',
-  environment: 'city'
 };
 
 export default Exhibit;

@@ -8,7 +8,7 @@ interface FloatingModelProps {
   scale?: number;
 }
 
-const FloatingModel: FC<FloatingModelProps> = ({ glbUrl, scale }) => {
+const FloatingModel: FC<FloatingModelProps> = ({ glbUrl, scale = 1.0 }) => {
   const ref = useRef<Group>();
   const gltf = useLoader(GLTFLoader, glbUrl);
 
@@ -26,10 +26,6 @@ const FloatingModel: FC<FloatingModelProps> = ({ glbUrl, scale }) => {
       <primitive castShadow object={gltf.scene} scale={scale} />
     </group>
   );
-};
-
-FloatingModel.defaultProps = {
-  scale: 1.0
 };
 
 export default FloatingModel;

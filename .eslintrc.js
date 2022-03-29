@@ -5,12 +5,12 @@ module.exports = {
     jest: true
   },
   extends: [
-    'plugin:react/recommended',
     'airbnb',
     'airbnb-typescript',
     'airbnb/hooks',
     'prettier',
-    'plugin:storybook/recommended'
+    'plugin:storybook/recommended',
+    'plugin:react-hooks/recommended'
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -32,6 +32,7 @@ module.exports = {
       }
     ],
     'react/react-in-jsx-scope': 'off',
+    'react/require-default-props': 'off',
     'react/function-component-definition': 'off',
     'react/destructuring-assignment': 'off',
     'react/jsx-props-no-spreading': 'off',

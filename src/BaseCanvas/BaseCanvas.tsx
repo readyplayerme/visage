@@ -8,7 +8,7 @@ interface BaseCanvasProps {
   fov?: number;
 }
 
-const BaseCanvas: FC<BaseCanvasProps> = ({ children, background, fov }) => (
+const BaseCanvas: FC<BaseCanvasProps> = ({ children = undefined, background = '#0e0f1e', fov = 50 }) => (
   <Canvas
     className={styles['base-canvas']}
     shadows
@@ -20,11 +20,5 @@ const BaseCanvas: FC<BaseCanvasProps> = ({ children, background, fov }) => (
     {children}
   </Canvas>
 );
-
-BaseCanvas.defaultProps = {
-  background: '#0e0f1e',
-  children: undefined,
-  fov: 50
-};
 
 export default BaseCanvas;
