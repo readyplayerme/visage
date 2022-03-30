@@ -1,1 +1,1 @@
-export { default as Exhibit } from './Exhibit';
+export { Exhibit } from './Exhibit.component';

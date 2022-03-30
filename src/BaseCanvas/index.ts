@@ -1,1 +1,1 @@
-export { default as BaseCanvas } from './BaseCanvas';
+export { BaseCanvas } from './BaseCanvas.component';

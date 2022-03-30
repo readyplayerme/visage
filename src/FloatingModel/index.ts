@@ -1,1 +1,1 @@
-export { default as FloatingModel } from './FloatingModel';
+export { FloatingModel } from './FloatingModel.component';

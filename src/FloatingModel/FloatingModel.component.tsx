@@ -8,7 +8,7 @@ interface FloatingModelProps {
   scale?: number;
 }
 
-const FloatingModel: FC<FloatingModelProps> = ({ glbUrl, scale = 1.0 }) => {
+export const FloatingModel: FC<FloatingModelProps> = ({ glbUrl, scale = 1.0 }) => {
   const ref = useRef<Group>();
   const gltf = useLoader(GLTFLoader, glbUrl);
 
@@ -27,5 +27,3 @@ const FloatingModel: FC<FloatingModelProps> = ({ glbUrl, scale = 1.0 }) => {
     </group>
   );
 };
-
-export default FloatingModel;
