@@ -29,7 +29,7 @@ export interface ExhibitProps {
 export const Exhibit: FC<ExhibitProps> = ({
   glbUrl,
   scale = 1.0,
-  backgroundColor = '#ffffff',
+  backgroundColor = '#f0f0f0',
   environment = 'city'
 }) => {
   const isValidGlbUrl = glbUrl.endsWith('.glb');

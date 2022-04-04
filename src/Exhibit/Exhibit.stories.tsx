@@ -6,7 +6,7 @@ const Template: ComponentStory<typeof Exhibit> = (args) => <Exhibit {...args} />
 
 export const Default = Template.bind({});
 Default.args = {
-  backgroundColor: '#fffffff',
+  backgroundColor: '#f0f0f0',
   glbUrl: `${process.env.NODE_ENV === 'production' ? '/visage' : ''}/headwear.glb`,
   scale: 3,
   environment: 'city'
