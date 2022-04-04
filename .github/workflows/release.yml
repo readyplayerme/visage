@@ -73,7 +73,6 @@ jobs:
       - name: 🚀 Release npm package
         uses: cycjimmy/semantic-release-action@v3
         with:
-          dry_run: true
           extra_plugins: |
             @semantic-release/git
           branches: |
