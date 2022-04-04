@@ -17,10 +17,10 @@
     "type": "git",
     "url": "git+https://github.com/readyplayerme/visage.git"
   },
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/readyplayerme/visage/issues"
   },
-  "private": true,
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "files": [
