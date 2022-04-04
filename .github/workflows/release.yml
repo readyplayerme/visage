@@ -64,12 +64,6 @@ jobs:
           npm ci
           npm run build-storybook
           npm run build-package
-      - name: 📃 Deploy
-        uses: JamesIves/github-pages-deploy-action@v4.2.5
-        with:
-          branch: main
-          folder: storybook-static
-          target-folder: docs
       - name: 🚀 Release npm package
         uses: cycjimmy/semantic-release-action@v3
         with:
@@ -82,3 +76,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: 📃 Deploy
+        uses: JamesIves/github-pages-deploy-action@v4.2.5
+        with:
+          branch: main
+          folder: storybook-static
+          target-folder: docs
