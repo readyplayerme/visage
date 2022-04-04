@@ -21,12 +21,12 @@
   "bugs": {
     "url": "https://github.com/readyplayerme/visage/issues"
   },
-  "main": "dist/index.cjs.js",
-  "module": "dist/index.esm.js",
+  "main": "./dist/index.cjs.js",
+  "module": "./dist/index.esm.js",
   "files": [
     "dist"
   ],
-  "types": "dist/index.d.ts",
+  "types": "./dist/types/library.d.ts",
   "dependencies": {
     "react-scripts": "^5.0.0"
   },

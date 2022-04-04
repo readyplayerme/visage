@@ -35,8 +35,8 @@ export default [
           '**/*.test.tsx',
           '**/*.stories.tsx',
           '**/setupTests.ts',
-          '**/App.tsx',
-          'src/index.ts'
+          'src/App/*',
+          'src/index.tsx'
         ]
       }),
       postcss(),
