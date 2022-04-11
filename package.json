@@ -27,9 +27,6 @@
     "dist"
   ],
   "types": "./dist/types/library.d.ts",
-  "dependencies": {
-    "react-scripts": "^5.0.0"
-  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -117,6 +114,7 @@
     "prettier": "^2.5.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-scripts": "^5.0.0",
     "rollup": "^2.70.1",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.2",
@@ -128,7 +126,7 @@
     "webpack": "^5.70.0"
   },
   "engines": {
-    "node": ">=17",
-    "npm": ">=8"
+    "node": ">=17.0.0",
+    "npm": ">=8.0.0"
   }
 }
