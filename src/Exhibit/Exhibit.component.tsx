@@ -6,7 +6,7 @@ import { FloatingModel } from '../FloatingModel';
 
 export interface ExhibitProps {
   /**
-   * Path to `.glb` file.
+   * Path to `.glb` file of the 3D model.
    */
   glbUrl: string;
   /**
@@ -24,7 +24,7 @@ export interface ExhibitProps {
 }
 
 /**
- * Interactive presentation of any GLB file.
+ * Interactive presentation of any GLTF (.glb) asset.
  */
 export const Exhibit: FC<ExhibitProps> = ({
   glbUrl,
