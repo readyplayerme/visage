@@ -11,7 +11,7 @@ export interface CameraProps {
   cameraPosition?: Vector3;
 }
 
-export interface GeneralLightingProps {
+export interface LightingProps {
   ambientLightColor?: Color | string;
   ambientLightIntensity?: number;
   dirLightPosition?: Vector3;
