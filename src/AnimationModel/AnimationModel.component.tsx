@@ -7,15 +7,21 @@ import { AnimationMixer, LinearFilter, Material, MeshStandardMaterial, Object3D 
 const defaultRotation = 20 * (Math.PI / 180);
 
 interface AnimationModelProps {
-  url: string;
+  modelUrl: string;
   animationUrl: string;
   rotation?: number;
+  scale?: number;
 }
 
 let currentRotation = 0;
 
-export const AnimationModel: FC<AnimationModelProps> = ({ url, animationUrl, rotation = defaultRotation }) => {
-  const { scene } = useGLTF(url, false);
+export const AnimationModel: FC<AnimationModelProps> = ({
+  modelUrl,
+  animationUrl,
+  rotation = defaultRotation,
+  scale = 1
+}) => {
+  const { scene } = useGLTF(modelUrl, false);
   const clone = useMemo(() => SkeletonUtils.clone(scene), [scene]);
   const { nodes, materials } = useGraph(clone);
   const meshRef = useRef<Object3D>();
@@ -45,7 +51,7 @@ export const AnimationModel: FC<AnimationModelProps> = ({ url, animationUrl, rot
 
   return (
     <group ref={meshRef} rotation={[0, 0, 0]}>
-      <primitive key="armature" object={nodes.Armature || nodes.Hips} />
+      <primitive key="armature" object={nodes.Armature || nodes.Hips} scale={scale} />
       {Object.keys(nodes).map((key) => {
         const node: any = nodes[key];
 
