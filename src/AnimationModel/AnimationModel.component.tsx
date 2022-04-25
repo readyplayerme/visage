@@ -6,7 +6,7 @@ import { AnimationMixer, LinearFilter, Material, MeshStandardMaterial, Object3D 
 
 const defaultRotation = 20 * (Math.PI / 180);
 
-interface AnimatedModelProps {
+interface AnimationModelProps {
   url: string;
   animationUrl: string;
   rotation?: number;
@@ -14,7 +14,7 @@ interface AnimatedModelProps {
 
 let currentRotation = 0;
 
-export const AnimatedModel: FC<AnimatedModelProps> = ({ url, animationUrl, rotation = defaultRotation }) => {
+export const AnimationModel: FC<AnimationModelProps> = ({ url, animationUrl, rotation = defaultRotation }) => {
   const { scene } = useGLTF(url, false);
   const clone = useMemo(() => SkeletonUtils.clone(scene), [scene]);
   const { nodes, materials } = useGraph(clone);
