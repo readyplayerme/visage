@@ -10,7 +10,7 @@ export interface ExhibitProps extends CameraProps {
   /**
    * Path to `.glb` file of the 3D model.
    */
-  glbUrl: string;
+  modelUrl: string;
   /**
    * Size of the rendered GLB model.
    */
@@ -29,7 +29,7 @@ export interface ExhibitProps extends CameraProps {
  * Interactive presentation of any GLTF (.glb) asset.
  */
 export const Exhibit: FC<ExhibitProps> = ({
-  glbUrl,
+  modelUrl,
   scale = 1.0,
   backgroundColor = '#f0f0f0',
   environment = 'city',
@@ -47,7 +47,7 @@ export const Exhibit: FC<ExhibitProps> = ({
         polar={[-Math.PI / 3, Math.PI / 3]}
         azimuth={[-Math.PI / 1.4, Math.PI / 2]}
       >
-        {isValidGlbUrl(glbUrl) && <FloatingModel glbUrl={glbUrl} scale={scale} />}
+        {isValidGlbUrl(modelUrl) && <FloatingModel modelUrl={modelUrl} scale={scale} />}
       </PresentationControls>
       <ContactShadows
         rotation-x={Math.PI / 2}

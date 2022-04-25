@@ -4,8 +4,6 @@ import React, { useMemo, useRef, FC } from 'react';
 import { useFrame, useGraph } from '@react-three/fiber';
 import { AnimationMixer, LinearFilter, Material, MeshStandardMaterial, Object3D } from 'three';
 
-const defaultRotation = 20 * (Math.PI / 180);
-
 interface AnimationModelProps {
   modelUrl: string;
   animationUrl: string;
@@ -13,6 +11,7 @@ interface AnimationModelProps {
   scale?: number;
 }
 
+const defaultRotation = 20 * (Math.PI / 180);
 let currentRotation = 0;
 
 export const AnimationModel: FC<AnimationModelProps> = ({
@@ -31,7 +30,6 @@ export const AnimationModel: FC<AnimationModelProps> = ({
   mixer.clipAction(animationSource.animations[0]).play();
   mixer.update(0);
 
-  // applying LinearFilter to texture to avoid  pixellization
   Object.values(materials).forEach((material: Material) => {
     const mat = material as MeshStandardMaterial;
     if (mat.map) {
@@ -41,10 +39,8 @@ export const AnimationModel: FC<AnimationModelProps> = ({
   });
 
   useFrame((state, delta) => {
-    mixer?.update(delta);
-
     const ref = meshRef.current as Object3D;
-
+    mixer?.update(delta);
     currentRotation += delta * 0.2;
     ref.rotation.y = rotation + Math.sin(currentRotation) / 3;
   });
