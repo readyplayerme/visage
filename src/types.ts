@@ -4,6 +4,13 @@ export type Required<T> = {
   [P in keyof T]-?: T[P];
 };
 
+export interface CameraProps {
+  /**
+   * A Vector3 representing the cameras position, default is (0, 0, 5)
+   */
+  cameraPosition?: Vector3;
+}
+
 export interface GeneralLightingProps {
   ambientLightColor?: Color | string;
   ambientLightIntensity?: number;

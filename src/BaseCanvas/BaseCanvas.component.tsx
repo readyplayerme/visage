@@ -1,13 +1,13 @@
 import React, { ReactNode, FC } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Vector3 } from 'three';
+import { CameraProps } from 'src/types';
 import styles from './BaseCanvas.module.css';
 
-interface BaseCanvasProps {
+interface BaseCanvasProps extends CameraProps {
   children?: ReactNode;
   background?: string;
   fov?: number;
-  cameraPosition?: Vector3;
 }
 
 export const BaseCanvas: FC<BaseCanvasProps> = ({
