@@ -2,10 +2,11 @@ import React, { Suspense, FC } from 'react';
 import { PresentationControls, Environment, ContactShadows } from '@react-three/drei';
 import type { PresetsType } from '@react-three/drei/helpers/environment-assets';
 import { isValidGlbUrl } from 'src/helpers';
+import { CameraProps } from 'src/types';
 import { BaseCanvas } from '../BaseCanvas';
 import { FloatingModel } from '../FloatingModel';
 
-export interface ExhibitProps {
+export interface ExhibitProps extends CameraProps {
   /**
    * Path to `.glb` file of the 3D model.
    */
@@ -31,9 +32,10 @@ export const Exhibit: FC<ExhibitProps> = ({
   glbUrl,
   scale = 1.0,
   backgroundColor = '#f0f0f0',
-  environment = 'city'
+  environment = 'city',
+  cameraPosition
 }) => (
-  <BaseCanvas background={backgroundColor}>
+  <BaseCanvas background={backgroundColor} cameraPosition={cameraPosition}>
     <Suspense fallback={null}>
       <ambientLight intensity={0.5} />
       <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} shadow-mapSize={[512, 512]} castShadow />
