@@ -47,7 +47,8 @@ module.exports = {
         tsx: 'never'
       }
     ],
-    'prefer-regex-literals': ['error', { disallowRedundantWrapping: false }]
+    'prefer-regex-literals': ['error', { disallowRedundantWrapping: false }],
+    '@typescript-eslint/no-shadow': 'off'
   },
   settings: {
     'import/resolver': {

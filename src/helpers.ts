@@ -1,4 +1,7 @@
-export const isValidGlbUrl = (url: string) => {
+export const isValidGlbUrl = (url: string | string[]): boolean => {
+  if (Array.isArray(url)) {
+    return url.filter((url) => !isValidGlbUrl(url)).length === 0;
+  }
   const expression = new RegExp(/(.glb|.glb[?].*)$/g);
   return expression.test(url);
 };
