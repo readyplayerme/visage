@@ -3,6 +3,7 @@ import { GLTFLoader, SkeletonUtils } from 'three-stdlib';
 import { useFrame, useGraph, useLoader } from '@react-three/fiber';
 import type { Group } from 'three';
 import { normaliseMaterialsConfig } from 'src/helpers';
+import { Model } from 'src/Model';
 
 interface FloatingModelProps {
   modelUrl: string;
@@ -26,9 +27,5 @@ export const FloatingModel: FC<FloatingModelProps> = ({ modelUrl, scale = 1.0 })
     }
   });
 
-  return (
-    <group ref={ref} dispose={null}>
-      <primitive castShadow object={gltf.scene} scale={scale} />
-    </group>
-  );
+  return <Model modelRef={ref} scale={scale} scene={gltf.scene} />;
 };
