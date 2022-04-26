@@ -1,9 +1,8 @@
-import { useGLTF } from '@react-three/drei';
 import React, { useRef, FC } from 'react';
-import { useFrame, useGraph } from '@react-three/fiber';
+import { useFrame, useGraph, useLoader } from '@react-three/fiber';
 import { AnimationMixer, Group } from 'three';
-import { normaliseMaterialsConfig } from 'src/helpers';
 import { Model } from 'src/Model/Model.component';
+import { GLTFLoader } from 'three-stdlib';
 
 interface AnimationModelProps {
   modelUrl: string;
@@ -22,11 +21,10 @@ export const AnimationModel: FC<AnimationModelProps> = ({
   scale = 1
 }) => {
   const ref = useRef<Group>();
-  const { scene } = useGLTF(modelUrl, false);
-  const { nodes, materials } = useGraph(scene);
-  normaliseMaterialsConfig(materials);
+  const { scene } = useLoader(GLTFLoader, modelUrl);
+  const { nodes } = useGraph(scene);
 
-  const animationSource = useGLTF(animationUrl, false);
+  const animationSource = useLoader(GLTFLoader, animationUrl);
   const mixer = new AnimationMixer(nodes.Armature);
   mixer.clipAction(animationSource.animations[0]).play();
   mixer.update(0);

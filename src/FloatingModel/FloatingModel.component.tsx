@@ -1,8 +1,7 @@
-import React, { useRef, FC, useMemo } from 'react';
-import { GLTFLoader, SkeletonUtils } from 'three-stdlib';
-import { useFrame, useGraph, useLoader } from '@react-three/fiber';
+import React, { useRef, FC } from 'react';
+import { GLTFLoader } from 'three-stdlib';
+import { useFrame, useLoader } from '@react-three/fiber';
 import type { Group } from 'three';
-import { normaliseMaterialsConfig } from 'src/helpers';
 import { Model } from 'src/Model';
 
 interface FloatingModelProps {
@@ -12,11 +11,7 @@ interface FloatingModelProps {
 
 export const FloatingModel: FC<FloatingModelProps> = ({ modelUrl, scale = 1.0 }) => {
   const ref = useRef<Group>();
-  const gltf = useLoader(GLTFLoader, modelUrl);
-  const clone = useMemo(() => SkeletonUtils.clone(gltf.scene), [gltf.scene]);
-  const { materials } = useGraph(clone);
-
-  normaliseMaterialsConfig(materials);
+  const { scene } = useLoader(GLTFLoader, modelUrl);
 
   useFrame((state) => {
     const t = state.clock.getElapsedTime();
@@ -27,5 +22,5 @@ export const FloatingModel: FC<FloatingModelProps> = ({ modelUrl, scale = 1.0 })
     }
   });
 
-  return <Model modelRef={ref} scale={scale} scene={gltf.scene} />;
+  return <Model modelRef={ref} scale={scale} scene={scene} />;
 };
