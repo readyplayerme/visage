@@ -15,7 +15,6 @@ export const HalfBodyModel: FC<HalfBodyModelProps> = ({ modelUrl, modelRef, scal
 
   scene.traverse((object) => {
     const node = object;
-    console.log(node);
     if (node.name === 'Wolf3D_Hands') {
       node.visible = false;
     }
