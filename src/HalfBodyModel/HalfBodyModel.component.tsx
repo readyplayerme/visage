@@ -21,12 +21,10 @@ export const HalfBodyModel: FC<HalfBodyModelProps> = ({ modelUrl, modelRef, scal
 
     if (node.name === 'RightHand') {
       node.position.set(0, -2, 0);
-      node.visible = false;
     }
 
     if (node.name === 'LeftHand') {
       node.position.set(0, -2, 0);
-      node.visible = false;
     }
   });
 
