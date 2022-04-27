@@ -3,6 +3,7 @@ import { useFrame, useGraph, useLoader } from '@react-three/fiber';
 import { AnimationMixer, Group } from 'three';
 import { GLTFLoader } from 'three-stdlib';
 import { Model } from 'src/Model';
+import { useHeadMovement } from 'src/helpers';
 
 interface AnimationModelProps {
   modelUrl: string;
@@ -35,6 +36,8 @@ export const AnimationModel: FC<AnimationModelProps> = ({
       ref.current.rotation.y = rotation + Math.sin(currentRotation) / 3;
     }
   });
+
+  useHeadMovement(nodes);
 
   return <Model modelRef={ref} scene={scene} scale={scale} />;
 };
