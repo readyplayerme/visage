@@ -1,5 +1,8 @@
 import { LinearFilter, MeshStandardMaterial, Material } from 'three';
 
+export const getStoryAssetPath = (publicAsset: string) =>
+  `${process.env.NODE_ENV === 'production' ? '/visage' : ''}/${publicAsset}`;
+
 export const isValidGlbUrl = (url: string | string[]): boolean => {
   if (Array.isArray(url)) {
     return url.filter((url) => !isValidGlbUrl(url)).length === 0;
