@@ -1,8 +1,9 @@
 import React, { FC, useRef } from 'react';
-import { useFrame, useLoader } from '@react-three/fiber';
+import { useFrame, useGraph, useLoader } from '@react-three/fiber';
 import { GLTFLoader } from 'three-stdlib';
 import { Model } from 'src/Model';
 import { Group } from 'three';
+import { useHeadMovement } from 'src/helpers';
 
 interface HalfBodyModelProps {
   modelUrl: string;
@@ -15,6 +16,7 @@ let currentRotation = 0;
 export const HalfBodyModel: FC<HalfBodyModelProps> = ({ modelUrl, scale = 1, rotation = 20 * (Math.PI / 180) }) => {
   const ref = useRef<Group>();
   const { scene } = useLoader(GLTFLoader, modelUrl);
+  const { nodes } = useGraph(scene);
 
   scene.traverse((object) => {
     const node = object;
@@ -37,6 +39,8 @@ export const HalfBodyModel: FC<HalfBodyModelProps> = ({ modelUrl, scale = 1, rot
       ref.current.rotation.y = rotation + Math.sin(currentRotation) / 3;
     }
   });
+
+  useHeadMovement(nodes, true);
 
   return <Model modelRef={ref} scene={scene} scale={scale} />;
 };
