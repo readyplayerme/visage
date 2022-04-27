@@ -1,8 +1,8 @@
 import React, { useRef, FC } from 'react';
 import { useFrame, useGraph, useLoader } from '@react-three/fiber';
 import { AnimationMixer, Group } from 'three';
-import { Model } from 'src/Model/Model.component';
 import { GLTFLoader } from 'three-stdlib';
+import { Model } from 'src/Model';
 
 interface AnimationModelProps {
   modelUrl: string;
@@ -11,13 +11,12 @@ interface AnimationModelProps {
   scale?: number;
 }
 
-const defaultRotation = 20 * (Math.PI / 180);
 let currentRotation = 0;
 
 export const AnimationModel: FC<AnimationModelProps> = ({
   modelUrl,
   animationUrl,
-  rotation = defaultRotation,
+  rotation = 20 * (Math.PI / 180),
   scale = 1
 }) => {
   const ref = useRef<Group>();
