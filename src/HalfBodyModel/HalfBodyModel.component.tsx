@@ -1,16 +1,19 @@
-import React, { FC, MutableRefObject } from 'react';
-import { useLoader } from '@react-three/fiber';
+import React, { FC, useRef } from 'react';
+import { useFrame, useLoader } from '@react-three/fiber';
 import { GLTFLoader } from 'three-stdlib';
 import { Model } from 'src/Model';
 import { Group } from 'three';
 
 interface HalfBodyModelProps {
   modelUrl: string;
-  modelRef?: MutableRefObject<Group | undefined>;
+  rotation?: number;
   scale?: number;
 }
 
-export const HalfBodyModel: FC<HalfBodyModelProps> = ({ modelUrl, modelRef, scale = 1 }) => {
+let currentRotation = 0;
+
+export const HalfBodyModel: FC<HalfBodyModelProps> = ({ modelUrl, scale = 1, rotation = 20 * (Math.PI / 180) }) => {
+  const ref = useRef<Group>();
   const { scene } = useLoader(GLTFLoader, modelUrl);
 
   scene.traverse((object) => {
@@ -28,5 +31,12 @@ export const HalfBodyModel: FC<HalfBodyModelProps> = ({ modelUrl, modelRef, scal
     }
   });
 
-  return <Model modelRef={modelRef} scene={scene} scale={scale} />;
+  useFrame((state, delta) => {
+    if (ref?.current) {
+      currentRotation += delta * 0.2;
+      ref.current.rotation.y = rotation + Math.sin(currentRotation) / 3;
+    }
+  });
+
+  return <Model modelRef={ref} scene={scene} scale={scale} />;
 };
