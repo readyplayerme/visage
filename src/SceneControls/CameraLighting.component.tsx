@@ -80,9 +80,7 @@ export const CameraLighting: FC<CameraLightingProps> = ({
   }, [cameraInitialDistance]);
 
   useEffect(() => {
-    const sceneHasLighting = scene.getObjectByName('DirectionalLight') as DirectionalLight;
-
-    if (!sceneHasLighting) {
+    if (!scene.getObjectByName('back-highlight')) {
       const dirLight = new DirectionalLight(dirLightColor, 5);
       dirLight.name = 'back-highlight';
       dirLight.position.set(dirLightPosition.x, dirLightPosition.y, dirLightPosition.z);
@@ -93,15 +91,30 @@ export const CameraLighting: FC<CameraLightingProps> = ({
       dirLight.shadow.blurSamples = 100;
 
       const ambientLight = new AmbientLight(ambientLightColor, ambientLightIntensity);
+      ambientLight.name = 'ambient-light';
       ambientLight.position.set(0, 0, 0);
 
       const spotLight = new SpotLight(spotLightColor, 1, 0, spotLightAngle, 0, 1);
+      spotLight.name = 'spot-light';
       spotLight.position.set(spotLightPosition.x, spotLightPosition.y, spotLightPosition.z);
 
       camera.add(ambientLight);
       camera.add(spotLight);
       camera.add(dirLight);
       scene.add(camera);
+    } else {
+      const dirLight = scene.getObjectByName('back-highlight') as DirectionalLight;
+      dirLight.color.set(dirLightColor);
+      dirLight.position.set(dirLightPosition.x, dirLightPosition.y, dirLightPosition.z);
+
+      const ambientLight = scene.getObjectByName('ambient-light') as AmbientLight;
+      ambientLight.color.set(ambientLightColor);
+      ambientLight.intensity = ambientLightIntensity;
+
+      const spotLight = scene.getObjectByName('spot-light') as SpotLight;
+      spotLight.color.set(spotLightColor);
+      spotLight.angle = spotLightAngle;
+      spotLight.position.set(spotLightPosition.x, spotLightPosition.y, spotLightPosition.z);
     }
   }, [
     ambientLightColor,
