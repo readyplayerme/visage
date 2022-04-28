@@ -3,108 +3,94 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { Camera, Vector3, DirectionalLight, AmbientLight, SpotLight } from 'three';
 import { OrbitControls } from 'three-stdlib';
 import { clamp, lerp } from 'src/helpers';
-import { GeneralLightingProps, Required } from 'src/types';
+import { LightingProps, Required } from 'src/types';
 
-type CameraLightingProps = Required<GeneralLightingProps> & {
+type CameraLightingProps = Required<LightingProps> & {
   fullBody?: boolean;
-  gender?: string;
   headScale?: number;
-  camTarget?: BodyTypeNumber;
-  initialCamDistance?: BodyTypeNumber;
+  cameraTarget?: number;
+  cameraInitialDistance?: number;
+  cameraZoomTarget?: Vector3;
+  controlsMinDistance?: number;
+  controlsMaxDistance?: number;
+  updateCameraTargetOnZoom?: boolean;
 };
-
-interface BodyTypeNumber {
-  halfBody: number;
-  fullBody: number;
-}
-
-let fullBodyMinDist = 0.5;
-const fullBodyMaxDist = 2.5;
-
-const halfBodyMinDist = 0.5;
-const halfBodyMaxDist = 1.4;
 
 let controls: any;
 let progress = Number.POSITIVE_INFINITY;
 
-const bodyZoomFullbody = new Vector3(-0.51, 0, 2.41);
-
-const updateCameraFocus = (camera: Camera, delta: number) => {
-  const target = bodyZoomFullbody;
-
-  if (progress <= 1) {
+const updateCameraFocus = (camera: Camera, delta: number, target?: Vector3) => {
+  if (target && progress <= 1) {
     camera.position.setX(lerp(camera.position.x, target.x, progress));
     camera.position.setZ(lerp(camera.position.z, target.z, progress));
     progress += delta;
   }
 };
 
-const updateCameraTarget = (camera: Camera, target: number, fullBody?: boolean) => {
-  if (controls && fullBody) {
+const updateCameraTarget = (camera: Camera, target: number, minDistance: number, maxDistance: number) => {
+  if (controls) {
     let distance = controls.target.distanceTo(camera.position);
-    distance = clamp(distance, fullBodyMaxDist, fullBodyMinDist);
-    const pivot = (distance - fullBodyMinDist) / (fullBodyMaxDist - fullBodyMinDist);
+    distance = clamp(distance, maxDistance, minDistance);
+    const pivot = (distance - minDistance) / (maxDistance - minDistance);
 
     controls.target.set(0, target - 0.6 * pivot, 0);
   }
 };
 
 export const CameraLighting: FC<CameraLightingProps> = ({
-  fullBody,
-  gender,
-  camTarget,
-  initialCamDistance,
+  cameraTarget,
+  cameraInitialDistance,
+  cameraZoomTarget,
   headScale = 1,
   ambientLightColor,
   ambientLightIntensity,
   dirLightPosition,
   dirLightColor,
-  secondaryDirLightPosition,
-  secondaryDirLightColor,
   spotLightPosition,
   spotLightColor,
-  spotLightAngle
+  spotLightAngle,
+  controlsMinDistance = 0.4,
+  controlsMaxDistance = 2.5,
+  updateCameraTargetOnZoom = false
 }) => {
   const { camera, gl, scene } = useThree();
-  const camTargetValue = camTarget?.fullBody || 1.475 + headScale / 10;
-  const fullbodyCamTarget = gender === 'male' ? camTargetValue + 0.075 : camTargetValue;
+  const fallbackCameraTarget = cameraTarget || 1.475 + headScale / 10;
+  const headScaleAdjustedMinDistance = controlsMinDistance + headScale / 10;
 
   useEffect(() => {
     controls = new OrbitControls(camera, gl.domElement);
     controls.enablePan = false;
 
-    fullBodyMinDist += headScale / 10;
-
-    controls.minDistance = fullBody ? fullBodyMinDist : halfBodyMinDist;
-    controls.maxDistance = fullBody ? fullBodyMaxDist : halfBodyMaxDist;
-
+    controls.minDistance = headScaleAdjustedMinDistance;
+    controls.maxDistance = controlsMaxDistance;
     controls.minPolarAngle = 1.4;
     controls.maxPolarAngle = 1.4;
 
+    controls.target.set(0, fallbackCameraTarget, 0);
+    controls.update();
+
+    if (cameraInitialDistance) {
+      camera.position.z = cameraInitialDistance;
+      controls.update();
+    }
+
+    return () => {
+      controls.dispose();
+    };
+  }, [cameraInitialDistance]);
+
+  useEffect(() => {
     const sceneHasLighting = scene.getObjectByName('DirectionalLight') as DirectionalLight;
 
     if (!sceneHasLighting) {
-      const dirLight = new DirectionalLight(dirLightColor, 0.001);
-      dirLight.name = 'front-highlight';
+      const dirLight = new DirectionalLight(dirLightColor, 5);
+      dirLight.name = 'back-highlight';
+      dirLight.position.set(dirLightPosition.x, dirLightPosition.y, dirLightPosition.z);
+      dirLight.castShadow = true;
       dirLight.shadow.bias = -0.0001;
       dirLight.shadow.mapSize.height = 1024;
       dirLight.shadow.mapSize.width = 1024;
-      dirLight.castShadow = true;
-      dirLight.position.set(dirLightPosition?.x, dirLightPosition?.y, dirLightPosition?.z);
-      dirLight.shadow.camera.far = 50;
-      dirLight.shadow.camera.left = -10;
-      dirLight.shadow.camera.right = 10;
-      dirLight.shadow.camera.top = 10;
-      dirLight.shadow.camera.bottom = -10;
-
-      const backDirLight = new DirectionalLight(secondaryDirLightColor, 5);
-      backDirLight.name = 'back-highlight';
-      backDirLight.position.set(secondaryDirLightPosition.x, secondaryDirLightPosition.y, secondaryDirLightPosition.z);
-      backDirLight.castShadow = true;
-      backDirLight.shadow.bias = -0.0001;
-      backDirLight.shadow.mapSize.height = 1024;
-      backDirLight.shadow.mapSize.width = 1024;
-      backDirLight.shadow.blurSamples = 100;
+      dirLight.shadow.blurSamples = 100;
 
       const ambientLight = new AmbientLight(ambientLightColor, ambientLightIntensity);
       ambientLight.position.set(0, 0, 0);
@@ -115,27 +101,25 @@ export const CameraLighting: FC<CameraLightingProps> = ({
       camera.add(ambientLight);
       camera.add(spotLight);
       camera.add(dirLight);
-      camera.add(backDirLight);
-
       scene.add(camera);
     }
-
-    controls.target.set(0, fullbodyCamTarget, 0);
-    controls.update();
-
-    if (initialCamDistance) {
-      camera.position.z = initialCamDistance.fullBody;
-      controls.update();
-    }
-
-    return () => {
-      controls.dispose();
-    };
-  }, [fullBody, gender]);
+  }, [
+    ambientLightColor,
+    ambientLightIntensity,
+    dirLightPosition,
+    dirLightColor,
+    spotLightPosition,
+    spotLightColor,
+    spotLightAngle,
+    camera,
+    scene
+  ]);
 
   useFrame((_, delta) => {
-    updateCameraTarget(camera, fullbodyCamTarget, fullBody);
-    updateCameraFocus(camera, delta);
+    if (updateCameraTargetOnZoom) {
+      updateCameraTarget(camera, fallbackCameraTarget, headScaleAdjustedMinDistance, controlsMaxDistance);
+    }
+    updateCameraFocus(camera, delta, cameraZoomTarget);
     controls.update();
   });
 

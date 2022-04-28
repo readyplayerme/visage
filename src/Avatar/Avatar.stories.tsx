@@ -21,8 +21,8 @@ Static.args = {
   spotLightPosition: new Vector3(12, 10, 7.5),
   spotLightColor: '#fff5b6',
   spotLightAngle: 0.314,
-  camTarget: CAMERA.TARGET.FULL_BODY,
-  camInitialDistance: CAMERA.INITIAL_DISTANCE.FULL_BODY
+  cameraTarget: CAMERA.TARGET.FULL_BODY,
+  cameraInitialDistance: CAMERA.INITIAL_DISTANCE.FULL_BODY
 };
 
 export default {
@@ -41,8 +41,8 @@ Animated.args = {
   ...Static.args,
   modelUrl: getStoryAssetPath('male.glb'),
   animationUrl: getStoryAssetPath('maleIdle.glb'),
-  camTarget: CAMERA.TARGET.FULL_BODY,
-  camInitialDistance: CAMERA.INITIAL_DISTANCE.FULL_BODY
+  cameraTarget: CAMERA.TARGET.FULL_BODY,
+  cameraInitialDistance: CAMERA.INITIAL_DISTANCE.FULL_BODY
 };
 
 export const HalfBody = Template.bind({});
@@ -50,6 +50,6 @@ HalfBody.args = {
   ...Static.args,
   modelUrl: getStoryAssetPath('halfBody.glb'),
   halfBody: true,
-  camTarget: CAMERA.TARGET.HALF_BODY,
-  camInitialDistance: CAMERA.INITIAL_DISTANCE.HALF_BODY
+  cameraTarget: CAMERA.TARGET.HALF_BODY,
+  cameraInitialDistance: CAMERA.INITIAL_DISTANCE.HALF_BODY
 };

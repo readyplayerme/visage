@@ -16,17 +16,19 @@ export const CAMERA = {
     HALF_BODY: 0.55
   },
   INITIAL_DISTANCE: {
-    FULL_BODY: 0.5,
-    HALF_BODY: 0.4
+    FULL_BODY: 0.4,
+    HALF_BODY: 0.5
   },
   CONTROLS: {
     FULL_BODY: {
       MIN_DISTANCE: 0.5,
-      MAX_DISTANCE: 2.5
+      MAX_DISTANCE: 2.5,
+      ZOOM_TARGET: new Vector3(-0.11, 0, 0.48)
     },
     HALF_BODY: {
       MIN_DISTANCE: 0.5,
-      MAX_DISTANCE: 1.4
+      MAX_DISTANCE: 1.4,
+      ZOOM_TARGET: new Vector3(-0.15, 0, 0.55)
     }
   }
 };
@@ -60,11 +62,8 @@ export interface AvatarProps extends LightingProps {
    * Size of the rendered GLB model.
    */
   scale?: number;
-  /**
-   *
-   */
-  camTarget?: number;
-  camInitialDistance?: number;
+  cameraTarget?: number;
+  cameraInitialDistance?: number;
 }
 
 /**
@@ -86,8 +85,8 @@ export const Avatar: FC<AvatarProps> = ({
   spotLightPosition = new Vector3(12, 10, 7.5),
   spotLightColor = '#fff5b6',
   spotLightAngle = 0.314,
-  camTarget = CAMERA.TARGET.FULL_BODY,
-  camInitialDistance = CAMERA.INITIAL_DISTANCE.FULL_BODY
+  cameraTarget = CAMERA.TARGET.FULL_BODY,
+  cameraInitialDistance = CAMERA.INITIAL_DISTANCE.FULL_BODY
 }) => {
   const AvatarModel = useMemo(() => {
     if (!!animationUrl && !halfBody && isValidGlbUrl([modelUrl, animationUrl])) {
@@ -106,12 +105,13 @@ export const Avatar: FC<AvatarProps> = ({
   }, [halfBody, animationUrl, modelUrl, scale]);
 
   return (
-    <BaseCanvas background={backgroundColor} cameraPosition={new Vector3(0, 0, 3)} fov={50}>
+    <BaseCanvas background={backgroundColor} cameraPosition={new Vector3(0, 0, 0)} fov={50}>
       <Suspense fallback={null}>
         <Environment preset={environment} />
         <CameraLighting
-          camTarget={camTarget}
-          camInitialDistance={camInitialDistance}
+          cameraTarget={cameraTarget}
+          cameraInitialDistance={cameraInitialDistance}
+          cameraZoomTarget={halfBody ? CAMERA.CONTROLS.HALF_BODY.ZOOM_TARGET : CAMERA.CONTROLS.FULL_BODY.ZOOM_TARGET}
           ambientLightColor={ambientLightColor}
           ambientLightIntensity={ambientLightIntensity}
           dirLightPosition={dirLightPosition}
@@ -125,6 +125,7 @@ export const Avatar: FC<AvatarProps> = ({
           controlsMaxDistance={
             halfBody ? CAMERA.CONTROLS.HALF_BODY.MAX_DISTANCE : CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE
           }
+          updateCameraTargetOnZoom={!halfBody}
         />
         {AvatarModel}
         {shadows && (

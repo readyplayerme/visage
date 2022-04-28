@@ -78,12 +78,12 @@ export const useHeadMovement = (
     nodes.RightEye.rotation.x = currentPos.x - eyeRotationOffsetX;
     nodes.LeftEye.rotation.x = currentPos.x - eyeRotationOffsetX;
 
-    if (isHalfBody) {
-      nodes.RightEye.rotation.z = currentPos.y * 2 + Math.PI;
-      nodes.LeftEye.rotation.z = currentPos.y * 2 + Math.PI;
-    } else {
+    if (!isHalfBody) {
       nodes.RightEye.rotation.y = currentPos.y * 2;
       nodes.LeftEye.rotation.y = currentPos.y * 2;
+    } else {
+      nodes.RightEye.rotation.z = currentPos.y * 2 + Math.PI;
+      nodes.LeftEye.rotation.z = currentPos.y * 2 + Math.PI;
     }
   });
 };
