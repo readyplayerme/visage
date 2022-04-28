@@ -1,4 +1,4 @@
-import React, { Suspense, FC, useMemo } from 'react';
+import React, { Suspense, FC, useMemo, CSSProperties } from 'react';
 import { Environment } from '@react-three/drei';
 import { PresetsType } from '@react-three/drei/helpers/environment-assets';
 import { Vector3 } from 'three';
@@ -62,13 +62,23 @@ export interface AvatarProps extends LightingProps {
    * Size of the rendered GLB model.
    */
   scale?: number;
+  /**
+   * Camera target on Y-axis.
+   */
   cameraTarget?: number;
+  /**
+   * Initial distance from the object upon render.
+   */
   cameraInitialDistance?: number;
+  /**
+   * Pass styling to canvas element.
+   */
+  style?: CSSProperties;
 }
 
 /**
- * Interactive presentation of Ready Player Me avatar.
- * Supports full-body and half-body.
+ * Interactive avatar presentation with zooming and horizontal rotation controls.
+ * Optimised for full-body and half-body avatars.
  */
 export const Avatar: FC<AvatarProps> = ({
   modelUrl,
@@ -86,7 +96,8 @@ export const Avatar: FC<AvatarProps> = ({
   spotLightColor = '#fff5b6',
   spotLightAngle = 0.314,
   cameraTarget = CAMERA.TARGET.FULL_BODY,
-  cameraInitialDistance = CAMERA.INITIAL_DISTANCE.FULL_BODY
+  cameraInitialDistance = CAMERA.INITIAL_DISTANCE.FULL_BODY,
+  style
 }) => {
   const AvatarModel = useMemo(() => {
     if (!!animationUrl && !halfBody && isValidGlbUrl([modelUrl, animationUrl])) {
@@ -105,7 +116,7 @@ export const Avatar: FC<AvatarProps> = ({
   }, [halfBody, animationUrl, modelUrl, scale]);
 
   return (
-    <BaseCanvas background={backgroundColor} cameraPosition={new Vector3(0, 0, 0)} fov={50}>
+    <BaseCanvas background={backgroundColor} cameraPosition={new Vector3(0, 0, 3)} fov={50} style={style}>
       <Suspense fallback={null}>
         <Environment preset={environment} />
         <CameraLighting

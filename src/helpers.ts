@@ -19,7 +19,7 @@ export const isValidGlbUrl = (url: string | string[] | undefined): boolean => {
 
 export const clamp = (value: number, max: number, min: number): number => Math.min(Math.max(min, value), max);
 
-export const lerp = (start: number, end: number, time = 0.1): number => start * (1 - time) + end * time;
+export const lerp = (start: number, end: number, time = 0.05): number => start * (1 - time) + end * time;
 
 /**
  * Avoid texture pixelation and add depth effect.
@@ -51,9 +51,8 @@ export const useHeadMovement = (
   const eyeRotationOffsetX = isHalfBody ? 90 * rad : 0;
   const neckBoneRotationOffsetX = (isHalfBody ? -5 : 10) * rad;
   const nodes = objects;
-
   const mapRange = (value: number, inMin: number, inMax: number, outMin: number, outMax: number) =>
-    ((clamp(value, inMin, inMax) - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
+    ((clamp(value, inMax, inMin) - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
 
   useFrame((state) => {
     const cameraToHeadDistance = state.camera.position.distanceTo(nodes.Head.position);
