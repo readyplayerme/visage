@@ -1,6 +1,6 @@
 import React from 'react';
 import { Avatar } from '../Avatar/Avatar.component';
-import './App.css';
+import './App.scss';
 
 function App() {
   return (
