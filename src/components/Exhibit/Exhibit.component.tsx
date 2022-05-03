@@ -33,9 +33,9 @@ export const Exhibit: FC<ExhibitProps> = ({
   scale = 1.0,
   backgroundColor = '#f0f0f0',
   environment = 'city',
-  cameraPosition
+  position
 }) => (
-  <BaseCanvas background={backgroundColor} cameraPosition={cameraPosition}>
+  <BaseCanvas background={backgroundColor} position={position}>
     <Suspense fallback={null}>
       <ambientLight intensity={0.5} />
       <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} shadow-mapSize={[512, 512]} castShadow />

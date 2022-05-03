@@ -8,7 +8,7 @@ export interface CameraProps {
   /**
    * A Vector3 representing the cameras position, default is (0, 0, 5)
    */
-  cameraPosition?: Vector3;
+  position?: Vector3;
 }
 
 export interface LightingProps {

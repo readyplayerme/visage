@@ -115,7 +115,7 @@ export const Avatar: FC<AvatarProps> = ({
   }, [halfBody, animationUrl, modelUrl, scale]);
 
   return (
-    <BaseCanvas background={backgroundColor} cameraPosition={new Vector3(0, 0, 3)} fov={50} style={style}>
+    <BaseCanvas background={backgroundColor} position={new Vector3(0, 0, 3)} fov={50} style={style}>
       <Suspense fallback={null}>
         <Environment preset={environment} />
         <CameraLighting
