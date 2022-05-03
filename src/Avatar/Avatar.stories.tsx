@@ -32,7 +32,12 @@ export default {
     backgroundColor: { control: 'color' },
     ambientLightColor: { control: 'color' },
     dirLightColor: { control: 'color' },
-    spotLightColor: { control: 'color' }
+    spotLightColor: { control: 'color' },
+    ambientLightIntensity: { control: { type: 'range', min: 0, max: 10, step: 0.1 } },
+    spotLightAngle: { control: { type: 'range', min: 0, max: 10, step: 0.01 } },
+    cameraTarget: { control: { type: 'range', min: 0, max: 10, step: 0.01 } },
+    scale: { control: { type: 'range', min: 0.01, max: 10, step: 0.01 } },
+    cameraInitialDistance: { control: { type: 'range', min: 0, max: 1.4, step: 0.01 } }
   }
 } as ComponentMeta<typeof Avatar>;
 

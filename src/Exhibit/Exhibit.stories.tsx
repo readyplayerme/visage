@@ -17,6 +17,7 @@ export default {
   title: 'Components/Exhibit',
   component: Exhibit,
   argTypes: {
-    backgroundColor: { control: 'color' }
+    backgroundColor: { control: 'color' },
+    scale: { control: { type: 'range', min: 0.01, max: 10, step: 0.01 } }
   }
 } as ComponentMeta<typeof Exhibit>;
