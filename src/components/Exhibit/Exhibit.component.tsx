@@ -1,7 +1,7 @@
 import React, { Suspense, FC } from 'react';
 import { PresentationControls, Environment, ContactShadows } from '@react-three/drei';
 import type { PresetsType } from '@react-three/drei/helpers/environment-assets';
-import { isValidGlbUrl } from 'src/Models';
+import { isValidGlbUrl } from 'src/services';
 import { CameraProps } from 'src/types';
 import { BaseCanvas } from '../BaseCanvas';
 import { FloatingModel } from '../Models/FloatingModel';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar } from '../Avatar/Avatar.component';
+import { Avatar } from 'src/components/Avatar';
 import './App.scss';
 
 function App() {

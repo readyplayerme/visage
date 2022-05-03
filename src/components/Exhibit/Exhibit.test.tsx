@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, RenderResult } from '@testing-library/react';
-import { Exhibit } from 'src/Exhibit';
+import { Exhibit } from 'src/components/Exhibit';
 import { act } from '@react-three/fiber';
 
 describe('Exhibit component', () => {

@@ -2,11 +2,12 @@ import React, { Suspense, FC, useMemo, CSSProperties } from 'react';
 import { Environment } from '@react-three/drei';
 import { PresetsType } from '@react-three/drei/helpers/environment-assets';
 import { Vector3 } from 'three';
-import { CameraLighting } from 'src/SceneControls/CameraLighting.component';
-import { AnimationModel } from 'src/Models/AnimationModel/AnimationModel.component';
+import { CameraLighting } from 'src/components/SceneControls/CameraLighting.component';
+import { AnimationModel } from 'src/components/Models/AnimationModel/AnimationModel.component';
 import { LightingProps } from 'src/types';
-import { BaseCanvas } from 'src/BaseCanvas';
-import { HalfBodyModel, StaticModel, isValidGlbUrl } from 'src/Models';
+import { BaseCanvas } from 'src/components/BaseCanvas';
+import { HalfBodyModel, StaticModel } from 'src/components/Models';
+import { isValidGlbUrl } from 'src/services';
 
 export const CAMERA = {
   TARGET: {

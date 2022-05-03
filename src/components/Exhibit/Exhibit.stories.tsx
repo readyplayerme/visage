@@ -1,6 +1,6 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { getStoryAssetPath } from 'src/Models';
+import { getStoryAssetPath } from 'src/services';
 import { Exhibit } from './Exhibit.component';
 
 const Template: ComponentStory<typeof Exhibit> = (args) => <Exhibit {...args} />;

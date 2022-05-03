@@ -2,8 +2,8 @@ import React, { useRef, FC } from 'react';
 import { useFrame, useGraph, useLoader } from '@react-three/fiber';
 import { AnimationMixer, Group } from 'three';
 import { GLTFLoader } from 'three-stdlib';
-import { Model } from 'src/Models/Model';
-import { useHeadMovement } from 'src/Models/Models.service';
+import { Model } from 'src/components/Models/Model';
+import { useHeadMovement } from 'src/services';
 
 interface AnimationModelProps {
   modelUrl: string;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { getStoryAssetPath } from 'src/Models';
+import { getStoryAssetPath } from 'src/services';
 import { Vector3 } from 'three';
 import { Avatar, CAMERA } from './Avatar.component';
 
