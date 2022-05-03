@@ -2,7 +2,7 @@ import React, { ReactNode, FC, CSSProperties } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Vector3 } from 'three';
 import { CameraProps } from 'src/types';
-import styles from './BaseCanvas.module.css';
+import styles from './BaseCanvas.module.scss';
 
 interface BaseCanvasProps extends CameraProps {
   children?: ReactNode;
