@@ -77,7 +77,15 @@ export const CameraLighting: FC<CameraLightingProps> = ({
     return () => {
       controls.dispose();
     };
-  }, [cameraInitialDistance]);
+  }, [
+    cameraInitialDistance,
+    camera,
+    controlsMinDistance,
+    controlsMaxDistance,
+    fallbackCameraTarget,
+    gl.domElement,
+    headScaleAdjustedMinDistance
+  ]);
 
   useEffect(() => {
     if (!scene.getObjectByName('back-highlight')) {
