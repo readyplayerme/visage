@@ -6,7 +6,7 @@ export const getStoryAssetPath = (publicAsset: string) =>
 
 export const isValidGlbUrl = (url: string | string[] | undefined): boolean => {
   if (Array.isArray(url)) {
-    return url.filter((url) => !isValidGlbUrl(url)).length === 0;
+    return url.filter((uri) => !isValidGlbUrl(uri)).length === 0;
   }
 
   if (typeof url === 'string') {
