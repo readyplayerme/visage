@@ -1,10 +1,10 @@
 import React, { Suspense, FC } from 'react';
 import { PresentationControls, Environment, ContactShadows } from '@react-three/drei';
 import type { PresetsType } from '@react-three/drei/helpers/environment-assets';
-import { isValidGlbUrl } from 'src/helpers';
+import { isValidGlbUrl } from 'src/Models';
 import { CameraProps } from 'src/types';
 import { BaseCanvas } from '../BaseCanvas';
-import { FloatingModel } from '../FloatingModel';
+import { FloatingModel } from '../Models/FloatingModel';
 
 export interface ExhibitProps extends CameraProps {
   /**

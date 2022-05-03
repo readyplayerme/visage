@@ -2,7 +2,7 @@ import { useEffect, FC } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Camera, Vector3, DirectionalLight, AmbientLight, SpotLight } from 'three';
 import { OrbitControls } from 'three-stdlib';
-import { clamp, lerp } from 'src/helpers';
+import { clamp, lerp } from 'src/Models';
 import { LightingProps, Required } from 'src/types';
 
 type CameraLightingProps = Required<LightingProps> & {

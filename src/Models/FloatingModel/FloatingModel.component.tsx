@@ -2,7 +2,7 @@ import React, { useRef, FC } from 'react';
 import { GLTFLoader } from 'three-stdlib';
 import { useFrame, useLoader } from '@react-three/fiber';
 import type { Group } from 'three';
-import { Model } from 'src/Model';
+import { Model } from 'src/Models/Model';
 
 interface FloatingModelProps {
   modelUrl: string;

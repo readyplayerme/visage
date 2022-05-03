@@ -3,12 +3,10 @@ import { Environment } from '@react-three/drei';
 import { PresetsType } from '@react-three/drei/helpers/environment-assets';
 import { Vector3 } from 'three';
 import { CameraLighting } from 'src/SceneControls/CameraLighting.component';
-import { AnimationModel } from 'src/AnimationModel/AnimationModel.component';
-import { isValidGlbUrl } from 'src/helpers';
+import { AnimationModel } from 'src/Models/AnimationModel/AnimationModel.component';
 import { LightingProps } from 'src/types';
 import { BaseCanvas } from 'src/BaseCanvas';
-import { HalfBodyModel } from '../HalfBodyModel';
-import { StaticModel } from '../StaticModel';
+import { HalfBodyModel, StaticModel, isValidGlbUrl } from 'src/Models';
 
 export const CAMERA = {
   TARGET: {

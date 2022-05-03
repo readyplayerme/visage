@@ -1,6 +1,6 @@
 import React, { FC, MutableRefObject } from 'react';
 import { Group, Mesh } from 'three';
-import { normaliseMaterialsConfig } from 'src/helpers';
+import { normaliseMaterialsConfig } from 'src/Models/Models.service';
 import { useGraph } from '@react-three/fiber';
 
 interface ModelProps {

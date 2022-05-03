@@ -1,9 +1,9 @@
 import React, { FC, useRef } from 'react';
 import { useFrame, useGraph, useLoader } from '@react-three/fiber';
 import { GLTFLoader } from 'three-stdlib';
-import { Model } from 'src/Model';
+import { Model } from 'src/Models/Model';
+import { useHeadMovement } from 'src/Models/Models.service';
 import { Group } from 'three';
-import { useHeadMovement } from 'src/helpers';
 
 interface HalfBodyModelProps {
   modelUrl: string;
