@@ -1,7 +1,7 @@
 import { useEffect, FC } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Camera, Vector3, DirectionalLight, AmbientLight, SpotLight } from 'three';
-import { OrbitControls } from 'three-stdlib';
+import { OrbitControls } from 'three-stdlib/controls/OrbitControls';
 import { clamp, lerp } from 'src/services';
 import { LightingProps, Required } from 'src/types';
 

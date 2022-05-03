@@ -1,6 +1,6 @@
 import React, { FC, MutableRefObject } from 'react';
 import { useLoader } from '@react-three/fiber';
-import { GLTFLoader } from 'three-stdlib';
+import { GLTFLoader } from 'three-stdlib/loaders/GLTFLoader';
 import { Model } from 'src/components/Models/Model';
 import { Group } from 'three';
 
