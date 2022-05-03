@@ -99,19 +99,19 @@ export const Avatar: FC<AvatarProps> = ({
   style
 }) => {
   const AvatarModel = useMemo(() => {
-    if (!!animationUrl && !halfBody && isValidGlbUrl([modelUrl, animationUrl])) {
+    if (!isValidGlbUrl(modelUrl)) {
+      return null;
+    }
+
+    if (!!animationUrl && !halfBody && isValidGlbUrl(animationUrl)) {
       return <AnimationModel modelUrl={modelUrl} animationUrl={animationUrl} scale={scale} />;
     }
 
-    if (halfBody && isValidGlbUrl(modelUrl)) {
+    if (halfBody) {
       return <HalfBodyModel modelUrl={modelUrl} scale={scale} />;
     }
 
-    if (isValidGlbUrl(modelUrl)) {
-      return <StaticModel modelUrl={modelUrl} scale={scale} />;
-    }
-
-    return null;
+    return <StaticModel modelUrl={modelUrl} scale={scale} />;
   }, [halfBody, animationUrl, modelUrl, scale]);
 
   return (
