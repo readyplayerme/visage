@@ -1,11 +1,16 @@
 import React from 'react';
-import { Exhibit } from '../Exhibit';
+import { Avatar } from 'src/components/Avatar';
+import './App.scss';
 
 function App() {
   return (
     <div className="App">
-      <p>localhost playground</p>
-      <Exhibit glbUrl="/headwear.glb" backgroundColor="#f0f0f0" />
+      <div>localhost playground</div>
+      <div className="container">
+        <div className="card">
+          <Avatar modelUrl="/male.glb" animationUrl="/maleIdle.glb" backgroundColor="#fafafa" shadows />
+        </div>
+      </div>
     </div>
   );
 }

@@ -23,7 +23,7 @@ import { Exhibit } from '@readyplayerme/visage';
 
 function App() {
   return (
-    <Exhibit glbUrl="/model.glb" />
+    <Exhibit modelUrl="/model.glb" />
   );
 }
 
