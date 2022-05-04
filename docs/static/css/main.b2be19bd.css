@@ -1,0 +1,23 @@
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  overflow: hidden;
+}
+
+#root {
+  overflow: auto;
+  height: 100%;
+  width: 100%;
+}
+
+.BaseCanvas_base-canvas__7RHH3{width:100%;height:100%;margin:0;padding:0;touch-action:none}
+
+/*# sourceMappingURL=main.b2be19bd.css.map*/
