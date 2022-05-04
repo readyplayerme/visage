@@ -1,6 +1,6 @@
 import React, { FC, useRef } from 'react';
 import { useFrame, useGraph, useLoader } from '@react-three/fiber';
-import { GLTFLoader } from 'three-stdlib/loaders/GLTFLoader';
+import { GLTFLoader } from 'three-stdlib';
 import { Model } from 'src/components/Models/Model';
 import { useHeadMovement } from 'src/services';
 import { Group } from 'three';
