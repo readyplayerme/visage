@@ -6,7 +6,7 @@ export const getStoryAssetPath = (publicAsset: string) =>
 
 export const isValidGlbUrl = (url: string | string[] | undefined): boolean => {
   if (Array.isArray(url)) {
-    return url.filter((uri) => !isValidGlbUrl(uri)).length === 0;
+    return url.length > 0 && url.every(isValidGlbUrl);
   }
 
   if (typeof url === 'string') {
@@ -77,12 +77,12 @@ export const useHeadMovement = (
     nodes.RightEye.rotation.x = currentPos.x - eyeRotationOffsetX;
     nodes.LeftEye.rotation.x = currentPos.x - eyeRotationOffsetX;
 
-    if (!isHalfBody) {
-      nodes.RightEye.rotation.y = currentPos.y * 2;
-      nodes.LeftEye.rotation.y = currentPos.y * 2;
-    } else {
+    if (isHalfBody) {
       nodes.RightEye.rotation.z = currentPos.y * 2 + Math.PI;
       nodes.LeftEye.rotation.z = currentPos.y * 2 + Math.PI;
+    } else {
+      nodes.RightEye.rotation.y = currentPos.y * 2;
+      nodes.LeftEye.rotation.y = currentPos.y * 2;
     }
   });
 };
