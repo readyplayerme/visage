@@ -36,6 +36,7 @@ export const normaliseMaterialsConfig = (materials: Record<string, Material>) =>
 
 /**
  * Avatar head movement relative to cursor.
+ * When the model isn't a standard Ready Player Me avatar, the head movement won't take effect.
  */
 export const useHeadMovement = (
   objects: Record<string, Object3D>,
@@ -55,6 +56,10 @@ export const useHeadMovement = (
     ((clamp(value, inMax, inMin) - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
 
   useFrame((state) => {
+    if (!nodes.Neck || !nodes.Head || !nodes.RightEye || !nodes.LeftEye) {
+      return;
+    }
+
     const cameraToHeadDistance = state.camera.position.distanceTo(nodes.Head.position);
     const cameraRotation = Math.abs(state.camera.rotation.z);
 
