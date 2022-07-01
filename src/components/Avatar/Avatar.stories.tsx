@@ -22,7 +22,8 @@ Static.args = {
   spotLightColor: '#fff5b6',
   spotLightAngle: 0.314,
   cameraTarget: CAMERA.TARGET.FULL_BODY,
-  cameraInitialDistance: CAMERA.INITIAL_DISTANCE.FULL_BODY
+  cameraInitialDistance: CAMERA.INITIAL_DISTANCE.FULL_BODY,
+  controlsMaxDistance: 2.5
 };
 
 export default {
@@ -37,7 +38,8 @@ export default {
     spotLightAngle: { control: { type: 'range', min: 0, max: 10, step: 0.01 } },
     cameraTarget: { control: { type: 'range', min: 0, max: 10, step: 0.01 } },
     scale: { control: { type: 'range', min: 0.01, max: 10, step: 0.01 } },
-    cameraInitialDistance: { control: { type: 'range', min: 0, max: 1.4, step: 0.01 } }
+    cameraInitialDistance: { control: { type: 'range', min: 0, max: 1.4, step: 0.01 } },
+    controlsMaxDistance: { control: { type: 'range', min: 2.5, max: 20.0, step: 0.01 } }
   }
 } as ComponentMeta<typeof Avatar>;
 

@@ -69,6 +69,8 @@ export interface AvatarProps extends LightingProps {
    * Initial distance from the object upon render.
    */
   cameraInitialDistance?: number;
+
+  controlsMaxDistance?: number;
   /**
    * Pass styling to canvas element.
    */
@@ -96,6 +98,7 @@ export const Avatar: FC<AvatarProps> = ({
   spotLightAngle = 0.314,
   cameraTarget = CAMERA.TARGET.FULL_BODY,
   cameraInitialDistance = CAMERA.INITIAL_DISTANCE.FULL_BODY,
+  controlsMaxDistance = halfBody ? CAMERA.CONTROLS.HALF_BODY.MAX_DISTANCE : CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
   style
 }) => {
   const AvatarModel = useMemo(() => {
@@ -132,9 +135,7 @@ export const Avatar: FC<AvatarProps> = ({
           controlsMinDistance={
             halfBody ? CAMERA.CONTROLS.HALF_BODY.MIN_DISTANCE : CAMERA.CONTROLS.FULL_BODY.MIN_DISTANCE
           }
-          controlsMaxDistance={
-            halfBody ? CAMERA.CONTROLS.HALF_BODY.MAX_DISTANCE : CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE
-          }
+          controlsMaxDistance={controlsMaxDistance}
           updateCameraTargetOnZoom={!halfBody}
         />
         {AvatarModel}
