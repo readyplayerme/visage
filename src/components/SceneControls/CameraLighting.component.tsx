@@ -109,7 +109,14 @@ export const CameraLighting: FC<CameraLightingProps> = ({
       dirLight.shadow.mapSize.width = 1024;
       dirLight.shadow.blurSamples = 100;
 
-      const helper = new DirectionalLightHelper(dirLight);
+      const dirLightHelper = new DirectionalLightHelper(dirLight);
+      dirLightHelper.name = 'dir-light-helper';
+
+      const dirLightSphereGeometry = new SphereGeometry(0.2, 32, 16);
+      const dirLightSphereMaterial = new MeshBasicMaterial({ color: 0x00fffff });
+      const dirLightSphere = new Mesh(dirLightSphereGeometry, dirLightSphereMaterial);
+      dirLightSphere.position.set(dirLight.position.x, dirLight.position.y, dirLight.position.z);
+      dirLightSphere.name = 'dir-light-sphere';
 
       const ambientLight = new AmbientLight(ambientLightColor, ambientLightIntensity);
       ambientLight.name = 'ambient-light';
@@ -127,23 +134,26 @@ export const CameraLighting: FC<CameraLightingProps> = ({
       const cameraSpotLightSphereMaterial = new MeshBasicMaterial({ color: 0xff0000 });
       const cameraSpotLightSphere = new Mesh(cameraSpotLightSphereGeometry, cameraSpotLightSphereMaterial);
       cameraSpotLightSphere.position.set(
-        cameraSpotLightPosition.x,
-        cameraSpotLightPosition.y,
-        cameraSpotLightPosition.z
+        cameraSpotLight.position.x,
+        cameraSpotLight.position.y,
+        cameraSpotLight.position.z
       );
       cameraSpotLightSphere.name = 'camera-spot-light-sphere';
 
-      scene.add(ambientLight);
       scene.add(dirLight);
+      scene.add(dirLightHelper);
+      scene.add(dirLightSphere);
+      scene.add(ambientLight);
       camera.add(cameraSpotLight);
       camera.add(cameraSpotLightHelper);
       camera.add(cameraSpotLightSphere);
-      scene.add(helper);
       scene.add(camera);
     } else {
       const dirLight = scene.getObjectByName('back-highlight') as DirectionalLight;
       dirLight.color.set(dirLightColor);
       dirLight.position.set(dirLightPosition.x, dirLightPosition.y, dirLightPosition.z);
+      const dirLightSphere = scene.getObjectByName('dir-light-sphere') as Mesh;
+      dirLightSphere.position.set(dirLight.position.x, dirLight.position.y, dirLight.position.z);
 
       const ambientLight = scene.getObjectByName('ambient-light') as AmbientLight;
       ambientLight.color.set(ambientLightColor);
@@ -153,6 +163,12 @@ export const CameraLighting: FC<CameraLightingProps> = ({
       cameraSpotLight.color.set(cameraSpotLightColor);
       cameraSpotLight.angle = cameraSpotLightAngle;
       cameraSpotLight.position.set(cameraSpotLightPosition.x, cameraSpotLightPosition.y, cameraSpotLightPosition.z);
+      const cameraSpotLightSphere = scene.getObjectByName('camera-spot-light-sphere') as Mesh;
+      cameraSpotLightSphere.position.set(
+        cameraSpotLight.position.x,
+        cameraSpotLight.position.y,
+        cameraSpotLight.position.z
+      );
     }
   }, [
     ambientLightColor,
