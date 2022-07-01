@@ -57,9 +57,9 @@ export const CameraLighting: FC<CameraLightingProps> = ({
   ambientLightIntensity,
   dirLightPosition,
   dirLightColor,
-  spotLightPosition,
-  spotLightColor,
-  spotLightAngle,
+  cameraSpotLightPosition,
+  cameraSpotLightColor,
+  cameraSpotLightAngle,
   controlsMinDistance = 0.4,
   controlsMaxDistance = 2.5,
   updateCameraTargetOnZoom = false
@@ -115,25 +115,30 @@ export const CameraLighting: FC<CameraLightingProps> = ({
       ambientLight.name = 'ambient-light';
       ambientLight.position.set(0, 0, 0);
 
-      const spotLight = new SpotLight(spotLightColor, 1, 0, spotLightAngle, 0, 1);
-      spotLight.name = 'spot-light';
-      spotLight.position.set(spotLightPosition.x, spotLightPosition.y, spotLightPosition.z);
-      spotLight.distance = 20;
+      const cameraSpotLight = new SpotLight(cameraSpotLightColor, 1, 0, cameraSpotLightAngle, 0, 1);
+      cameraSpotLight.name = 'camera-spot-light';
+      cameraSpotLight.position.set(cameraSpotLightPosition.x, cameraSpotLightPosition.y, cameraSpotLightPosition.z);
+      cameraSpotLight.distance = 20;
 
-      const lightHelper = new SpotLightHelper(spotLight);
+      const cameraSpotLightHelper = new SpotLightHelper(cameraSpotLight);
+      cameraSpotLightHelper.name = 'camera-spot-light-helper';
 
-      const geometry = new SphereGeometry(0.2, 32, 16);
-      const material = new MeshBasicMaterial({ color: 0xff0000 });
-      const sphere = new Mesh(geometry, material);
-      sphere.position.set(spotLightPosition.x, spotLightPosition.y, spotLightPosition.z);
-      sphere.name = 'spot-light-sphere';
+      const cameraSpotLightSphereGeometry = new SphereGeometry(0.2, 32, 16);
+      const cameraSpotLightSphereMaterial = new MeshBasicMaterial({ color: 0xff0000 });
+      const cameraSpotLightSphere = new Mesh(cameraSpotLightSphereGeometry, cameraSpotLightSphereMaterial);
+      cameraSpotLightSphere.position.set(
+        cameraSpotLightPosition.x,
+        cameraSpotLightPosition.y,
+        cameraSpotLightPosition.z
+      );
+      cameraSpotLightSphere.name = 'camera-spot-light-sphere';
 
       scene.add(ambientLight);
       scene.add(dirLight);
-      scene.add(sphere);
-      camera.add(spotLight);
+      camera.add(cameraSpotLight);
+      camera.add(cameraSpotLightHelper);
+      camera.add(cameraSpotLightSphere);
       scene.add(helper);
-      camera.add(lightHelper);
       scene.add(camera);
     } else {
       const dirLight = scene.getObjectByName('back-highlight') as DirectionalLight;
@@ -144,19 +149,19 @@ export const CameraLighting: FC<CameraLightingProps> = ({
       ambientLight.color.set(ambientLightColor);
       ambientLight.intensity = ambientLightIntensity;
 
-      const spotLight = scene.getObjectByName('spot-light') as SpotLight;
-      spotLight.color.set(spotLightColor);
-      spotLight.angle = spotLightAngle;
-      spotLight.position.set(spotLightPosition.x, spotLightPosition.y, spotLightPosition.z);
+      const cameraSpotLight = scene.getObjectByName('camera-spot-light') as SpotLight;
+      cameraSpotLight.color.set(cameraSpotLightColor);
+      cameraSpotLight.angle = cameraSpotLightAngle;
+      cameraSpotLight.position.set(cameraSpotLightPosition.x, cameraSpotLightPosition.y, cameraSpotLightPosition.z);
     }
   }, [
     ambientLightColor,
     ambientLightIntensity,
     dirLightPosition,
     dirLightColor,
-    spotLightPosition,
-    spotLightColor,
-    spotLightAngle,
+    cameraSpotLightPosition,
+    cameraSpotLightColor,
+    cameraSpotLightAngle,
     camera,
     scene
   ]);

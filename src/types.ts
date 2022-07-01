@@ -16,7 +16,7 @@ export interface LightingProps {
   ambientLightIntensity?: number;
   dirLightPosition?: Vector3;
   dirLightColor?: Color | string;
-  spotLightPosition?: Vector3;
-  spotLightColor?: string;
-  spotLightAngle?: number;
+  cameraSpotLightPosition?: Vector3;
+  cameraSpotLightColor?: string;
+  cameraSpotLightAngle?: number;
 }
