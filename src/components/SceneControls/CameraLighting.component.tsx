@@ -6,13 +6,9 @@ import {
   DirectionalLight,
   AmbientLight,
   SpotLight,
-  BufferGeometry,
-  Line,
-  LineBasicMaterial,
   SphereGeometry,
   MeshBasicMaterial,
   Mesh,
-  EllipseCurve,
   SpotLightHelper,
   DirectionalLightHelper
 } from 'three';
@@ -115,14 +111,6 @@ export const CameraLighting: FC<CameraLightingProps> = ({
 
       const helper = new DirectionalLightHelper(dirLight);
 
-      const dirLightLineMaterial = new LineBasicMaterial({ color: 0x00ffff });
-      const dirLightLinePoints = [];
-      dirLightLinePoints.push(dirLightPosition);
-      dirLightLinePoints.push(dirLight.target.position);
-      const dirLightLineGeometry = new BufferGeometry().setFromPoints(dirLightLinePoints);
-      const dirLightLine = new Line(dirLightLineGeometry, dirLightLineMaterial);
-      dirLightLine.name = 'dir-light-line';
-
       const ambientLight = new AmbientLight(ambientLightColor, ambientLightIntensity);
       ambientLight.name = 'ambient-light';
       ambientLight.position.set(0, 0, 0);
@@ -131,69 +119,17 @@ export const CameraLighting: FC<CameraLightingProps> = ({
       spotLight.name = 'spot-light';
       spotLight.position.set(spotLightPosition.x, spotLightPosition.y, spotLightPosition.z);
       spotLight.distance = 20;
-      // spotLight.castShadow = true;
 
       const lightHelper = new SpotLightHelper(spotLight);
 
-      const spotLightLineMaterial = new LineBasicMaterial({ color: 0x0000ff });
-      const spotLightLinePoints = [];
-      spotLightLinePoints.push(spotLightPosition);
-      spotLightLinePoints.push(new Vector3());
-      const spotLightLineGeometry = new BufferGeometry().setFromPoints(spotLightLinePoints);
-      const spotLightLine = new Line(spotLightLineGeometry, spotLightLineMaterial);
-      spotLightLine.name = 'spot-light-line';
       const geometry = new SphereGeometry(0.2, 32, 16);
       const material = new MeshBasicMaterial({ color: 0xff0000 });
       const sphere = new Mesh(geometry, material);
       sphere.position.set(spotLightPosition.x, spotLightPosition.y, spotLightPosition.z);
       sphere.name = 'spot-light-sphere';
 
-      const spotLightBoxMaterial = new LineBasicMaterial({ color: 0x00ff00 });
-      let boxLength = 2;
-      if (spotLight.distance > 0) {
-        boxLength = spotLight.distance;
-      }
-      const radius = boxLength * Math.tan(spotLight.angle);
-
-      const boxLengthVector = new Vector3(boxLength, boxLength, boxLength);
-      // const radiusVector = new Vector3(radius, radius, radius);
-      const directionVector = new Vector3(0, 0, 0).sub(spotLightPosition.clone()).normalize();
-      const startPos = spotLightPosition.clone();
-      // startPos = new Vector3();
-      const forwardPos = startPos.clone().add(directionVector.clone().multiply(boxLengthVector));
-
-      const spotLightBoxPoints = [];
-      spotLightBoxPoints.push(startPos.clone());
-      spotLightBoxPoints.push(forwardPos.clone().multiply(boxLengthVector));
-      // spotLightBoxPoints.push(startPos.clone());
-      // spotLightBoxPoints.push(forwardPos.clone().multiply(boxLengthVector).add(startPos.clone().add(new Vector3(-directionVector.z, 0, directionVector.x)).multiply(radiusVector).multiply(boxLengthVector)));
-      // spotLightBoxPoints.push(startPos.clone());
-      // spotLightBoxPoints.push(forwardPos.clone().multiply(boxLengthVector).add(startPos.clone().add(new Vector3(-directionVector.z, 0, directionVector.x)).negate().multiply(radiusVector).multiply(boxLengthVector)));
-      // spotLightBoxPoints.push(startPos.clone());
-      // spotLightBoxPoints.push(forwardPos.clone().multiply(boxLengthVector).add(startPos.clone().add(new Vector3(directionVector.y, -directionVector.x, directionVector.z)).multiply(radiusVector).multiply(boxLengthVector)));
-      // spotLightBoxPoints.push(startPos.clone());
-      // spotLightBoxPoints.push(forwardPos.clone().multiply(boxLengthVector).add(startPos.clone().add(new Vector3(directionVector.y, -directionVector.x, directionVector.z)).negate().multiply(radiusVector).multiply(boxLengthVector)));
-      const spotLightBoxGeometry = new BufferGeometry().setFromPoints(spotLightBoxPoints);
-      const spotLightBox = new Line(spotLightBoxGeometry, spotLightBoxMaterial);
-      spotLightBox.name = 'spot-light-box';
-
-      const curve = new EllipseCurve(0, 0, radius, radius, 0, Math.PI * 2, false, 0);
-
-      const elipsePoints = curve.getPoints(50);
-      const elipseGeometry = new BufferGeometry().setFromPoints(elipsePoints);
-      const elipseMaterial = new LineBasicMaterial({ color: 0xff0000 });
-
-      const ellipse = new Line(elipseGeometry, elipseMaterial);
-      ellipse.position.set(forwardPos.x, forwardPos.y, forwardPos.z);
-      ellipse.lookAt(new Vector3(startPos.x, startPos.y, startPos.z));
-      ellipse.name = 'spot-light-ellipse';
-
       scene.add(ambientLight);
       scene.add(dirLight);
-      // scene.add(dirLightLine);
-      // scene.add(spotLightBox);
-      // scene.add(ellipse);
-      // scene.add(spotLightLine);
       scene.add(sphere);
       camera.add(spotLight);
       scene.add(helper);
