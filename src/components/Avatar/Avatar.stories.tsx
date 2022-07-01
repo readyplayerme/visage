@@ -21,9 +21,15 @@ Static.args = {
   cameraSpotLightPosition: new Vector3(12, 10, 7.5),
   cameraSpotLightColor: '#fff5b6',
   cameraSpotLightAngle: 0.314,
+  cameraSpotLightDistance: 10,
   cameraTarget: CAMERA.TARGET.FULL_BODY,
   cameraInitialDistance: CAMERA.INITIAL_DISTANCE.FULL_BODY,
-  controlsMaxDistance: 2.5
+  controlsMaxDistance: 2.5,
+  spotLight1Position: new Vector3(0, 5, 0),
+  spotLight1Color: '#ff0000',
+  spotLight1Angle: 0.314,
+  spotLight1Distance: 10,
+  showSpotLight1: true
 };
 
 export default {
@@ -35,11 +41,15 @@ export default {
     dirLightColor: { control: 'color' },
     cameraSpotLightColor: { control: 'color' },
     ambientLightIntensity: { control: { type: 'range', min: 0, max: 10, step: 0.1 } },
-    cameraSpotLighttAngle: { control: { type: 'range', min: 0, max: 10, step: 0.01 } },
+    cameraSpotLightAngle: { control: { type: 'range', min: 0, max: 1.57, step: 0.001 } },
     cameraTarget: { control: { type: 'range', min: 0, max: 10, step: 0.01 } },
     scale: { control: { type: 'range', min: 0.01, max: 10, step: 0.01 } },
-    cameraInitialDistance: { control: { type: 'range', min: 0, max: 1.4, step: 0.01 } },
-    controlsMaxDistance: { control: { type: 'range', min: 2.5, max: 20.0, step: 0.01 } }
+    cameraInitialDistance: { control: { type: 'range', min: 0, max: 1.4, step: 0.001 } },
+    controlsMaxDistance: { control: { type: 'range', min: 2.5, max: 20.0, step: 0.01 } },
+    spotLight1Color: { control: 'color' },
+    spotLight1Angle: { control: { type: 'range', min: 0, max: 1.57, step: 0.001 } },
+    spotLight1Distance: { control: { type: 'range', min: 0, max: 1000, step: 0.01 } },
+    cameraSpotLightDistance: { control: { type: 'range', min: 0, max: 1000, step: 0.01 } }
   }
 } as ComponentMeta<typeof Avatar>;
 

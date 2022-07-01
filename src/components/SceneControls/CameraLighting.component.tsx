@@ -14,9 +14,9 @@ import {
 } from 'three';
 import { OrbitControls } from 'three-stdlib';
 import { clamp, lerp } from 'src/services';
-import { LightingProps, Required } from 'src/types';
+import { LightingPropsCamera, Required } from 'src/types';
 
-type CameraLightingProps = Required<LightingProps> & {
+type CameraLightingProps = Required<LightingPropsCamera> & {
   fullBody?: boolean;
   headScale?: number;
   cameraTarget?: number;
@@ -60,6 +60,7 @@ export const CameraLighting: FC<CameraLightingProps> = ({
   cameraSpotLightPosition,
   cameraSpotLightColor,
   cameraSpotLightAngle,
+  cameraSpotLightDistance,
   controlsMinDistance = 0.4,
   controlsMaxDistance = 2.5,
   updateCameraTargetOnZoom = false
@@ -113,7 +114,7 @@ export const CameraLighting: FC<CameraLightingProps> = ({
       dirLightHelper.name = 'dir-light-helper';
 
       const dirLightSphereGeometry = new SphereGeometry(0.2, 32, 16);
-      const dirLightSphereMaterial = new MeshBasicMaterial({ color: 0x00fffff });
+      const dirLightSphereMaterial = new MeshBasicMaterial({ color: dirLightColor });
       const dirLightSphere = new Mesh(dirLightSphereGeometry, dirLightSphereMaterial);
       dirLightSphere.position.set(dirLight.position.x, dirLight.position.y, dirLight.position.z);
       dirLightSphere.name = 'dir-light-sphere';
@@ -125,13 +126,13 @@ export const CameraLighting: FC<CameraLightingProps> = ({
       const cameraSpotLight = new SpotLight(cameraSpotLightColor, 1, 0, cameraSpotLightAngle, 0, 1);
       cameraSpotLight.name = 'camera-spot-light';
       cameraSpotLight.position.set(cameraSpotLightPosition.x, cameraSpotLightPosition.y, cameraSpotLightPosition.z);
-      cameraSpotLight.distance = 20;
+      cameraSpotLight.distance = cameraSpotLightDistance;
 
       const cameraSpotLightHelper = new SpotLightHelper(cameraSpotLight);
       cameraSpotLightHelper.name = 'camera-spot-light-helper';
 
       const cameraSpotLightSphereGeometry = new SphereGeometry(0.2, 32, 16);
-      const cameraSpotLightSphereMaterial = new MeshBasicMaterial({ color: 0xff0000 });
+      const cameraSpotLightSphereMaterial = new MeshBasicMaterial({ color: cameraSpotLightColor });
       const cameraSpotLightSphere = new Mesh(cameraSpotLightSphereGeometry, cameraSpotLightSphereMaterial);
       cameraSpotLightSphere.position.set(
         cameraSpotLight.position.x,
@@ -154,6 +155,8 @@ export const CameraLighting: FC<CameraLightingProps> = ({
       dirLight.position.set(dirLightPosition.x, dirLightPosition.y, dirLightPosition.z);
       const dirLightSphere = scene.getObjectByName('dir-light-sphere') as Mesh;
       dirLightSphere.position.set(dirLight.position.x, dirLight.position.y, dirLight.position.z);
+      const dirLightSphereMaterial = new MeshBasicMaterial({ color: dirLightColor });
+      dirLightSphere.material = dirLightSphereMaterial;
 
       const ambientLight = scene.getObjectByName('ambient-light') as AmbientLight;
       ambientLight.color.set(ambientLightColor);
@@ -169,6 +172,8 @@ export const CameraLighting: FC<CameraLightingProps> = ({
         cameraSpotLight.position.y,
         cameraSpotLight.position.z
       );
+      const spotLight1SphereMaterial = new MeshBasicMaterial({ color: cameraSpotLightColor });
+      cameraSpotLightSphere.material = spotLight1SphereMaterial;
     }
   }, [
     ambientLightColor,
@@ -188,6 +193,13 @@ export const CameraLighting: FC<CameraLightingProps> = ({
     }
     updateCameraFocus(camera, delta, cameraZoomTarget);
     controls.update();
+    const cameraSpotLight = scene.getObjectByName('camera-spot-light') as SpotLight;
+    const cameraSpotLightHelper = scene.getObjectByName('camera-spot-light-helper') as SpotLightHelper;
+    cameraSpotLight.angle = cameraSpotLightAngle;
+    cameraSpotLight.distance = cameraSpotLightDistance;
+    cameraSpotLightHelper.update();
+    const dirLightHelper = scene.getObjectByName('dir-light-helper') as SpotLightHelper;
+    dirLightHelper.update();
   });
 
   return null;

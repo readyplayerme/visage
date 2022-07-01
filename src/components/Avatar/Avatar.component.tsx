@@ -3,8 +3,9 @@ import { Environment } from '@react-three/drei';
 import { PresetsType } from '@react-three/drei/helpers/environment-assets';
 import { Vector3 } from 'three';
 import { CameraLighting } from 'src/components/SceneControls/CameraLighting.component';
+import { SceneLighting } from 'src/components/SceneControls/SceneLighting.component';
 import { AnimationModel } from 'src/components/Models/AnimationModel/AnimationModel.component';
-import { LightingProps } from 'src/types';
+import { LightingPropsCamera, LightingPropsScene } from 'src/types';
 import { BaseCanvas } from 'src/components/BaseCanvas';
 import { HalfBodyModel, StaticModel } from 'src/components/Models';
 import { isValidGlbUrl } from 'src/services';
@@ -32,7 +33,7 @@ export const CAMERA = {
   }
 };
 
-export interface AvatarProps extends LightingProps {
+export interface AvatarProps extends LightingPropsCamera, LightingPropsScene {
   /**
    * Path to `.glb` file of the 3D model.
    */
@@ -96,10 +97,16 @@ export const Avatar: FC<AvatarProps> = ({
   cameraSpotLightPosition = new Vector3(12, 10, 7.5),
   cameraSpotLightColor = '#fff5b6',
   cameraSpotLightAngle = 0.314,
+  cameraSpotLightDistance = 10,
   cameraTarget = CAMERA.TARGET.FULL_BODY,
   cameraInitialDistance = CAMERA.INITIAL_DISTANCE.FULL_BODY,
   controlsMaxDistance = halfBody ? CAMERA.CONTROLS.HALF_BODY.MAX_DISTANCE : CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
-  style
+  style,
+  spotLight1Position = new Vector3(0, 5, 0),
+  spotLight1Color = '#ff0000',
+  spotLight1Angle = 0.314,
+  spotLight1Distance = 10,
+  showSpotLight1 = false
 }) => {
   const AvatarModel = useMemo(() => {
     if (!isValidGlbUrl(modelUrl)) {
@@ -132,11 +139,19 @@ export const Avatar: FC<AvatarProps> = ({
           cameraSpotLightPosition={cameraSpotLightPosition}
           cameraSpotLightColor={cameraSpotLightColor}
           cameraSpotLightAngle={cameraSpotLightAngle}
+          cameraSpotLightDistance={cameraSpotLightDistance}
           controlsMinDistance={
             halfBody ? CAMERA.CONTROLS.HALF_BODY.MIN_DISTANCE : CAMERA.CONTROLS.FULL_BODY.MIN_DISTANCE
           }
           controlsMaxDistance={controlsMaxDistance}
           updateCameraTargetOnZoom={!halfBody}
+        />
+        <SceneLighting
+          spotLight1Position={spotLight1Position}
+          spotLight1Color={spotLight1Color}
+          spotLight1Angle={spotLight1Angle}
+          spotLight1Distance={spotLight1Distance}
+          showSpotLight1={showSpotLight1}
         />
         {AvatarModel}
         {shadows && (
