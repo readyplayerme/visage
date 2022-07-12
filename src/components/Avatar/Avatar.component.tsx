@@ -6,7 +6,7 @@ import { CameraLighting } from 'src/components/SceneControls/CameraLighting.comp
 import { AnimationModel } from 'src/components/Models/AnimationModel/AnimationModel.component';
 import { LightingProps } from 'src/types';
 import { BaseCanvas } from 'src/components/BaseCanvas';
-import { HalfBodyModel, StaticModel } from 'src/components/Models';
+import { HalfBodyModel, StaticModel, PoseModel } from 'src/components/Models';
 import { isValidGlbUrl } from 'src/services';
 
 export const CAMERA = {
@@ -117,7 +117,11 @@ export const Avatar: FC<AvatarProps> = ({
       return <HalfBodyModel modelUrl={modelUrl} scale={scale} />;
     }
 
-    return <StaticModel modelUrl={modelUrl} scale={scale} poseUrl={poseUrl} />;
+    if (isValidGlbUrl(poseUrl)) {
+      return <PoseModel modelUrl={modelUrl} scale={scale} poseUrl={poseUrl!} />;
+    }
+
+    return <StaticModel modelUrl={modelUrl} scale={scale} />;
   }, [halfBody, animationUrl, modelUrl, scale]);
 
   return (
