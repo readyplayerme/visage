@@ -42,6 +42,11 @@ export interface AvatarProps extends LightingProps {
    */
   animationUrl?: string;
   /**
+   * Path to `.glb` file which will be used to map Bone placements onto the underlying 3D model.
+   * Applied when not specifying an animation.
+   */
+  poseUrl?: string;
+  /**
    * Canvas background color. Supports all CSS color value types.
    */
   backgroundColor?: string;
@@ -82,6 +87,7 @@ export interface AvatarProps extends LightingProps {
 export const Avatar: FC<AvatarProps> = ({
   modelUrl,
   animationUrl = undefined,
+  poseUrl = undefined,
   backgroundColor = '#f0f0f0',
   environment = 'city',
   halfBody = false,
@@ -111,7 +117,7 @@ export const Avatar: FC<AvatarProps> = ({
       return <HalfBodyModel modelUrl={modelUrl} scale={scale} />;
     }
 
-    return <StaticModel modelUrl={modelUrl} scale={scale} />;
+    return <StaticModel modelUrl={modelUrl} scale={scale} poseUrl={poseUrl} />;
   }, [halfBody, animationUrl, modelUrl, scale]);
 
   return (
