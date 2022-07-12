@@ -122,7 +122,7 @@ export const Avatar: FC<AvatarProps> = ({
     }
 
     return <StaticModel modelUrl={modelUrl} scale={scale} />;
-  }, [halfBody, animationUrl, modelUrl, scale]);
+  }, [halfBody, animationUrl, modelUrl, scale, poseUrl]);
 
   return (
     <BaseCanvas background={backgroundColor} position={new Vector3(0, 0, 3)} fov={50} style={style}>
