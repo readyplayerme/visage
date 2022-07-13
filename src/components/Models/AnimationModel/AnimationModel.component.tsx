@@ -10,6 +10,7 @@ interface AnimationModelProps {
   animationUrl: string;
   rotation?: number;
   scale?: number;
+  idleRotation?: boolean;
 }
 
 let currentRotation = 0;
@@ -18,7 +19,8 @@ export const AnimationModel: FC<AnimationModelProps> = ({
   modelUrl,
   animationUrl,
   rotation = 20 * (Math.PI / 180),
-  scale = 1
+  scale = 1,
+  idleRotation = false
 }) => {
   const ref = useRef<Group>();
   const { scene } = useLoader(GLTFLoader, modelUrl);
@@ -31,6 +33,11 @@ export const AnimationModel: FC<AnimationModelProps> = ({
 
   useFrame((state, delta) => {
     mixer?.update(delta);
+
+    if (!idleRotation) {
+      return;
+    }
+
     if (ref?.current) {
       currentRotation += delta * 0.2;
       ref.current.rotation.y = rotation + Math.sin(currentRotation) / 3;

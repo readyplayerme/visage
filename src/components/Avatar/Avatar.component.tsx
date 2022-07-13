@@ -78,6 +78,10 @@ export interface AvatarProps extends LightingProps {
    * Pass styling to canvas element.
    */
   style?: CSSProperties;
+  /**
+   * Applies an idle rotation to the animated and half-body models.
+   */
+  idleRotation?: boolean;
 }
 
 /**
@@ -102,7 +106,8 @@ export const Avatar: FC<AvatarProps> = ({
   spotLightAngle = 0.314,
   cameraTarget = CAMERA.TARGET.FULL_BODY,
   cameraInitialDistance = CAMERA.INITIAL_DISTANCE.FULL_BODY,
-  style
+  style,
+  idleRotation = false
 }) => {
   const AvatarModel = useMemo(() => {
     if (!isValidGlbUrl(modelUrl)) {
@@ -110,11 +115,13 @@ export const Avatar: FC<AvatarProps> = ({
     }
 
     if (!!animationUrl && !halfBody && isValidGlbUrl(animationUrl)) {
-      return <AnimationModel modelUrl={modelUrl} animationUrl={animationUrl} scale={scale} />;
+      return (
+        <AnimationModel modelUrl={modelUrl} animationUrl={animationUrl} scale={scale} idleRotation={idleRotation} />
+      );
     }
 
     if (halfBody) {
-      return <HalfBodyModel modelUrl={modelUrl} scale={scale} />;
+      return <HalfBodyModel modelUrl={modelUrl} scale={scale} idleRotation={idleRotation} />;
     }
 
     if (isValidGlbUrl(poseUrl)) {
@@ -122,7 +129,7 @@ export const Avatar: FC<AvatarProps> = ({
     }
 
     return <StaticModel modelUrl={modelUrl} scale={scale} />;
-  }, [halfBody, animationUrl, modelUrl, scale, poseUrl]);
+  }, [halfBody, animationUrl, modelUrl, scale, poseUrl, idleRotation]);
 
   return (
     <BaseCanvas background={backgroundColor} position={new Vector3(0, 0, 3)} fov={50} style={style}>

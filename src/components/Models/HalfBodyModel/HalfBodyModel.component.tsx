@@ -9,11 +9,17 @@ interface HalfBodyModelProps {
   modelUrl: string;
   rotation?: number;
   scale?: number;
+  idleRotation?: boolean;
 }
 
 let currentRotation = 0;
 
-export const HalfBodyModel: FC<HalfBodyModelProps> = ({ modelUrl, scale = 1, rotation = 20 * (Math.PI / 180) }) => {
+export const HalfBodyModel: FC<HalfBodyModelProps> = ({
+  modelUrl,
+  scale = 1,
+  rotation = 20 * (Math.PI / 180),
+  idleRotation = false
+}) => {
   const ref = useRef<Group>();
   const { scene } = useLoader(GLTFLoader, modelUrl);
   const { nodes } = useGraph(scene);
@@ -34,6 +40,10 @@ export const HalfBodyModel: FC<HalfBodyModelProps> = ({ modelUrl, scale = 1, rot
   });
 
   useFrame((state, delta) => {
+    if (!idleRotation) {
+      return;
+    }
+
     if (ref?.current) {
       currentRotation += delta * 0.2;
       ref.current.rotation.y = rotation + Math.sin(currentRotation) / 3;
