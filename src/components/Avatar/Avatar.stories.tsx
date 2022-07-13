@@ -14,6 +14,7 @@ Static.args = {
   environment: 'city',
   shadows: false,
   halfBody: false,
+  idleRotation: false,
   ambientLightColor: '#fff5b6',
   ambientLightIntensity: 0.25,
   dirLightPosition: new Vector3(-3, 5, -5),
