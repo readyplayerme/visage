@@ -22,7 +22,7 @@ Static.args = {
   spotLightColor: '#fff5b6',
   spotLightAngle: 0.314,
   cameraTarget: CAMERA.TARGET.FULL_BODY,
-  cameraInitialDistance: CAMERA.INITIAL_DISTANCE.FULL_BODY
+  cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE
 };
 
 export default {
@@ -37,7 +37,7 @@ export default {
     spotLightAngle: { control: { type: 'range', min: 0, max: 10, step: 0.01 } },
     cameraTarget: { control: { type: 'range', min: 0, max: 10, step: 0.01 } },
     scale: { control: { type: 'range', min: 0.01, max: 10, step: 0.01 } },
-    cameraInitialDistance: { control: { type: 'range', min: 0, max: 1.4, step: 0.01 } }
+    cameraInitialDistance: { control: { type: 'range', min: 0, max: 2.5, step: 0.01 } }
   }
 } as ComponentMeta<typeof Avatar>;
 
@@ -47,7 +47,7 @@ Animated.args = {
   modelUrl: getStoryAssetPath('male.glb'),
   animationUrl: getStoryAssetPath('maleIdle.glb'),
   cameraTarget: CAMERA.TARGET.FULL_BODY,
-  cameraInitialDistance: CAMERA.INITIAL_DISTANCE.FULL_BODY
+  cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE
 };
 
 export const HalfBody = Template.bind({});
@@ -57,4 +57,13 @@ HalfBody.args = {
   halfBody: true,
   cameraTarget: CAMERA.TARGET.HALF_BODY,
   cameraInitialDistance: CAMERA.INITIAL_DISTANCE.HALF_BODY
+};
+
+export const Posing = Template.bind({});
+Posing.args = {
+  ...Static.args,
+  modelUrl: getStoryAssetPath('male.glb'),
+  poseUrl: getStoryAssetPath('male-pose-standing.glb'),
+  cameraTarget: CAMERA.TARGET.FULL_BODY,
+  cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE
 };

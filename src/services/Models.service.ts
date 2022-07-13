@@ -1,5 +1,6 @@
 import { LinearFilter, MeshStandardMaterial, Material, Vector2, Object3D } from 'three';
 import { useFrame } from '@react-three/fiber';
+import type { ObjectMap } from '@react-three/fiber';
 
 export const getStoryAssetPath = (publicAsset: string) =>
   `${process.env.NODE_ENV === 'production' ? '/visage' : ''}/${publicAsset}`;
@@ -39,7 +40,7 @@ export const normaliseMaterialsConfig = (materials: Record<string, Material>) =>
  * When the model isn't a standard Ready Player Me avatar, the head movement won't take effect.
  */
 export const useHeadMovement = (
-  objects: Record<string, Object3D>,
+  nodes: Record<string, Object3D>,
   isHalfBody: boolean = false,
   distance = 2,
   activeRotation = 0.2,
@@ -51,7 +52,6 @@ export const useHeadMovement = (
   const activeDistance = distance - (isHalfBody ? 1 : 0);
   const eyeRotationOffsetX = isHalfBody ? 90 * rad : 0;
   const neckBoneRotationOffsetX = (isHalfBody ? -5 : 10) * rad;
-  const nodes = objects;
   const mapRange = (value: number, inMin: number, inMax: number, outMin: number, outMax: number) =>
     ((clamp(value, inMax, inMin) - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
 
@@ -72,7 +72,7 @@ export const useHeadMovement = (
 
     currentPos.x = lerp(currentPos.x, targetPos.x);
     currentPos.y = lerp(currentPos.y, targetPos.y);
-
+    /* eslint-disable no-param-reassign */
     nodes.Neck.rotation.x = currentPos.x + neckBoneRotationOffsetX;
     nodes.Neck.rotation.y = currentPos.y;
 
@@ -90,4 +90,24 @@ export const useHeadMovement = (
       nodes.LeftEye.rotation.y = currentPos.y * 2;
     }
   });
+};
+
+/**
+ * Transfers Bone positions from source to target.
+ * @param targetNodes {object} - object that will be mutated
+ * @param sourceNodes {object} - object that will be used as reference
+ */
+export const mutatePose = (targetNodes?: ObjectMap['nodes'], sourceNodes?: ObjectMap['nodes']) => {
+  if (targetNodes && sourceNodes) {
+    Object.keys(targetNodes).forEach((key) => {
+      if (targetNodes[key].type === 'Bone' && sourceNodes[key]) {
+        /* eslint-disable no-param-reassign */
+        const pos = sourceNodes[key].position;
+        targetNodes[key].position.set(pos.x, pos.y, pos.z);
+
+        const rot = sourceNodes[key].rotation;
+        targetNodes[key].rotation.set(rot.x, rot.y, rot.z);
+      }
+    });
+  }
 };

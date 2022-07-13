@@ -6,7 +6,7 @@ import { CameraLighting } from 'src/components/SceneControls/CameraLighting.comp
 import { AnimationModel } from 'src/components/Models/AnimationModel/AnimationModel.component';
 import { LightingProps } from 'src/types';
 import { BaseCanvas } from 'src/components/BaseCanvas';
-import { HalfBodyModel, StaticModel } from 'src/components/Models';
+import { HalfBodyModel, StaticModel, PoseModel } from 'src/components/Models';
 import { isValidGlbUrl } from 'src/services';
 
 export const CAMERA = {
@@ -41,6 +41,11 @@ export interface AvatarProps extends LightingProps {
    * Path to `.glb` animation file of the 3D model.
    */
   animationUrl?: string;
+  /**
+   * Path to `.glb` file which will be used to map Bone placements onto the underlying 3D model.
+   * Applied when not specifying an animation.
+   */
+  poseUrl?: string;
   /**
    * Canvas background color. Supports all CSS color value types.
    */
@@ -82,6 +87,7 @@ export interface AvatarProps extends LightingProps {
 export const Avatar: FC<AvatarProps> = ({
   modelUrl,
   animationUrl = undefined,
+  poseUrl = undefined,
   backgroundColor = '#f0f0f0',
   environment = 'city',
   halfBody = false,
@@ -111,8 +117,12 @@ export const Avatar: FC<AvatarProps> = ({
       return <HalfBodyModel modelUrl={modelUrl} scale={scale} />;
     }
 
+    if (isValidGlbUrl(poseUrl)) {
+      return <PoseModel modelUrl={modelUrl} scale={scale} poseUrl={poseUrl!} />;
+    }
+
     return <StaticModel modelUrl={modelUrl} scale={scale} />;
-  }, [halfBody, animationUrl, modelUrl, scale]);
+  }, [halfBody, animationUrl, modelUrl, scale, poseUrl]);
 
   return (
     <BaseCanvas background={backgroundColor} position={new Vector3(0, 0, 3)} fov={50} style={style}>
