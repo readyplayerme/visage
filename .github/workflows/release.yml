@@ -79,6 +79,6 @@ jobs:
       - name: 📃 Deploy
         uses: JamesIves/github-pages-deploy-action@v4.2.5
         with:
-          branch: main
+          branch: github-pages
           folder: storybook-static
           target-folder: docs
