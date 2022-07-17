@@ -32,6 +32,8 @@ export const CAMERA = {
   }
 };
 
+export type EmotionType = 'idle' | 'sad' | 'angry' | 'happy';
+
 export interface AvatarProps extends LightingProps {
   /**
    * Path to `.glb` file of the 3D model.
@@ -82,6 +84,10 @@ export interface AvatarProps extends LightingProps {
    * Applies an idle rotation to the animated and half-body models.
    */
   idleRotation?: boolean;
+  /**
+   * Applies a face emotion of the model.
+   */
+  emotion?: EmotionType;
 }
 
 /**
@@ -107,6 +113,7 @@ export const Avatar: FC<AvatarProps> = ({
   cameraTarget = CAMERA.TARGET.FULL_BODY,
   cameraInitialDistance = CAMERA.INITIAL_DISTANCE.FULL_BODY,
   style,
+  emotion,
   idleRotation = false
 }) => {
   const AvatarModel = useMemo(() => {
@@ -125,11 +132,11 @@ export const Avatar: FC<AvatarProps> = ({
     }
 
     if (isValidGlbUrl(poseUrl)) {
-      return <PoseModel modelUrl={modelUrl} scale={scale} poseUrl={poseUrl!} />;
+      return <PoseModel emotion={emotion} modelUrl={modelUrl} scale={scale} poseUrl={poseUrl!} />;
     }
 
     return <StaticModel modelUrl={modelUrl} scale={scale} />;
-  }, [halfBody, animationUrl, modelUrl, scale, poseUrl, idleRotation]);
+  }, [halfBody, animationUrl, modelUrl, scale, poseUrl, idleRotation, emotion]);
 
   return (
     <BaseCanvas background={backgroundColor} position={new Vector3(0, 0, 3)} fov={50} style={style}>
