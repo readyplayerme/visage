@@ -2,7 +2,7 @@ import React, { FC, MutableRefObject } from 'react';
 import { useFrame, useGraph, useLoader } from '@react-three/fiber';
 import { GLTFLoader } from 'three-stdlib';
 import { Model } from 'src/components/Models/Model';
-import { Group } from 'three';
+import { Group, SkinnedMesh } from 'three';
 import { mutatePose } from 'src/services';
 import { EmotionType } from '../../Avatar/Avatar.component';
 
@@ -50,7 +50,7 @@ export const PoseModel: FC<PoseModelProps> = ({ modelUrl, poseUrl, modelRef, sca
   const { nodes } = useGraph(scene);
   const pose = useLoader(GLTFLoader, poseUrl);
   const { nodes: sourceNodes } = useGraph(pose.scene);
-  const headMesh = sourceNodes;
+  const headMesh = nodes.HeadMesh as SkinnedMesh;
 
   useFrame(() => {
     if (!nodes.RightEye || !nodes.LeftEye) {
@@ -67,7 +67,6 @@ export const PoseModel: FC<PoseModelProps> = ({ modelUrl, poseUrl, modelRef, sca
   });
 
   console.log('emotion', emotion);
-  console.log('nodes', nodes);
   console.log('headmesh', headMesh);
 
   mutatePose(nodes, sourceNodes);
