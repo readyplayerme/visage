@@ -37,19 +37,54 @@ const emotions: Record<EmotionVariantsType, Array<EmotionType>> = {
   ],
   angry: [
     {
-      id: 1,
-      value: 2,
-      name: 'mouthSmile'
-    },
-    {
       id: 38,
-      value: -2,
+      value: 0.95,
       name: 'browDownLeft'
     },
     {
       id: 39,
-      value: -2,
+      value: 0.95,
       name: 'browDownRight'
+    },
+    {
+      id: 24,
+      value: -0.5,
+      name: 'mouthDimpleLeft'
+    },
+    {
+      id: 25,
+      value: -0.5,
+      name: 'mouthDimpleRight'
+    },
+    {
+      id: 35,
+      value: -0.3,
+      name: 'mouthLowerDownRight'
+    },
+    {
+      id: 34,
+      value: -0.3,
+      name: 'mouthLowerDownLeft'
+    },
+    {
+      id: 46,
+      value: 0.35,
+      name: 'noseSneerLeft'
+    },
+    {
+      id: 47,
+      value: 0.35,
+      name: 'noseSneerRight'
+    },
+    {
+      id: 5,
+      value: 0.15,
+      name: 'eyeBlinkLeft'
+    },
+    {
+      id: 8,
+      value: 0.15,
+      name: 'eyeBlinkRight'
     }
   ],
   happy: [
@@ -96,7 +131,7 @@ const emotions: Record<EmotionVariantsType, Array<EmotionType>> = {
   ]
 };
 
-export const PoseModel: FC<PoseModelProps> = ({ modelUrl, poseUrl, modelRef, scale = 1, emotion = 'idle' }) => {
+export const PoseModel: FC<PoseModelProps> = ({ modelUrl, poseUrl, modelRef, scale = 1, emotion = 'angry' }) => {
   const { scene } = useLoader(GLTFLoader, modelUrl);
   const { nodes } = useGraph(scene);
   const pose = useLoader(GLTFLoader, poseUrl);
