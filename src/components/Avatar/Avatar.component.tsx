@@ -4,7 +4,7 @@ import { PresetsType } from '@react-three/drei/helpers/environment-assets';
 import { Vector3 } from 'three';
 import { CameraLighting } from 'src/components/SceneControls/CameraLighting.component';
 import { AnimationModel } from 'src/components/Models/AnimationModel/AnimationModel.component';
-import { LightingProps } from 'src/types';
+import { EmotionVariantsType, LightingProps } from 'src/types';
 import { BaseCanvas } from 'src/components/BaseCanvas';
 import { HalfBodyModel, StaticModel, PoseModel } from 'src/components/Models';
 import { isValidGlbUrl } from 'src/services';
@@ -31,8 +31,6 @@ export const CAMERA = {
     }
   }
 };
-
-export type EmotionVariantsType = 'idle' | 'sad' | 'angry' | 'happy' | 'impressed';
 
 export interface AvatarProps extends LightingProps {
   /**

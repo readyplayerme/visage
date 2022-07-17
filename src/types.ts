@@ -20,3 +20,7 @@ export interface LightingProps {
   spotLightColor?: string;
   spotLightAngle?: number;
 }
+
+export type EmotionVariantsType = 'idle' | 'sad' | 'angry' | 'happy' | 'impressed';
+
+export type EmotionType = { id: number; value: number; name: string };
