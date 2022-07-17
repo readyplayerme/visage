@@ -32,7 +32,7 @@ export const CAMERA = {
   }
 };
 
-export type EmotionVariantsType = 'idle' | 'sad' | 'angry' | 'happy';
+export type EmotionVariantsType = 'idle' | 'sad' | 'angry' | 'happy' | 'impressed';
 
 export interface AvatarProps extends LightingProps {
   /**
