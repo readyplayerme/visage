@@ -4,72 +4,118 @@ import { GLTFLoader } from 'three-stdlib';
 import { Model } from 'src/components/Models/Model';
 import { Group, SkinnedMesh } from 'three';
 import { mutatePose } from 'src/services';
-import { EmotionType } from '../../Avatar/Avatar.component';
+import { EmotionVariantsType } from '../../Avatar/Avatar.component';
 
 interface PoseModelProps {
   modelUrl: string;
   poseUrl: string;
   modelRef?: MutableRefObject<Group | undefined>;
   scale?: number;
-  emotion?: EmotionType;
+  emotion?: EmotionVariantsType;
 }
 
-// const emotions = {
-//   idle : {
-//     mouth: 0,
-//     leftEye: 0,
-//     rightEye: 0,
-//     leftEyebrow: 0,
-//     rightEyebrow: 0
-//   },
-//   sad: {
-//     mouth: 0,
-//     leftEye: 0,
-//     rightEye: 0,
-//     leftEyebrow: 0,
-//     rightEyebrow: 0
-//   },
-//   angry: {
-//     mouth: 0,
-//     leftEye: 0,
-//     rightEye: 0,
-//     leftEyebrow: 0,
-//     rightEyebrow: 0
-//   },
-//   happy: {
-//     mouth: 0,
-//     leftEye: 0,
-//     rightEye: 0,
-//     leftEyebrow: 0,
-//     rightEyebrow: 0
-//   },
-// }
+export type EmotionType = { id: number; value: number; name: string };
+
+const emotions: Record<EmotionVariantsType, Array<EmotionType>> = {
+  idle: [],
+  sad: [
+    {
+      id: 1,
+      value: 2,
+      name: 'mouthSmile'
+    },
+    {
+      id: 38,
+      value: 2,
+      name: 'browDownLeft'
+    },
+    {
+      id: 39,
+      value: 2,
+      name: 'browDownRight'
+    }
+  ],
+  angry: [
+    {
+      id: 1,
+      value: 2,
+      name: 'mouthSmile'
+    },
+    {
+      id: 38,
+      value: -2,
+      name: 'browDownLeft'
+    },
+    {
+      id: 39,
+      value: -2,
+      name: 'browDownRight'
+    }
+  ],
+  happy: [
+    {
+      id: 1,
+      value: 0.6,
+      name: 'mouthSmile'
+    },
+    {
+      id: 0,
+      value: 0.3,
+      name: 'mouthOpen'
+    },
+    {
+      id: 39,
+      value: -0.5,
+      name: 'browDownRight'
+    },
+    {
+      id: 38,
+      value: -0.5,
+      name: 'browDownLeft'
+    },
+    {
+      id: 24,
+      value: 0.7,
+      name: 'mouthDimpleLeft'
+    },
+    {
+      id: 25,
+      value: 0.7,
+      name: 'mouthDimpleRight'
+    },
+    {
+      id: 46,
+      value: 0.45,
+      name: 'noseSneerLeft'
+    },
+    {
+      id: 47,
+      value: 0.45,
+      name: 'noseSneerRight'
+    }
+  ]
+};
 
 export const PoseModel: FC<PoseModelProps> = ({ modelUrl, poseUrl, modelRef, scale = 1, emotion = 'idle' }) => {
   const { scene } = useLoader(GLTFLoader, modelUrl);
   const { nodes } = useGraph(scene);
   const pose = useLoader(GLTFLoader, poseUrl);
   const { nodes: sourceNodes } = useGraph(pose.scene);
-  const headMesh = nodes.HeadMesh as SkinnedMesh;
+  const headMesh = nodes.Wolf3D_Head as SkinnedMesh;
 
   useFrame(() => {
-    if (!nodes.RightEye || !nodes.LeftEye) {
+    if (!headMesh) {
       return;
     }
 
-    nodes.RightEye.rotation.x = 0;
-    nodes.RightEye.rotation.y = -0.5;
-    nodes.RightEye.rotation.z = 0;
-
-    nodes.LeftEye.rotation.x = 0.3;
-    nodes.LeftEye.rotation.y = 0.5;
-    nodes.LeftEye.rotation.z = 0.3;
+    if (emotion !== 'idle') {
+      emotions[emotion].forEach((item) => {
+        headMesh!.morphTargetInfluences![item.id] = item.value;
+      });
+    }
   });
 
-  console.log('emotion', emotion);
-  console.log('headmesh', headMesh);
-
-  mutatePose(nodes, sourceNodes);
+  mutatePose(sourceNodes, nodes);
 
   return <Model modelRef={modelRef} scene={scene} scale={scale} />;
 };
