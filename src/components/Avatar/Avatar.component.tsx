@@ -126,7 +126,7 @@ export const Avatar: FC<AvatarProps> = ({
     }
 
     if (halfBody) {
-      return <HalfBodyModel modelUrl={modelUrl} scale={scale} idleRotation={idleRotation} />;
+      return <HalfBodyModel emotion={emotion} modelUrl={modelUrl} scale={scale} idleRotation={idleRotation} />;
     }
 
     if (isValidGlbUrl(poseUrl)) {

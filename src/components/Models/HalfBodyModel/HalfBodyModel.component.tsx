@@ -2,14 +2,16 @@ import React, { FC, useRef } from 'react';
 import { useFrame, useGraph, useLoader } from '@react-three/fiber';
 import { GLTFLoader } from 'three-stdlib';
 import { Model } from 'src/components/Models/Model';
-import { useHeadMovement } from 'src/services';
+import { useEmotion, useHeadMovement } from 'src/services';
 import { Group } from 'three';
+import { Emotion } from '../../../types';
 
 interface HalfBodyModelProps {
   modelUrl: string;
   rotation?: number;
   scale?: number;
   idleRotation?: boolean;
+  emotion?: Emotion;
 }
 
 let currentRotation = 0;
@@ -18,7 +20,8 @@ export const HalfBodyModel: FC<HalfBodyModelProps> = ({
   modelUrl,
   scale = 1,
   rotation = 20 * (Math.PI / 180),
-  idleRotation = false
+  idleRotation = false,
+  emotion = 'idle'
 }) => {
   const ref = useRef<Group>();
   const { scene } = useLoader(GLTFLoader, modelUrl);
@@ -51,6 +54,7 @@ export const HalfBodyModel: FC<HalfBodyModelProps> = ({
   });
 
   useHeadMovement(nodes, true);
+  useEmotion(nodes, emotion);
 
   return <Model modelRef={ref} scene={scene} scale={scale} />;
 };
