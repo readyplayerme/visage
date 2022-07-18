@@ -20,7 +20,7 @@ export const PoseModel: FC<PoseModelProps> = ({ modelUrl, poseUrl, modelRef, sca
   const pose = useLoader(GLTFLoader, poseUrl);
   const { nodes: sourceNodes } = useGraph(pose.scene);
 
-  mutatePose(sourceNodes, nodes);
+  mutatePose(nodes, sourceNodes);
   useEmotion(nodes, emotion);
 
   return <Model modelRef={modelRef} scene={scene} scale={scale} />;
