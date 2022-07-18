@@ -1,7 +1,7 @@
 import { LinearFilter, MeshStandardMaterial, Material, Vector2, Object3D, SkinnedMesh } from 'three';
 import { useFrame } from '@react-three/fiber';
 import type { ObjectMap } from '@react-three/fiber';
-import { EmotionType, EmotionVariantsType } from '../types';
+import { EmotionsType, EmotionVariantsType } from '../types';
 
 export const getStoryAssetPath = (publicAsset: string) =>
   `${process.env.NODE_ENV === 'production' ? '/visage' : ''}/${publicAsset}`;
@@ -113,171 +113,46 @@ export const mutatePose = (targetNodes?: ObjectMap['nodes'], sourceNodes?: Objec
   }
 };
 
-const emotions: Record<EmotionVariantsType, Array<EmotionType>> = {
-  idle: [],
-  impressed: [
-    {
-      id: 0,
-      value: 0.7,
-      name: 'mouthOpen'
-    },
-    {
-      id: 1,
-      value: 0.3,
-      name: 'mouthSmile'
-    },
-    {
-      id: 24,
-      value: 0.4,
-      name: 'mouthDimpleLeft'
-    },
-    {
-      id: 25,
-      value: 0.4,
-      name: 'mouthDimpleRight'
-    },
-    {
-      id: 7,
-      value: 0.75,
-      name: 'eyeWideLeft'
-    },
-    {
-      id: 10,
-      value: 0.75,
-      name: 'eyeWideRight'
-    },
-    {
-      id: 40,
-      value: 0.3,
-      name: 'browInnerUp'
-    }
-  ],
-  sad: [
-    {
-      id: 1,
-      value: -0.35,
-      name: 'mouthSmile'
-    },
-    {
-      id: 38,
-      value: -0.45,
-      name: 'browDownLeft'
-    },
-    {
-      id: 39,
-      value: -0.45,
-      name: 'browDownRight'
-    },
-    {
-      id: 30,
-      value: 0.3,
-      name: 'browDownRight'
-    },
-    {
-      id: 46,
-      value: -0.35,
-      name: 'noseSneerLeft'
-    },
-    {
-      id: 47,
-      value: -0.35,
-      name: 'noseSneerRight'
-    }
-  ],
-  angry: [
-    {
-      id: 38,
-      value: 0.95,
-      name: 'browDownLeft'
-    },
-    {
-      id: 39,
-      value: 0.95,
-      name: 'browDownRight'
-    },
-    {
-      id: 24,
-      value: -0.5,
-      name: 'mouthDimpleLeft'
-    },
-    {
-      id: 25,
-      value: -0.5,
-      name: 'mouthDimpleRight'
-    },
-    {
-      id: 35,
-      value: -0.3,
-      name: 'mouthLowerDownRight'
-    },
-    {
-      id: 34,
-      value: -0.3,
-      name: 'mouthLowerDownLeft'
-    },
-    {
-      id: 46,
-      value: 0.35,
-      name: 'noseSneerLeft'
-    },
-    {
-      id: 47,
-      value: 0.35,
-      name: 'noseSneerRight'
-    },
-    {
-      id: 5,
-      value: 0.15,
-      name: 'eyeBlinkLeft'
-    },
-    {
-      id: 8,
-      value: 0.15,
-      name: 'eyeBlinkRight'
-    }
-  ],
-  happy: [
-    {
-      id: 1,
-      value: 0.6,
-      name: 'mouthSmile'
-    },
-    {
-      id: 0,
-      value: 0.3,
-      name: 'mouthOpen'
-    },
-    {
-      id: 39,
-      value: -0.5,
-      name: 'browDownRight'
-    },
-    {
-      id: 38,
-      value: -0.5,
-      name: 'browDownLeft'
-    },
-    {
-      id: 24,
-      value: 0.7,
-      name: 'mouthDimpleLeft'
-    },
-    {
-      id: 25,
-      value: 0.7,
-      name: 'mouthDimpleRight'
-    },
-    {
-      id: 46,
-      value: 0.45,
-      name: 'noseSneerLeft'
-    },
-    {
-      id: 47,
-      value: 0.45,
-      name: 'noseSneerRight'
-    }
-  ]
+const emotions: EmotionsType = {
+  idle: {},
+  impressed: {
+    mouthOpen: 0.7,
+    mouthSmile: 0.3,
+    mouthDimpleLeft: 0.4,
+    mouthDimpleRight: 0.4,
+    eyeWideLeft: 0.75,
+    eyeWideRight: 0.75,
+    browInnerUp: 0.3
+  },
+  sad: {
+    mouthSmile: -0.35,
+    browDownLeft: -0.45,
+    browDownRight: -0.45,
+    noseSneerLeft: -0.35,
+    noseSneerRight: -0.35
+  },
+  angry: {
+    browDownLeft: 0.95,
+    browDownRight: 0.95,
+    mouthDimpleLeft: -0.5,
+    mouthDimpleRight: -0.5,
+    mouthLowerDownRight: -0.3,
+    mouthLowerDownLeft: -0.3,
+    noseSneerLeft: 0.35,
+    noseSneerRight: 0.35,
+    eyeBlinkLeft: 0.15,
+    eyeBlinkRight: 0.15
+  },
+  happy: {
+    mouthSmile: 0.6,
+    mouthOpen: 0.3,
+    browDownRight: -0.5,
+    browDownLeft: -0.5,
+    mouthDimpleLeft: 0.7,
+    mouthDimpleRight: 0.7,
+    noseSneerLeft: 0.45,
+    noseSneerRight: 0.45
+  }
 };
 
 export const useEmotion = (nodes: ObjectMap['nodes'], emotion: EmotionVariantsType) => {
@@ -289,8 +164,12 @@ export const useEmotion = (nodes: ObjectMap['nodes'], emotion: EmotionVariantsTy
     }
 
     if (emotion !== 'idle') {
-      emotions[emotion].forEach((item) => {
-        headMesh!.morphTargetInfluences![item.id] = item.value;
+      Object.entries(emotions[emotion]).forEach(([shape, value]) => {
+        const shapeId = headMesh!.morphTargetDictionary?.[shape];
+
+        if (shapeId) {
+          headMesh!.morphTargetInfluences![shapeId] = value;
+        }
       });
     }
   });
