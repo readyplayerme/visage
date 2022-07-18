@@ -4,7 +4,7 @@ import { GLTFLoader } from 'three-stdlib';
 import { Model } from 'src/components/Models/Model';
 import { Group } from 'three';
 import { mutatePose, useEmotion } from 'src/services';
-import { Emotion } from '../../../types';
+import { Emotion } from 'src/components/Avatar/Avatar.component';
 
 interface PoseModelProps {
   modelUrl: string;

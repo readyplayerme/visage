@@ -2,7 +2,8 @@ import { LinearFilter, MeshStandardMaterial, Material, Vector2, Object3D, Skinne
 import { useFrame } from '@react-three/fiber';
 import type { ObjectMap } from '@react-three/fiber';
 import { useMemo } from 'react';
-import { Emotions, Emotion } from '../types';
+import { Emotions } from '../types';
+import { Emotion } from '../components/Avatar/Avatar.component';
 
 export const getStoryAssetPath = (publicAsset: string) =>
   `${process.env.NODE_ENV === 'production' ? '/visage' : ''}/${publicAsset}`;

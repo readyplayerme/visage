@@ -1,4 +1,5 @@
 import { Color, Vector3 } from 'three';
+import { Emotion } from './components/Avatar/Avatar.component';
 
 export type Required<T> = {
   [P in keyof T]-?: T[P];
@@ -20,8 +21,6 @@ export interface LightingProps {
   spotLightColor?: string;
   spotLightAngle?: number;
 }
-
-export type Emotion = 'idle' | 'sad' | 'angry' | 'happy' | 'impressed';
 
 export type HeadBlendShapeType =
   | 'browDownLeft'

@@ -4,7 +4,7 @@ import { GLTFLoader } from 'three-stdlib';
 import { Model } from 'src/components/Models/Model';
 import { useEmotion, useHeadMovement } from 'src/services';
 import { Group } from 'three';
-import { Emotion } from '../../../types';
+import { Emotion } from 'src/components/Avatar/Avatar.component';
 
 interface HalfBodyModelProps {
   modelUrl: string;
