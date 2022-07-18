@@ -157,7 +157,7 @@ const emotions: Emotions = {
 };
 
 export const useEmotion = (nodes: ObjectMap['nodes'], emotion: Emotion) => {
-  const headMesh = nodes.Wolf3D_Head as SkinnedMesh;
+  const headMesh = (nodes.Wolf3D_Head || nodes.Wolf3D_Avatar) as SkinnedMesh;
   const selectedEmotion = useMemo(() => emotions[emotion], [emotion]);
 
   const resetEmotions = () =>
