@@ -4,7 +4,7 @@ import { PresetsType } from '@react-three/drei/helpers/environment-assets';
 import { Vector3 } from 'three';
 import { CameraLighting } from 'src/components/SceneControls/CameraLighting.component';
 import { AnimationModel } from 'src/components/Models/AnimationModel/AnimationModel.component';
-import { LightingProps } from 'src/types';
+import { Emotion, LightingProps } from 'src/types';
 import { BaseCanvas } from 'src/components/BaseCanvas';
 import { HalfBodyModel, StaticModel, PoseModel } from 'src/components/Models';
 import { isValidGlbUrl } from 'src/services';
@@ -82,6 +82,10 @@ export interface AvatarProps extends LightingProps {
    * Applies an idle rotation to the animated and half-body models.
    */
   idleRotation?: boolean;
+  /**
+   * Applies a face emotion of the model.
+   */
+  emotion?: Emotion;
 }
 
 /**
@@ -107,6 +111,7 @@ export const Avatar: FC<AvatarProps> = ({
   cameraTarget = CAMERA.TARGET.FULL_BODY,
   cameraInitialDistance = CAMERA.INITIAL_DISTANCE.FULL_BODY,
   style,
+  emotion,
   idleRotation = false
 }) => {
   const AvatarModel = useMemo(() => {
@@ -121,15 +126,15 @@ export const Avatar: FC<AvatarProps> = ({
     }
 
     if (halfBody) {
-      return <HalfBodyModel modelUrl={modelUrl} scale={scale} idleRotation={idleRotation} />;
+      return <HalfBodyModel emotion={emotion} modelUrl={modelUrl} scale={scale} idleRotation={idleRotation} />;
     }
 
     if (isValidGlbUrl(poseUrl)) {
-      return <PoseModel modelUrl={modelUrl} scale={scale} poseUrl={poseUrl!} />;
+      return <PoseModel emotion={emotion} modelUrl={modelUrl} scale={scale} poseUrl={poseUrl!} />;
     }
 
     return <StaticModel modelUrl={modelUrl} scale={scale} />;
-  }, [halfBody, animationUrl, modelUrl, scale, poseUrl, idleRotation]);
+  }, [halfBody, animationUrl, modelUrl, scale, poseUrl, idleRotation, emotion]);
 
   return (
     <BaseCanvas background={backgroundColor} position={new Vector3(0, 0, 3)} fov={50} style={style}>

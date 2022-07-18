@@ -7,8 +7,8 @@ function App() {
     <div className="App">
       <div>localhost playground</div>
       <div className="container">
-        <div className="card">
-          <Avatar modelUrl="/male.glb" animationUrl="/maleIdle.glb" backgroundColor="#fafafa" shadows />
+        <div className="card" style={{ width: '100%' }}>
+          <Avatar modelUrl="/male.glb" poseUrl="/male-pose-standing.glb" backgroundColor="#fafafa" shadows />
         </div>
       </div>
     </div>
