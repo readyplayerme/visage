@@ -1,7 +1,7 @@
 import { LinearFilter, MeshStandardMaterial, Material, Vector2, Object3D, SkinnedMesh } from 'three';
 import { useFrame } from '@react-three/fiber';
 import type { ObjectMap } from '@react-three/fiber';
-import { EmotionsType, EmotionVariantsType } from '../types';
+import { Emotions, Emotion } from '../types';
 
 export const getStoryAssetPath = (publicAsset: string) =>
   `${process.env.NODE_ENV === 'production' ? '/visage' : ''}/${publicAsset}`;
@@ -113,7 +113,7 @@ export const mutatePose = (targetNodes?: ObjectMap['nodes'], sourceNodes?: Objec
   }
 };
 
-const emotions: EmotionsType = {
+const emotions: Emotions = {
   idle: {},
   impressed: {
     mouthOpen: 0.7,
@@ -155,7 +155,7 @@ const emotions: EmotionsType = {
   }
 };
 
-export const useEmotion = (nodes: ObjectMap['nodes'], emotion: EmotionVariantsType) => {
+export const useEmotion = (nodes: ObjectMap['nodes'], emotion: Emotion) => {
   const headMesh = nodes.Wolf3D_Head as SkinnedMesh;
 
   useFrame(() => {
