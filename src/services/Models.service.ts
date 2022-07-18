@@ -1,6 +1,7 @@
 import { LinearFilter, MeshStandardMaterial, Material, Vector2, Object3D, SkinnedMesh } from 'three';
 import { useFrame } from '@react-three/fiber';
 import type { ObjectMap } from '@react-three/fiber';
+import { useMemo } from 'react';
 import { Emotions, Emotion } from '../types';
 
 export const getStoryAssetPath = (publicAsset: string) =>
@@ -157,6 +158,12 @@ const emotions: Emotions = {
 
 export const useEmotion = (nodes: ObjectMap['nodes'], emotion: Emotion) => {
   const headMesh = nodes.Wolf3D_Head as SkinnedMesh;
+  const selectedEmotion = useMemo(() => emotions[emotion], [emotion]);
+
+  const resetEmotions = () =>
+    headMesh?.morphTargetInfluences?.forEach((_, index) => {
+      headMesh!.morphTargetInfluences![index] = 0;
+    });
 
   useFrame(() => {
     if (!headMesh) {
@@ -164,13 +171,17 @@ export const useEmotion = (nodes: ObjectMap['nodes'], emotion: Emotion) => {
     }
 
     if (emotion !== 'idle') {
-      Object.entries(emotions[emotion]).forEach(([shape, value]) => {
+      resetEmotions();
+
+      Object.entries(selectedEmotion).forEach(([shape, value]) => {
         const shapeId = headMesh!.morphTargetDictionary?.[shape];
 
         if (shapeId) {
           headMesh!.morphTargetInfluences![shapeId] = value;
         }
       });
+    } else {
+      resetEmotions();
     }
   });
 };
