@@ -4,7 +4,7 @@ import { PresetsType } from '@react-three/drei/helpers/environment-assets';
 import { Vector3 } from 'three';
 import { CameraLighting } from 'src/components/SceneControls/CameraLighting.component';
 import { AnimationModel } from 'src/components/Models/AnimationModel/AnimationModel.component';
-import { LightingProps } from 'src/types';
+import { HeadBlendShapeType, LightingProps } from 'src/types';
 import { BaseCanvas } from 'src/components/BaseCanvas';
 import { HalfBodyModel, StaticModel, PoseModel } from 'src/components/Models';
 import { isValidGlbUrl } from 'src/services';
@@ -31,71 +31,6 @@ export const CAMERA = {
     }
   }
 };
-
-export type HeadBlendShapeType =
-  | 'browDownLeft'
-  | 'browDownRight'
-  | 'browInnerUp'
-  | 'browOuterUpLeft'
-  | 'browOuterUpRight'
-  | 'cheekPuff'
-  | 'cheekSquintLeft'
-  | 'cheekSquintRight'
-  | 'eyeBlinkLeft'
-  | 'eyeBlinkRight'
-  | 'eyeSquintLeft'
-  | 'eyeSquintRight'
-  | 'eyeWideLeft'
-  | 'eyeWideRight'
-  | 'eyesClosed'
-  | 'eyesLookDown'
-  | 'eyesLookUp'
-  | 'jawForward'
-  | 'jawLeft'
-  | 'jawOpen'
-  | 'jawRight'
-  | 'mouthClose'
-  | 'mouthDimpleLeft'
-  | 'mouthDimpleRight'
-  | 'mouthFrownLeft'
-  | 'mouthFrownRight'
-  | 'mouthFunnel'
-  | 'mouthLeft'
-  | 'mouthLowerDownLeft'
-  | 'mouthLowerDownRight'
-  | 'mouthOpen'
-  | 'mouthPressLeft'
-  | 'mouthPressRight'
-  | 'mouthPucker'
-  | 'mouthRight'
-  | 'mouthRollLower'
-  | 'mouthRollUpper'
-  | 'mouthShrugLower'
-  | 'mouthShrugUpper'
-  | 'mouthSmile'
-  | 'mouthSmileLeft'
-  | 'mouthSmileRight'
-  | 'mouthStretchLeft'
-  | 'mouthStretchRight'
-  | 'mouthUpperUpLeft'
-  | 'mouthUpperUpRight'
-  | 'noseSneerLeft'
-  | 'noseSneerRight'
-  | 'viseme_CH'
-  | 'viseme_DD'
-  | 'viseme_E'
-  | 'viseme_FF'
-  | 'viseme_I'
-  | 'viseme_O'
-  | 'viseme_PP'
-  | 'viseme_RR'
-  | 'viseme_SS'
-  | 'viseme_TH'
-  | 'viseme_U'
-  | 'viseme_aa'
-  | 'viseme_kk'
-  | 'viseme_nn'
-  | 'viseme_sil';
 
 export type Emotion = Record<HeadBlendShapeType, number>;
 
