@@ -4,7 +4,7 @@ import { GLTFLoader } from 'three-stdlib';
 import { Model } from 'src/components/Models/Model';
 import { useEmotion, useHeadMovement } from 'src/services';
 import { Group } from 'three';
-import { Emotion } from '../../../types';
+import { Emotion } from '../../Avatar/Avatar.component';
 
 interface HalfBodyModelProps {
   modelUrl: string;
@@ -21,7 +21,7 @@ export const HalfBodyModel: FC<HalfBodyModelProps> = ({
   scale = 1,
   rotation = 20 * (Math.PI / 180),
   idleRotation = false,
-  emotion = 'idle'
+  emotion
 }) => {
   const ref = useRef<Group>();
   const { scene } = useLoader(GLTFLoader, modelUrl);

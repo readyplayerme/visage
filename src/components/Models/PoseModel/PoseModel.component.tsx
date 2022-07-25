@@ -4,7 +4,7 @@ import { GLTFLoader } from 'three-stdlib';
 import { Model } from 'src/components/Models/Model';
 import { Group } from 'three';
 import { mutatePose, useEmotion } from 'src/services';
-import { Emotion } from '../../../types';
+import { Emotion } from '../../Avatar/Avatar.component';
 
 interface PoseModelProps {
   modelUrl: string;
@@ -14,7 +14,7 @@ interface PoseModelProps {
   emotion?: Emotion;
 }
 
-export const PoseModel: FC<PoseModelProps> = ({ modelUrl, poseUrl, modelRef, scale = 1, emotion = 'idle' }) => {
+export const PoseModel: FC<PoseModelProps> = ({ modelUrl, poseUrl, modelRef, scale = 1, emotion }) => {
   const { scene } = useLoader(GLTFLoader, modelUrl);
   const { nodes } = useGraph(scene);
   const pose = useLoader(GLTFLoader, poseUrl);

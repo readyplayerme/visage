@@ -23,8 +23,7 @@ Static.args = {
   spotLightColor: '#fff5b6',
   spotLightAngle: 0.314,
   cameraTarget: CAMERA.TARGET.FULL_BODY,
-  cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
-  emotion: 'idle'
+  cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE
 };
 
 export default {
@@ -66,16 +65,6 @@ Posing.args = {
   ...Static.args,
   modelUrl: getStoryAssetPath('male.glb'),
   poseUrl: getStoryAssetPath('male-pose-standing.glb'),
-  cameraTarget: CAMERA.TARGET.FULL_BODY,
-  cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE
-};
-
-export const Emotions = Template.bind({});
-Emotions.args = {
-  ...Static.args,
-  modelUrl: getStoryAssetPath('male.glb'),
-  poseUrl: getStoryAssetPath('male-pose-standing.glb'),
-  emotion: 'angry',
   cameraTarget: CAMERA.TARGET.FULL_BODY,
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE
 };
