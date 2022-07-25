@@ -14,7 +14,7 @@ interface PoseModelProps {
   emotion?: Emotion;
 }
 
-export const PoseModel: FC<PoseModelProps> = ({ modelUrl, poseUrl, modelRef, scale = 1, emotion = 'happy' }) => {
+export const PoseModel: FC<PoseModelProps> = ({ modelUrl, poseUrl, modelRef, scale = 1, emotion = 'idle' }) => {
   const { scene } = useLoader(GLTFLoader, modelUrl);
   const { nodes } = useGraph(scene);
   const pose = useLoader(GLTFLoader, poseUrl);
