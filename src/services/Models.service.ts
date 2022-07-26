@@ -1,8 +1,7 @@
 import { LinearFilter, MeshStandardMaterial, Material, Vector2, Object3D, SkinnedMesh } from 'three';
 import { useFrame } from '@react-three/fiber';
 import type { ObjectMap } from '@react-three/fiber';
-import { useMemo } from 'react';
-import { Emotions, Emotion } from '../types';
+import { Emotion } from '../components/Avatar/Avatar.component';
 
 export const getStoryAssetPath = (publicAsset: string) =>
   `${process.env.NODE_ENV === 'production' ? '/visage' : ''}/${publicAsset}`;
@@ -114,51 +113,8 @@ export const mutatePose = (targetNodes?: ObjectMap['nodes'], sourceNodes?: Objec
   }
 };
 
-const emotions: Emotions = {
-  idle: {},
-  impressed: {
-    mouthOpen: 0.7,
-    mouthSmile: 0.3,
-    mouthDimpleLeft: 0.4,
-    mouthDimpleRight: 0.4,
-    eyeWideLeft: 0.75,
-    eyeWideRight: 0.75,
-    browInnerUp: 0.3
-  },
-  sad: {
-    mouthSmile: -0.35,
-    browDownLeft: -0.45,
-    browDownRight: -0.45,
-    noseSneerLeft: -0.35,
-    noseSneerRight: -0.35
-  },
-  angry: {
-    browDownLeft: 0.95,
-    browDownRight: 0.95,
-    mouthDimpleLeft: -0.5,
-    mouthDimpleRight: -0.5,
-    mouthLowerDownRight: -0.3,
-    mouthLowerDownLeft: -0.3,
-    noseSneerLeft: 0.35,
-    noseSneerRight: 0.35,
-    eyeBlinkLeft: 0.15,
-    eyeBlinkRight: 0.15
-  },
-  happy: {
-    mouthSmile: 0.6,
-    mouthOpen: 0.3,
-    browDownRight: -0.5,
-    browDownLeft: -0.5,
-    mouthDimpleLeft: 0.7,
-    mouthDimpleRight: 0.7,
-    noseSneerLeft: 0.45,
-    noseSneerRight: 0.45
-  }
-};
-
-export const useEmotion = (nodes: ObjectMap['nodes'], emotion: Emotion) => {
+export const useEmotion = (nodes: ObjectMap['nodes'], emotion?: Emotion) => {
   const headMesh = (nodes.Wolf3D_Head || nodes.Wolf3D_Avatar) as SkinnedMesh;
-  const selectedEmotion = useMemo(() => emotions[emotion], [emotion]);
 
   const resetEmotions = () =>
     headMesh?.morphTargetInfluences?.forEach((_, index) => {
@@ -170,10 +126,10 @@ export const useEmotion = (nodes: ObjectMap['nodes'], emotion: Emotion) => {
       return;
     }
 
-    if (emotion !== 'idle') {
+    if (emotion) {
       resetEmotions();
 
-      Object.entries(selectedEmotion).forEach(([shape, value]) => {
+      Object.entries(emotion).forEach(([shape, value]) => {
         const shapeId = headMesh!.morphTargetDictionary?.[shape];
 
         if (shapeId) {

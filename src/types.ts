@@ -21,8 +21,6 @@ export interface LightingProps {
   spotLightAngle?: number;
 }
 
-export type Emotion = 'idle' | 'sad' | 'angry' | 'happy' | 'impressed';
-
 export type HeadBlendShapeType =
   | 'browDownLeft'
   | 'browDownRight'
@@ -87,9 +85,3 @@ export type HeadBlendShapeType =
   | 'viseme_kk'
   | 'viseme_nn'
   | 'viseme_sil';
-
-export type EmotionConfig = Record<HeadBlendShapeType, number>;
-
-export type Emotions = {
-  [name in Emotion]: Partial<EmotionConfig>;
-};
