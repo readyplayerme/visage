@@ -116,18 +116,14 @@ export const mutatePose = (targetNodes?: ObjectMap['nodes'], sourceNodes?: Objec
 export const useEmotion = (nodes: ObjectMap['nodes'], emotion?: Emotion) => {
   const headMesh = (nodes.Wolf3D_Head || nodes.Wolf3D_Avatar) as SkinnedMesh;
 
-  const resetEmotions = () =>
-    headMesh?.morphTargetInfluences?.forEach((_, index) => {
-      headMesh!.morphTargetInfluences![index] = 0;
+  const resetEmotions = (mesh: SkinnedMesh) =>
+    mesh?.morphTargetInfluences?.forEach((_, index) => {
+      mesh!.morphTargetInfluences![index] = 0;
     });
 
   useFrame(() => {
-    if (!headMesh) {
-      return;
-    }
-
     if (emotion) {
-      resetEmotions();
+      resetEmotions(headMesh);
 
       Object.entries(emotion).forEach(([shape, value]) => {
         const shapeId = headMesh!.morphTargetDictionary?.[shape];
@@ -137,7 +133,7 @@ export const useEmotion = (nodes: ObjectMap['nodes'], emotion?: Emotion) => {
         }
       });
     } else {
-      resetEmotions();
+      resetEmotions(headMesh);
     }
   });
 };
