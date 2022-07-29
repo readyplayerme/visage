@@ -116,6 +116,8 @@ export const mutatePose = (targetNodes?: ObjectMap['nodes'], sourceNodes?: Objec
 export const useEmotion = (nodes: ObjectMap['nodes'], emotion?: Emotion) => {
   const headMesh = (nodes.Wolf3D_Head || nodes.Wolf3D_Avatar) as SkinnedMesh;
 
+  console.log("useEmotion nodes", nodes)
+
   const resetEmotions = (mesh: SkinnedMesh) =>
     mesh?.morphTargetInfluences?.forEach((_, index) => {
       mesh!.morphTargetInfluences![index] = 0;

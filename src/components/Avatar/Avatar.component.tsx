@@ -4,7 +4,7 @@ import { PresetsType } from '@react-three/drei/helpers/environment-assets';
 import { Vector3 } from 'three';
 import { CameraLighting } from 'src/components/SceneControls/CameraLighting.component';
 import { AnimationModel } from 'src/components/Models/AnimationModel/AnimationModel.component';
-import { HeadBlendShapeType, LightingProps } from 'src/types';
+import { LightingProps } from 'src/types';
 import { BaseCanvas } from 'src/components/BaseCanvas';
 import { HalfBodyModel, StaticModel, PoseModel } from 'src/components/Models';
 import { isValidGlbUrl } from 'src/services';
@@ -32,7 +32,7 @@ export const CAMERA = {
   }
 };
 
-export type Emotion = Record<HeadBlendShapeType, number>;
+export type Emotion = Record<string, number>;
 
 export interface AvatarProps extends LightingProps {
   /**
@@ -88,6 +88,7 @@ export interface AvatarProps extends LightingProps {
    * Applies a face emotion of the model.
    */
   emotion?: Emotion;
+  capture?: boolean;
 }
 
 /**
@@ -114,7 +115,8 @@ export const Avatar: FC<AvatarProps> = ({
   cameraInitialDistance = CAMERA.INITIAL_DISTANCE.FULL_BODY,
   style,
   emotion,
-  idleRotation = false
+  idleRotation = false,
+  capture,
 }) => {
   const AvatarModel = useMemo(() => {
     if (!isValidGlbUrl(modelUrl)) {
@@ -132,11 +134,11 @@ export const Avatar: FC<AvatarProps> = ({
     }
 
     if (isValidGlbUrl(poseUrl)) {
-      return <PoseModel emotion={emotion} modelUrl={modelUrl} scale={scale} poseUrl={poseUrl!} />;
+      return <PoseModel capture={capture} emotion={emotion} modelUrl={modelUrl} scale={scale} poseUrl={poseUrl!} />;
     }
 
     return <StaticModel modelUrl={modelUrl} scale={scale} />;
-  }, [halfBody, animationUrl, modelUrl, scale, poseUrl, idleRotation, emotion]);
+  }, [halfBody, animationUrl, modelUrl, scale, poseUrl, idleRotation, emotion, capture]);
 
   return (
     <BaseCanvas background={backgroundColor} position={new Vector3(0, 0, 3)} fov={50} style={style}>
