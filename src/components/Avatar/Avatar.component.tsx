@@ -8,6 +8,7 @@ import { LightingProps } from 'src/types';
 import { BaseCanvas } from 'src/components/BaseCanvas';
 import { HalfBodyModel, StaticModel, PoseModel } from 'src/components/Models';
 import { isValidGlbUrl } from 'src/services';
+import Capture from "../Capture/Capture.component";
 
 export const CAMERA = {
   TARGET: {
@@ -134,11 +135,11 @@ export const Avatar: FC<AvatarProps> = ({
     }
 
     if (isValidGlbUrl(poseUrl)) {
-      return <PoseModel capture={capture} emotion={emotion} modelUrl={modelUrl} scale={scale} poseUrl={poseUrl!} />;
+      return <PoseModel emotion={emotion} modelUrl={modelUrl} scale={scale} poseUrl={poseUrl!} />;
     }
 
     return <StaticModel modelUrl={modelUrl} scale={scale} />;
-  }, [halfBody, animationUrl, modelUrl, scale, poseUrl, idleRotation, emotion, capture]);
+  }, [halfBody, animationUrl, modelUrl, scale, poseUrl, idleRotation, emotion]);
 
   return (
     <BaseCanvas background={backgroundColor} position={new Vector3(0, 0, 3)} fov={50} style={style}>
@@ -172,6 +173,7 @@ export const Avatar: FC<AvatarProps> = ({
             </mesh>
           </group>
         )}
+        <Capture capture={capture} />
       </Suspense>
     </BaseCanvas>
   );
