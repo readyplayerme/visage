@@ -68,18 +68,24 @@ function App() {
 
   return (
     <div className="App">
-      <div>localhost playground</div>
-      <button onClick={() => setCapture(prevState => !prevState)}>Take Capture</button>
-      <div style={{ display: "flex", gap: "20px", flexWrap: "nowrap" }}>
-        {Object.keys(emotions).map((key) => (
-          <div
-            key={key}
-            style={{ color: emotion === key ? 'red' : "black" , padding: '10px', background: "grey", cursor: 'pointer'}}
-            onClick={() => setEmotion(key)}
-          >
-            {key}
+      <div className="settings">
+        <div className="wrapper">
+          <h3 className="title">localhost playground</h3>
+          <div className="content">
+            <button onClick={() => setCapture(prevState => !prevState)}>Take Capture</button>
+            <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
+              {Object.keys(emotions).map((key) => (
+                <div
+                  key={key}
+                  style={{ color: emotion === key ? 'red' : "black" , padding: '10px', background: "grey", cursor: 'pointer'}}
+                  onClick={() => setEmotion(key)}
+                >
+                  {key}
+                </div>
+              ))}
+            </div>
           </div>
-        ))}
+        </div>
       </div>
       <div className="container">
         <div className="card" style={{width: '100%'}}>
