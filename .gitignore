@@ -28,6 +28,8 @@ coverage
 # Library
 /dist
 
+# IDE Logs
+.idea
 
 # node-waf configuration
 .lock-wscript
