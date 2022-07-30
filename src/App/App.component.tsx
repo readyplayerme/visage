@@ -61,8 +61,17 @@ const emotions: Record<string, Emotion | undefined> = {
   }
 };
 
+const bgs = [
+  undefined,
+  "/rpm-bg-nature-02.jpg",
+  "/rpm-bg-city-00.jpg",
+  "/rpm-bg-simple-dark.jpg",
+  "/rpm-bg-simple-light.jpg",
+]
+
 function App() {
   const [emotion, setEmotion] = useState<string>();
+  const [bg, setBg] = useState<string | undefined>(bgs[0]);
   const blendShape = useMemo(() => emotions[emotion as string], [emotion])
   const [capture, setCapture] = useState(false)
 
@@ -84,18 +93,34 @@ function App() {
                 </div>
               ))}
             </div>
+            <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
+              {bgs.map((it) => (
+                <div
+                  key={it}
+                  style={{ color: emotion === it ? 'red' : "black" , padding: '10px', background: "grey", cursor: 'pointer'}}
+                  onClick={() => setBg(it)}
+                >
+                  {it}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
       <div className="container">
         <div className="card" style={{width: '100%'}}>
           <Avatar
+            background={{
+              src: bg,
+              position: [0, 0.75, -2],
+              scale: 3
+            }}
             capture={capture}
             emotion={blendShape}
             modelUrl="https://d1a370nemizbjq.cloudfront.net/9f87424f-cb9b-415c-9742-15ece4bc05c5.glb"
             poseUrl="/male-pose-standing.glb"
             backgroundColor="#fafafa"
-            shadows
+            shadows={false}
           />
         </div>
       </div>

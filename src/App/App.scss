@@ -51,6 +51,9 @@ body,
     .content {
       position: relative;
       padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
   }
 }

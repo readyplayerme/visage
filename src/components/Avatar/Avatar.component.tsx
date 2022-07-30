@@ -2,6 +2,7 @@ import React, { Suspense, FC, useMemo, CSSProperties } from 'react';
 import { Environment } from '@react-three/drei';
 import { PresetsType } from '@react-three/drei/helpers/environment-assets';
 import { Vector3 } from 'three';
+import { MeshProps } from "@react-three/fiber/dist/declarations/src/three-types";
 import { CameraLighting } from 'src/components/SceneControls/CameraLighting.component';
 import { AnimationModel } from 'src/components/Models/AnimationModel/AnimationModel.component';
 import { LightingProps } from 'src/types';
@@ -9,6 +10,7 @@ import { BaseCanvas } from 'src/components/BaseCanvas';
 import { HalfBodyModel, StaticModel, PoseModel } from 'src/components/Models';
 import { isValidGlbUrl } from 'src/services';
 import Capture from "../Capture/Capture.component";
+import Box from "../Background/Box/Box.component";
 
 export const CAMERA = {
   TARGET: {
@@ -34,6 +36,8 @@ export const CAMERA = {
 };
 
 export type Emotion = Record<string, number>;
+
+export type Background = { src?: string } & MeshProps;
 
 export interface AvatarProps extends LightingProps {
   /**
@@ -89,6 +93,13 @@ export interface AvatarProps extends LightingProps {
    * Applies a face emotion of the model.
    */
   emotion?: Emotion;
+  /**
+   * Applies Box background for canvas.
+   */
+  background?: Background;
+  /**
+   * Applies Capturing frame of the canvas.
+   */
   capture?: boolean;
 }
 
@@ -105,12 +116,12 @@ export const Avatar: FC<AvatarProps> = ({
   halfBody = false,
   shadows = false,
   scale = 1,
-  ambientLightColor = '#fff5b6',
+  ambientLightColor = '#ff209c',
   ambientLightIntensity = 0.25,
   dirLightPosition = new Vector3(-3, 5, -5),
   dirLightColor = '#002aff',
   spotLightPosition = new Vector3(12, 10, 7.5),
-  spotLightColor = '#fff5b6',
+  spotLightColor = '#24ff02',
   spotLightAngle = 0.314,
   cameraTarget = CAMERA.TARGET.FULL_BODY,
   cameraInitialDistance = CAMERA.INITIAL_DISTANCE.FULL_BODY,
@@ -118,6 +129,7 @@ export const Avatar: FC<AvatarProps> = ({
   emotion,
   idleRotation = false,
   capture,
+  background,
 }) => {
   const AvatarModel = useMemo(() => {
     if (!isValidGlbUrl(modelUrl)) {
@@ -173,6 +185,7 @@ export const Avatar: FC<AvatarProps> = ({
             </mesh>
           </group>
         )}
+        {background?.src && <Box {...background} />}
         <Capture capture={capture} />
       </Suspense>
     </BaseCanvas>
