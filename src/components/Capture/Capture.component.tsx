@@ -1,21 +1,18 @@
-import React, { useEffect, FC } from "react";
-import { useThree } from "@react-three/fiber";
+import React, { FC } from 'react';
+import { useThree } from '@react-three/fiber';
+
+export type CaptureType = (image?: string) => void;
 
 type CaptureProps = {
-  capture?: boolean;
-}
+  onCapture?: CaptureType;
+};
 
-const Capture: FC<CaptureProps> = ({ capture }) => {
+const Capture: FC<CaptureProps> = ({ onCapture }) => {
   const gl = useThree((state) => state.gl);
 
-  useEffect(() => {
-    if (capture) {
-      const link = document?.createElement('a')
-      link.setAttribute('download', 'canvas.png')
-      link.setAttribute('href', gl.domElement.toDataURL('image/png').replace('image/png', 'image/octet-stream'))
-      link.click();
-    }
-  }, [gl, capture]);
+  if (onCapture) {
+    onCapture(gl.domElement.toDataURL('image/png', 0.1));
+  }
 
   // eslint-disable-next-line react/jsx-no-useless-fragment
   return <></>;
