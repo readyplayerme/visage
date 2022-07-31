@@ -21,6 +21,7 @@ export const BaseCanvas: FC<BaseCanvasProps> = ({
   <Canvas
     className={styles['base-canvas']}
     shadows
+    gl={{ preserveDrawingBuffer: true }}
     dpr={[1, 4]}
     camera={{ fov, position }}
     resize={{ scroll: true, debounce: { scroll: 50, resize: 0 } }}

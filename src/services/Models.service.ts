@@ -114,30 +114,32 @@ export const mutatePose = (targetNodes?: ObjectMap['nodes'], sourceNodes?: Objec
 };
 
 export const useEmotion = (nodes: ObjectMap['nodes'], emotion?: Emotion) => {
-  const headMesh = (nodes.Wolf3D_Head || nodes.Wolf3D_Avatar) as SkinnedMesh;
+  // @ts-ignore
+  const meshes = Object.values(nodes).filter((item: SkinnedMesh) => item?.morphTargetInfluences) as SkinnedMesh[];
 
-  const resetEmotions = () =>
-    headMesh?.morphTargetInfluences?.forEach((_, index) => {
-      headMesh!.morphTargetInfluences![index] = 0;
+  const resetEmotions = (resetMeshes: Array<SkinnedMesh>) => {
+    resetMeshes.forEach((mesh) => {
+      mesh?.morphTargetInfluences?.forEach((_, index) => {
+        mesh!.morphTargetInfluences![index] = 0;
+      });
     });
+  };
 
   useFrame(() => {
-    if (!headMesh) {
-      return;
-    }
-
     if (emotion) {
-      resetEmotions();
+      resetEmotions(meshes);
 
-      Object.entries(emotion).forEach(([shape, value]) => {
-        const shapeId = headMesh!.morphTargetDictionary?.[shape];
+      meshes.forEach((mesh) => {
+        Object.entries(emotion).forEach(([shape, value]) => {
+          const shapeId = mesh!.morphTargetDictionary?.[shape];
 
-        if (shapeId) {
-          headMesh!.morphTargetInfluences![shapeId] = value;
-        }
+          if (shapeId) {
+            mesh!.morphTargetInfluences![shapeId] = value;
+          }
+        });
       });
     } else {
-      resetEmotions();
+      resetEmotions(meshes);
     }
   });
 };
