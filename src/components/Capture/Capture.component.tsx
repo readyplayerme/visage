@@ -1,18 +1,32 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { useThree } from '@react-three/fiber';
 
-export type CaptureType = (image?: string) => void;
-
-type CaptureProps = {
-  onCapture?: CaptureType;
+type CaptureSettingsType = {
+  quality?: number;
+  type?: string;
 };
 
-const Capture: FC<CaptureProps> = ({ onCapture }) => {
+export type CaptureType = {
+  trigger: boolean;
+  callBack: (capture?: string) => void;
+  settings?: CaptureSettingsType;
+};
+
+type CaptureProps = CaptureType;
+
+const Capture: FC<CaptureProps> = ({ trigger, settings, callBack }) => {
   const gl = useThree((state) => state.gl);
 
-  if (onCapture) {
-    onCapture(gl.domElement.toDataURL('image/png', 0.1));
-  }
+  const type = settings?.type || 'image/png';
+  const quality = settings?.quality || 0.1;
+
+  useEffect(() => {
+    if (trigger) {
+      const capture = gl.domElement.toDataURL(type, quality);
+
+      callBack(capture);
+    }
+  }, [trigger]);
 
   // eslint-disable-next-line react/jsx-no-useless-fragment
   return <></>;
