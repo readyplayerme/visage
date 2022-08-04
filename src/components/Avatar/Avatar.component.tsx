@@ -97,7 +97,7 @@ export interface AvatarProps extends LightingProps {
   /**
    * Return base64 image after making screenshot of the canvas.
    */
-  onCapture?: CaptureType;
+  capture?: CaptureType;
 }
 
 /**
@@ -125,7 +125,7 @@ export const Avatar: FC<AvatarProps> = ({
   style,
   emotion,
   idleRotation = false,
-  onCapture,
+  capture,
   background
 }) => {
   const AvatarModel = useMemo(() => {
@@ -183,7 +183,7 @@ export const Avatar: FC<AvatarProps> = ({
           </group>
         )}
         {background?.src && <Box {...background} />}
-        {onCapture && <Capture onCapture={onCapture} />}
+        {capture && <Capture {...capture} />}
       </Suspense>
     </BaseCanvas>
   );
