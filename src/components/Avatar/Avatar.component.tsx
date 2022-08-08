@@ -92,7 +92,7 @@ export interface AvatarProps extends LightingProps {
    */
   emotion?: Emotion;
   /**
-   * Applies Box background for canvas.
+   * Applies Box background for canvas, make sure that image is loadable to prevent bg errors.
    */
   background?: Background;
   /**
