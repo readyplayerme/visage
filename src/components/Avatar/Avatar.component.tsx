@@ -10,6 +10,7 @@ import { HalfBodyModel, StaticModel, PoseModel } from 'src/components/Models';
 import { isValidGlbUrl } from 'src/services';
 import Capture, { CaptureType } from '../Capture/Capture.component';
 import Box, { Background } from '../Background/Box/Box.component';
+import Shadow from '../Shadow/Shadow.components';
 
 export const CAMERA = {
   TARGET: {
@@ -91,7 +92,7 @@ export interface AvatarProps extends LightingProps {
    */
   emotion?: Emotion;
   /**
-   * Applies Box background for canvas.
+   * Applies Box background for canvas, make sure that image is loadable to prevent bg errors.
    */
   background?: Background;
   /**
@@ -174,14 +175,7 @@ export const Avatar: FC<AvatarProps> = ({
           updateCameraTargetOnZoom={!halfBody}
         />
         {AvatarModel}
-        {shadows && (
-          <group position={[0, 0, 0]}>
-            <mesh key="shadow-catcher" receiveShadow position={[0, 0, 0]} rotation-x={-Math.PI / 2}>
-              <planeBufferGeometry attach="geometry" args={[5, 5]} />
-              <shadowMaterial attach="material" transparent opacity={0.2} />
-            </mesh>
-          </group>
-        )}
+        {shadows && <Shadow />}
         {background?.src && <Box {...background} />}
         {capture && <Capture {...capture} />}
       </Suspense>
