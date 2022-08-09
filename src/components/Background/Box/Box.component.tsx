@@ -13,7 +13,6 @@ const Box: FC<Background> = ({ src = '', ...baseProps }) => {
     <mesh ref={ref} castShadow receiveShadow {...baseProps}>
       <boxBufferGeometry />
       <meshPhysicalMaterial map={texture} />
-      <axesHelper />
     </mesh>
   );
 };
