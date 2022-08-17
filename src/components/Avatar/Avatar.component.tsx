@@ -10,7 +10,9 @@ import { HalfBodyModel, StaticModel, PoseModel } from 'src/components/Models';
 import { isValidGlbUrl } from 'src/services';
 import Capture, { CaptureType } from '../Capture/Capture.component';
 import Box, { Background } from '../Background/Box/Box.component';
+import { LoaderType } from '../Loader/Loader.component';
 import Shadow from '../Shadow/Shadow.components';
+import Loader from '../Loader';
 
 export const CAMERA = {
   TARGET: {
@@ -99,6 +101,10 @@ export interface AvatarProps extends LightingProps {
    * Return base64 image after making screenshot of the canvas.
    */
   capture?: CaptureType;
+  /**
+   * Show loading state in canvas, with custom color & text value
+   */
+  loader?: LoaderType;
 }
 
 /**
@@ -127,7 +133,8 @@ export const Avatar: FC<AvatarProps> = ({
   emotion,
   idleRotation = false,
   capture,
-  background
+  background,
+  loader
 }) => {
   const AvatarModel = useMemo(() => {
     if (!isValidGlbUrl(modelUrl)) {
@@ -152,8 +159,8 @@ export const Avatar: FC<AvatarProps> = ({
   }, [halfBody, animationUrl, modelUrl, scale, poseUrl, idleRotation, emotion]);
 
   return (
-    <BaseCanvas background={backgroundColor} position={new Vector3(0, 0, 3)} fov={50} style={style}>
-      <Suspense fallback={null}>
+    <Suspense fallback={<Loader {...loader} />}>
+      <BaseCanvas background={backgroundColor} position={new Vector3(0, 0, 3)} fov={50} style={style}>
         <Environment preset={environment} />
         <CameraLighting
           cameraTarget={cameraTarget}
@@ -178,7 +185,7 @@ export const Avatar: FC<AvatarProps> = ({
         {shadows && <Shadow />}
         {background?.src && <Box {...background} />}
         {capture && <Capture {...capture} />}
-      </Suspense>
-    </BaseCanvas>
+      </BaseCanvas>
+    </Suspense>
   );
 };
