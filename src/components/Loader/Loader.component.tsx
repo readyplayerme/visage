@@ -1,23 +1,13 @@
 import React, { FC } from 'react';
 
-import './Loader.scss';
+import styles from './Loader.module.scss';
 
-export type LoaderType = {
-  color?: string;
-  text?: string;
-};
-
-const Loader: FC<LoaderType> = ({ text, color }) => (
-  <div className="loader">
-    {text && (
-      <p className="text" style={{ color }}>
-        {text}
-      </p>
-    )}
-    <div className="dots">
-      <div className="dot" style={{ backgroundColor: color }} />
-      <div className="dot" style={{ backgroundColor: color }} />
-      <div className="dot" style={{ backgroundColor: color }} />
+const Loader: FC = () => (
+  <div className={styles.loader}>
+    <div className={styles.dots}>
+      {[1, 2, 3].map((it) => (
+        <div key={it} className={styles.dot} />
+      ))}
     </div>
   </div>
 );

@@ -1,4 +1,4 @@
-import React, { Suspense, FC, useMemo, CSSProperties } from 'react';
+import React, { Suspense, FC, useMemo, CSSProperties, ReactNode } from 'react';
 import { Environment } from '@react-three/drei';
 import { PresetsType } from '@react-three/drei/helpers/environment-assets';
 import { Vector3 } from 'three';
@@ -10,7 +10,6 @@ import { HalfBodyModel, StaticModel, PoseModel } from 'src/components/Models';
 import { isValidGlbUrl } from 'src/services';
 import Capture, { CaptureType } from '../Capture/Capture.component';
 import Box, { Background } from '../Background/Box/Box.component';
-import { LoaderType } from '../Loader/Loader.component';
 import Shadow from '../Shadow/Shadow.components';
 import Loader from '../Loader';
 
@@ -102,9 +101,9 @@ export interface AvatarProps extends LightingProps {
    */
   capture?: CaptureType;
   /**
-   * Show loading state in canvas, with custom color & text value
+   * Pass custom fallback component
    */
-  loader?: LoaderType;
+  loader?: ReactNode;
 }
 
 /**
@@ -159,7 +158,7 @@ export const Avatar: FC<AvatarProps> = ({
   }, [halfBody, animationUrl, modelUrl, scale, poseUrl, idleRotation, emotion]);
 
   return (
-    <Suspense fallback={<Loader {...loader} />}>
+    <Suspense fallback={loader ?? <Loader />}>
       <BaseCanvas background={backgroundColor} position={new Vector3(0, 0, 3)} fov={50} style={style}>
         <Environment preset={environment} />
         <CameraLighting
