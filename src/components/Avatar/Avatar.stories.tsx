@@ -46,7 +46,7 @@ export const Animated = Template.bind({});
 Animated.args = {
   ...Static.args,
   modelUrl: getStoryAssetPath('male.glb'),
-  animationUrl: getStoryAssetPath('maleIdle.glb'),
+  animationUrl: getStoryAssetPath('male-idle.glb'),
   cameraTarget: CAMERA.TARGET.FULL_BODY,
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE
 };
@@ -54,7 +54,7 @@ Animated.args = {
 export const HalfBody = Template.bind({});
 HalfBody.args = {
   ...Static.args,
-  modelUrl: getStoryAssetPath('halfBody.glb'),
+  modelUrl: getStoryAssetPath('half-body.glb'),
   halfBody: true,
   cameraTarget: CAMERA.TARGET.HALF_BODY,
   cameraInitialDistance: CAMERA.INITIAL_DISTANCE.HALF_BODY

@@ -1,4 +1,4 @@
-import React, { Suspense, FC, useMemo, CSSProperties } from 'react';
+import React, { Suspense, FC, useMemo, CSSProperties, ReactNode } from 'react';
 import { Environment } from '@react-three/drei';
 import { PresetsType } from '@react-three/drei/helpers/environment-assets';
 import { Vector3 } from 'three';
@@ -11,6 +11,7 @@ import { isValidGlbUrl } from 'src/services';
 import Capture, { CaptureType } from '../Capture/Capture.component';
 import Box, { Background } from '../Background/Box/Box.component';
 import Shadow from '../Shadow/Shadow.components';
+import Loader from '../Loader';
 
 export const CAMERA = {
   TARGET: {
@@ -99,6 +100,10 @@ export interface AvatarProps extends LightingProps {
    * Return base64 image after making screenshot of the canvas.
    */
   capture?: CaptureType;
+  /**
+   * Pass custom fallback component
+   */
+  loader?: ReactNode;
 }
 
 /**
@@ -127,7 +132,8 @@ export const Avatar: FC<AvatarProps> = ({
   emotion,
   idleRotation = false,
   capture,
-  background
+  background,
+  loader
 }) => {
   const AvatarModel = useMemo(() => {
     if (!isValidGlbUrl(modelUrl)) {
@@ -152,8 +158,8 @@ export const Avatar: FC<AvatarProps> = ({
   }, [halfBody, animationUrl, modelUrl, scale, poseUrl, idleRotation, emotion]);
 
   return (
-    <BaseCanvas background={backgroundColor} position={new Vector3(0, 0, 3)} fov={50} style={style}>
-      <Suspense fallback={null}>
+    <Suspense fallback={loader ?? <Loader />}>
+      <BaseCanvas background={backgroundColor} position={new Vector3(0, 0, 3)} fov={50} style={style}>
         <Environment preset={environment} />
         <CameraLighting
           cameraTarget={cameraTarget}
@@ -178,7 +184,7 @@ export const Avatar: FC<AvatarProps> = ({
         {shadows && <Shadow />}
         {background?.src && <Box {...background} />}
         {capture && <Capture {...capture} />}
-      </Suspense>
-    </BaseCanvas>
+      </BaseCanvas>
+    </Suspense>
   );
 };
