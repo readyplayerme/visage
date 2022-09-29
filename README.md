@@ -5,7 +5,7 @@ Built with [`three.js`](https://github.com/mrdoob/three.js), [`react-three-fiber
 
 # Installation
 
-Visage is available as an npm package.
+Visage is available as an [npm package](https://www.npmjs.com/package/@readyplayerme/visage).
 ```sh
 npm install @readyplayerme/visage
 ```
