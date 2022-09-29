@@ -1,9 +1,9 @@
 import { create } from '@storybook/theming';
-import rpmLogo from './ReadyPlayerMe.png';
+import logo from './logo.png';
 
 export default create({
   base: 'light',
-  brandImage: rpmLogo,
+  brandImage: logo,
   brandUlr: 'https://readyplayer.me',
   appBg: '#fafafa'
 });
