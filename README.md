@@ -1,6 +1,4 @@
-<p align="center">
-  <a href="https://readyplayerme.github.io/visage/" rel="noopener" target="_blank"><img width="200" src=".storybook/logo.png" alt="Visage logo"></a>
-</p>
+# Visage
 Visage is a collection of components for showcasing Ready Player Me avatars and 3D on the web!
 
 Built with [`three.js`](https://github.com/mrdoob/three.js), [`react-three-fiber`](https://github.com/pmndrs/react-three-fiber), [`drei`](https://github.com/pmndrs/drei), [`three-stdlib`](https://github.com/pmndrs/three-stdlib) and [`react`](https://github.com/facebook/react/).
