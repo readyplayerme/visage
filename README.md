@@ -1,21 +1,27 @@
-# Visage
-A growing collection of react components for showcasing 3D on the web!
+<p align="center">
+  <a href="https://readyplayerme.github.io/visage/" rel="noopener" target="_blank"><img width="200" src=".storybook/logo.png" alt="Visage logo"></a>
+</p>
+Visage is a collection of components for showcasing Ready Player Me avatars and 3D on the web!
 
-Built with [`three.js`](https://github.com/mrdoob/three.js), [`react-three-fiber`](https://github.com/pmndrs/react-three-fiber), [`drei`](https://github.com/pmndrs/drei), [`three-stdlib`](https://github.com/pmndrs/three-stdlib)
+Built with [`three.js`](https://github.com/mrdoob/three.js), [`react-three-fiber`](https://github.com/pmndrs/react-three-fiber), [`drei`](https://github.com/pmndrs/drei), [`three-stdlib`](https://github.com/pmndrs/three-stdlib) and [`react`](https://github.com/facebook/react/).
 
+# Installation
 
-## Installation
-
-```
+Visage is available as an npm package.
+```sh
 npm install @readyplayerme/visage
 ```
 
-## Documentation
+Make sure to install peer-dependencies if your project doesn't already include them:
+```sh
+npm install @react-three/drei @react-three/fiber three three-stdlib
+```
 
-You can find all examples of components and their documentation on [our GitHub page](https://readyplayerme.github.io/visage/).
+# Documentation & examples
 
-## Usage
+You can find all code examples of the components and their documentation on [our GitHub page](https://readyplayerme.github.io/visage/).
 
+Here is the first one to get you started:
 ```typescript jsx
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -30,4 +36,6 @@ function App() {
 ReactDOM.render(<App />, document.querySelector('#app'));
 ```
 
-## Contributing
+## License
+
+Visage is [MIT licensed](./LICENSE).

@@ -1,8 +1,8 @@
 {
   "name": "@readyplayerme/visage",
   "version": "0.1.0",
-  "description": "Easily display 3D models and Ready Player Me avatars on the web.",
-  "author": "readyplayer.me Team",
+  "description": "Easily display Ready Player Me avatars and 3D on the web.",
+  "author": "Ready Player Me",
   "keywords": [
     "react",
     "three",
@@ -10,6 +10,7 @@
     "react-three-fiber",
     "ready-player-me",
     "3D",
+    "avatars",
     "glb",
     "frontend"
   ],
