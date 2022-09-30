@@ -17,7 +17,7 @@ npm install @react-three/drei @react-three/fiber three three-stdlib
 
 # Documentation & examples
 
-You can find all code examples of the components and their documentation on [our GitHub page](https://readyplayerme.github.io/visage/).
+You can find all **code examples** of the components and their **documentation** on [our GitHub page](https://readyplayerme.github.io/visage/).
 
 Here is the first one to get you started:
 ```typescript jsx
@@ -25,9 +25,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Exhibit } from '@readyplayerme/visage';
 
+const modelUrl = 'https://readyplayerme.github.io/visage/male.glb'; // this can be a relative or absolute URL
+
 function App() {
   return (
-    <Exhibit modelUrl="/model.glb" />
+    <Exhibit modelUrl={modelUrl} />
   );
 }
 
