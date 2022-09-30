@@ -64,7 +64,8 @@ export interface AvatarProps extends LightingProps {
    */
   environment?: PresetsType;
   /**
-   * Adjust camera zoom for half-body avatars.
+   * Adjusts camera and model for half-body avatars.
+   * Enable only when using Ready Player Me half-body avatars.
    */
   halfBody?: boolean;
   /**
