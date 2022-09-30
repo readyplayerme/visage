@@ -41,15 +41,18 @@ export type Emotion = Record<string, number>;
 export interface AvatarProps extends LightingProps {
   /**
    * Path to `.glb` file of the 3D model.
+   * Can be a relative or absolute URL.
    */
   modelUrl: string;
   /**
    * Path to `.glb` animation file of the 3D model.
+   * Can be a relative or absolute URL.
    */
   animationUrl?: string;
   /**
    * Path to `.glb` file which will be used to map Bone placements onto the underlying 3D model.
    * Applied when not specifying an animation.
+   * Can be a relative or absolute URL.
    */
   poseUrl?: string;
   /**
