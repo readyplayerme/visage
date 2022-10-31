@@ -1,5 +1,6 @@
 import React from 'react';
 import { Avatar } from 'src/components/Avatar';
+import { FileDropper } from 'src/components/FileDropper';
 import styles from './App.module.scss';
 
 function App() {
@@ -9,13 +10,15 @@ function App() {
         <div className={styles.wrapper}>
           <h3 className={styles.title}>localhost playground</h3>
           <div className={styles.content}>
-            Paste your content in there to test the avatar props without shrinking the canvas
+            Drop your content in there to test the avatar props without shrinking the canvas
           </div>
         </div>
       </div>
       <div className={styles.container}>
         <div className={styles.card}>
-          <Avatar modelSrc="/male.glb" poseSrc="/male-pose-standing.glb" backgroundColor="#fafafa" shadows={false} />
+          <FileDropper>
+            <Avatar modelSrc="/male.glb" poseSrc="/male-pose-standing.glb" backgroundColor="#fafafa" shadows={false} />
+          </FileDropper>
         </div>
       </div>
     </div>
