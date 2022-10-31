@@ -7,17 +7,17 @@ import { mutatePose, useEmotion } from 'src/services';
 import { Emotion } from '../../Avatar/Avatar.component';
 
 interface PoseModelProps {
-  modelUrl: string;
-  poseUrl: string;
+  modelSrc: string;
+  poseSrc: string;
   modelRef?: MutableRefObject<Group | undefined>;
   scale?: number;
   emotion?: Emotion;
 }
 
-export const PoseModel: FC<PoseModelProps> = ({ modelUrl, poseUrl, modelRef, scale = 1, emotion }) => {
-  const { scene } = useLoader(GLTFLoader, modelUrl);
+export const PoseModel: FC<PoseModelProps> = ({ modelSrc, poseSrc, modelRef, scale = 1, emotion }) => {
+  const { scene } = useLoader(GLTFLoader, modelSrc);
   const { nodes } = useGraph(scene);
-  const pose = useLoader(GLTFLoader, poseUrl);
+  const pose = useLoader(GLTFLoader, poseSrc);
   const { nodes: sourceNodes } = useGraph(pose.scene);
 
   mutatePose(nodes, sourceNodes);

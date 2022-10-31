@@ -1,7 +1,7 @@
 import React, { Suspense, FC } from 'react';
 import { PresentationControls, Environment, ContactShadows } from '@react-three/drei';
 import type { PresetsType } from '@react-three/drei/helpers/environment-assets';
-import { isValidGlbUrl } from 'src/services';
+import { isValidGlbFormat } from 'src/services';
 import { CameraProps } from 'src/types';
 import { BaseCanvas } from '../BaseCanvas';
 import { FloatingModel } from '../Models/FloatingModel';
@@ -11,7 +11,7 @@ export interface ExhibitProps extends CameraProps {
    * Path to `.glb` file of the 3D model.
    * Can be a relative or absolute URL.
    */
-  modelUrl: string;
+  modelSrc: string;
   /**
    * Size of the rendered GLB model.
    */
@@ -30,7 +30,7 @@ export interface ExhibitProps extends CameraProps {
  * Interactive presentation of any GLTF (.glb) asset.
  */
 export const Exhibit: FC<ExhibitProps> = ({
-  modelUrl,
+  modelSrc,
   scale = 1.0,
   backgroundColor = '#f0f0f0',
   environment = 'city',
@@ -48,7 +48,7 @@ export const Exhibit: FC<ExhibitProps> = ({
         polar={[-Math.PI / 3, Math.PI / 3]}
         azimuth={[-Math.PI / 1.4, Math.PI / 2]}
       >
-        {isValidGlbUrl(modelUrl) && <FloatingModel modelUrl={modelUrl} scale={scale} />}
+        {isValidGlbFormat(modelSrc) && <FloatingModel modelSrc={modelSrc} scale={scale} />}
       </PresentationControls>
       <ContactShadows
         rotation-x={Math.PI / 2}

@@ -5,13 +5,13 @@ import type { Group } from 'three';
 import { Model } from 'src/components/Models/Model';
 
 interface FloatingModelProps {
-  modelUrl: string;
+  modelSrc: string;
   scale?: number;
 }
 
-export const FloatingModel: FC<FloatingModelProps> = ({ modelUrl, scale = 1.0 }) => {
+export const FloatingModel: FC<FloatingModelProps> = ({ modelSrc, scale = 1.0 }) => {
   const ref = useRef<Group>();
-  const { scene } = useLoader(GLTFLoader, modelUrl);
+  const { scene } = useLoader(GLTFLoader, modelSrc);
 
   useFrame((state) => {
     const t = state.clock.getElapsedTime();

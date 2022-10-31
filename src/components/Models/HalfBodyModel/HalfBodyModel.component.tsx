@@ -7,7 +7,7 @@ import { Group } from 'three';
 import { Emotion } from '../../Avatar/Avatar.component';
 
 interface HalfBodyModelProps {
-  modelUrl: string;
+  modelSrc: string;
   rotation?: number;
   scale?: number;
   idleRotation?: boolean;
@@ -17,14 +17,14 @@ interface HalfBodyModelProps {
 let currentRotation = 0;
 
 export const HalfBodyModel: FC<HalfBodyModelProps> = ({
-  modelUrl,
+  modelSrc,
   scale = 1,
   rotation = 20 * (Math.PI / 180),
   idleRotation = false,
   emotion
 }) => {
   const ref = useRef<Group>();
-  const { scene } = useLoader(GLTFLoader, modelUrl);
+  const { scene } = useLoader(GLTFLoader, modelSrc);
   const { nodes } = useGraph(scene);
 
   scene.traverse((object) => {

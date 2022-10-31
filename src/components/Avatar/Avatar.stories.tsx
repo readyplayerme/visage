@@ -9,7 +9,7 @@ const Template: ComponentStory<typeof Avatar> = (args) => <Avatar {...args} />;
 export const Static = Template.bind({});
 Static.args = {
   backgroundColor: '#f0f0f0',
-  modelUrl: getStoryAssetPath('female.glb'),
+  modelSrc: getStoryAssetPath('female.glb'),
   scale: 1,
   environment: 'city',
   shadows: false,
@@ -45,8 +45,8 @@ export default {
 export const Animated = Template.bind({});
 Animated.args = {
   ...Static.args,
-  modelUrl: getStoryAssetPath('male.glb'),
-  animationUrl: getStoryAssetPath('male-idle.glb'),
+  modelSrc: getStoryAssetPath('male.glb'),
+  animationSrc: getStoryAssetPath('male-idle.glb'),
   cameraTarget: CAMERA.TARGET.FULL_BODY,
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE
 };
@@ -54,7 +54,7 @@ Animated.args = {
 export const HalfBody = Template.bind({});
 HalfBody.args = {
   ...Static.args,
-  modelUrl: getStoryAssetPath('half-body.glb'),
+  modelSrc: getStoryAssetPath('half-body.glb'),
   halfBody: true,
   cameraTarget: CAMERA.TARGET.HALF_BODY,
   cameraInitialDistance: CAMERA.INITIAL_DISTANCE.HALF_BODY
@@ -63,8 +63,8 @@ HalfBody.args = {
 export const Posing = Template.bind({});
 Posing.args = {
   ...Static.args,
-  modelUrl: getStoryAssetPath('male.glb'),
-  poseUrl: getStoryAssetPath('male-pose-standing.glb'),
+  modelSrc: getStoryAssetPath('male.glb'),
+  poseSrc: getStoryAssetPath('male-pose-standing.glb'),
   cameraTarget: CAMERA.TARGET.FULL_BODY,
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE
 };

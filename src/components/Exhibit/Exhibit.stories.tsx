@@ -8,7 +8,7 @@ const Template: ComponentStory<typeof Exhibit> = (args) => <Exhibit {...args} />
 export const Default = Template.bind({});
 Default.args = {
   backgroundColor: '#f0f0f0',
-  modelUrl: getStoryAssetPath('headwear.glb'),
+  modelSrc: getStoryAssetPath('headwear.glb'),
   scale: 3,
   environment: 'city'
 };

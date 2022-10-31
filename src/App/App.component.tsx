@@ -15,7 +15,7 @@ function App() {
       </div>
       <div className={styles.container}>
         <div className={styles.card}>
-          <Avatar modelUrl="/male.glb" poseUrl="/male-pose-standing.glb" backgroundColor="#fafafa" shadows={false} />
+          <Avatar modelSrc="/male.glb" poseSrc="/male-pose-standing.glb" backgroundColor="#fafafa" shadows={false} />
         </div>
       </div>
     </div>

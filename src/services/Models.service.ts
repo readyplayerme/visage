@@ -6,14 +6,15 @@ import { Emotion } from '../components/Avatar/Avatar.component';
 export const getStoryAssetPath = (publicAsset: string) =>
   `${process.env.NODE_ENV === 'production' ? '/visage' : ''}/${publicAsset}`;
 
-export const isValidGlbUrl = (url: string | string[] | undefined): boolean => {
+export const isValidGlbFormat = (url: string | string[] | undefined): boolean => {
   if (Array.isArray(url)) {
-    return url.length > 0 && url.every(isValidGlbUrl);
+    return url.length > 0 && url.every(isValidGlbFormat);
   }
 
   if (typeof url === 'string') {
-    const expression = new RegExp(/(.glb|.glb[?].*)$/g);
-    return expression.test(url);
+    const fileEndExpression = new RegExp(/(.glb|.glb[?].*)$/g);
+    const binaryFileExpression = new RegExp(/^data:application\/octet-stream;base64/g);
+    return fileEndExpression.test(url) || binaryFileExpression.test(url);
   }
 
   return false;
