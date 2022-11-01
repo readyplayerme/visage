@@ -2,9 +2,15 @@ import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { getStoryAssetPath } from 'src/services';
 import { Vector3 } from 'three';
+import { FileDropper } from 'src/components/FileDropper/FileDropper.component';
 import { Avatar, CAMERA } from './Avatar.component';
 
 const Template: ComponentStory<typeof Avatar> = (args) => <Avatar {...args} />;
+const DropTemplate: ComponentStory<typeof Avatar> = (args) => (
+  <FileDropper>
+    <Avatar {...args} />
+  </FileDropper>
+);
 
 export const Static = Template.bind({});
 Static.args = {
@@ -25,22 +31,6 @@ Static.args = {
   cameraTarget: CAMERA.TARGET.FULL_BODY,
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE
 };
-
-export default {
-  title: 'Components/Avatar',
-  component: Avatar,
-  argTypes: {
-    backgroundColor: { control: 'color' },
-    ambientLightColor: { control: 'color' },
-    dirLightColor: { control: 'color' },
-    spotLightColor: { control: 'color' },
-    ambientLightIntensity: { control: { type: 'range', min: 0, max: 10, step: 0.1 } },
-    spotLightAngle: { control: { type: 'range', min: 0, max: 10, step: 0.01 } },
-    cameraTarget: { control: { type: 'range', min: 0, max: 10, step: 0.01 } },
-    scale: { control: { type: 'range', min: 0.01, max: 10, step: 0.01 } },
-    cameraInitialDistance: { control: { type: 'range', min: 0, max: 2.5, step: 0.01 } }
-  }
-} as ComponentMeta<typeof Avatar>;
 
 export const Animated = Template.bind({});
 Animated.args = {
@@ -68,3 +58,32 @@ Posing.args = {
   cameraTarget: CAMERA.TARGET.FULL_BODY,
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE
 };
+
+/* eslint-disable */
+export const _BinaryInput = DropTemplate.bind({});
+_BinaryInput.args = {
+  ...Static.args,
+  modelSrc: '',
+  cameraTarget: CAMERA.TARGET.FULL_BODY,
+  cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE
+};
+_BinaryInput.argTypes = {
+  modelSrc: { control: false }
+};
+/* eslint-enable */
+
+export default {
+  title: 'Components/Avatar',
+  component: Avatar,
+  argTypes: {
+    backgroundColor: { control: 'color' },
+    ambientLightColor: { control: 'color' },
+    dirLightColor: { control: 'color' },
+    spotLightColor: { control: 'color' },
+    ambientLightIntensity: { control: { type: 'range', min: 0, max: 10, step: 0.1 } },
+    spotLightAngle: { control: { type: 'range', min: 0, max: 10, step: 0.01 } },
+    cameraTarget: { control: { type: 'range', min: 0, max: 10, step: 0.01 } },
+    scale: { control: { type: 'range', min: 0.01, max: 10, step: 0.01 } },
+    cameraInitialDistance: { control: { type: 'range', min: 0, max: 2.5, step: 0.01 } }
+  }
+} as ComponentMeta<typeof Avatar>;

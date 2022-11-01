@@ -8,8 +8,7 @@ import { FloatingModel } from '../Models/FloatingModel';
 
 export interface ExhibitProps extends CameraProps {
   /**
-   * Path to `.glb` file of the 3D model.
-   * Can be a relative or absolute URL.
+   * Arbitrary binary data (base64 string) of a `.glb` file or path (URL) to a `.glb` resource.
    */
   modelSrc: string;
   /**
