@@ -7,7 +7,7 @@ describe('Exhibit component', () => {
   it('should mount without errors', async () => {
     let renderer: RenderResult = null!;
     act(() => {
-      renderer = render(<Exhibit modelUrl="https://www.__test__.it/works.glb" />);
+      renderer = render(<Exhibit modelSrc="https://www.__test__.it/works.glb" />);
     });
 
     expect(renderer.container).toMatchSnapshot();
@@ -20,7 +20,7 @@ describe('Exhibit component', () => {
 
     let renderer: RenderResult = null!;
     act(() => {
-      renderer = render(<Exhibit modelUrl="" backgroundColor={teal.hex} />);
+      renderer = render(<Exhibit modelSrc="" backgroundColor={teal.hex} />);
     });
 
     expect(renderer.container).toMatchSnapshot();

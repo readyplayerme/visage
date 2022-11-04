@@ -7,7 +7,7 @@ import { AnimationModel } from 'src/components/Models/AnimationModel/AnimationMo
 import { LightingProps } from 'src/types';
 import { BaseCanvas } from 'src/components/BaseCanvas';
 import { HalfBodyModel, StaticModel, PoseModel } from 'src/components/Models';
-import { isValidGlbUrl } from 'src/services';
+import { isValidGlbFormat } from 'src/services';
 import Capture, { CaptureType } from '../Capture/Capture.component';
 import Box, { Background } from '../Background/Box/Box.component';
 import Shadow from '../Shadow/Shadow.components';
@@ -40,21 +40,19 @@ export type Emotion = Record<string, number>;
 
 export interface AvatarProps extends LightingProps {
   /**
-   * Path to `.glb` file of the 3D model.
-   * Can be a relative or absolute URL.
+   * Arbitrary binary data (base64 string, Blob) of a `.glb` file or path (URL) to a `.glb` resource.
    */
-  modelUrl: string;
+  modelSrc: string | Blob;
   /**
-   * Path to `.glb` animation file of the 3D model.
-   * Can be a relative or absolute URL.
+   * Arbitrary binary data (base64 string, Blob) of a `.glb` file or path (URL) to a `.glb` resource.
+   * The animation will be run for the 3D model provided in `modelSrc`.
    */
-  animationUrl?: string;
+  animationSrc?: string | Blob;
   /**
-   * Path to `.glb` file which will be used to map Bone placements onto the underlying 3D model.
+   * Arbitrary binary data (base64 string, Blob) or a path (URL) to `.glb` file which will be used to map Bone placements onto the underlying 3D model.
    * Applied when not specifying an animation.
-   * Can be a relative or absolute URL.
    */
-  poseUrl?: string;
+  poseSrc?: string | Blob;
   /**
    * Canvas background color. Supports all CSS color value types.
    */
@@ -115,9 +113,9 @@ export interface AvatarProps extends LightingProps {
  * Optimised for full-body and half-body avatars.
  */
 export const Avatar: FC<AvatarProps> = ({
-  modelUrl,
-  animationUrl = undefined,
-  poseUrl = undefined,
+  modelSrc,
+  animationSrc = undefined,
+  poseSrc = undefined,
   backgroundColor = '#f0f0f0',
   environment = 'city',
   halfBody = false,
@@ -140,26 +138,26 @@ export const Avatar: FC<AvatarProps> = ({
   loader
 }) => {
   const AvatarModel = useMemo(() => {
-    if (!isValidGlbUrl(modelUrl)) {
+    if (!isValidGlbFormat(modelSrc)) {
       return null;
     }
 
-    if (!!animationUrl && !halfBody && isValidGlbUrl(animationUrl)) {
+    if (!!animationSrc && !halfBody && isValidGlbFormat(animationSrc)) {
       return (
-        <AnimationModel modelUrl={modelUrl} animationUrl={animationUrl} scale={scale} idleRotation={idleRotation} />
+        <AnimationModel modelSrc={modelSrc} animationSrc={animationSrc} scale={scale} idleRotation={idleRotation} />
       );
     }
 
     if (halfBody) {
-      return <HalfBodyModel emotion={emotion} modelUrl={modelUrl} scale={scale} idleRotation={idleRotation} />;
+      return <HalfBodyModel emotion={emotion} modelSrc={modelSrc} scale={scale} idleRotation={idleRotation} />;
     }
 
-    if (isValidGlbUrl(poseUrl)) {
-      return <PoseModel emotion={emotion} modelUrl={modelUrl} scale={scale} poseUrl={poseUrl!} />;
+    if (isValidGlbFormat(poseSrc)) {
+      return <PoseModel emotion={emotion} modelSrc={modelSrc} scale={scale} poseSrc={poseSrc!} />;
     }
 
-    return <StaticModel modelUrl={modelUrl} scale={scale} />;
-  }, [halfBody, animationUrl, modelUrl, scale, poseUrl, idleRotation, emotion]);
+    return <StaticModel modelSrc={modelSrc} scale={scale} />;
+  }, [halfBody, animationSrc, modelSrc, scale, poseSrc, idleRotation, emotion]);
 
   return (
     <Suspense fallback={loader ?? <Loader />}>

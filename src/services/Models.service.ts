@@ -1,19 +1,27 @@
 import { LinearFilter, MeshStandardMaterial, Material, Vector2, Object3D, SkinnedMesh } from 'three';
 import { useFrame } from '@react-three/fiber';
 import type { ObjectMap } from '@react-three/fiber';
-import { Emotion } from '../components/Avatar/Avatar.component';
+import { GLTF, GLTFLoader } from 'three-stdlib';
+import { suspend } from 'suspend-react';
+import { Emotion } from 'src/components/Avatar/Avatar.component';
 
 export const getStoryAssetPath = (publicAsset: string) =>
   `${process.env.NODE_ENV === 'production' ? '/visage' : ''}/${publicAsset}`;
 
-export const isValidGlbUrl = (url: string | string[] | undefined): boolean => {
-  if (Array.isArray(url)) {
-    return url.length > 0 && url.every(isValidGlbUrl);
+export const isValidGlbFormat = (source: string | string[] | Blob | undefined | null): boolean => {
+  if (Array.isArray(source)) {
+    return source.length > 0 && source.every(isValidGlbFormat);
   }
 
-  if (typeof url === 'string') {
-    const expression = new RegExp(/(.glb|.glb[?].*)$/g);
-    return expression.test(url);
+  if (typeof source === 'string') {
+    const fileEndExpression = new RegExp(/(.glb|.glb[?].*)$/g);
+    const uploadFileExpression = new RegExp(/^data:application\/octet-stream;base64,/g);
+    const gltfModelExpression = new RegExp(/^data:model\/gltf-binary;base64,/g);
+    return fileEndExpression.test(source) || uploadFileExpression.test(source) || gltfModelExpression.test(source);
+  }
+
+  if (source instanceof Blob) {
+    return source.type === 'model/gltf-binary';
   }
 
   return false;
@@ -143,3 +151,16 @@ export const useEmotion = (nodes: ObjectMap['nodes'], emotion?: Emotion) => {
     }
   });
 };
+
+export const useGltfLoader = (source: Blob | string): GLTF =>
+  suspend(async () => {
+    const loader = new GLTFLoader();
+
+    if (source instanceof Blob) {
+      const buffer = await source.arrayBuffer();
+      return (await loader.parseAsync(buffer, '')) as unknown as GLTF;
+    }
+
+    const gltf = await loader.loadAsync(source);
+    return gltf;
+  }, [source]);

@@ -1,17 +1,17 @@
 import React, { useRef, FC } from 'react';
-import { GLTFLoader } from 'three-stdlib';
-import { useFrame, useLoader } from '@react-three/fiber';
+import { useFrame } from '@react-three/fiber';
 import type { Group } from 'three';
 import { Model } from 'src/components/Models/Model';
+import { useGltfLoader } from 'src/services';
 
 interface FloatingModelProps {
-  modelUrl: string;
+  modelSrc: string;
   scale?: number;
 }
 
-export const FloatingModel: FC<FloatingModelProps> = ({ modelUrl, scale = 1.0 }) => {
+export const FloatingModel: FC<FloatingModelProps> = ({ modelSrc, scale = 1.0 }) => {
   const ref = useRef<Group>();
-  const { scene } = useLoader(GLTFLoader, modelUrl);
+  const { scene } = useGltfLoader(modelSrc);
 
   useFrame((state) => {
     const t = state.clock.getElapsedTime();

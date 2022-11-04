@@ -2,14 +2,20 @@ import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { getStoryAssetPath } from 'src/services';
 import { Vector3 } from 'three';
+import { FileDropper } from 'src/components/FileDropper/FileDropper.component';
 import { Avatar, CAMERA } from './Avatar.component';
 
 const Template: ComponentStory<typeof Avatar> = (args) => <Avatar {...args} />;
+const DropTemplate: ComponentStory<typeof Avatar> = (args) => (
+  <FileDropper>
+    <Avatar {...args} />
+  </FileDropper>
+);
 
 export const Static = Template.bind({});
 Static.args = {
   backgroundColor: '#f0f0f0',
-  modelUrl: getStoryAssetPath('female.glb'),
+  modelSrc: getStoryAssetPath('female.glb'),
   scale: 1,
   environment: 'city',
   shadows: false,
@@ -26,6 +32,46 @@ Static.args = {
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE
 };
 
+export const Animated = Template.bind({});
+Animated.args = {
+  ...Static.args,
+  modelSrc: getStoryAssetPath('male.glb'),
+  animationSrc: getStoryAssetPath('male-idle.glb'),
+  cameraTarget: CAMERA.TARGET.FULL_BODY,
+  cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE
+};
+
+export const HalfBody = Template.bind({});
+HalfBody.args = {
+  ...Static.args,
+  modelSrc: getStoryAssetPath('half-body.glb'),
+  halfBody: true,
+  cameraTarget: CAMERA.TARGET.HALF_BODY,
+  cameraInitialDistance: CAMERA.INITIAL_DISTANCE.HALF_BODY
+};
+
+export const Posing = Template.bind({});
+Posing.args = {
+  ...Static.args,
+  modelSrc: getStoryAssetPath('male.glb'),
+  poseSrc: getStoryAssetPath('male-pose-standing.glb'),
+  cameraTarget: CAMERA.TARGET.FULL_BODY,
+  cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE
+};
+
+/* eslint-disable */
+export const _BinaryInput = DropTemplate.bind({});
+_BinaryInput.args = {
+  ...Static.args,
+  modelSrc: '',
+  cameraTarget: CAMERA.TARGET.FULL_BODY,
+  cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE
+};
+_BinaryInput.argTypes = {
+  modelSrc: { control: false }
+};
+/* eslint-enable */
+
 export default {
   title: 'Components/Avatar',
   component: Avatar,
@@ -41,30 +87,3 @@ export default {
     cameraInitialDistance: { control: { type: 'range', min: 0, max: 2.5, step: 0.01 } }
   }
 } as ComponentMeta<typeof Avatar>;
-
-export const Animated = Template.bind({});
-Animated.args = {
-  ...Static.args,
-  modelUrl: getStoryAssetPath('male.glb'),
-  animationUrl: getStoryAssetPath('male-idle.glb'),
-  cameraTarget: CAMERA.TARGET.FULL_BODY,
-  cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE
-};
-
-export const HalfBody = Template.bind({});
-HalfBody.args = {
-  ...Static.args,
-  modelUrl: getStoryAssetPath('half-body.glb'),
-  halfBody: true,
-  cameraTarget: CAMERA.TARGET.HALF_BODY,
-  cameraInitialDistance: CAMERA.INITIAL_DISTANCE.HALF_BODY
-};
-
-export const Posing = Template.bind({});
-Posing.args = {
-  ...Static.args,
-  modelUrl: getStoryAssetPath('male.glb'),
-  poseUrl: getStoryAssetPath('male-pose-standing.glb'),
-  cameraTarget: CAMERA.TARGET.FULL_BODY,
-  cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE
-};

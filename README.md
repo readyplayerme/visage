@@ -12,7 +12,7 @@ npm install @readyplayerme/visage
 
 Make sure to install peer-dependencies if your project doesn't already include them:
 ```sh
-npm install @react-three/drei @react-three/fiber three three-stdlib
+npm install @react-three/drei @react-three/fiber three three-stdlib suspend-react
 ```
 
 # Documentation & examples
@@ -25,11 +25,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Exhibit } from '@readyplayerme/visage';
 
-const modelUrl = 'https://readyplayerme.github.io/visage/male.glb'; // this can be a relative or absolute URL
+const modelSrc = 'https://readyplayerme.github.io/visage/male.glb'; // this can be a relative or absolute URL
 
 function App() {
   return (
-    <Exhibit modelUrl={modelUrl} />
+    <Exhibit modelSrc={modelSrc} />
   );
 }
 

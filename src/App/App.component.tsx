@@ -9,13 +9,13 @@ function App() {
         <div className={styles.wrapper}>
           <h3 className={styles.title}>localhost playground</h3>
           <div className={styles.content}>
-            Paste your content in there to test the avatar props without shrinking the canvas
+            Drop your content in there to test the avatar props without shrinking the canvas
           </div>
         </div>
       </div>
       <div className={styles.container}>
         <div className={styles.card}>
-          <Avatar modelUrl="/male.glb" poseUrl="/male-pose-standing.glb" backgroundColor="#fafafa" shadows={false} />
+          <Avatar modelSrc="/male.glb" poseSrc="/male-pose-standing.glb" backgroundColor="#fafafa" shadows={false} />
         </div>
       </div>
     </div>

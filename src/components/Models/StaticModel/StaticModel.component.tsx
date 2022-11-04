@@ -1,17 +1,16 @@
 import React, { FC, MutableRefObject } from 'react';
-import { useLoader } from '@react-three/fiber';
-import { GLTFLoader } from 'three-stdlib';
 import { Model } from 'src/components/Models/Model';
+import { useGltfLoader } from 'src/services';
 import { Group } from 'three';
 
 interface StaticModelProps {
-  modelUrl: string;
+  modelSrc: string | Blob;
   modelRef?: MutableRefObject<Group | undefined>;
   scale?: number;
 }
 
-export const StaticModel: FC<StaticModelProps> = ({ modelUrl, modelRef, scale = 1 }) => {
-  const { scene } = useLoader(GLTFLoader, modelUrl);
+export const StaticModel: FC<StaticModelProps> = ({ modelSrc, modelRef, scale = 1 }) => {
+  const { scene } = useGltfLoader(modelSrc);
 
   return <Model modelRef={modelRef} scene={scene} scale={scale} />;
 };
