@@ -8,7 +8,7 @@ import { FloatingModel } from '../Models/FloatingModel';
 
 export interface ExhibitProps extends CameraProps {
   /**
-   * Arbitrary binary data (base64 string) of a `.glb` file or path (URL) to a `.glb` resource.
+   * Arbitrary binary data (base64 string | Blob) of a `.glb` file or path (URL) to a `.glb` resource.
    */
   modelSrc: string;
   /**

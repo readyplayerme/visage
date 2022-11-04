@@ -23,6 +23,21 @@ describe('Models service unit tests', () => {
         name: 'valid base64 format',
         format: 'data:application/octet-stream;base64,Z2xURgIAAAC4aKAAqA4CAEpTT...',
         expected: true
+      },
+      {
+        name: 'valid base64 gltf-model format',
+        format: 'data:model/gltf-binary;base64,Z2xURgIAAAC4aKAAqA4CAEpTT...',
+        expected: true
+      },
+      {
+        name: 'invalid Blob format',
+        format: new Blob(),
+        expected: false
+      },
+      {
+        name: 'valid Blob format',
+        format: new Blob(undefined, { type: 'model/gltf-binary' }),
+        expected: true
       }
     ];
 

@@ -40,19 +40,19 @@ export type Emotion = Record<string, number>;
 
 export interface AvatarProps extends LightingProps {
   /**
-   * Arbitrary binary data (base64 string) of a `.glb` file or path (URL) to a `.glb` resource.
+   * Arbitrary binary data (base64 string, Blob) of a `.glb` file or path (URL) to a `.glb` resource.
    */
-  modelSrc: string;
+  modelSrc: string | Blob;
   /**
-   * Arbitrary binary data (base64 string) of a `.glb` file or path (URL) to a `.glb` resource.
+   * Arbitrary binary data (base64 string, Blob) of a `.glb` file or path (URL) to a `.glb` resource.
    * The animation will be run for the 3D model provided in `modelSrc`.
    */
-  animationSrc?: string;
+  animationSrc?: string | Blob;
   /**
-   * Arbitrary binary data (base64 string) or a path (URL) to `.glb` file which will be used to map Bone placements onto the underlying 3D model.
+   * Arbitrary binary data (base64 string, Blob) or a path (URL) to `.glb` file which will be used to map Bone placements onto the underlying 3D model.
    * Applied when not specifying an animation.
    */
-  poseSrc?: string;
+  poseSrc?: string | Blob;
   /**
    * Canvas background color. Supports all CSS color value types.
    */

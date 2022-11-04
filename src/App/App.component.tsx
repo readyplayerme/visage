@@ -1,6 +1,5 @@
 import React from 'react';
 import { Avatar } from 'src/components/Avatar';
-import { FileDropper } from 'src/components/FileDropper';
 import styles from './App.module.scss';
 
 function App() {
@@ -16,9 +15,7 @@ function App() {
       </div>
       <div className={styles.container}>
         <div className={styles.card}>
-          <FileDropper>
-            <Avatar modelSrc="/male.glb" poseSrc="/male-pose-standing.glb" backgroundColor="#fafafa" shadows={false} />
-          </FileDropper>
+          <Avatar modelSrc="/male.glb" poseSrc="/male-pose-standing.glb" backgroundColor="#fafafa" shadows={false} />
         </div>
       </div>
     </div>

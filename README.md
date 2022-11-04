@@ -12,7 +12,7 @@ npm install @readyplayerme/visage
 
 Make sure to install peer-dependencies if your project doesn't already include them:
 ```sh
-npm install @react-three/drei @react-three/fiber three three-stdlib
+npm install @react-three/drei @react-three/fiber three three-stdlib suspend-react
 ```
 
 # Documentation & examples

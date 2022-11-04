@@ -1,13 +1,12 @@
 import React, { useRef, FC } from 'react';
-import { useFrame, useGraph, useLoader } from '@react-three/fiber';
+import { useFrame, useGraph } from '@react-three/fiber';
 import { AnimationMixer, Group } from 'three';
-import { GLTFLoader } from 'three-stdlib';
 import { Model } from 'src/components/Models/Model';
-import { useHeadMovement } from 'src/services';
+import { useHeadMovement, useGltfLoader } from 'src/services';
 
 interface AnimationModelProps {
-  modelSrc: string;
-  animationSrc: string;
+  modelSrc: string | Blob;
+  animationSrc: string | Blob;
   rotation?: number;
   scale?: number;
   idleRotation?: boolean;
@@ -23,10 +22,10 @@ export const AnimationModel: FC<AnimationModelProps> = ({
   idleRotation = false
 }) => {
   const ref = useRef<Group>();
-  const { scene } = useLoader(GLTFLoader, modelSrc);
+  const { scene } = useGltfLoader(modelSrc);
   const { nodes } = useGraph(scene);
 
-  const animationSource = useLoader(GLTFLoader, animationSrc);
+  const animationSource = useGltfLoader(animationSrc);
   const mixer = new AnimationMixer(nodes.Armature);
   mixer.clipAction(animationSource.animations[0]).play();
   mixer.update(0);

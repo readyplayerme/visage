@@ -1,13 +1,12 @@
 import React, { FC, useRef } from 'react';
-import { useFrame, useGraph, useLoader } from '@react-three/fiber';
-import { GLTFLoader } from 'three-stdlib';
+import { useFrame, useGraph } from '@react-three/fiber';
 import { Model } from 'src/components/Models/Model';
-import { useEmotion, useHeadMovement } from 'src/services';
+import { useEmotion, useHeadMovement, useGltfLoader } from 'src/services';
 import { Group } from 'three';
 import { Emotion } from '../../Avatar/Avatar.component';
 
 interface HalfBodyModelProps {
-  modelSrc: string;
+  modelSrc: string | Blob;
   rotation?: number;
   scale?: number;
   idleRotation?: boolean;
@@ -24,7 +23,7 @@ export const HalfBodyModel: FC<HalfBodyModelProps> = ({
   emotion
 }) => {
   const ref = useRef<Group>();
-  const { scene } = useLoader(GLTFLoader, modelSrc);
+  const { scene } = useGltfLoader(modelSrc);
   const { nodes } = useGraph(scene);
 
   scene.traverse((object) => {
