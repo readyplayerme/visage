@@ -26,6 +26,7 @@ const Capture: FC<CaptureProps> = ({ trigger, settings, callBack }) => {
 
       callBack(capture);
     }
+    /* eslint-disable-next-line react-hooks/exhaustive-deps */
   }, [trigger]);
 
   // eslint-disable-next-line react/jsx-no-useless-fragment

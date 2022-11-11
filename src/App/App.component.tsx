@@ -15,7 +15,22 @@ function App() {
       </div>
       <div className={styles.container}>
         <div className={styles.card}>
-          <Avatar modelSrc="/male.glb" poseSrc="/male-pose-standing.glb" backgroundColor="#fafafa" shadows={false} />
+          <Avatar
+            modelSrc="/male.glb"
+            poseSrc="/male-pose-standing.glb"
+            backgroundColor="#fafafa"
+            shadows={false}
+            onLoaded={() => console.log('male avatar loaded')}
+          />
+        </div>
+        <div className={styles.card}>
+          <Avatar
+            modelSrc="/female.glb"
+            poseSrc="/female-pose-standing.glb"
+            backgroundColor="#fafafa"
+            shadows={false}
+            onLoaded={() => console.log('female avatar loaded')}
+          />
         </div>
       </div>
     </div>
