@@ -1,7 +1,8 @@
-import React, { FC, MutableRefObject } from 'react';
+import React, { FC, MutableRefObject, useContext } from 'react';
 import { Group, Mesh } from 'three';
 import { normaliseMaterialsConfig } from 'src/services';
 import { useGraph } from '@react-three/fiber';
+import { ModelContext } from './Model.context';
 
 interface ModelProps {
   scene: Group;
@@ -11,6 +12,7 @@ interface ModelProps {
 
 export const Model: FC<ModelProps> = ({ scene, scale = 1, modelRef }) => {
   const { materials } = useGraph(scene);
+  const { setModelContext } = useContext(ModelContext);
   normaliseMaterialsConfig(materials);
   scene.traverse((object) => {
     const node = object;
@@ -22,6 +24,11 @@ export const Model: FC<ModelProps> = ({ scene, scale = 1, modelRef }) => {
     if (node.type === 'SkinnedMesh') {
       node.receiveShadow = true;
     }
+  });
+
+  setModelContext({
+    isLoaded: true,
+    isLoading: false
   });
 
   return (
