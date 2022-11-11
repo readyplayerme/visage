@@ -149,7 +149,8 @@ export const Avatar: FC<AvatarProps> = ({
   onLoading
 }) => {
   const [modelContext, setModelContext] = useState(defaultContext.modelContext);
-  const modelContextProviderValue = useMemo(() => ({ modelContext, setModelContext }), [defaultContext.modelContext]);
+  /* eslint-disable-next-line react-hooks/exhaustive-deps */
+  const modelContextProviderValue = useMemo(() => ({ modelContext, setModelContext }), []);
 
   const AvatarModel = useMemo(() => {
     if (!isValidGlbFormat(modelSrc)) {

@@ -30,7 +30,10 @@ Static.args = {
   spotLightAngle: 0.314,
   cameraTarget: CAMERA.TARGET.FULL_BODY,
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
-  onLoaded: () => console.info('EVENT: static avatar loaded')
+  /* eslint-disable no-console */
+  onLoaded: () => console.info('EVENT: static avatar loaded'),
+  onLoading: () => console.info('EVENT: loading static avatar')
+  /* eslint-enable no-console */
 };
 
 export const Animated = Template.bind({});
@@ -40,8 +43,10 @@ Animated.args = {
   animationSrc: getStoryAssetPath('male-idle.glb'),
   cameraTarget: CAMERA.TARGET.FULL_BODY,
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
+  /* eslint-disable no-console */
   onLoaded: () => console.info('EVENT: animated avatar loaded'),
   onLoading: () => console.info('EVENT: loading animated avatar')
+  /* eslint-enable no-console */
 };
 
 export const HalfBody = Template.bind({});
@@ -51,8 +56,10 @@ HalfBody.args = {
   halfBody: true,
   cameraTarget: CAMERA.TARGET.HALF_BODY,
   cameraInitialDistance: CAMERA.INITIAL_DISTANCE.HALF_BODY,
+  /* eslint-disable no-console */
   onLoaded: () => console.info('EVENT: half body avatar loaded'),
   onLoading: () => console.info('EVENT: loading half body avatar')
+  /* eslint-enable no-console */
 };
 
 export const Posing = Template.bind({});
@@ -62,8 +69,10 @@ Posing.args = {
   poseSrc: getStoryAssetPath('male-pose-standing.glb'),
   cameraTarget: CAMERA.TARGET.FULL_BODY,
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
+  /* eslint-disable no-console */
   onLoaded: () => console.info('EVENT: posing avatar loaded'),
   onLoading: () => console.info('EVENT: loading posing avatar')
+  /* eslint-enable no-console */
 };
 
 /* eslint-disable */
@@ -73,8 +82,10 @@ _BinaryInput.args = {
   modelSrc: '',
   cameraTarget: CAMERA.TARGET.FULL_BODY,
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
+  /* eslint-disable no-console */
   onLoaded: () => console.info('EVENT: binary file loaded'),
   onLoading: () => console.info('EVENT: loading avatar from binary file')
+  /* eslint-enable no-console */
 };
 _BinaryInput.argTypes = {
   modelSrc: { control: false }
