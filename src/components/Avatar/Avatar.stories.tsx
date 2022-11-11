@@ -29,7 +29,8 @@ Static.args = {
   spotLightColor: '#fff5b6',
   spotLightAngle: 0.314,
   cameraTarget: CAMERA.TARGET.FULL_BODY,
-  cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE
+  cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
+  onLoaded: () => console.info('EVENT: static avatar loaded')
 };
 
 export const Animated = Template.bind({});
@@ -38,7 +39,9 @@ Animated.args = {
   modelSrc: getStoryAssetPath('male.glb'),
   animationSrc: getStoryAssetPath('male-idle.glb'),
   cameraTarget: CAMERA.TARGET.FULL_BODY,
-  cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE
+  cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
+  onLoaded: () => console.info('EVENT: animated avatar loaded'),
+  onLoading: () => console.info('EVENT: loading animated avatar')
 };
 
 export const HalfBody = Template.bind({});
@@ -47,7 +50,9 @@ HalfBody.args = {
   modelSrc: getStoryAssetPath('half-body.glb'),
   halfBody: true,
   cameraTarget: CAMERA.TARGET.HALF_BODY,
-  cameraInitialDistance: CAMERA.INITIAL_DISTANCE.HALF_BODY
+  cameraInitialDistance: CAMERA.INITIAL_DISTANCE.HALF_BODY,
+  onLoaded: () => console.info('EVENT: half body avatar loaded'),
+  onLoading: () => console.info('EVENT: loading half body avatar')
 };
 
 export const Posing = Template.bind({});
@@ -56,7 +61,9 @@ Posing.args = {
   modelSrc: getStoryAssetPath('male.glb'),
   poseSrc: getStoryAssetPath('male-pose-standing.glb'),
   cameraTarget: CAMERA.TARGET.FULL_BODY,
-  cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE
+  cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
+  onLoaded: () => console.info('EVENT: posing avatar loaded'),
+  onLoading: () => console.info('EVENT: loading posing avatar')
 };
 
 /* eslint-disable */
@@ -65,7 +72,9 @@ _BinaryInput.args = {
   ...Static.args,
   modelSrc: '',
   cameraTarget: CAMERA.TARGET.FULL_BODY,
-  cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE
+  cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
+  onLoaded: () => console.info('EVENT: binary file loaded'),
+  onLoading: () => console.info('EVENT: loading avatar from binary file')
 };
 _BinaryInput.argTypes = {
   modelSrc: { control: false }
@@ -84,6 +93,7 @@ export default {
     spotLightAngle: { control: { type: 'range', min: 0, max: 10, step: 0.01 } },
     cameraTarget: { control: { type: 'range', min: 0, max: 10, step: 0.01 } },
     scale: { control: { type: 'range', min: 0.01, max: 10, step: 0.01 } },
-    cameraInitialDistance: { control: { type: 'range', min: 0, max: 2.5, step: 0.01 } }
+    cameraInitialDistance: { control: { type: 'range', min: 0, max: 2.5, step: 0.01 } },
+    onLoaded: { control: false }
   }
 } as ComponentMeta<typeof Avatar>;

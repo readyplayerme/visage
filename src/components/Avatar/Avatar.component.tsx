@@ -1,4 +1,4 @@
-import React, { Suspense, FC, useMemo, CSSProperties, ReactNode } from 'react';
+import React, { Suspense, FC, useMemo, CSSProperties, ReactNode, useState, useEffect } from 'react';
 import { Environment } from '@react-three/drei';
 import { PresetsType } from '@react-three/drei/helpers/environment-assets';
 import { Vector3 } from 'three';
@@ -8,6 +8,7 @@ import { LightingProps } from 'src/types';
 import { BaseCanvas } from 'src/components/BaseCanvas';
 import { HalfBodyModel, StaticModel, PoseModel } from 'src/components/Models';
 import { isValidGlbFormat } from 'src/services';
+import { ModelContext, defaultContext } from 'src/components/Models/Model/Model.context';
 import Capture, { CaptureType } from '../Capture/Capture.component';
 import Box, { Background } from '../Background/Box/Box.component';
 import Shadow from '../Shadow/Shadow.components';
@@ -106,6 +107,14 @@ export interface AvatarProps extends LightingProps {
    * Pass custom fallback component
    */
   loader?: ReactNode;
+  /**
+   * Detect when model is loaded and trigger custom logic.
+   */
+  onLoaded?: () => void;
+  /**
+   * Detect when model is being loaded and trigger custom logic.
+   */
+  onLoading?: () => void;
 }
 
 /**
@@ -135,12 +144,22 @@ export const Avatar: FC<AvatarProps> = ({
   idleRotation = false,
   capture,
   background,
-  loader
+  loader,
+  onLoaded,
+  onLoading
 }) => {
+  const [modelContext, setModelContext] = useState(defaultContext.modelContext);
+  const modelContextProviderValue = useMemo(() => ({ modelContext, setModelContext }), [defaultContext.modelContext]);
+
   const AvatarModel = useMemo(() => {
     if (!isValidGlbFormat(modelSrc)) {
       return null;
     }
+
+    setModelContext({
+      isLoading: true,
+      isLoaded: false
+    });
 
     if (!!animationSrc && !halfBody && isValidGlbFormat(animationSrc)) {
       return (
@@ -158,6 +177,16 @@ export const Avatar: FC<AvatarProps> = ({
 
     return <StaticModel modelSrc={modelSrc} scale={scale} />;
   }, [halfBody, animationSrc, modelSrc, scale, poseSrc, idleRotation, emotion]);
+
+  useEffect(() => {
+    if (typeof onLoading === 'function' && !modelContext.isLoaded && modelContext.isLoading) {
+      onLoading();
+    }
+
+    if (typeof onLoaded === 'function' && !modelContext.isLoading && modelContext.isLoaded) {
+      onLoaded();
+    }
+  }, [modelContext.isLoaded, modelContext.isLoading, onLoaded, onLoading]);
 
   return (
     <Suspense fallback={loader ?? <Loader />}>
@@ -182,7 +211,7 @@ export const Avatar: FC<AvatarProps> = ({
           }
           updateCameraTargetOnZoom={!halfBody}
         />
-        {AvatarModel}
+        <ModelContext.Provider value={modelContextProviderValue}>{AvatarModel}</ModelContext.Provider>
         {shadows && <Shadow />}
         {background?.src && <Box {...background} />}
         {capture && <Capture {...capture} />}
