@@ -1,9 +1,33 @@
-import { LinearFilter, MeshStandardMaterial, Material, Vector2, Object3D, SkinnedMesh } from 'three';
+import React from 'react';
+import {
+  LinearFilter,
+  MeshStandardMaterial,
+  Material,
+  Vector2,
+  Object3D,
+  SkinnedMesh,
+  Euler,
+  Vector3,
+  BufferGeometry,
+  Skeleton
+} from 'three';
 import { useFrame } from '@react-three/fiber';
 import type { ObjectMap } from '@react-three/fiber';
 import { GLTF, GLTFLoader } from 'three-stdlib';
 import { suspend } from 'suspend-react';
 import { Emotion } from 'src/components/Avatar/Avatar.component';
+
+export interface CustomNode extends Object3D {
+  geometry: BufferGeometry;
+  material: Material;
+  skeleton: Skeleton;
+  isMesh: boolean;
+  morphTargetInfluences?: number[];
+}
+
+export interface Nodes {
+  [node: string]: CustomNode;
+}
 
 export const getStoryAssetPath = (publicAsset: string) =>
   `${process.env.NODE_ENV === 'production' ? '/visage' : ''}/${publicAsset}`;
@@ -49,7 +73,7 @@ export const normaliseMaterialsConfig = (materials: Record<string, Material>) =>
  * When the model isn't a standard Ready Player Me avatar, the head movement won't take effect.
  */
 export const useHeadMovement = (
-  nodes: Record<string, Object3D>,
+  nodes: Nodes,
   isHalfBody: boolean = false,
   distance = 2,
   activeRotation = 0.2,
@@ -164,3 +188,65 @@ export const useGltfLoader = (source: Blob | string): GLTF =>
     const gltf = await loader.loadAsync(source);
     return gltf;
   }, [source]);
+
+class Transform {
+  constructor() {
+    this.scale = new Vector3(1, 1, 1);
+    this.rotation = new Euler(0, 0, 0);
+    this.position = new Vector3(0, 0, 0);
+  }
+
+  scale: Vector3;
+
+  rotation: Euler;
+
+  position: Vector3;
+}
+
+/**
+ * Builds a fallback model for given nodes.
+ * Useful for displaying as the suspense fallback object.
+ */
+export function buildFallback(nodes: Nodes, transform: Transform = new Transform()): JSX.Element {
+  return (
+    <group>
+      {Object.keys(nodes).map((key) => {
+        const node = nodes[key];
+        if (node.type === 'SkinnedMesh') {
+          return (
+            <skinnedMesh
+              castShadow
+              receiveShadow
+              key={node.name}
+              scale={transform.scale}
+              position={transform.position}
+              rotation={transform.rotation}
+              geometry={node.geometry}
+              material={node.material}
+              skeleton={node.skeleton}
+              morphTargetInfluences={node.morphTargetInfluences || []}
+            />
+          );
+        }
+
+        if (node.type === 'Mesh') {
+          return (
+            <mesh
+              castShadow
+              receiveShadow
+              key={node.name}
+              scale={transform.scale}
+              position={transform.position}
+              rotation={transform.rotation}
+              geometry={node.geometry}
+              material={node.material}
+              morphTargetInfluences={node.morphTargetInfluences || []}
+            />
+          );
+        }
+
+        return null;
+      })}
+    </group>
+  );
+}
