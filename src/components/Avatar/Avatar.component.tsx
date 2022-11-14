@@ -9,6 +9,7 @@ import { BaseCanvas } from 'src/components/BaseCanvas';
 import { HalfBodyModel, StaticModel, PoseModel } from 'src/components/Models';
 import { isValidGlbFormat } from 'src/services';
 import { ModelContext, defaultContext } from 'src/components/Models/Model/Model.context';
+import { Dpr } from '@react-three/fiber';
 import Capture, { CaptureType } from '../Capture/Capture.component';
 import Box, { Background } from '../Background/Box/Box.component';
 import Shadow from '../Shadow/Shadow.components';
@@ -115,6 +116,14 @@ export interface AvatarProps extends LightingProps {
    * Detect when model is being loaded and trigger custom logic.
    */
   onLoading?: () => void;
+  /**
+   * Device Pixel Ratio
+   */
+  dpr?: Dpr;
+  /**
+   * Custom style classes for underlying Canvas.
+   */
+  className?: string;
 }
 
 /**
@@ -146,7 +155,9 @@ export const Avatar: FC<AvatarProps> = ({
   background,
   loader,
   onLoaded,
-  onLoading
+  onLoading,
+  dpr,
+  className
 }) => {
   const [modelContext, setModelContext] = useState(defaultContext.modelContext);
   /* eslint-disable-next-line react-hooks/exhaustive-deps */
@@ -191,7 +202,14 @@ export const Avatar: FC<AvatarProps> = ({
 
   return (
     <Suspense fallback={loader ?? <Loader />}>
-      <BaseCanvas background={backgroundColor} position={new Vector3(0, 0, 3)} fov={50} style={style}>
+      <BaseCanvas
+        background={backgroundColor}
+        position={new Vector3(0, 0, 3)}
+        fov={50}
+        style={style}
+        dpr={dpr}
+        className={className}
+      >
         <Environment preset={environment} />
         <CameraLighting
           cameraTarget={cameraTarget}
