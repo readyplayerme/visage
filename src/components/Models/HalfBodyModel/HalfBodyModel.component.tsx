@@ -1,7 +1,7 @@
 import React, { FC, useRef } from 'react';
 import { useFrame, useGraph } from '@react-three/fiber';
 import { Model } from 'src/components/Models/Model';
-import { useEmotion, useHeadMovement, useGltfLoader } from 'src/services';
+import { useEmotion, useHeadMovement, useGltfLoader, useFallback } from 'src/services';
 import { Group } from 'three';
 import { Emotion } from '../../Avatar/Avatar.component';
 
@@ -11,6 +11,7 @@ interface HalfBodyModelProps {
   scale?: number;
   idleRotation?: boolean;
   emotion?: Emotion;
+  setModelFallback: (fallback: JSX.Element) => void;
 }
 
 let currentRotation = 0;
@@ -20,7 +21,8 @@ export const HalfBodyModel: FC<HalfBodyModelProps> = ({
   scale = 1,
   rotation = 20 * (Math.PI / 180),
   idleRotation = false,
-  emotion
+  emotion,
+  setModelFallback
 }) => {
   const ref = useRef<Group>();
   const { scene } = useGltfLoader(modelSrc);
@@ -54,6 +56,7 @@ export const HalfBodyModel: FC<HalfBodyModelProps> = ({
 
   useHeadMovement(nodes, true);
   useEmotion(nodes, emotion);
+  useFallback(setModelFallback, nodes);
 
   return <Model modelRef={ref} scene={scene} scale={scale} />;
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   LinearFilter,
   MeshStandardMaterial,
@@ -26,7 +26,7 @@ export interface CustomNode extends Object3D {
 }
 
 export interface Nodes {
-  [node: string]: CustomNode;
+  [node: string]: Object3D;
 }
 
 export const getStoryAssetPath = (publicAsset: string) =>
@@ -207,11 +207,11 @@ class Transform {
  * Builds a fallback model for given nodes.
  * Useful for displaying as the suspense fallback object.
  */
-export function buildFallback(nodes: Nodes, transform: Transform = new Transform()): JSX.Element {
+function buildFallback(nodes: Nodes, transform: Transform = new Transform()): JSX.Element {
   return (
     <group>
       {Object.keys(nodes).map((key) => {
-        const node = nodes[key];
+        const node = nodes[key] as CustomNode;
         if (node.type === 'SkinnedMesh') {
           return (
             <skinnedMesh
@@ -250,3 +250,8 @@ export function buildFallback(nodes: Nodes, transform: Transform = new Transform
     </group>
   );
 }
+
+export const useFallback = (setter: (fallback: JSX.Element) => void, nodes: Nodes) =>
+  useEffect(() => {
+    setter(buildFallback(nodes));
+  }, [setter, nodes]);

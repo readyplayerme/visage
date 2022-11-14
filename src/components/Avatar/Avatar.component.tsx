@@ -160,6 +160,8 @@ export const Avatar: FC<AvatarProps> = ({
   className
 }) => {
   const [modelContext, setModelContext] = useState(defaultContext.modelContext);
+  /* eslint-disable-next-line react/jsx-no-useless-fragment */
+  const [modelFallback, setModelFallback] = useState<JSX.Element>(<></>);
   /* eslint-disable-next-line react-hooks/exhaustive-deps */
   const modelContextProviderValue = useMemo(() => ({ modelContext, setModelContext }), []);
 
@@ -175,19 +177,41 @@ export const Avatar: FC<AvatarProps> = ({
 
     if (!!animationSrc && !halfBody && isValidGlbFormat(animationSrc)) {
       return (
-        <AnimationModel modelSrc={modelSrc} animationSrc={animationSrc} scale={scale} idleRotation={idleRotation} />
+        <AnimationModel
+          modelSrc={modelSrc}
+          animationSrc={animationSrc}
+          scale={scale}
+          idleRotation={idleRotation}
+          setModelFallback={setModelFallback}
+        />
       );
     }
 
     if (halfBody) {
-      return <HalfBodyModel emotion={emotion} modelSrc={modelSrc} scale={scale} idleRotation={idleRotation} />;
+      return (
+        <HalfBodyModel
+          emotion={emotion}
+          modelSrc={modelSrc}
+          scale={scale}
+          idleRotation={idleRotation}
+          setModelFallback={setModelFallback}
+        />
+      );
     }
 
     if (isValidGlbFormat(poseSrc)) {
-      return <PoseModel emotion={emotion} modelSrc={modelSrc} scale={scale} poseSrc={poseSrc!} />;
+      return (
+        <PoseModel
+          emotion={emotion}
+          modelSrc={modelSrc}
+          scale={scale}
+          poseSrc={poseSrc!}
+          setModelFallback={setModelFallback}
+        />
+      );
     }
 
-    return <StaticModel modelSrc={modelSrc} scale={scale} />;
+    return <StaticModel modelSrc={modelSrc} scale={scale} setModelFallback={setModelFallback} />;
   }, [halfBody, animationSrc, modelSrc, scale, poseSrc, idleRotation, emotion]);
 
   useEffect(() => {
@@ -230,7 +254,9 @@ export const Avatar: FC<AvatarProps> = ({
           }
           updateCameraTargetOnZoom={!halfBody}
         />
-        <ModelContext.Provider value={modelContextProviderValue}>{AvatarModel}</ModelContext.Provider>
+        <ModelContext.Provider value={modelContextProviderValue}>
+          <Suspense fallback={modelFallback}>{AvatarModel}</Suspense>
+        </ModelContext.Provider>
         {shadows && <Shadow />}
         {background?.src && <Box {...background} />}
         {capture && <Capture {...capture} />}
