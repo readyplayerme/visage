@@ -81,7 +81,7 @@ export interface AvatarProps extends LightingProps {
    */
   cameraTarget?: number;
   /**
-   * Initial distance from the object upon render.
+   * Initial Z-axis distance from the object upon render.
    */
   cameraInitialDistance?: number;
   /**
