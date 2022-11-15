@@ -23,7 +23,7 @@ export const BaseCanvas: FC<BaseCanvasProps> = ({
   className
 }) => (
   <Canvas
-    className={`${styles['base-canvas']} ${className}`}
+    className={`${styles['base-canvas']} ${className ?? ''}`}
     shadows
     gl={{ preserveDrawingBuffer: true }}
     dpr={dpr}
