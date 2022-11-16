@@ -3,6 +3,7 @@ import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import typescript from '@rollup/plugin-typescript';
 import postcss from 'rollup-plugin-postcss';
+import dts from 'rollup-plugin-dts';
 
 const packageJson = require('./package.json');
 
@@ -40,5 +41,10 @@ export default [
       resolve({ extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'] }),
       postcss()
     ]
+  },
+  {
+    input: './dist/src/library.d.ts',
+    output: [{ file: 'dist/types.d.ts', format: 'es', paths: { 'src/types': './src/types' } }],
+    plugins: [dts()]
   }
 ];

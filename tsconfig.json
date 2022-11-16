@@ -16,7 +16,7 @@
     "noEmit": true,
     "jsx": "react",
     "declaration": true,
-    "declarationDir": "types",
+    "declarationDir": "src",
     "sourceMap": false,
     "outDir": "dist",
     "emitDeclarationOnly": true,
