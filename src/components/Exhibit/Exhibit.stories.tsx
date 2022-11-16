@@ -14,7 +14,6 @@ const DropTemplate: ComponentStory<typeof Exhibit> = (args) => (
 
 export const Default = Template.bind({});
 Default.args = {
-  backgroundColor: '#f0f0f0',
   modelSrc: getStoryAssetPath('headwear.glb'),
   scale: 3,
   environment: 'city',
@@ -24,7 +23,6 @@ Default.args = {
 /* eslint-disable */
 export const _BinaryInput = DropTemplate.bind({});
 _BinaryInput.args = {
-  backgroundColor: '#f0f0f0',
   scale: 3,
   environment: 'city',
   position: new Vector3(0, 0, 5)
@@ -38,7 +36,6 @@ export default {
   title: 'Components/Exhibit',
   component: Exhibit,
   argTypes: {
-    backgroundColor: { control: 'color' },
     scale: { control: { type: 'range', min: 0.01, max: 10, step: 0.01 } }
   }
 } as ComponentMeta<typeof Exhibit>;

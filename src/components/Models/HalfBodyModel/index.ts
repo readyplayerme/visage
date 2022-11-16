@@ -1,1 +1,1 @@
-export { HalfBodyModel } from './HalfBodyModel.component';
+export { HalfBodyModelContainer as HalfBodyModel } from './HalfBodyModel.container';

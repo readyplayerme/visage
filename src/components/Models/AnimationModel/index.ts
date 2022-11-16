@@ -1,1 +1,1 @@
-export { AnimationModel } from './AnimationModel.component';
+export { AnimationModelContainer as AnimationModel } from './AnimationModel.container';
