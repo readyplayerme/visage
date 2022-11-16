@@ -15,7 +15,10 @@ import Loader from '../Loader';
 
 export const CAMERA = {
   TARGET: {
-    FULL_BODY: 1.55,
+    FULL_BODY: {
+      MALE: 1.65,
+      FEMALE: 1.55
+    },
     HALF_BODY: 0.55
   },
   INITIAL_DISTANCE: {
@@ -131,7 +134,7 @@ export const Avatar: FC<AvatarProps> = ({
   spotLightPosition = new Vector3(12, 10, 7.5),
   spotLightColor = '#fff5b6',
   spotLightAngle = 0.314,
-  cameraTarget = CAMERA.TARGET.FULL_BODY,
+  cameraTarget = CAMERA.TARGET.FULL_BODY.MALE,
   cameraInitialDistance = CAMERA.INITIAL_DISTANCE.FULL_BODY,
   style,
   emotion,

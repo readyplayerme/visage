@@ -27,7 +27,7 @@ Static.args = {
   spotLightPosition: new Vector3(12, 10, 7.5),
   spotLightColor: '#fff5b6',
   spotLightAngle: 0.314,
-  cameraTarget: CAMERA.TARGET.FULL_BODY,
+  cameraTarget: CAMERA.TARGET.FULL_BODY.FEMALE,
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
   /* eslint-disable no-console */
   onLoaded: () => console.info('EVENT: static avatar loaded'),
@@ -40,7 +40,7 @@ Animated.args = {
   ...Static.args,
   modelSrc: getStoryAssetPath('male.glb'),
   animationSrc: getStoryAssetPath('male-idle.glb'),
-  cameraTarget: CAMERA.TARGET.FULL_BODY,
+  cameraTarget: CAMERA.TARGET.FULL_BODY.MALE,
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
   /* eslint-disable no-console */
   onLoaded: () => console.info('EVENT: animated avatar loaded'),
@@ -66,7 +66,7 @@ Posing.args = {
   ...Static.args,
   modelSrc: getStoryAssetPath('male.glb'),
   poseSrc: getStoryAssetPath('male-pose-standing.glb'),
-  cameraTarget: CAMERA.TARGET.FULL_BODY,
+  cameraTarget: CAMERA.TARGET.FULL_BODY.MALE,
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
   /* eslint-disable no-console */
   onLoaded: () => console.info('EVENT: posing avatar loaded'),
@@ -79,7 +79,7 @@ export const _BinaryInput = DropTemplate.bind({});
 _BinaryInput.args = {
   ...Static.args,
   modelSrc: '',
-  cameraTarget: CAMERA.TARGET.FULL_BODY,
+  cameraTarget: CAMERA.TARGET.FULL_BODY.FEMALE,
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
   /* eslint-disable no-console */
   onLoaded: () => console.info('EVENT: binary file loaded'),
