@@ -38,7 +38,7 @@ export const CAMERA = {
 
 export type Emotion = Record<string, number>;
 
-export interface AvatarProps extends LightingProps, BaseModelProps {
+export interface AvatarProps extends LightingProps, Omit<BaseModelProps, 'setModelFallback'> {
   /**
    * Arbitrary binary data (base64 string, Blob) of a `.glb` file or path (URL) to a `.glb` resource.
    */
