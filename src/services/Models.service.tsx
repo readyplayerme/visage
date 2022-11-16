@@ -251,7 +251,15 @@ function buildFallback(nodes: Nodes, transform: Transform = new Transform()): JS
   );
 }
 
-export const useFallback = (setter: (fallback: JSX.Element) => void, nodes: Nodes) =>
+export const useFallback = (nodes: Nodes, setter?: (fallback: JSX.Element) => void) =>
   useEffect(() => {
-    setter(buildFallback(nodes));
+    if (typeof setter === 'function') {
+      setter(buildFallback(nodes));
+    }
   }, [setter, nodes]);
+
+export const triggerCallback = (callback?: () => void) => {
+  if (typeof callback === 'function') {
+    callback();
+  }
+};

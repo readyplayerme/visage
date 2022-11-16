@@ -21,6 +21,18 @@ export interface LightingProps {
   spotLightAngle?: number;
 }
 
+export interface BaseModelProps {
+  /**
+   * Detect when model is loaded and trigger custom logic.
+   */
+  onLoaded?: () => void;
+  /**
+   * Detect when model is being loaded and trigger custom logic.
+   */
+  onLoading?: () => void;
+  setModelFallback?: (fallback: JSX.Element) => void;
+}
+
 export type HeadBlendShapeType =
   | 'browDownLeft'
   | 'browDownRight'

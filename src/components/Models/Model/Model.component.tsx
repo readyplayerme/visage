@@ -1,18 +1,17 @@
-import React, { FC, MutableRefObject, useContext } from 'react';
+import React, { FC, MutableRefObject } from 'react';
 import { Group, Mesh } from 'three';
-import { normaliseMaterialsConfig } from 'src/services';
+import { normaliseMaterialsConfig, triggerCallback } from 'src/services';
 import { useGraph } from '@react-three/fiber';
-import { ModelContext } from './Model.context';
+import { BaseModelProps } from 'src/types';
 
-interface ModelProps {
+interface ModelProps extends BaseModelProps {
   scene: Group;
   modelRef?: MutableRefObject<Group | undefined>;
   scale?: number;
 }
 
-export const Model: FC<ModelProps> = ({ scene, scale = 1, modelRef }) => {
+export const Model: FC<ModelProps> = ({ scene, scale = 1, modelRef, onLoaded }) => {
   const { materials } = useGraph(scene);
-  const { setModelContext } = useContext(ModelContext);
   normaliseMaterialsConfig(materials);
   scene.traverse((object) => {
     const node = object;
@@ -25,11 +24,7 @@ export const Model: FC<ModelProps> = ({ scene, scale = 1, modelRef }) => {
       node.receiveShadow = true;
     }
   });
-
-  setModelContext({
-    isLoaded: true,
-    isLoading: false
-  });
+  triggerCallback(onLoaded);
 
   return (
     <group ref={modelRef} dispose={null} rotation={[0, 0, 0]}>

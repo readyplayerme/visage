@@ -1,4 +1,4 @@
-import React, { Suspense, FC } from 'react';
+import React, { Suspense, FC, CSSProperties } from 'react';
 import { PresentationControls, Environment, ContactShadows } from '@react-three/drei';
 import type { PresetsType } from '@react-three/drei/helpers/environment-assets';
 import { isValidGlbFormat } from 'src/services';
@@ -16,13 +16,17 @@ export interface ExhibitProps extends CameraProps {
    */
   scale?: number;
   /**
-   * Canvas background color. Supports all CSS color value types.
-   */
-  backgroundColor?: string;
-  /**
    * Brightness, color hue, shadow contrast, reflection details change according to the selected environment.
    */
   environment?: PresetsType;
+  /**
+   * Pass styling to canvas.
+   */
+  style?: CSSProperties;
+  /**
+   * Custom style classes for canvas.
+   */
+  className?: string;
 }
 
 /**
@@ -31,11 +35,12 @@ export interface ExhibitProps extends CameraProps {
 export const Exhibit: FC<ExhibitProps> = ({
   modelSrc,
   scale = 1.0,
-  backgroundColor = '#f0f0f0',
   environment = 'city',
-  position
+  position,
+  style,
+  className
 }) => (
-  <BaseCanvas background={backgroundColor} position={position}>
+  <BaseCanvas position={position} style={style} className={className}>
     <Suspense fallback={null}>
       <ambientLight intensity={0.5} />
       <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} shadow-mapSize={[512, 512]} castShadow />

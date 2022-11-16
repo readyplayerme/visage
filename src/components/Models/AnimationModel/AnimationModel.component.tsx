@@ -2,15 +2,15 @@ import React, { useRef, FC } from 'react';
 import { useFrame, useGraph } from '@react-three/fiber';
 import { AnimationMixer, Group } from 'three';
 import { Model } from 'src/components/Models/Model';
-import { useHeadMovement, useGltfLoader, useFallback } from 'src/services';
+import { useHeadMovement, useGltfLoader, useFallback, triggerCallback } from 'src/services';
+import { BaseModelProps } from 'src/types';
 
-interface AnimationModelProps {
+export interface AnimationModelProps extends BaseModelProps {
   modelSrc: string | Blob;
   animationSrc: string | Blob;
   rotation?: number;
   scale?: number;
   idleRotation?: boolean;
-  setModelFallback: (fallback: JSX.Element) => void;
 }
 
 let currentRotation = 0;
@@ -21,8 +21,11 @@ export const AnimationModel: FC<AnimationModelProps> = ({
   rotation = 20 * (Math.PI / 180),
   scale = 1,
   idleRotation = false,
-  setModelFallback
+  setModelFallback,
+  onLoaded,
+  onLoading
 }) => {
+  triggerCallback(onLoading);
   const ref = useRef<Group>();
   const { scene } = useGltfLoader(modelSrc);
   const { nodes } = useGraph(scene);
@@ -46,7 +49,7 @@ export const AnimationModel: FC<AnimationModelProps> = ({
   });
 
   useHeadMovement(nodes);
-  useFallback(setModelFallback, nodes);
+  useFallback(nodes, setModelFallback);
 
-  return <Model modelRef={ref} scene={scene} scale={scale} />;
+  return <Model modelRef={ref} scene={scene} scale={scale} onLoaded={onLoaded} />;
 };

@@ -14,7 +14,6 @@ const DropTemplate: ComponentStory<typeof Avatar> = (args) => (
 
 export const Static = Template.bind({});
 Static.args = {
-  backgroundColor: '#f0f0f0',
   modelSrc: getStoryAssetPath('female.glb'),
   scale: 1,
   environment: 'city',

@@ -2,14 +2,16 @@ import React, { useRef, FC } from 'react';
 import { useFrame } from '@react-three/fiber';
 import type { Group } from 'three';
 import { Model } from 'src/components/Models/Model';
-import { useGltfLoader } from 'src/services';
+import { triggerCallback, useGltfLoader } from 'src/services';
+import { BaseModelProps } from 'src/types';
 
-interface FloatingModelProps {
+export interface FloatingModelProps extends BaseModelProps {
   modelSrc: string;
   scale?: number;
 }
 
-export const FloatingModel: FC<FloatingModelProps> = ({ modelSrc, scale = 1.0 }) => {
+export const FloatingModel: FC<FloatingModelProps> = ({ modelSrc, scale = 1.0, onLoaded, onLoading }) => {
+  triggerCallback(onLoading);
   const ref = useRef<Group>();
   const { scene } = useGltfLoader(modelSrc);
 
@@ -22,5 +24,5 @@ export const FloatingModel: FC<FloatingModelProps> = ({ modelSrc, scale = 1.0 })
     }
   });
 
-  return <Model modelRef={ref} scale={scale} scene={scene} />;
+  return <Model modelRef={ref} scale={scale} scene={scene} onLoaded={onLoaded} />;
 };

@@ -1,1 +1,1 @@
-export { PoseModel } from './PoseModel.component';
+export { PoseModelContainer as PoseModel } from './PoseModel.container';

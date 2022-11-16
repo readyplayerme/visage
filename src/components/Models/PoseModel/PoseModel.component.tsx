@@ -2,16 +2,16 @@ import React, { FC, MutableRefObject } from 'react';
 import { useGraph } from '@react-three/fiber';
 import { Model } from 'src/components/Models/Model';
 import { Group } from 'three';
-import { mutatePose, useEmotion, useFallback, useGltfLoader } from 'src/services';
+import { mutatePose, triggerCallback, useEmotion, useFallback, useGltfLoader } from 'src/services';
+import { BaseModelProps } from 'src/types';
 import { Emotion } from '../../Avatar/Avatar.component';
 
-interface PoseModelProps {
+export interface PoseModelProps extends BaseModelProps {
   modelSrc: string | Blob;
   poseSrc: string | Blob;
   modelRef?: MutableRefObject<Group | undefined>;
   scale?: number;
   emotion?: Emotion;
-  setModelFallback: (fallback: JSX.Element) => void;
 }
 
 export const PoseModel: FC<PoseModelProps> = ({
@@ -20,8 +20,11 @@ export const PoseModel: FC<PoseModelProps> = ({
   modelRef,
   scale = 1,
   emotion,
-  setModelFallback
+  setModelFallback,
+  onLoaded,
+  onLoading
 }) => {
+  triggerCallback(onLoading);
   const { scene } = useGltfLoader(modelSrc);
   const { nodes } = useGraph(scene);
   const pose = useGltfLoader(poseSrc);
@@ -29,7 +32,7 @@ export const PoseModel: FC<PoseModelProps> = ({
 
   mutatePose(nodes, sourceNodes);
   useEmotion(nodes, emotion);
-  useFallback(setModelFallback, nodes);
+  useFallback(nodes, setModelFallback);
 
-  return <Model modelRef={modelRef} scene={scene} scale={scale} />;
+  return <Model modelRef={modelRef} scene={scene} scale={scale} onLoaded={onLoaded} />;
 };

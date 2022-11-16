@@ -1,1 +1,1 @@
-export { StaticModel } from './StaticModel.component';
+export { StaticModelContainer as StaticModel } from './StaticModel.container';

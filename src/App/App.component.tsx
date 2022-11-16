@@ -18,7 +18,6 @@ function App() {
           <Avatar
             modelSrc="/male.glb"
             poseSrc="/male-pose-standing.glb"
-            backgroundColor="#fafafa"
             shadows={false}
             onLoaded={() => console.log('male avatar loaded')}
           />
@@ -27,7 +26,6 @@ function App() {
           <Avatar
             modelSrc="/female.glb"
             poseSrc="/female-pose-standing.glb"
-            backgroundColor="#fafafa"
             shadows={false}
             onLoaded={() => console.log('female avatar loaded')}
           />

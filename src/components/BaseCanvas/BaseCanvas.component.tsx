@@ -6,7 +6,6 @@ import styles from './BaseCanvas.module.scss';
 
 interface BaseCanvasProps extends CameraProps {
   children?: ReactNode;
-  background?: string;
   fov?: number;
   style?: CSSProperties;
   dpr?: Dpr;
@@ -15,7 +14,6 @@ interface BaseCanvasProps extends CameraProps {
 
 export const BaseCanvas: FC<BaseCanvasProps> = ({
   children = undefined,
-  background = '#0e0f1e',
   fov = 50,
   position = new Vector3(0, 0, 5),
   style,
@@ -29,7 +27,7 @@ export const BaseCanvas: FC<BaseCanvasProps> = ({
     dpr={dpr}
     camera={{ fov, position }}
     resize={{ scroll: true, debounce: { scroll: 50, resize: 0 } }}
-    style={{ background, ...style }}
+    style={{ ...style }}
   >
     {children}
   </Canvas>

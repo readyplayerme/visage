@@ -1,17 +1,17 @@
 import React, { FC, useRef } from 'react';
 import { useFrame, useGraph } from '@react-three/fiber';
 import { Model } from 'src/components/Models/Model';
-import { useEmotion, useHeadMovement, useGltfLoader, useFallback } from 'src/services';
+import { BaseModelProps } from 'src/types';
+import { useEmotion, useHeadMovement, useGltfLoader, useFallback, triggerCallback } from 'src/services';
 import { Group } from 'three';
 import { Emotion } from '../../Avatar/Avatar.component';
 
-interface HalfBodyModelProps {
+export interface HalfBodyModelProps extends BaseModelProps {
   modelSrc: string | Blob;
   rotation?: number;
   scale?: number;
   idleRotation?: boolean;
   emotion?: Emotion;
-  setModelFallback: (fallback: JSX.Element) => void;
 }
 
 let currentRotation = 0;
@@ -22,8 +22,11 @@ export const HalfBodyModel: FC<HalfBodyModelProps> = ({
   rotation = 20 * (Math.PI / 180),
   idleRotation = false,
   emotion,
-  setModelFallback
+  setModelFallback,
+  onLoading,
+  onLoaded
 }) => {
+  triggerCallback(onLoading);
   const ref = useRef<Group>();
   const { scene } = useGltfLoader(modelSrc);
   const { nodes } = useGraph(scene);
@@ -56,7 +59,7 @@ export const HalfBodyModel: FC<HalfBodyModelProps> = ({
 
   useHeadMovement(nodes, true);
   useEmotion(nodes, emotion);
-  useFallback(setModelFallback, nodes);
+  useFallback(nodes, setModelFallback);
 
-  return <Model modelRef={ref} scene={scene} scale={scale} />;
+  return <Model modelRef={ref} scene={scene} scale={scale} onLoaded={onLoaded} />;
 };
