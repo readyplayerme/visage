@@ -20,7 +20,7 @@ describe('Exhibit component', () => {
 
     let renderer: RenderResult = null!;
     act(() => {
-      renderer = render(<Exhibit modelSrc="" backgroundColor={teal.hex} />);
+      renderer = render(<Exhibit modelSrc="" style={{ background: teal.hex }} />);
     });
 
     expect(renderer.container).toMatchSnapshot();
