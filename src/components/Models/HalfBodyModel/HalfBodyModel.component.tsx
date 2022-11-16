@@ -12,6 +12,7 @@ export interface HalfBodyModelProps extends BaseModelProps {
   scale?: number;
   idleRotation?: boolean;
   emotion?: Emotion;
+  headMovement?: boolean;
 }
 
 let currentRotation = 0;
@@ -24,7 +25,8 @@ export const HalfBodyModel: FC<HalfBodyModelProps> = ({
   emotion,
   setModelFallback,
   onLoading,
-  onLoaded
+  onLoaded,
+  headMovement = false
 }) => {
   triggerCallback(onLoading);
   const ref = useRef<Group>();
@@ -57,7 +59,7 @@ export const HalfBodyModel: FC<HalfBodyModelProps> = ({
     }
   });
 
-  useHeadMovement(nodes, true);
+  useHeadMovement({ nodes, isHalfBody: true, enabled: headMovement });
   useEmotion(nodes, emotion);
   useFallback(nodes, setModelFallback);
 

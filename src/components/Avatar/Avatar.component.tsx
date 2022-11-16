@@ -19,7 +19,7 @@ export const CAMERA = {
       MALE: 1.65,
       FEMALE: 1.55
     },
-    HALF_BODY: 0.55
+    HALF_BODY: 0.6
   },
   INITIAL_DISTANCE: {
     FULL_BODY: 0.4,
@@ -113,6 +113,10 @@ export interface AvatarProps extends LightingProps, Omit<BaseModelProps, 'setMod
    * Custom style classes for canvas.
    */
   className?: string;
+  /**
+   * Enable head tracking cursor movements.
+   */
+  headMovement?: boolean;
 }
 
 /**
@@ -145,7 +149,8 @@ export const Avatar: FC<AvatarProps> = ({
   onLoaded,
   onLoading,
   dpr,
-  className
+  className,
+  headMovement = false
 }) => {
   const AvatarModel = useMemo(() => {
     if (!isValidGlbFormat(modelSrc)) {
@@ -161,6 +166,7 @@ export const Avatar: FC<AvatarProps> = ({
           idleRotation={idleRotation}
           onLoaded={onLoaded}
           onLoading={onLoading}
+          headMovement={headMovement}
         />
       );
     }
@@ -174,6 +180,7 @@ export const Avatar: FC<AvatarProps> = ({
           idleRotation={idleRotation}
           onLoaded={onLoaded}
           onLoading={onLoading}
+          headMovement={headMovement}
         />
       );
     }
@@ -192,7 +199,7 @@ export const Avatar: FC<AvatarProps> = ({
     }
 
     return <StaticModel modelSrc={modelSrc} scale={scale} onLoaded={onLoaded} onLoading={onLoading} />;
-  }, [halfBody, animationSrc, modelSrc, scale, poseSrc, idleRotation, emotion, onLoaded, onLoading]);
+  }, [halfBody, animationSrc, modelSrc, scale, poseSrc, idleRotation, emotion, onLoaded, onLoading, headMovement]);
 
   return (
     <Suspense fallback={loader ?? <Loader />}>

@@ -68,17 +68,26 @@ export const normaliseMaterialsConfig = (materials: Record<string, Material>) =>
   });
 };
 
+interface UseHeadMovement {
+  nodes: Nodes;
+  isHalfBody?: boolean;
+  distance?: number;
+  activeRotation?: number;
+  rotationMargin?: Vector2;
+  enabled?: boolean;
+}
 /**
  * Avatar head movement relative to cursor.
  * When the model isn't a standard Ready Player Me avatar, the head movement won't take effect.
  */
-export const useHeadMovement = (
-  nodes: Nodes,
-  isHalfBody: boolean = false,
+export const useHeadMovement = ({
+  nodes,
+  isHalfBody = false,
   distance = 2,
   activeRotation = 0.2,
-  rotationMargin: Vector2 = new Vector2(5, 10)
-) => {
+  rotationMargin = new Vector2(5, 10),
+  enabled = false
+}: UseHeadMovement) => {
   const rad = Math.PI / 180;
   const currentPos = new Vector2(0, 0);
   const targetPos = new Vector2(0, 0);
@@ -89,7 +98,7 @@ export const useHeadMovement = (
     ((clamp(value, inMax, inMin) - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
 
   useFrame((state) => {
-    if (!nodes.Neck || !nodes.Head || !nodes.RightEye || !nodes.LeftEye) {
+    if (!enabled || !nodes.Neck || !nodes.Head || !nodes.RightEye || !nodes.LeftEye) {
       return;
     }
 

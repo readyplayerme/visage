@@ -20,6 +20,7 @@ Static.args = {
   shadows: false,
   halfBody: false,
   idleRotation: false,
+  headMovement: false,
   ambientLightColor: '#fff5b6',
   ambientLightIntensity: 0.25,
   dirLightPosition: new Vector3(-3, 5, -5),
@@ -33,6 +34,9 @@ Static.args = {
   onLoaded: () => console.info('EVENT: static avatar loaded'),
   onLoading: () => console.info('EVENT: loading static avatar')
   /* eslint-enable no-console */
+};
+Static.argTypes = {
+  headMovement: { control: false }
 };
 
 export const Animated = Template.bind({});
@@ -73,6 +77,9 @@ Posing.args = {
   onLoading: () => console.info('EVENT: loading posing avatar')
   /* eslint-enable no-console */
 };
+Posing.argTypes = {
+  headMovement: { control: false }
+};
 
 /* eslint-disable */
 export const _BinaryInput = DropTemplate.bind({});
@@ -87,7 +94,8 @@ _BinaryInput.args = {
   /* eslint-enable no-console */
 };
 _BinaryInput.argTypes = {
-  modelSrc: { control: false }
+  modelSrc: { control: false },
+  headMovement: { control: false }
 };
 /* eslint-enable */
 

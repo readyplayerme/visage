@@ -11,6 +11,7 @@ export interface AnimationModelProps extends BaseModelProps {
   rotation?: number;
   scale?: number;
   idleRotation?: boolean;
+  headMovement?: boolean;
 }
 
 let currentRotation = 0;
@@ -23,7 +24,8 @@ export const AnimationModel: FC<AnimationModelProps> = ({
   idleRotation = false,
   setModelFallback,
   onLoaded,
-  onLoading
+  onLoading,
+  headMovement = false
 }) => {
   triggerCallback(onLoading);
   const ref = useRef<Group>();
@@ -48,7 +50,7 @@ export const AnimationModel: FC<AnimationModelProps> = ({
     }
   });
 
-  useHeadMovement(nodes);
+  useHeadMovement({ nodes, enabled: headMovement });
   useFallback(nodes, setModelFallback);
 
   return <Model modelRef={ref} scene={scene} scale={scale} onLoaded={onLoaded} />;
