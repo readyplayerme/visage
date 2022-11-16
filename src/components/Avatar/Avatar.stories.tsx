@@ -95,7 +95,6 @@ export default {
   title: 'Components/Avatar',
   component: Avatar,
   argTypes: {
-    backgroundColor: { control: 'color' },
     ambientLightColor: { control: 'color' },
     dirLightColor: { control: 'color' },
     spotLightColor: { control: 'color' },
