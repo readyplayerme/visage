@@ -26,6 +26,7 @@ Static.args = {
   dirLightPosition: new Vector3(-3, 5, -5),
   dirLightColor: '#002aff',
   spotLightPosition: new Vector3(12, 10, 7.5),
+  cameraZoomTarget: CAMERA.CONTROLS.FULL_BODY.ZOOM_TARGET,
   spotLightColor: '#fff5b6',
   spotLightAngle: 0.314,
   cameraTarget: CAMERA.TARGET.FULL_BODY.FEMALE,

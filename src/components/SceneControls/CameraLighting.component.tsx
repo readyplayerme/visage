@@ -1,4 +1,4 @@
-import { useEffect, FC } from 'react';
+import { useEffect, FC, useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Camera, Vector3, DirectionalLight, AmbientLight, SpotLight } from 'three';
 import { OrbitControls } from 'three-stdlib';
@@ -10,9 +10,15 @@ type CameraLightingProps = Required<LightingProps> & {
   headScale?: number;
   cameraTarget?: number;
   cameraInitialDistance?: number;
+  /**
+   * Handles camera movement on the Z-axis.
+   */
   cameraZoomTarget?: Vector3;
   controlsMinDistance?: number;
   controlsMaxDistance?: number;
+  /**
+   * Enables camera moving on Y-axis while zooming in-out.
+   */
   updateCameraTargetOnZoom?: boolean;
 };
 
@@ -53,11 +59,17 @@ export const CameraLighting: FC<CameraLightingProps> = ({
   controlsMaxDistance = 2.5,
   updateCameraTargetOnZoom = false
 }) => {
+  const cameraZoomTargetRef = useRef(cameraZoomTarget);
   const { camera, gl, scene } = useThree();
   const fallbackCameraTarget = cameraTarget || 1.475 + headScale / 10;
   const headScaleAdjustedMinDistance = controlsMinDistance + headScale / 10;
 
   useEffect(() => {
+    if (cameraZoomTargetRef.current !== cameraZoomTarget) {
+      cameraZoomTargetRef.current = cameraZoomTarget;
+      progress = 0;
+    }
+
     controls = new OrbitControls(camera, gl.domElement);
     controls.enablePan = false;
 
@@ -84,7 +96,8 @@ export const CameraLighting: FC<CameraLightingProps> = ({
     controlsMaxDistance,
     fallbackCameraTarget,
     gl.domElement,
-    headScaleAdjustedMinDistance
+    headScaleAdjustedMinDistance,
+    cameraZoomTarget
   ]);
 
   useEffect(() => {
@@ -140,7 +153,7 @@ export const CameraLighting: FC<CameraLightingProps> = ({
     if (updateCameraTargetOnZoom) {
       updateCameraTarget(camera, fallbackCameraTarget, headScaleAdjustedMinDistance, controlsMaxDistance);
     }
-    updateCameraFocus(camera, delta, cameraZoomTarget);
+    updateCameraFocus(camera, delta, cameraZoomTargetRef.current);
     controls.update();
   });
 
