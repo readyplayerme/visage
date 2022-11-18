@@ -32,7 +32,7 @@ export const CAMERA = {
       ZOOM_TARGET: new Vector3(-0.11, 0, 0.48)
     },
     HALF_BODY: {
-      MIN_DISTANCE: 0.5,
+      MIN_DISTANCE: 0.4,
       MAX_DISTANCE: 1.4,
       ZOOM_TARGET: new Vector3(-0.15, 0, 0.55)
     }
@@ -117,6 +117,11 @@ export interface AvatarProps extends LightingProps, Omit<BaseModelProps, 'setMod
    * Enable head tracking cursor movements.
    */
   headMovement?: boolean;
+  /**
+   * Initialise and update camera movement on Z-Axis.
+   * Defaults to full-body zoom distance.
+   */
+  cameraZoomTarget?: Vector3;
 }
 
 /**
@@ -150,7 +155,8 @@ export const Avatar: FC<AvatarProps> = ({
   onLoading,
   dpr,
   className,
-  headMovement = false
+  headMovement = false,
+  cameraZoomTarget = CAMERA.CONTROLS.FULL_BODY.ZOOM_TARGET
 }) => {
   const AvatarModel = useMemo(() => {
     if (!isValidGlbFormat(modelSrc)) {
@@ -208,7 +214,7 @@ export const Avatar: FC<AvatarProps> = ({
         <CameraLighting
           cameraTarget={cameraTarget}
           cameraInitialDistance={cameraInitialDistance}
-          cameraZoomTarget={halfBody ? CAMERA.CONTROLS.HALF_BODY.ZOOM_TARGET : CAMERA.CONTROLS.FULL_BODY.ZOOM_TARGET}
+          cameraZoomTarget={cameraZoomTarget}
           ambientLightColor={ambientLightColor}
           ambientLightIntensity={ambientLightIntensity}
           dirLightPosition={dirLightPosition}
