@@ -65,7 +65,11 @@ export const CameraLighting: FC<CameraLightingProps> = ({
   const headScaleAdjustedMinDistance = controlsMinDistance + headScale / 10;
 
   useEffect(() => {
-    if (cameraZoomTargetRef.current !== cameraZoomTarget) {
+    if (
+      cameraZoomTargetRef.current?.x !== cameraZoomTarget?.x ||
+      cameraZoomTargetRef.current?.y !== cameraZoomTarget?.y ||
+      cameraZoomTargetRef.current?.z !== cameraZoomTarget?.z
+    ) {
       cameraZoomTargetRef.current = cameraZoomTarget;
       progress = 0;
     }
@@ -81,7 +85,8 @@ export const CameraLighting: FC<CameraLightingProps> = ({
     controls.target.set(0, fallbackCameraTarget, 0);
     controls.update();
 
-    if (cameraInitialDistance) {
+    // TODO: Look for a better distance initialiser, without progress value check it conflicts with cameraZoomTarget which also can update camera position.z
+    if (cameraInitialDistance && progress === Number.POSITIVE_INFINITY) {
       camera.position.z = cameraInitialDistance;
       controls.update();
     }
@@ -97,7 +102,9 @@ export const CameraLighting: FC<CameraLightingProps> = ({
     fallbackCameraTarget,
     gl.domElement,
     headScaleAdjustedMinDistance,
-    cameraZoomTarget
+    cameraZoomTarget?.x,
+    cameraZoomTarget?.y,
+    cameraZoomTarget?.z
   ]);
 
   useEffect(() => {
@@ -153,7 +160,7 @@ export const CameraLighting: FC<CameraLightingProps> = ({
     if (updateCameraTargetOnZoom) {
       updateCameraTarget(camera, fallbackCameraTarget, headScaleAdjustedMinDistance, controlsMaxDistance);
     }
-    updateCameraFocus(camera, delta, cameraZoomTargetRef.current);
+    updateCameraFocus(camera, delta, cameraZoomTarget);
     controls.update();
   });
 
