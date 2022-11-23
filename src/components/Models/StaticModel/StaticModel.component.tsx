@@ -1,6 +1,6 @@
 import React, { FC, MutableRefObject } from 'react';
 import { Model } from 'src/components/Models/Model';
-import { triggerCallback, useFallback, useGltfLoader } from 'src/services';
+import { useFallback, useGltfLoader } from 'src/services';
 import { Group } from 'three';
 import { useGraph } from '@react-three/fiber';
 import { BaseModelProps } from 'src/types';
@@ -11,15 +11,7 @@ export interface StaticModelProps extends BaseModelProps {
   scale?: number;
 }
 
-export const StaticModel: FC<StaticModelProps> = ({
-  modelSrc,
-  modelRef,
-  scale = 1,
-  setModelFallback,
-  onLoading,
-  onLoaded
-}) => {
-  triggerCallback(onLoading);
+export const StaticModel: FC<StaticModelProps> = ({ modelSrc, modelRef, scale = 1, setModelFallback, onLoaded }) => {
   const { scene } = useGltfLoader(modelSrc);
   const { nodes } = useGraph(scene);
 

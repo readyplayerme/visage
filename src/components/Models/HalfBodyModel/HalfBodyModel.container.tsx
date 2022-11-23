@@ -1,4 +1,5 @@
-import React, { FC, Suspense, useState } from 'react';
+import React, { FC, Suspense, useEffect, useState } from 'react';
+import { triggerCallback } from 'src/services';
 import { HalfBodyModel, HalfBodyModelProps } from './HalfBodyModel.component';
 
 /**
@@ -7,6 +8,7 @@ import { HalfBodyModel, HalfBodyModelProps } from './HalfBodyModel.component';
 export const HalfBodyModelContainer: FC<HalfBodyModelProps> = (props) => {
   /* eslint-disable-next-line react/jsx-no-useless-fragment */
   const [fallback, setFallback] = useState<JSX.Element>(<></>);
+  useEffect(() => triggerCallback(props.onLoading), [props.modelSrc, props.onLoading]);
 
   return (
     <Suspense fallback={fallback}>

@@ -2,7 +2,7 @@ import React, { useRef, FC } from 'react';
 import { useFrame, useGraph } from '@react-three/fiber';
 import { AnimationMixer, Group } from 'three';
 import { Model } from 'src/components/Models/Model';
-import { useHeadMovement, useGltfLoader, useFallback, triggerCallback } from 'src/services';
+import { useHeadMovement, useGltfLoader, useFallback } from 'src/services';
 import { BaseModelProps } from 'src/types';
 
 export interface AnimationModelProps extends BaseModelProps {
@@ -24,10 +24,8 @@ export const AnimationModel: FC<AnimationModelProps> = ({
   idleRotation = false,
   setModelFallback,
   onLoaded,
-  onLoading,
   headMovement = false
 }) => {
-  triggerCallback(onLoading);
   const ref = useRef<Group>();
   const { scene } = useGltfLoader(modelSrc);
   const { nodes } = useGraph(scene);

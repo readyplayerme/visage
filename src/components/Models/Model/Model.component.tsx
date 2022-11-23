@@ -1,4 +1,4 @@
-import React, { FC, MutableRefObject } from 'react';
+import React, { FC, MutableRefObject, useEffect } from 'react';
 import { Group, Mesh } from 'three';
 import { normaliseMaterialsConfig, triggerCallback } from 'src/services';
 import { useGraph } from '@react-three/fiber';
@@ -24,7 +24,7 @@ export const Model: FC<ModelProps> = ({ scene, scale = 1, modelRef, onLoaded }) 
       node.receiveShadow = true;
     }
   });
-  triggerCallback(onLoaded);
+  useEffect(() => triggerCallback(onLoaded), [scene, materials, onLoaded]);
 
   return (
     <group ref={modelRef} dispose={null} rotation={[0, 0, 0]}>

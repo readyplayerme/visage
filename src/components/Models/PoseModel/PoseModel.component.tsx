@@ -2,7 +2,7 @@ import React, { FC, MutableRefObject } from 'react';
 import { useGraph } from '@react-three/fiber';
 import { Model } from 'src/components/Models/Model';
 import { Group } from 'three';
-import { mutatePose, triggerCallback, useEmotion, useFallback, useGltfLoader } from 'src/services';
+import { mutatePose, useEmotion, useFallback, useGltfLoader } from 'src/services';
 import { BaseModelProps } from 'src/types';
 import { Emotion } from '../../Avatar/Avatar.component';
 
@@ -21,10 +21,8 @@ export const PoseModel: FC<PoseModelProps> = ({
   scale = 1,
   emotion,
   setModelFallback,
-  onLoaded,
-  onLoading
+  onLoaded
 }) => {
-  triggerCallback(onLoading);
   const { scene } = useGltfLoader(modelSrc);
   const { nodes } = useGraph(scene);
   const pose = useGltfLoader(poseSrc);

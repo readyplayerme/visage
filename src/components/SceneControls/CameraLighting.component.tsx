@@ -102,9 +102,7 @@ export const CameraLighting: FC<CameraLightingProps> = ({
     fallbackCameraTarget,
     gl.domElement,
     headScaleAdjustedMinDistance,
-    cameraZoomTarget?.x,
-    cameraZoomTarget?.y,
-    cameraZoomTarget?.z
+    cameraZoomTarget
   ]);
 
   useEffect(() => {

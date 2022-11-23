@@ -1,4 +1,5 @@
-import React, { FC, Suspense, useState } from 'react';
+import React, { FC, Suspense, useEffect, useState } from 'react';
+import { triggerCallback } from 'src/services';
 import { AnimationModel, AnimationModelProps } from './AnimationModel.component';
 
 /**
@@ -7,6 +8,7 @@ import { AnimationModel, AnimationModelProps } from './AnimationModel.component'
 export const AnimationModelContainer: FC<AnimationModelProps> = (props) => {
   /* eslint-disable-next-line react/jsx-no-useless-fragment */
   const [fallback, setFallback] = useState<JSX.Element>(<></>);
+  useEffect(() => triggerCallback(props.onLoading), [props.modelSrc, props.animationSrc, props.onLoading]);
 
   return (
     <Suspense fallback={fallback}>
