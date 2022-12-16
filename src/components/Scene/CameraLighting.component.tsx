@@ -52,9 +52,11 @@ export const CameraLighting: FC<CameraLightingProps> = ({
   ambientLightIntensity,
   dirLightPosition,
   dirLightColor,
+  dirLightIntensity,
   spotLightPosition,
   spotLightColor,
   spotLightAngle,
+  spotLightIntensity,
   controlsMinDistance = 0.4,
   controlsMaxDistance = 2.5,
   updateCameraTargetOnZoom = false
@@ -107,7 +109,7 @@ export const CameraLighting: FC<CameraLightingProps> = ({
 
   useEffect(() => {
     if (!scene.getObjectByName('back-highlight')) {
-      const dirLight = new DirectionalLight(dirLightColor, 5);
+      const dirLight = new DirectionalLight(dirLightColor, dirLightIntensity);
       dirLight.name = 'back-highlight';
       dirLight.position.set(dirLightPosition.x, dirLightPosition.y, dirLightPosition.z);
       dirLight.castShadow = true;
@@ -120,7 +122,7 @@ export const CameraLighting: FC<CameraLightingProps> = ({
       ambientLight.name = 'ambient-light';
       ambientLight.position.set(0, 0, 0);
 
-      const spotLight = new SpotLight(spotLightColor, 1, 0, spotLightAngle, 0, 1);
+      const spotLight = new SpotLight(spotLightColor, spotLightIntensity, 0, spotLightAngle, 0, 1);
       spotLight.name = 'spot-light';
       spotLight.position.set(spotLightPosition.x, spotLightPosition.y, spotLightPosition.z);
 
@@ -131,6 +133,7 @@ export const CameraLighting: FC<CameraLightingProps> = ({
     } else {
       const dirLight = scene.getObjectByName('back-highlight') as DirectionalLight;
       dirLight.color.set(dirLightColor);
+      dirLight.intensity = dirLightIntensity;
       dirLight.position.set(dirLightPosition.x, dirLightPosition.y, dirLightPosition.z);
 
       const ambientLight = scene.getObjectByName('ambient-light') as AmbientLight;
@@ -139,6 +142,7 @@ export const CameraLighting: FC<CameraLightingProps> = ({
 
       const spotLight = scene.getObjectByName('spot-light') as SpotLight;
       spotLight.color.set(spotLightColor);
+      spotLight.intensity = spotLightIntensity;
       spotLight.angle = spotLightAngle;
       spotLight.position.set(spotLightPosition.x, spotLightPosition.y, spotLightPosition.z);
     }
@@ -147,8 +151,10 @@ export const CameraLighting: FC<CameraLightingProps> = ({
     ambientLightIntensity,
     dirLightPosition,
     dirLightColor,
+    dirLightIntensity,
     spotLightPosition,
     spotLightColor,
+    spotLightIntensity,
     spotLightAngle,
     camera,
     scene

@@ -25,9 +25,11 @@ export interface LightingProps {
   ambientLightIntensity?: number;
   dirLightPosition?: Vector3;
   dirLightColor?: Color | string;
+  dirLightIntensity?: number;
   spotLightPosition?: Vector3;
   spotLightColor?: string;
   spotLightAngle?: number;
+  spotLightIntensity?: number;
 }
 
 export interface BaseModelProps {

@@ -131,9 +131,11 @@ export const Avatar: FC<AvatarProps> = ({
   ambientLightIntensity = 0.25,
   dirLightPosition = new Vector3(-3, 5, -5),
   dirLightColor = '#002aff',
+  dirLightIntensity = 5,
   spotLightPosition = new Vector3(12, 10, 7.5),
   spotLightColor = '#fff5b6',
   spotLightAngle = 0.314,
+  spotLightIntensity = 1,
   cameraTarget = CAMERA.TARGET.FULL_BODY.MALE,
   cameraInitialDistance = CAMERA.INITIAL_DISTANCE.FULL_BODY,
   style,
@@ -210,9 +212,11 @@ export const Avatar: FC<AvatarProps> = ({
           ambientLightIntensity={ambientLightIntensity}
           dirLightPosition={dirLightPosition}
           dirLightColor={dirLightColor}
+          dirLightIntensity={dirLightIntensity}
           spotLightPosition={spotLightPosition}
           spotLightColor={spotLightColor}
           spotLightAngle={spotLightAngle}
+          spotLightIntensity={spotLightIntensity}
           controlsMinDistance={
             halfBody ? CAMERA.CONTROLS.HALF_BODY.MIN_DISTANCE : CAMERA.CONTROLS.FULL_BODY.MIN_DISTANCE
           }
