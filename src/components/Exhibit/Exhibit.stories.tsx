@@ -8,7 +8,7 @@ import { allowedPresets } from '../Scene/Environment.component';
 
 const Template: ComponentStory<typeof Exhibit> = (args) => <Exhibit {...args} />;
 const DropTemplate: ComponentStory<typeof Exhibit> = (args) => (
-  <FileDropper>
+  <FileDropper placeholder="Drag n' Drop a .glb model here">
     <Exhibit {...args} />
   </FileDropper>
 );
