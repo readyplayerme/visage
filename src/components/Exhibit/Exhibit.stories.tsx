@@ -4,6 +4,7 @@ import { getStoryAssetPath } from 'src/services';
 import { FileDropper } from 'src/components/FileDropper/FileDropper.component';
 import { Vector3 } from 'three';
 import { Exhibit } from './Exhibit.component';
+import { allowedPresets } from '../Scene/Environment.component';
 
 const Template: ComponentStory<typeof Exhibit> = (args) => <Exhibit {...args} />;
 const DropTemplate: ComponentStory<typeof Exhibit> = (args) => (
@@ -18,6 +19,9 @@ Default.args = {
   scale: 3,
   environment: 'city',
   position: new Vector3(0, 0, 5)
+};
+Default.argTypes = {
+  environment: { options: Object.keys(allowedPresets), control: { type: 'select' } }
 };
 
 /* eslint-disable */

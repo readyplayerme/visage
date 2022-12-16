@@ -3,6 +3,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { getStoryAssetPath } from 'src/services';
 import { Vector3 } from 'three';
 import { FileDropper } from 'src/components/FileDropper/FileDropper.component';
+import { allowedPresets } from 'src/components/Scene/Environment.component';
 import { Avatar, CAMERA } from './Avatar.component';
 
 const Template: ComponentStory<typeof Avatar> = (args) => <Avatar {...args} />;
@@ -15,8 +16,10 @@ const DropTemplate: ComponentStory<typeof Avatar> = (args) => (
 export const Static = Template.bind({});
 Static.args = {
   modelSrc: getStoryAssetPath('female.glb'),
-  scale: 1,
+  animationSrc: undefined,
+  poseSrc: undefined,
   environment: 'city',
+  scale: 1,
   shadows: false,
   halfBody: false,
   idleRotation: false,
@@ -37,7 +40,9 @@ Static.args = {
   /* eslint-enable no-console */
 };
 Static.argTypes = {
-  headMovement: { control: false }
+  headMovement: { control: false },
+  animationSrc: { control: false },
+  poseSrc: { control: false }
 };
 
 export const Animated = Template.bind({});
@@ -51,6 +56,9 @@ Animated.args = {
   onLoaded: () => console.info('EVENT: animated avatar loaded'),
   onLoading: () => console.info('EVENT: loading animated avatar')
   /* eslint-enable no-console */
+};
+Animated.argTypes = {
+  poseSrc: { control: false }
 };
 
 export const HalfBody = Template.bind({});
@@ -86,7 +94,10 @@ Posing.argTypes = {
 export const _BinaryInput = DropTemplate.bind({});
 _BinaryInput.args = {
   ...Static.args,
-  modelSrc: '',
+  modelSrc: undefined,
+  animationSrc: undefined,
+  poseSrc: '',
+  environment: 'city',
   cameraTarget: CAMERA.TARGET.FULL_BODY.FEMALE,
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
   /* eslint-disable no-console */
@@ -96,7 +107,9 @@ _BinaryInput.args = {
 };
 _BinaryInput.argTypes = {
   modelSrc: { control: false },
-  headMovement: { control: false }
+  animationSrc: { control: false },
+  headMovement: { control: false },
+  environment: { control: { type: 'text' } }
 };
 /* eslint-enable */
 
@@ -112,6 +125,7 @@ export default {
     cameraTarget: { control: { type: 'range', min: 0, max: 10, step: 0.01 } },
     scale: { control: { type: 'range', min: 0.01, max: 10, step: 0.01 } },
     cameraInitialDistance: { control: { type: 'range', min: 0, max: 2.5, step: 0.01 } },
-    onLoaded: { control: false }
+    onLoaded: { control: false },
+    environment: { options: Object.keys(allowedPresets), control: { type: 'select' } }
   }
 } as ComponentMeta<typeof Avatar>;

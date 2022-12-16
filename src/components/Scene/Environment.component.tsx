@@ -2,7 +2,7 @@ import React, { FC, useMemo } from 'react';
 import { Environment as DreiEnvironment } from '@react-three/drei';
 import { PresetsType } from '@react-three/drei/helpers/environment-assets';
 
-const allowedPresets = {
+export const allowedPresets = {
   sunset: 'sunset',
   dawn: 'dawn',
   night: 'night',

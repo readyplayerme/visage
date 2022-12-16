@@ -1,4 +1,5 @@
 import { Color, Vector3 } from 'three';
+import { PresetsType } from '@react-three/drei/helpers/environment-assets';
 
 export type Required<T> = {
   [P in keyof T]-?: T[P];
@@ -9,6 +10,14 @@ export interface CameraProps {
    * A Vector3 representing the cameras position, default is (0, 0, 5)
    */
   position?: Vector3;
+}
+
+export interface EnvironmentProps {
+  /**
+   * Brightness, color hue, shadow contrast, reflection details change according to the selected environment.
+   * Possible to provide a custom `.hdr` file path (URL) as environment background.
+   */
+  environment?: PresetsType | string;
 }
 
 export interface LightingProps {
