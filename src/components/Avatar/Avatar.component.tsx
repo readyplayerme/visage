@@ -1,9 +1,8 @@
 import React, { Suspense, FC, useMemo, CSSProperties, ReactNode } from 'react';
-import { Environment } from '@react-three/drei';
-import { PresetsType } from '@react-three/drei/helpers/environment-assets';
 import { Vector3 } from 'three';
-import { CameraLighting } from 'src/components/SceneControls/CameraLighting.component';
-import { LightingProps, BaseModelProps } from 'src/types';
+import { CameraLighting } from 'src/components/Scene/CameraLighting.component';
+import { Environment } from 'src/components/Scene/Environment.component';
+import { LightingProps, BaseModelProps, EnvironmentProps } from 'src/types';
 import { BaseCanvas } from 'src/components/BaseCanvas';
 import { AnimationModel, HalfBodyModel, StaticModel, PoseModel } from 'src/components/Models';
 import { isValidGlbFormat } from 'src/services';
@@ -41,7 +40,7 @@ export const CAMERA = {
 
 export type Emotion = Record<string, number>;
 
-export interface AvatarProps extends LightingProps, Omit<BaseModelProps, 'setModelFallback'> {
+export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseModelProps, 'setModelFallback'> {
   /**
    * Arbitrary binary data (base64 string, Blob) of a `.glb` file or path (URL) to a `.glb` resource.
    */
@@ -56,14 +55,6 @@ export interface AvatarProps extends LightingProps, Omit<BaseModelProps, 'setMod
    * Applied when not specifying an animation.
    */
   poseSrc?: string | Blob;
-  /**
-   * Brightness, color hue, shadow contrast, reflection details change according to the selected environment.
-   */
-  environment?: PresetsType;
-  /**
-   * Adjusts camera and model for half-body avatars.
-   * Enable only when using Ready Player Me half-body avatars.
-   */
   halfBody?: boolean;
   /**
    * Enable rendering shadows on ground.
@@ -140,9 +131,11 @@ export const Avatar: FC<AvatarProps> = ({
   ambientLightIntensity = 0.25,
   dirLightPosition = new Vector3(-3, 5, -5),
   dirLightColor = '#002aff',
+  dirLightIntensity = 5,
   spotLightPosition = new Vector3(12, 10, 7.5),
   spotLightColor = '#fff5b6',
   spotLightAngle = 0.314,
+  spotLightIntensity = 1,
   cameraTarget = CAMERA.TARGET.FULL_BODY.MALE,
   cameraInitialDistance = CAMERA.INITIAL_DISTANCE.FULL_BODY,
   style,
@@ -210,7 +203,7 @@ export const Avatar: FC<AvatarProps> = ({
   return (
     <Suspense fallback={loader ?? <Loader />}>
       <BaseCanvas position={new Vector3(0, 0, 3)} fov={50} style={style} dpr={dpr} className={className}>
-        <Environment preset={environment} />
+        <Environment environment={environment} />
         <CameraLighting
           cameraTarget={cameraTarget}
           cameraInitialDistance={cameraInitialDistance}
@@ -219,9 +212,11 @@ export const Avatar: FC<AvatarProps> = ({
           ambientLightIntensity={ambientLightIntensity}
           dirLightPosition={dirLightPosition}
           dirLightColor={dirLightColor}
+          dirLightIntensity={dirLightIntensity}
           spotLightPosition={spotLightPosition}
           spotLightColor={spotLightColor}
           spotLightAngle={spotLightAngle}
+          spotLightIntensity={spotLightIntensity}
           controlsMinDistance={
             halfBody ? CAMERA.CONTROLS.HALF_BODY.MIN_DISTANCE : CAMERA.CONTROLS.FULL_BODY.MIN_DISTANCE
           }

@@ -1,12 +1,12 @@
 import React, { Suspense, FC, CSSProperties } from 'react';
-import { PresentationControls, Environment, ContactShadows } from '@react-three/drei';
-import type { PresetsType } from '@react-three/drei/helpers/environment-assets';
+import { PresentationControls, ContactShadows } from '@react-three/drei';
+import { Environment } from 'src/components/Scene/Environment.component';
 import { isValidGlbFormat } from 'src/services';
-import { CameraProps } from 'src/types';
+import { CameraProps, EnvironmentProps } from 'src/types';
 import { BaseCanvas } from '../BaseCanvas';
 import { FloatingModel } from '../Models/FloatingModel';
 
-export interface ExhibitProps extends CameraProps {
+export interface ExhibitProps extends CameraProps, EnvironmentProps {
   /**
    * Arbitrary binary data (base64 string | Blob) of a `.glb` file or path (URL) to a `.glb` resource.
    */
@@ -15,10 +15,6 @@ export interface ExhibitProps extends CameraProps {
    * Size of the rendered GLB model.
    */
   scale?: number;
-  /**
-   * Brightness, color hue, shadow contrast, reflection details change according to the selected environment.
-   */
-  environment?: PresetsType;
   /**
    * Pass styling to canvas.
    */
@@ -63,7 +59,7 @@ export const Exhibit: FC<ExhibitProps> = ({
         blur={2.6}
         far={2}
       />
-      <Environment preset={environment} />
+      <Environment environment={environment} />
     </Suspense>
   </BaseCanvas>
 );

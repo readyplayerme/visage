@@ -9,9 +9,13 @@ interface DropContainerProps {
 /**
  * This component is only for using in Storybook for showcasing drag'n'drop functionality.
  */
-export const FileDropper: FC<DropContainerProps> = ({ children, placeholder = `Drag and Drop a .glb file here` }) => {
+export const FileDropper: FC<DropContainerProps> = ({
+  children,
+  placeholder = `Drag n' Drop a .glb model here, then Drop an animation .glb`
+}) => {
   const ref = useRef<HTMLDivElement>(null);
   const [modelSrc, setModelSrc] = useState('');
+  const [animationSrc, setAnimationSrc] = useState('');
 
   const getBase64 = (file: File): Promise<string> =>
     new Promise((resolve, reject) => {
@@ -41,11 +45,17 @@ export const FileDropper: FC<DropContainerProps> = ({ children, placeholder = `D
     if (e.dataTransfer?.items[0].kind === 'file') {
       const file = e.dataTransfer.items[0].getAsFile();
 
-      if (file!.name?.endsWith('.glb')) {
+      if (!file!.name?.endsWith('.glb')) {
+        return;
+      }
+
+      if (modelSrc === '') {
         setModelSrc(await getBase64(file!));
       }
-      const b64 = await getBase64(file!);
-      setModelSrc(b64 as string);
+
+      if (modelSrc !== '') {
+        setAnimationSrc(await getBase64(file!));
+      }
     }
   };
 
@@ -70,7 +80,9 @@ export const FileDropper: FC<DropContainerProps> = ({ children, placeholder = `D
       {modelSrc.length < 1 ? (
         <div className={styles.placeholder}>{placeholder}</div>
       ) : (
-        Children.map(Children.toArray(children), (child) => cloneElement(child as ReactElement, { modelSrc }))
+        Children.map(Children.toArray(children), (child) =>
+          cloneElement(child as ReactElement, { modelSrc, animationSrc })
+        )
       )}
     </div>
   );
