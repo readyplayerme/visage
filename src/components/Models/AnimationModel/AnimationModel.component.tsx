@@ -1,4 +1,4 @@
-import React, { useRef, FC } from 'react';
+import React, { useRef, FC, useMemo } from 'react';
 import { useFrame, useGraph } from '@react-three/fiber';
 import { AnimationMixer, Group } from 'three';
 import { Model } from 'src/components/Models/Model';
@@ -31,12 +31,18 @@ export const AnimationModel: FC<AnimationModelProps> = ({
   const { nodes } = useGraph(scene);
 
   const animationSource = useGltfLoader(animationSrc);
-  const mixer = new AnimationMixer(nodes.Armature);
-  mixer.clipAction(animationSource.animations[0]).play();
-  mixer.update(0);
+
+  const animationMixer = useMemo(() => {
+    const mixer = new AnimationMixer(nodes.Armature);
+
+    mixer.clipAction(animationSource.animations[0]).play();
+    mixer.update(0);
+
+    return mixer;
+  }, [animationSource.animations, nodes.Armature]);
 
   useFrame((state, delta) => {
-    mixer?.update(delta);
+    animationMixer?.update(delta);
 
     if (!idleRotation) {
       return;
