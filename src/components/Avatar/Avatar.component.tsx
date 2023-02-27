@@ -1,11 +1,11 @@
-import React, { Suspense, FC, useMemo, CSSProperties, ReactNode } from 'react';
+import React, { Suspense, FC, useMemo, CSSProperties, ReactNode, useEffect } from 'react';
 import { Vector3 } from 'three';
 import { CameraLighting } from 'src/components/Scene/CameraLighting.component';
 import { Environment } from 'src/components/Scene/Environment.component';
 import { LightingProps, BaseModelProps, EnvironmentProps } from 'src/types';
 import { BaseCanvas } from 'src/components/BaseCanvas';
 import { AnimationModel, HalfBodyModel, StaticModel, PoseModel } from 'src/components/Models';
-import { isValidGlbFormat } from 'src/services';
+import { isValidGlbFormat, triggerCallback } from 'src/services';
 import { Dpr } from '@react-three/fiber';
 import Capture, { CaptureType } from '../Capture/Capture.component';
 import Box, { Background } from '../Background/Box/Box.component';
@@ -164,7 +164,6 @@ export const Avatar: FC<AvatarProps> = ({
           scale={scale}
           idleRotation={idleRotation}
           onLoaded={onLoaded}
-          onLoading={onLoading}
           headMovement={headMovement}
         />
       );
@@ -178,27 +177,19 @@ export const Avatar: FC<AvatarProps> = ({
           scale={scale}
           idleRotation={idleRotation}
           onLoaded={onLoaded}
-          onLoading={onLoading}
           headMovement={headMovement}
         />
       );
     }
 
     if (isValidGlbFormat(poseSrc)) {
-      return (
-        <PoseModel
-          emotion={emotion}
-          modelSrc={modelSrc}
-          scale={scale}
-          poseSrc={poseSrc!}
-          onLoaded={onLoaded}
-          onLoading={onLoading}
-        />
-      );
+      return <PoseModel emotion={emotion} modelSrc={modelSrc} scale={scale} poseSrc={poseSrc!} onLoaded={onLoaded} />;
     }
 
-    return <StaticModel modelSrc={modelSrc} scale={scale} onLoaded={onLoaded} onLoading={onLoading} />;
-  }, [halfBody, animationSrc, modelSrc, scale, poseSrc, idleRotation, emotion, onLoaded, onLoading, headMovement]);
+    return <StaticModel modelSrc={modelSrc} scale={scale} onLoaded={onLoaded} />;
+  }, [halfBody, animationSrc, modelSrc, scale, poseSrc, idleRotation, emotion, onLoaded, headMovement]);
+
+  useEffect(() => triggerCallback(onLoading), [modelSrc, animationSrc, onLoading]);
 
   return (
     <Suspense fallback={loader ?? <Loader />}>

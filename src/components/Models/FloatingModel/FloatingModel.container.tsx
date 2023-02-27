@@ -1,5 +1,4 @@
-import React, { FC, Suspense, useEffect, useState } from 'react';
-import { triggerCallback } from 'src/services';
+import React, { FC, Suspense, useState } from 'react';
 import { FloatingModel, FloatingModelProps } from './FloatingModel.component';
 
 /**
@@ -8,7 +7,6 @@ import { FloatingModel, FloatingModelProps } from './FloatingModel.component';
 export const FloatingModelContainer: FC<FloatingModelProps> = (props) => {
   /* eslint-disable-next-line react/jsx-no-useless-fragment */
   const [fallback, setFallback] = useState<JSX.Element>(<></>);
-  useEffect(() => triggerCallback(props.onLoading), [props.modelSrc, props.onLoading]);
 
   return (
     <Suspense fallback={fallback}>
