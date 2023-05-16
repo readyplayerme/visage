@@ -29,10 +29,12 @@ export interface Nodes {
   [node: string]: Object3D;
 }
 
+type GlbSource = string | string[] | Blob | undefined | null;
+
 export const getStoryAssetPath = (publicAsset: string) =>
   `${process.env.NODE_ENV === 'production' ? '/visage' : ''}/${publicAsset}`;
 
-const validateGlbSource = (source: string | string[] | Blob | undefined | null): boolean => {
+const validateGlbSource = (source: GlbSource): boolean => {
   if (Array.isArray(source)) {
     return source.length > 0 && source.every(validateGlbSource);
   }
@@ -51,7 +53,7 @@ const validateGlbSource = (source: string | string[] | Blob | undefined | null):
   return false;
 };
 
-export const isValidGlbFormat = (source: string | string[] | Blob | undefined | null): boolean => {
+export const isValidGlbFormat = (source: GlbSource): boolean => {
   const isValid = validateGlbSource(source);
 
   if (!isValid) {
