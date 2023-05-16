@@ -94,8 +94,8 @@ Posing.argTypes = {
 };
 
 /* eslint-disable */
-export const _BinaryInput = DropTemplate.bind({});
-_BinaryInput.args = {
+export const _DragNDrop = DropTemplate.bind({});
+_DragNDrop.args = {
   ...Static.args,
   modelSrc: undefined,
   animationSrc: undefined,
@@ -108,7 +108,7 @@ _BinaryInput.args = {
   onLoading: () => console.info('EVENT: loading avatar from binary file')
   /* eslint-enable no-console */
 };
-_BinaryInput.argTypes = {
+_DragNDrop.argTypes = {
   modelSrc: { control: false },
   animationSrc: { control: false },
   headMovement: { control: false },

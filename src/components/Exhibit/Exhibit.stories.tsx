@@ -18,20 +18,26 @@ Default.args = {
   modelSrc: getStoryAssetPath('headwear.glb'),
   scale: 3,
   environment: 'city',
-  position: new Vector3(0, 0, 5)
+  position: new Vector3(0, 1, 5),
+  fit: true,
+  float: true,
+  shadows: true
 };
 Default.argTypes = {
   environment: { options: Object.keys(allowedPresets), control: { type: 'select' } }
 };
 
 /* eslint-disable */
-export const _BinaryInput = DropTemplate.bind({});
-_BinaryInput.args = {
+export const _DragNDrop = DropTemplate.bind({});
+_DragNDrop.args = {
   scale: 3,
   environment: 'city',
-  position: new Vector3(0, 0, 5)
+  position: new Vector3(0, 0, 5),
+  fit: true,
+  float: true,
+  shadows: true
 };
-_BinaryInput.argTypes = {
+_DragNDrop.argTypes = {
   modelSrc: { control: false }
 };
 /* eslint-enable */
