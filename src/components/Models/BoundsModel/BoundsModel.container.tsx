@@ -20,7 +20,7 @@ export const BoundsModelContainer: FC<BoundsModelContainerProps> = ({ modelSrc, 
 
   useEffect(() => {
     if (fit) {
-      bounds.refresh().clip().fit().fit();
+      bounds.refresh().clip().fit();
     }
   }, [modelSrc, fit, fallback]);
 
