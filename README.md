@@ -36,6 +36,18 @@ function App() {
 ReactDOM.render(<App />, document.querySelector('#app'));
 ```
 
+### Validation
+Props such as `modelSrc` and `animationSrc` are validated before rendering on the scene.
+
+Supported resource formats are:
+* URL resources
+  * relative `/headwear.glb`
+  * absolute `https://readyplayerme.github.io/visage/male.glb?queryParams=allowed`
+* Base64 strings
+  * `data:application/octet-stream;base64`
+  * `data:model/gltf-binary;base64`
+* Binary input as `model/gltf-binary`
+
 ## License
 
 Visage is [MIT licensed](./LICENSE).
