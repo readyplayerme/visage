@@ -186,7 +186,7 @@ export const Avatar: FC<AvatarProps> = ({
       return <PoseModel emotion={emotion} modelSrc={modelSrc} scale={scale} poseSrc={poseSrc!} onLoaded={onLoaded} />;
     }
 
-    return <StaticModel modelSrc={modelSrc} scale={scale} onLoaded={onLoaded} />;
+    return <StaticModel modelSrc={modelSrc} scale={scale} onLoaded={onLoaded} emotion={emotion} />;
   }, [halfBody, animationSrc, modelSrc, scale, poseSrc, idleRotation, emotion, onLoaded, headMovement]);
 
   useEffect(() => triggerCallback(onLoading), [modelSrc, animationSrc, onLoading]);

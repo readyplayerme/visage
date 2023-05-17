@@ -29,12 +29,14 @@ export interface Nodes {
   [node: string]: Object3D;
 }
 
+type GlbSource = string | string[] | Blob | undefined | null;
+
 export const getStoryAssetPath = (publicAsset: string) =>
   `${process.env.NODE_ENV === 'production' ? '/visage' : ''}/${publicAsset}`;
 
-export const isValidGlbFormat = (source: string | string[] | Blob | undefined | null): boolean => {
+const validateGlbSource = (source: GlbSource): boolean => {
   if (Array.isArray(source)) {
-    return source.length > 0 && source.every(isValidGlbFormat);
+    return source.length > 0 && source.every(validateGlbSource);
   }
 
   if (typeof source === 'string') {
@@ -49,6 +51,16 @@ export const isValidGlbFormat = (source: string | string[] | Blob | undefined | 
   }
 
   return false;
+};
+
+export const isValidGlbFormat = (source: GlbSource): boolean => {
+  const isValid = validateGlbSource(source);
+
+  if (!isValid) {
+    console.warn('Provided GLB is invalid. Check docs for supported formats: https://github.com/readyplayerme/visage');
+  }
+
+  return isValid;
 };
 
 export const clamp = (value: number, max: number, min: number): number => Math.min(Math.max(min, value), max);
