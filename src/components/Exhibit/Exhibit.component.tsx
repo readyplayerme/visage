@@ -30,7 +30,7 @@ export interface ExhibitProps extends CameraProps, EnvironmentProps {
    */
   shadows?: boolean;
   /**
-   * Enables floating animation for mode.
+   * Enables floating idle animation.
    */
   float?: boolean;
   /**
