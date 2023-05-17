@@ -37,7 +37,7 @@ ReactDOM.render(<App />, document.querySelector('#app'));
 ```
 
 ### Validation
-Props such as `modelSrc` and `animationSrc` are validated before rendering on the scene.
+Props such as `modelSrc`, `animationSrc` and `poseSrc` are validated before rendering on the scene.
 
 Supported resource formats are:
 * URL resources

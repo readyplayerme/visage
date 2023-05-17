@@ -6,6 +6,18 @@ import { FileDropper } from 'src/components/FileDropper/FileDropper.component';
 import { allowedPresets } from 'src/components/Scene/Environment.component';
 import { Avatar, CAMERA } from './Avatar.component';
 
+const emotions = {
+  smile: {
+    eyeSquintLeft: 0.4,
+    eyeSquintRight: 0.2,
+    mouthSmileLeft: 0.37,
+    mouthSmileRight: 0.36,
+    mouthShrugUpper: 0.27,
+    browInnerUp: 0.3,
+    browOuterUpLeft: 0.37,
+    browOuterUpRight: 0.49
+  }
+};
 const Template: ComponentStory<typeof Avatar> = (args) => <Avatar {...args} />;
 const DropTemplate: ComponentStory<typeof Avatar> = (args) => (
   <FileDropper>
@@ -36,6 +48,7 @@ Static.args = {
   cameraZoomTarget: CAMERA.CONTROLS.FULL_BODY.ZOOM_TARGET,
   cameraTarget: CAMERA.TARGET.FULL_BODY.FEMALE,
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
+  emotion: emotions.smile,
   style: { background: 'transparent' },
   /* eslint-disable no-console */
   onLoaded: () => console.info('EVENT: static avatar loaded'),
@@ -51,6 +64,7 @@ Static.argTypes = {
 export const Animated = Template.bind({});
 Animated.args = {
   ...Static.args,
+  emotion: undefined,
   modelSrc: getStoryAssetPath('male.glb'),
   animationSrc: getStoryAssetPath('male-idle.glb'),
   cameraTarget: CAMERA.TARGET.FULL_BODY.MALE,
@@ -61,7 +75,8 @@ Animated.args = {
   /* eslint-enable no-console */
 };
 Animated.argTypes = {
-  poseSrc: { control: false }
+  poseSrc: { control: false },
+  emotion: { control: false }
 };
 
 export const HalfBody = Template.bind({});
@@ -86,8 +101,9 @@ Posing.args = {
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
   /* eslint-disable no-console */
   onLoaded: () => console.info('EVENT: posing avatar loaded'),
-  onLoading: () => console.info('EVENT: loading posing avatar')
+  onLoading: () => console.info('EVENT: loading posing avatar'),
   /* eslint-enable no-console */
+  emotion: emotions.smile
 };
 Posing.argTypes = {
   headMovement: { control: false }
