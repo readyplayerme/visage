@@ -12,7 +12,7 @@ export interface ExhibitProps extends CameraProps, EnvironmentProps {
   /**
    * Arbitrary binary data (base64 string | Blob) of a `.glb` file or path (URL) to a `.glb` resource.
    */
-  modelSrc: string;
+  modelSrc: string | Blob;
   /**
    * Size of the rendered GLB model.
    */
