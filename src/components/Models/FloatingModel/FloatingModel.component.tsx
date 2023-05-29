@@ -6,7 +6,7 @@ import { useGltfLoader } from 'src/services';
 import { BaseModelProps } from 'src/types';
 
 export interface FloatingModelProps extends BaseModelProps {
-  modelSrc: string;
+  modelSrc: string | Blob;
   scale?: number;
 }
 
