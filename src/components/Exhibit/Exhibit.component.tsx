@@ -7,6 +7,7 @@ import { FloatingModel } from 'src/components/Models/FloatingModel';
 import { StaticModel } from 'src/components/Models/StaticModel';
 import { BoundsModel } from 'src/components/Models/BoundsModel';
 import { BaseCanvas } from '../BaseCanvas';
+import Capture, { CaptureType } from '../Capture/Capture.component';
 
 export interface ExhibitProps extends CameraProps, EnvironmentProps {
   /**
@@ -37,6 +38,10 @@ export interface ExhibitProps extends CameraProps, EnvironmentProps {
    * Enables model to fit to available canvas dimensions.
    */
   fit?: boolean;
+  /**
+   * Return base64 image after making screenshot of the canvas.
+   */
+  capture?: CaptureType;
 }
 
 /**
@@ -51,7 +56,8 @@ export const Exhibit: FC<ExhibitProps> = ({
   className,
   shadows = false,
   float = false,
-  fit = false
+  fit = false,
+  capture
 }) => {
   const model = useMemo(() => {
     if (!isValidGlbFormat(modelSrc)) {
@@ -99,6 +105,7 @@ export const Exhibit: FC<ExhibitProps> = ({
         )}
         <Environment environment={environment} />
       </Suspense>
+      {capture && <Capture {...capture} />}
     </BaseCanvas>
   );
 };
