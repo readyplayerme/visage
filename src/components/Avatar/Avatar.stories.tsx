@@ -3,7 +3,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { getStoryAssetPath } from 'src/services';
 import { Vector3 } from 'three';
 import { FileDropper } from 'src/components/FileDropper/FileDropper.component';
-import { allowedPresets } from 'src/components/Scene/Environment.component';
+import { environmentPresets } from 'src/services/EnvironmentMap.service';
 import { Avatar, CAMERA } from './Avatar.component';
 
 const emotions = {
@@ -30,7 +30,7 @@ Static.args = {
   modelSrc: getStoryAssetPath('female.glb'),
   animationSrc: undefined,
   poseSrc: undefined,
-  environment: 'city',
+  environment: 'hub',
   scale: 1,
   shadows: false,
   halfBody: false,
@@ -147,6 +147,6 @@ export default {
     scale: { control: { type: 'range', min: 0.01, max: 10, step: 0.01 } },
     cameraInitialDistance: { control: { type: 'range', min: 0, max: 2.5, step: 0.01 } },
     onLoaded: { control: false },
-    environment: { options: Object.keys(allowedPresets), control: { type: 'select' } }
+    environment: { options: Object.keys(environmentPresets), control: { type: 'select' } }
   }
 } as ComponentMeta<typeof Avatar>;
