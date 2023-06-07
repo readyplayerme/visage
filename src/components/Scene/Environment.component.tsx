@@ -1,35 +1,20 @@
 import React, { FC, useMemo } from 'react';
 import { Environment as DreiEnvironment } from '@react-three/drei';
-import { PresetsType } from '@react-three/drei/helpers/environment-assets';
-
-export const allowedPresets = {
-  sunset: 'sunset',
-  dawn: 'dawn',
-  night: 'night',
-  warehouse: 'warehouse',
-  forest: 'forest',
-  apartment: 'apartment',
-  studio: 'studio',
-  city: 'city',
-  park: 'park',
-  lobby: 'lobby'
-};
+import { environmentPresets, getPresetEnvironmentMap, EnvironmentPresets } from 'src/services/EnvironmentMap.service';
 
 export interface EnvironmentProps {
-  environment: string;
+  environment: string | EnvironmentPresets;
 }
 
 export const Environment: FC<EnvironmentProps> = ({ environment }) => {
-  const config = useMemo<{ preset: PresetsType | undefined; files: string | undefined }>(() => {
-    const isStaticPreset = environment in allowedPresets;
-    const preset = isStaticPreset ? (environment as PresetsType) : undefined;
-    const files = isStaticPreset ? undefined : environment;
+  const config = useMemo<{ files: string }>(() => {
+    const isStaticPreset = environment in environmentPresets;
+    const files = isStaticPreset ? getPresetEnvironmentMap(environment as EnvironmentPresets) : environment;
 
     return {
-      preset,
       files
     };
   }, [environment]);
 
-  return <DreiEnvironment preset={config.preset} files={config.files} />;
+  return <DreiEnvironment files={config.files} />;
 };
