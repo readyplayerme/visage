@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useEffect, useState, cloneElement, useMemo, ReactElement } from 'react';
+import React, { FC, ReactNode, useEffect, useState, cloneElement, useMemo, ReactElement, useCallback } from 'react';
 import { useBounds } from '@react-three/drei';
 import { BaseModelProps } from 'src/types';
 
@@ -12,10 +12,18 @@ export const BoundsModelContainer: FC<BoundsModelContainerProps> = ({ modelSrc, 
   const bounds = useBounds();
   const [fallback, setFallback] = useState<JSX.Element>(<></>);
 
+  const onChildLoaded = useCallback(() => {
+    if (fit) {
+      bounds.refresh().clip().fit();
+    }
+  }, [bounds, fit]);
+
   const childModel = useMemo(
     () =>
-      React.Children.map(children, (child) => cloneElement(child as ReactElement, { setModelFallback: setFallback })),
-    [modelSrc, children]
+      React.Children.map(children, (child) =>
+        cloneElement(child as ReactElement, { setModelFallback: setFallback, onLoaded: onChildLoaded })
+      ),
+    [modelSrc, children, onChildLoaded]
   );
 
   useEffect(() => {
