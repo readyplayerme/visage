@@ -21,7 +21,8 @@ Default.args = {
   position: new Vector3(0, 1, 5),
   fit: true,
   float: true,
-  shadows: true
+  shadows: true,
+  snap: true
 };
 Default.argTypes = {
   environment: { options: Object.keys(environmentPresets), control: { type: 'select' } }
@@ -35,7 +36,8 @@ _DragNDrop.args = {
   position: new Vector3(0, 0, 5),
   fit: true,
   float: true,
-  shadows: true
+  shadows: true,
+  snap: true
 };
 _DragNDrop.argTypes = {
   modelSrc: { control: false }

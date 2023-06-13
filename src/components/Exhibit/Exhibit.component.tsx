@@ -42,6 +42,10 @@ export interface ExhibitProps extends CameraProps, EnvironmentProps {
    * Return base64 image after making screenshot of the canvas.
    */
   capture?: CaptureType;
+  /**
+   * Enables snap-back to center after rotating model.
+   */
+  snap?: boolean;
 }
 
 /**
@@ -57,7 +61,8 @@ export const Exhibit: FC<ExhibitProps> = ({
   shadows = false,
   float = false,
   fit = false,
-  capture
+  capture,
+  snap = false
 }) => {
   const model = useMemo(() => {
     if (!isValidGlbFormat(modelSrc)) {
@@ -79,7 +84,7 @@ export const Exhibit: FC<ExhibitProps> = ({
         <PresentationControls
           global
           config={{ mass: 2, tension: 500 }}
-          snap
+          snap={snap}
           rotation={[0, -0.3, 0]}
           polar={[-Math.PI / 3, Math.PI / 3]}
           azimuth={[-Math.PI / 1.4, Math.PI / 2]}
