@@ -46,6 +46,10 @@ export interface ExhibitProps extends CameraProps, EnvironmentProps {
    * Enables snap-back to center after rotating model.
    */
   snap?: boolean;
+  /**
+   * Disables vertical rotation.
+   */
+  lockVertical?: boolean;
 }
 
 /**
@@ -62,7 +66,8 @@ export const Exhibit: FC<ExhibitProps> = ({
   float = false,
   fit = false,
   capture,
-  snap = false
+  snap = false,
+  lockVertical = false
 }) => {
   const model = useMemo(() => {
     if (!isValidGlbFormat(modelSrc)) {
@@ -86,8 +91,8 @@ export const Exhibit: FC<ExhibitProps> = ({
           config={{ mass: 2, tension: 500 }}
           snap={snap}
           rotation={[0, -0.3, 0]}
-          polar={[-Math.PI / 3, Math.PI / 3]}
-          azimuth={[-Math.PI / 1.4, Math.PI / 2]}
+          polar={lockVertical ? [0, 0] : [-Math.PI / 3, Math.PI / 3]}
+          azimuth={[-Infinity, Infinity]}
         >
           {model && (
             <Bounds fit={fit} clip={fit} observe={fit}>
