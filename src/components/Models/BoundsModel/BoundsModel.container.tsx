@@ -1,6 +1,7 @@
 import React, { FC, ReactNode, useEffect, useState, cloneElement, useMemo, ReactElement, useCallback } from 'react';
 import { useBounds } from '@react-three/drei';
 import { BaseModelProps } from 'src/types';
+import { triggerCallback } from 'src/services';
 
 export interface BoundsModelContainerProps extends BaseModelProps {
   modelSrc: string | Blob;
@@ -8,7 +9,7 @@ export interface BoundsModelContainerProps extends BaseModelProps {
   fit?: boolean;
 }
 
-export const BoundsModelContainer: FC<BoundsModelContainerProps> = ({ modelSrc, children, fit }) => {
+export const BoundsModelContainer: FC<BoundsModelContainerProps> = ({ modelSrc, children, fit, onLoaded }) => {
   const bounds = useBounds();
   const [fallback, setFallback] = useState<JSX.Element>(<></>);
 
@@ -16,6 +17,8 @@ export const BoundsModelContainer: FC<BoundsModelContainerProps> = ({ modelSrc, 
     if (fit) {
       bounds.refresh().clip().fit();
     }
+
+    triggerCallback(onLoaded);
   }, [bounds, fit]);
 
   const childModel = useMemo(

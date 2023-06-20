@@ -1,15 +1,15 @@
-import React, { Suspense, FC, CSSProperties, useMemo } from 'react';
+import React, { Suspense, FC, CSSProperties, useMemo, useEffect } from 'react';
 import { PresentationControls, ContactShadows, Bounds } from '@react-three/drei';
 import { Environment } from 'src/components/Scene/Environment.component';
-import { isValidGlbFormat } from 'src/services';
-import { CameraProps, EnvironmentProps } from 'src/types';
+import { isValidGlbFormat, triggerCallback } from 'src/services';
+import { BaseModelProps, CameraProps, EnvironmentProps } from 'src/types';
 import { FloatingModel } from 'src/components/Models/FloatingModel';
 import { StaticModel } from 'src/components/Models/StaticModel';
 import { BoundsModel } from 'src/components/Models/BoundsModel';
 import { BaseCanvas } from '../BaseCanvas';
 import Capture, { CaptureType } from '../Capture/Capture.component';
 
-export interface ExhibitProps extends CameraProps, EnvironmentProps {
+export interface ExhibitProps extends CameraProps, EnvironmentProps, Omit<BaseModelProps, 'setModelFallback'> {
   /**
    * Arbitrary binary data (base64 string | Blob) of a `.glb` file or path (URL) to a `.glb` resource.
    */
@@ -67,7 +67,9 @@ export const Exhibit: FC<ExhibitProps> = ({
   fit = false,
   capture,
   snap = false,
-  lockVertical = false
+  lockVertical = false,
+  onLoaded,
+  onLoading
 }) => {
   const model = useMemo(() => {
     if (!isValidGlbFormat(modelSrc)) {
@@ -80,6 +82,8 @@ export const Exhibit: FC<ExhibitProps> = ({
 
     return <FloatingModel modelSrc={modelSrc} scale={scale} />;
   }, [float, modelSrc, scale]);
+
+  useEffect(() => triggerCallback(onLoading), [modelSrc, onLoading]);
 
   return (
     <BaseCanvas position={position} style={style} className={className}>
@@ -96,7 +100,7 @@ export const Exhibit: FC<ExhibitProps> = ({
         >
           {model && (
             <Bounds fit={fit} clip={fit} observe={fit}>
-              <BoundsModel modelSrc={modelSrc} fit={fit}>
+              <BoundsModel modelSrc={modelSrc} fit={fit} onLoaded={onLoaded}>
                 {model}
               </BoundsModel>
             </Bounds>

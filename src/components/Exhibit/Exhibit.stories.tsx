@@ -17,12 +17,17 @@ export const Default = Template.bind({});
 Default.args = {
   modelSrc: getStoryAssetPath('headwear.glb'),
   scale: 3,
-  environment: 'city',
+  environment: 'hub',
   position: new Vector3(0, 1, 5),
   fit: true,
   float: true,
   shadows: true,
-  snap: true
+  snap: true,
+  lockVertical: false,
+  /* eslint-disable no-console */
+  onLoaded: () => console.info('EVENT: static avatar loaded'),
+  onLoading: () => console.info('EVENT: loading static avatar')
+  /* eslint-enable no-console */
 };
 Default.argTypes = {
   environment: { options: Object.keys(environmentPresets), control: { type: 'select' } }
@@ -31,13 +36,12 @@ Default.argTypes = {
 /* eslint-disable */
 export const _DragNDrop = DropTemplate.bind({});
 _DragNDrop.args = {
-  scale: 3,
-  environment: 'city',
-  position: new Vector3(0, 0, 5),
-  fit: true,
-  float: true,
-  shadows: true,
-  snap: true
+  ...Default.args,
+  /* eslint-disable no-console */
+  onLoaded: () => console.info('EVENT: static avatar loaded'),
+  onLoading: () => console.info('EVENT: loading static avatar'),
+  /* eslint-enable no-console */
+  position: new Vector3(0, 0, 5)
 };
 _DragNDrop.argTypes = {
   modelSrc: { control: false }

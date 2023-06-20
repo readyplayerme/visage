@@ -24,6 +24,7 @@ export const Model: FC<ModelProps> = ({ scene, scale = 1, modelRef, onLoaded }) 
       node.receiveShadow = true;
     }
   });
+  console.log({ onLoaded });
   useEffect(() => triggerCallback(onLoaded), [scene, materials, onLoaded]);
 
   return (
