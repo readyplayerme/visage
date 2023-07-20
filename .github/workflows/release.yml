@@ -30,7 +30,7 @@ jobs:
         with:
           version: 7.9.0
       - name: Install deps
-        run: pnpm i --lockfile-only
+        run: pnpm i
       - name: Run linter
         run: pnpm run lint
   tests:
@@ -47,7 +47,7 @@ jobs:
         with:
           version: 7.9.0
       - name: Install deps
-        run: pnpm i --lockfile-only
+        run: pnpm i
       - name: Run tests
         run: pnpm test
       - name: Run storybook build
@@ -71,7 +71,7 @@ jobs:
           version: 7.9.0
       - name: 🛠 Install & Build
         run: |
-          pnpm i --lockfile-only
+          pnpm i
           pnpm build-storybook
           pnpm build-package
       - name: 🚀 Release npm package
