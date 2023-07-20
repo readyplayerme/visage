@@ -40,12 +40,14 @@ specifiers:
   eslint-plugin-react: ^7.32.2
   eslint-plugin-react-hooks: ^4.6.0
   eslint-plugin-storybook: ^0.6.13
-  husky: ^8.0.3
+  husky: ^8.0.0
+  identity-obj-proxy: ^3.0.0
   postprocessing: '>=6.32'
   prettier: ^3.0.0
   react: ^18.2.0
   react-dom: ^18.2.0
   react-scripts: ^5.0.1
+  resize-observer-polyfill: ^1.5.1
   rollup: ^2.0.0
   rollup-plugin-dts: ^4.2.0
   rollup-plugin-peer-deps-external: ^2.2.4
@@ -103,10 +105,12 @@ devDependencies:
   eslint-plugin-react-hooks: 4.6.0_eslint@8.45.0
   eslint-plugin-storybook: 0.6.13_mhvizudgavq6jzvqzwcqcv4nnm
   husky: 8.0.3
+  identity-obj-proxy: 3.0.0
   prettier: 3.0.0
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-scripts: 5.0.1_23nemxwpjlstyakrvplyt6sogy
+  resize-observer-polyfill: 1.5.1
   rollup: 2.79.1
   rollup-plugin-dts: 4.2.3_zptcx3kz3uwp66hzhyyt545weq
   rollup-plugin-peer-deps-external: 2.2.4_rollup@2.79.1
@@ -7684,6 +7688,7 @@ packages:
   /errno/0.1.8:
     resolution: {integrity: sha512-dJ6oBr5SQ1VSd9qkk7ByRgb/1SH4JZjCHSW/mr63/QcXO9zLVxvJ6Oy13nio03rxpSnVDDjFor75SjVeZWPW/A==}
     hasBin: true
+    requiresBuild: true
     dependencies:
       prr: 1.0.1
     dev: true
@@ -13542,6 +13547,10 @@ packages:
 
   /reserved-words/0.1.2:
     resolution: {integrity: sha512-0S5SrIUJ9LfpbVl4Yzij6VipUdafHrOTzvmfazSw/jeZrZtQK303OPZW+obtkaw7jQlTQppy0UvZWm9872PbRw==}
+    dev: true
+
+  /resize-observer-polyfill/1.5.1:
+    resolution: {integrity: sha512-LwZrotdHOo12nQuZlHEmtuXdqGoOD0OhaxopaNFxWzInpEgaLWoVuAMbTzixuosCx2nEG58ngzW3vxdWoxIgdg==}
     dev: true
 
   /resolve-cwd/3.0.0:

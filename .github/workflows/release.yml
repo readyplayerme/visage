@@ -28,8 +28,7 @@ jobs:
           node-version: '16.14.0'
       - uses: pnpm/action-setup@v2
         with:
-          version: 6.0.2
-
+          version: 7.9.0
       - name: Install deps
         run: NO_HUSKY=true; pnpm i --lockfile-only
       - name: Run linter
@@ -46,7 +45,7 @@ jobs:
           node-version: '16.14.0'
       - uses: pnpm/action-setup@v2
         with:
-          version: 6.0.2
+          version: 7.9.0
       - name: Install deps
         run: NO_HUSKY=true; pnpm i --lockfile-only
       - name: Run tests
@@ -69,7 +68,7 @@ jobs:
           node-version: '16.14.0'
       - uses: pnpm/action-setup@v2
         with:
-          version: 6.0.2
+          version: 7.9.0
       - name: 🛠 Install & Build
         run: |
           NO_HUSKY=true; pnpm i --lockfile-only
