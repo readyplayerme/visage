@@ -6,6 +6,7 @@ import { clamp, lerp } from 'src/services';
 import { LightingProps, Required } from 'src/types';
 
 type CameraLightingProps = Required<LightingProps> & {
+  // eslint-disable-next-line react/no-unused-prop-types
   fullBody?: boolean;
   headScale?: number;
   cameraTarget?: number;
@@ -165,7 +166,9 @@ export const CameraLighting: FC<CameraLightingProps> = ({
       updateCameraTarget(camera, fallbackCameraTarget, headScaleAdjustedMinDistance, controlsMaxDistance);
     }
     updateCameraFocus(camera, delta, cameraZoomTarget);
-    controls.update();
+    if (controls) {
+      controls.update();
+    }
   });
 
   return null;

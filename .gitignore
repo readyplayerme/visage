@@ -73,3 +73,6 @@ typings/
 .env.development.local
 .env.test.local
 .env.production.local
+
+# Storybook
+storybook-static

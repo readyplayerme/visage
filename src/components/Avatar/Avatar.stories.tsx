@@ -52,8 +52,13 @@ Static.args = {
   style: { background: 'transparent' },
   /* eslint-disable no-console */
   onLoaded: () => console.info('EVENT: static avatar loaded'),
-  onLoading: () => console.info('EVENT: loading static avatar')
+  onLoading: () => console.info('EVENT: loading static avatar'),
   /* eslint-enable no-console */
+  bloom: {
+    luminanceThreshold: 0.8,
+    luminanceSmoothing: 0.05,
+    mipmapBlur: false
+  }
 };
 Static.argTypes = {
   headMovement: { control: false },

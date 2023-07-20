@@ -7,10 +7,12 @@ import { BaseCanvas } from 'src/components/BaseCanvas';
 import { AnimationModel, HalfBodyModel, StaticModel, PoseModel } from 'src/components/Models';
 import { isValidGlbFormat, triggerCallback } from 'src/services';
 import { Dpr } from '@react-three/fiber';
+import { EffectComposer } from '@react-three/postprocessing';
 import Capture, { CaptureType } from '../Capture/Capture.component';
 import Box, { Background } from '../Background/Box/Box.component';
-import Shadow from '../Shadow/Shadow.components';
+import Shadow from '../Shadow/Shadow.component';
 import Loader from '../Loader';
+import Bloom, { BloomTypes } from '../Bloom/Bloom.component';
 
 export const CAMERA = {
   TARGET: {
@@ -113,6 +115,11 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
    * Defaults to full-body zoom distance.
    */
   cameraZoomTarget?: Vector3;
+
+  /**
+   * Bloom post-processing effect.
+   */
+  bloom?: BloomTypes;
 }
 
 /**
@@ -149,7 +156,8 @@ export const Avatar: FC<AvatarProps> = ({
   dpr,
   className,
   headMovement = false,
-  cameraZoomTarget = CAMERA.CONTROLS.FULL_BODY.ZOOM_TARGET
+  cameraZoomTarget = CAMERA.CONTROLS.FULL_BODY.ZOOM_TARGET,
+  bloom
 }) => {
   const AvatarModel = useMemo(() => {
     if (!isValidGlbFormat(modelSrc)) {
@@ -220,6 +228,13 @@ export const Avatar: FC<AvatarProps> = ({
         {shadows && <Shadow />}
         {background?.src && <Box {...background} />}
         {capture && <Capture {...capture} />}
+        <EffectComposer multisampling={0} disableNormalPass>
+          <Bloom
+            luminanceThreshold={bloom?.luminanceThreshold}
+            luminanceSmoothing={bloom?.luminanceSmoothing}
+            mipmapBlur={bloom?.mipmapBlur}
+          />
+        </EffectComposer>
       </BaseCanvas>
     </Suspense>
   );
