@@ -38,7 +38,7 @@
     "build-package": "rollup -c",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "prepare": "husky install"
+    "prepare": "if [ -z $NO_HUSKY ]; then husky install; fi"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
