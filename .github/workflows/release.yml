@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - "feature/**"
+      - "feat/**"
       - "hotfix/**"
 
 concurrency:
@@ -26,9 +27,9 @@ jobs:
         with:
           node-version: '17.x'
       - name: Install deps
-        run: npm ci
+        run: pnpm ci
       - name: Run linter
-        run: npm run lint
+        run: pnpm run lint
   tests:
     name: Tests
     runs-on: ubuntu-latest
@@ -40,11 +41,11 @@ jobs:
         with:
           node-version: '17.x'
       - name: Install deps
-        run: npm ci
+        run: pnpm ci
       - name: Run tests
-        run: npm run test
+        run: pnpm run test
       - name: Run storybook build
-        run: npm run build-storybook
+        run: pnpm run build-storybook
   build-and-deploy:
     name: Build, Deploy to GitHub pages, Release npm package
     needs: [linting, tests]
@@ -61,9 +62,9 @@ jobs:
           node-version: '17.x'
       - name: 🛠 Install & Build
         run: |
-          npm ci
-          npm run build-storybook
-          npm run build-package
+          pnpm ci
+          pnpm run build-storybook
+          pnpm run build-package
       - name: 🚀 Release npm package
         uses: cycjimmy/semantic-release-action@v3
         with:
