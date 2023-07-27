@@ -4,7 +4,7 @@ import { getStoryAssetPath } from 'src/services';
 import { Vector3 } from 'three';
 import { FileDropper } from 'src/components/FileDropper/FileDropper.component';
 import { environmentPresets } from 'src/services/EnvironmentMap.service';
-import { Avatar, CAMERA } from './Avatar.component';
+import Avatar, { CAMERA } from './Avatar.component';
 
 const emotions = {
   smile: {
@@ -58,7 +58,14 @@ Static.args = {
     luminanceThreshold: 0.8,
     luminanceSmoothing: 0.05,
     mipmapBlur: false
-  }
+  },
+  onMountEffect: {
+    src: '/spawn-effect.glb',
+    loop: 13
+  },
+  onMountAnimation: {
+    src: '/female-animation-chicken.glb',
+  },
 };
 Static.argTypes = {
   headMovement: { control: false },

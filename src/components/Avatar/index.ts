@@ -1,1 +1,3 @@
-export { Avatar, CAMERA } from './Avatar.component';
+import Avatar, {CAMERA } from './Avatar.component';
+
+export {Avatar, CAMERA}

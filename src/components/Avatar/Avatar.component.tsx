@@ -8,6 +8,7 @@ import { AnimationModel, HalfBodyModel, StaticModel, PoseModel } from 'src/compo
 import { isValidGlbFormat, triggerCallback } from 'src/services';
 import { Dpr } from '@react-three/fiber';
 import { EffectComposer } from '@react-three/postprocessing';
+import {atom, Provider, useSetAtom} from 'jotai'
 import Capture, { CaptureType } from '../Capture/Capture.component';
 import Box, { Background } from '../Background/Box/Box.component';
 import Shadow from '../Shadow/Shadow.component';
@@ -39,6 +40,24 @@ export const CAMERA = {
     }
   }
 };
+export interface SpawnState {
+  onMountEffect?: {
+    src: string | null;
+    animationSrc?: string | null;
+    loop?: number | null;
+  } | null,
+  onMountAnimation?: {
+    src: string | null;
+    loop?: number | null;
+  } | null
+}
+
+const initialSpawnState: SpawnState = {
+  onMountEffect: null,
+  onMountAnimation: null
+}
+
+export const spawnState = atom(initialSpawnState)
 
 export type Emotion = Record<string, number>;
 
@@ -120,13 +139,23 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
    * Bloom post-processing effect.
    */
   bloom?: BloomTypes;
+
+  /**
+   * Spawn effect on mount.
+   */
+  onMountEffect?: SpawnState['onMountEffect'];
+
+  /**
+   * Spawn animation on mount.
+   */
+  onMountAnimation?: SpawnState['onMountAnimation'];
 }
 
 /**
  * Interactive avatar presentation with zooming and horizontal rotation controls.
  * Optimised for full-body and half-body avatars.
  */
-export const Avatar: FC<AvatarProps> = ({
+const Avatar: FC<AvatarProps> = ({
   modelSrc,
   animationSrc = undefined,
   poseSrc = undefined,
@@ -150,15 +179,22 @@ export const Avatar: FC<AvatarProps> = ({
   idleRotation = false,
   capture,
   background,
-  loader,
   onLoaded,
   onLoading,
   dpr,
   className,
   headMovement = false,
   cameraZoomTarget = CAMERA.CONTROLS.FULL_BODY.ZOOM_TARGET,
-  bloom
+  bloom,
+  onMountEffect,
+  onMountAnimation,
 }) => {
+  const setSpawnState = useSetAtom(spawnState)
+
+  useEffect(() => {
+      setSpawnState({onMountEffect, onMountAnimation})
+  }, [onMountAnimation, onMountEffect, setSpawnState])
+
   const AvatarModel = useMemo(() => {
     if (!isValidGlbFormat(modelSrc)) {
       return null;
@@ -200,7 +236,6 @@ export const Avatar: FC<AvatarProps> = ({
   useEffect(() => triggerCallback(onLoading), [modelSrc, animationSrc, onLoading]);
 
   return (
-    <Suspense fallback={loader ?? <Loader />}>
       <BaseCanvas position={new Vector3(0, 0, 3)} fov={50} style={style} dpr={dpr} className={className}>
         <Environment environment={environment} />
         <CameraLighting
@@ -236,6 +271,15 @@ export const Avatar: FC<AvatarProps> = ({
           />
         </EffectComposer>
       </BaseCanvas>
-    </Suspense>
   );
 };
+
+const AvatarWrapper = (props: AvatarProps) => (
+    <Suspense fallback={<Loader />}>
+      <Provider>
+        <Avatar {...props} />
+      </Provider>
+    </Suspense>
+  );
+
+export default AvatarWrapper;
