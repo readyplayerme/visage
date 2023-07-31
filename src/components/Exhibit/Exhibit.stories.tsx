@@ -22,6 +22,7 @@ Default.args = {
   fit: true,
   float: true,
   shadows: true,
+  style: { background: '#ccc' },
   snap: true,
   lockVertical: false,
   /* eslint-disable no-console */

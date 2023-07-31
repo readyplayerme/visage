@@ -49,7 +49,7 @@ Static.args = {
   cameraTarget: CAMERA.TARGET.FULL_BODY.FEMALE,
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
   emotion: emotions.smile,
-  style: { background: 'transparent' },
+  style: { background: '#ccc' },
   /* eslint-disable no-console */
   onLoaded: () => console.info('EVENT: static avatar loaded'),
   onLoading: () => console.info('EVENT: loading static avatar'),
