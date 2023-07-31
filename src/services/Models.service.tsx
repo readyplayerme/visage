@@ -40,7 +40,7 @@ const validateGlbSource = (source: GlbSource): boolean => {
   }
 
   if (typeof source === 'string') {
-    const fileEndExpression = new RegExp(/(.glb|.glb[?].*)$/g);
+    const fileEndExpression = new RegExp(/(.glb|.fbx|.fbx[?].*|.glb[?].*)$/g);
     const uploadFileExpression = new RegExp(/^data:application\/octet-stream;base64,/g);
     const gltfModelExpression = new RegExp(/^data:model\/gltf-binary;base64,/g);
     return fileEndExpression.test(source) || uploadFileExpression.test(source) || gltfModelExpression.test(source);

@@ -4,6 +4,7 @@ import { AnimationMixer, Group } from 'three';
 import { Model } from 'src/components/Models/Model';
 import { useHeadMovement, useGltfLoader, useFallback } from 'src/services';
 import { BaseModelProps } from 'src/types';
+import { loadAnimationClip } from "../../../services/Animation.service";
 
 export interface AnimationModelProps extends BaseModelProps {
   modelSrc: string | Blob;
@@ -34,25 +35,27 @@ export const AnimationModel: FC<AnimationModelProps> = ({
 
   const { scene } = useGltfLoader(modelSrc);
   const { nodes } = useGraph(scene);
-  const animationSource = useGltfLoader(animationSrc);
 
-  const animationMixer = useMemo(() => {
+  const animationMixer = useMemo(async () => {
     const mixer = new AnimationMixer(nodes.Armature);
     if (animationRunning) {
       return mixer
     }
 
-    const animation = mixer.clipAction(animationSource.animations[0]);
+    const animationClip = await loadAnimationClip(animationSrc);
+
+
+    const animation = mixer.clipAction(animationClip);
     animation.fadeIn(0.5)
     animation.play();
 
     mixer.update(0);
 
     return mixer;
-  }, [animationRunning, animationSource.animations, nodes.Armature]);
+  }, [animationRunning, animationSrc, nodes.Armature]);
 
-  useFrame((state, delta) => {
-    animationMixer?.update(delta);
+  useFrame(async (state, delta) => {
+    (await animationMixer)?.update(delta);
 
     if (!idleRotation) {
       return;

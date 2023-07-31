@@ -1,8 +1,9 @@
 import {useFrame, useGraph} from "@react-three/fiber";
 import React, {useMemo, useEffect, FC} from "react";
 import {AnimationMixer, Group, LoopRepeat} from "three";
-import {triggerCallback, useGltfLoader} from "../../services";
+import {triggerCallback} from "../../services";
 import {SpawnState} from "../Avatar/Avatar.component";
+import {loadAnimationClip} from "../../services/Animation.service";
 
 interface SpawnAnimationProps {
     avatar: Group;
@@ -20,9 +21,8 @@ export const SpawnAnimation: FC<SpawnAnimationProps> = ({avatar, onSpawnAnimatio
     }, [onSpawnAnimationFinish, animationRunning])
 
     const {nodes: avatarNode} = useGraph(avatar);
-    const animationAvatar = useGltfLoader(onMountAnimation?.src || '');
 
-    const animationMixerAvatar = useMemo(() => {
+    const animationMixerAvatar = useMemo(async () => {
         if (onMountAnimation?.src === '') {
             return null;
         }
@@ -30,7 +30,9 @@ export const SpawnAnimation: FC<SpawnAnimationProps> = ({avatar, onSpawnAnimatio
         if (!avatarNode.Armature) {
             return mixer;
         }
-        const animation = mixer.clipAction(animationAvatar.animations[0])
+        const animationClip = await loadAnimationClip(onMountAnimation?.src || '');
+
+        const animation = mixer.clipAction(animationClip)
 
         animation.setLoop(LoopRepeat,  onMountAnimation?.loop || 1);
         animation.clampWhenFinished = true;
@@ -43,10 +45,10 @@ export const SpawnAnimation: FC<SpawnAnimationProps> = ({avatar, onSpawnAnimatio
         })
 
         return mixer;
-    }, [animationAvatar.animations, avatarNode.Armature, onMountAnimation?.loop, onMountAnimation?.src]);
+    }, [avatarNode.Armature, onMountAnimation?.loop, onMountAnimation?.src]);
 
-    useFrame((state, delta) => {
-        animationMixerAvatar?.update(delta);
+    useFrame(async (state, delta) => {
+        (await animationMixerAvatar)?.update(delta);
     });
 
     return (
