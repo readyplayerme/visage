@@ -106,17 +106,7 @@ export const Exhibit: FC<ExhibitProps> = ({
             </Bounds>
           )}
         </PresentationControls>
-        {shadows && (
-          <ContactShadows
-            rotation-x={Math.PI / 2}
-            position={[0, -1.0, 0]}
-            opacity={0.75}
-            width={10}
-            height={10}
-            blur={2.6}
-            far={2}
-          />
-        )}
+        {shadows && <ContactShadows position={[0, -1.0, 0]} opacity={0.75} scale={10} blur={2.6} far={2} />}
         <Environment environment={environment} />
       </Suspense>
       {capture && <Capture {...capture} />}

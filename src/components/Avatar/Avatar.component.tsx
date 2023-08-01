@@ -12,7 +12,7 @@ import Capture, { CaptureType } from '../Capture/Capture.component';
 import Box, { Background } from '../Background/Box/Box.component';
 import Shadow from '../Shadow/Shadow.component';
 import Loader from '../Loader';
-import Bloom, { BloomTypes } from '../Bloom/Bloom.component';
+import Bloom, { BloomConfiguration } from '../Bloom/Bloom.component';
 
 export const CAMERA = {
   TARGET: {
@@ -115,11 +115,10 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
    * Defaults to full-body zoom distance.
    */
   cameraZoomTarget?: Vector3;
-
   /**
    * Bloom post-processing effect.
    */
-  bloom?: BloomTypes;
+  bloom?: BloomConfiguration;
 }
 
 /**
@@ -228,13 +227,17 @@ export const Avatar: FC<AvatarProps> = ({
         {shadows && <Shadow />}
         {background?.src && <Box {...background} />}
         {capture && <Capture {...capture} />}
-        <EffectComposer multisampling={0} disableNormalPass>
-          <Bloom
-            luminanceThreshold={bloom?.luminanceThreshold}
-            luminanceSmoothing={bloom?.luminanceSmoothing}
-            mipmapBlur={bloom?.mipmapBlur}
-          />
-        </EffectComposer>
+        {bloom && (
+          <EffectComposer disableNormalPass>
+            <Bloom
+              luminanceThreshold={bloom?.luminanceThreshold}
+              luminanceSmoothing={bloom?.luminanceSmoothing}
+              intensity={bloom?.intensity}
+              kernelSize={bloom?.kernelSize}
+              mipmapBlur={bloom?.mipmapBlur}
+            />
+          </EffectComposer>
+        )}
       </BaseCanvas>
     </Suspense>
   );
