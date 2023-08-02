@@ -32,7 +32,7 @@ Static.args = {
   poseSrc: undefined,
   environment: 'hub',
   scale: 1,
-  shadows: false,
+  shadows: true,
   halfBody: false,
   idleRotation: false,
   headMovement: false,

@@ -8,11 +8,11 @@ import { AnimationModel, HalfBodyModel, StaticModel, PoseModel } from 'src/compo
 import { isValidGlbFormat, triggerCallback } from 'src/services';
 import { Dpr } from '@react-three/fiber';
 import { EffectComposer } from '@react-three/postprocessing';
-import Capture, { CaptureType } from '../Capture/Capture.component';
-import Box, { Background } from '../Background/Box/Box.component';
-import Shadow from '../Shadow/Shadow.component';
-import Loader from '../Loader';
-import Bloom, { BloomConfiguration } from '../Bloom/Bloom.component';
+import Capture, { CaptureType } from 'src/components/Capture/Capture.component';
+import Box, { Background } from 'src/components/Background/Box/Box.component';
+import Shadow from 'src/components/Shadow/Shadow.component';
+import Loader from 'src/components/Loader';
+import Bloom, { BloomConfiguration } from 'src/components/Bloom/Bloom.component';
 
 export const CAMERA = {
   TARGET: {
@@ -227,17 +227,15 @@ export const Avatar: FC<AvatarProps> = ({
         {shadows && <Shadow />}
         {background?.src && <Box {...background} />}
         {capture && <Capture {...capture} />}
-        {bloom && (
-          <EffectComposer disableNormalPass>
-            <Bloom
-              luminanceThreshold={bloom?.luminanceThreshold}
-              luminanceSmoothing={bloom?.luminanceSmoothing}
-              intensity={bloom?.intensity}
-              kernelSize={bloom?.kernelSize}
-              mipmapBlur={bloom?.mipmapBlur}
-            />
-          </EffectComposer>
-        )}
+        <EffectComposer disableNormalPass>
+          <Bloom
+            luminanceThreshold={bloom?.luminanceThreshold}
+            luminanceSmoothing={bloom?.luminanceSmoothing}
+            intensity={bloom?.intensity}
+            kernelSize={bloom?.kernelSize}
+            mipmapBlur={bloom?.mipmapBlur}
+          />
+        </EffectComposer>
       </BaseCanvas>
     </Suspense>
   );

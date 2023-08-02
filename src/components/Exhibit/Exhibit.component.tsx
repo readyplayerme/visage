@@ -6,8 +6,8 @@ import { BaseModelProps, CameraProps, EnvironmentProps } from 'src/types';
 import { FloatingModel } from 'src/components/Models/FloatingModel';
 import { StaticModel } from 'src/components/Models/StaticModel';
 import { BoundsModel } from 'src/components/Models/BoundsModel';
-import { BaseCanvas } from '../BaseCanvas';
-import Capture, { CaptureType } from '../Capture/Capture.component';
+import { BaseCanvas } from 'src/components/BaseCanvas';
+import Capture, { CaptureType } from 'src/components/Capture/Capture.component';
 
 export interface ExhibitProps extends CameraProps, EnvironmentProps, Omit<BaseModelProps, 'setModelFallback'> {
   /**
