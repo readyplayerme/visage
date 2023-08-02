@@ -1,5 +1,5 @@
 import { create } from '@storybook/theming';
-import { getStoryAssetPath } from 'src/services';
+import { getStoryAssetPath } from '../src/services';
 
 export default create({
   base: 'light',
