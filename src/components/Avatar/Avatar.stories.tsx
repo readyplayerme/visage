@@ -1,5 +1,5 @@
 import React from 'react';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { StoryFn } from '@storybook/react';
 import { getStoryAssetPath } from 'src/services';
 import { Vector3 } from 'three';
 import { FileDropper } from 'src/components/FileDropper/FileDropper.component';
@@ -18,21 +18,21 @@ const emotions = {
     browOuterUpRight: 0.49
   }
 };
-const Template: ComponentStory<typeof Avatar> = (args) => <Avatar {...args} />;
-const DropTemplate: ComponentStory<typeof Avatar> = (args) => (
+const Template: StoryFn<typeof Avatar> = (args) => <Avatar {...args} />;
+const DropTemplate: StoryFn<typeof Avatar> = (args) => (
   <FileDropper>
     <Avatar {...args} />
   </FileDropper>
 );
 
-export const Static = Template.bind({});
+export const Static: StoryFn<typeof Avatar> = Template.bind({});
 Static.args = {
   modelSrc: getStoryAssetPath('female.glb'),
   animationSrc: undefined,
   poseSrc: undefined,
   environment: 'hub',
   scale: 1,
-  shadows: false,
+  shadows: true,
   halfBody: false,
   idleRotation: false,
   headMovement: false,
@@ -49,11 +49,18 @@ Static.args = {
   cameraTarget: CAMERA.TARGET.FULL_BODY.FEMALE,
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
   emotion: emotions.smile,
-  style: { background: 'transparent' },
+  style: { background: '#ccc' },
   /* eslint-disable no-console */
   onLoaded: () => console.info('EVENT: static avatar loaded'),
-  onLoading: () => console.info('EVENT: loading static avatar')
+  onLoading: () => console.info('EVENT: loading static avatar'),
   /* eslint-enable no-console */
+  bloom: {
+    luminanceThreshold: 1.0,
+    luminanceSmoothing: 1.0,
+    mipmapBlur: false,
+    kernelSize: 1,
+    intensity: 1.0
+  }
 };
 Static.argTypes = {
   headMovement: { control: false },
@@ -61,7 +68,7 @@ Static.argTypes = {
   poseSrc: { control: false }
 };
 
-export const Animated = Template.bind({});
+export const Animated: StoryFn<typeof Avatar> = Template.bind({});
 Animated.args = {
   ...Static.args,
   emotion: undefined,
@@ -79,7 +86,7 @@ Animated.argTypes = {
   emotion: { control: false }
 };
 
-export const HalfBody = Template.bind({});
+export const HalfBody: StoryFn<typeof Avatar> = Template.bind({});
 HalfBody.args = {
   ...Static.args,
   modelSrc: getStoryAssetPath('half-body.glb'),
@@ -92,7 +99,7 @@ HalfBody.args = {
   /* eslint-enable no-console */
 };
 
-export const Posing = Template.bind({});
+export const Posing: StoryFn<typeof Avatar> = Template.bind({});
 Posing.args = {
   ...Static.args,
   modelSrc: getStoryAssetPath('male.glb'),
@@ -110,7 +117,7 @@ Posing.argTypes = {
 };
 
 /* eslint-disable */
-export const _DragNDrop = DropTemplate.bind({});
+export const _DragNDrop: StoryFn<typeof Avatar> = DropTemplate.bind({});
 _DragNDrop.args = {
   ...Static.args,
   modelSrc: undefined,
@@ -149,4 +156,4 @@ export default {
     onLoaded: { control: false },
     environment: { options: Object.keys(environmentPresets), control: { type: 'select' } }
   }
-} as ComponentMeta<typeof Avatar>;
+};

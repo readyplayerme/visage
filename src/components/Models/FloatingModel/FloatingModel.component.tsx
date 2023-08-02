@@ -11,7 +11,7 @@ export interface FloatingModelProps extends BaseModelProps {
 }
 
 export const FloatingModel: FC<FloatingModelProps> = ({ modelSrc, scale = 1.0, onLoaded }) => {
-  const ref = useRef<Group>();
+  const ref = useRef<Group>(null);
   const { scene } = useGltfLoader(modelSrc);
 
   useFrame((state) => {

@@ -1,4 +1,4 @@
-import React, { FC, MutableRefObject } from 'react';
+import React, { FC, Ref } from 'react';
 import { useGraph } from '@react-three/fiber';
 import { Model } from 'src/components/Models/Model';
 import { Group } from 'three';
@@ -9,7 +9,7 @@ import { Emotion } from '../../Avatar/Avatar.component';
 export interface PoseModelProps extends BaseModelProps {
   modelSrc: string | Blob;
   poseSrc: string | Blob;
-  modelRef?: MutableRefObject<Group | undefined>;
+  modelRef?: Ref<Group>;
   scale?: number;
   emotion?: Emotion;
 }

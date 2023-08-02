@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - "feature/**"
+      - "feat/**"
       - "hotfix/**"
 
 concurrency:
@@ -20,11 +21,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: '17.x'
+          node-version: '18.x'
       - name: Install deps
         run: npm ci
       - name: Run linter
@@ -34,11 +35,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: '17.x'
+          node-version: '18.x'
       - name: Install deps
         run: npm ci
       - name: Run tests
@@ -58,7 +59,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v2
         with:
-          node-version: '17.x'
+          node-version: '18.x'
       - name: 🛠 Install & Build
         run: |
           npm ci

@@ -1,4 +1,4 @@
-import React, { FC, MutableRefObject } from 'react';
+import React, { FC, Ref } from 'react';
 import { Model } from 'src/components/Models/Model';
 import { useEmotion, useFallback, useGltfLoader } from 'src/services';
 import { Group } from 'three';
@@ -8,7 +8,7 @@ import { Emotion } from '../../Avatar/Avatar.component';
 
 export interface StaticModelProps extends BaseModelProps {
   modelSrc: string | Blob;
-  modelRef?: MutableRefObject<Group | undefined>;
+  modelRef?: Ref<Group>;
   scale?: number;
   emotion?: Emotion;
 }

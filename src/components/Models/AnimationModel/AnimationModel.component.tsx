@@ -26,7 +26,7 @@ export const AnimationModel: FC<AnimationModelProps> = ({
   onLoaded,
   headMovement = false
 }) => {
-  const ref = useRef<Group>();
+  const ref = useRef<Group>(null);
   const { scene } = useGltfLoader(modelSrc);
   const { nodes } = useGraph(scene);
 

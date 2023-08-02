@@ -5,8 +5,11 @@ module.exports = {
   typescript: {
     check: true
   },
-  framework: '@storybook/react',
-  core: {
-    builder: 'webpack5'
+  framework: {
+    name: '@storybook/react-webpack5',
+    options: {}
+  },
+  docs: {
+    autodocs: true,
   }
 };

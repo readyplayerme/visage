@@ -7,10 +7,12 @@ import { BaseCanvas } from 'src/components/BaseCanvas';
 import { AnimationModel, HalfBodyModel, StaticModel, PoseModel } from 'src/components/Models';
 import { isValidGlbFormat, triggerCallback } from 'src/services';
 import { Dpr } from '@react-three/fiber';
-import Capture, { CaptureType } from '../Capture/Capture.component';
-import Box, { Background } from '../Background/Box/Box.component';
-import Shadow from '../Shadow/Shadow.components';
-import Loader from '../Loader';
+import { EffectComposer } from '@react-three/postprocessing';
+import Capture, { CaptureType } from 'src/components/Capture/Capture.component';
+import Box, { Background } from 'src/components/Background/Box/Box.component';
+import Shadow from 'src/components/Shadow/Shadow.component';
+import Loader from 'src/components/Loader';
+import Bloom, { BloomConfiguration } from 'src/components/Bloom/Bloom.component';
 
 export const CAMERA = {
   TARGET: {
@@ -113,6 +115,10 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
    * Defaults to full-body zoom distance.
    */
   cameraZoomTarget?: Vector3;
+  /**
+   * Bloom post-processing effect.
+   */
+  bloom?: BloomConfiguration;
 }
 
 /**
@@ -149,7 +155,8 @@ export const Avatar: FC<AvatarProps> = ({
   dpr,
   className,
   headMovement = false,
-  cameraZoomTarget = CAMERA.CONTROLS.FULL_BODY.ZOOM_TARGET
+  cameraZoomTarget = CAMERA.CONTROLS.FULL_BODY.ZOOM_TARGET,
+  bloom
 }) => {
   const AvatarModel = useMemo(() => {
     if (!isValidGlbFormat(modelSrc)) {
@@ -220,6 +227,15 @@ export const Avatar: FC<AvatarProps> = ({
         {shadows && <Shadow />}
         {background?.src && <Box {...background} />}
         {capture && <Capture {...capture} />}
+        <EffectComposer disableNormalPass>
+          <Bloom
+            luminanceThreshold={bloom?.luminanceThreshold}
+            luminanceSmoothing={bloom?.luminanceSmoothing}
+            intensity={bloom?.intensity}
+            kernelSize={bloom?.kernelSize}
+            mipmapBlur={bloom?.mipmapBlur}
+          />
+        </EffectComposer>
       </BaseCanvas>
     </Suspense>
   );
