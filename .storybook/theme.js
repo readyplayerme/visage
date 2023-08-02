@@ -1,9 +1,7 @@
-import { create } from '@storybook/theming';
-import logo from './logo.png';
+import { create, themes } from '@storybook/theming';
 
 export default create({
   base: 'light',
-  brandImage: logo,
-  brandUlr: 'https://readyplayer.me',
-  appBg: '#fafafa'
+  brandImage: '/logo.png',
+  brandUrl: 'https://readyplayer.me',
 });
