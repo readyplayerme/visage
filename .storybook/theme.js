@@ -1,7 +1,8 @@
-import { create, themes } from '@storybook/theming';
+import { create } from '@storybook/theming';
+import { getStoryAssetPath } from 'src/services';
 
 export default create({
   base: 'light',
-  brandImage: '/logo.png',
+  brandImage: getStoryAssetPath('logo.png'),
   brandUrl: 'https://readyplayer.me',
 });
