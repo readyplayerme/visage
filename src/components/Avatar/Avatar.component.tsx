@@ -8,12 +8,12 @@ import { AnimationModel, HalfBodyModel, StaticModel, PoseModel } from 'src/compo
 import { isValidGlbFormat, triggerCallback } from 'src/services';
 import { Dpr } from '@react-three/fiber';
 import { EffectComposer } from '@react-three/postprocessing';
-import {atom, Provider, useSetAtom} from 'jotai'
-import Capture, { CaptureType } from '../Capture/Capture.component';
-import Box, { Background } from '../Background/Box/Box.component';
-import Shadow from '../Shadow/Shadow.component';
-import Loader from '../Loader';
-import Bloom, { BloomTypes } from '../Bloom/Bloom.component';
+import { atom, Provider, useSetAtom } from 'jotai';
+import Capture, { CaptureType } from 'src/components/Capture/Capture.component';
+import Box, { Background } from 'src/components/Background/Box/Box.component';
+import Shadow from 'src/components/Shadow/Shadow.component';
+import Loader from 'src/components/Loader';
+import Bloom, { BloomConfiguration } from 'src/components/Bloom/Bloom.component';
 
 export const CAMERA = {
   TARGET: {
@@ -45,19 +45,19 @@ export interface SpawnState {
     src: string | null;
     animationSrc?: string | null;
     loop?: number | null;
-  } | null,
+  } | null;
   onMountAnimation?: {
     src: string | null;
     loop?: number | null;
-  } | null
+  } | null;
 }
 
 const initialSpawnState: SpawnState = {
   onMountEffect: null,
   onMountAnimation: null
-}
+};
 
-export const spawnState = atom(initialSpawnState)
+export const spawnState = atom(initialSpawnState);
 
 export type Emotion = Record<string, number>;
 
@@ -134,17 +134,14 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
    * Defaults to full-body zoom distance.
    */
   cameraZoomTarget?: Vector3;
-
   /**
    * Bloom post-processing effect.
    */
-  bloom?: BloomTypes;
-
+  bloom?: BloomConfiguration;
   /**
    * Spawn effect on mount.
    */
   onMountEffect?: SpawnState['onMountEffect'];
-
   /**
    * Spawn animation on mount.
    */
@@ -187,13 +184,13 @@ const Avatar: FC<AvatarProps> = ({
   cameraZoomTarget = CAMERA.CONTROLS.FULL_BODY.ZOOM_TARGET,
   bloom,
   onMountEffect,
-  onMountAnimation,
+  onMountAnimation
 }) => {
-  const setSpawnState = useSetAtom(spawnState)
+  const setSpawnState = useSetAtom(spawnState);
 
   useEffect(() => {
-      setSpawnState({onMountEffect, onMountAnimation})
-  }, [onMountAnimation, onMountEffect, setSpawnState])
+    setSpawnState({ onMountEffect, onMountAnimation });
+  }, [onMountAnimation, onMountEffect, setSpawnState]);
 
   const AvatarModel = useMemo(() => {
     if (!isValidGlbFormat(modelSrc)) {
@@ -236,50 +233,48 @@ const Avatar: FC<AvatarProps> = ({
   useEffect(() => triggerCallback(onLoading), [modelSrc, animationSrc, onLoading]);
 
   return (
-      <BaseCanvas position={new Vector3(0, 0, 3)} fov={50} style={style} dpr={dpr} className={className}>
-        <Environment environment={environment} />
-        <CameraLighting
-          cameraTarget={cameraTarget}
-          cameraInitialDistance={cameraInitialDistance}
-          cameraZoomTarget={cameraZoomTarget}
-          ambientLightColor={ambientLightColor}
-          ambientLightIntensity={ambientLightIntensity}
-          dirLightPosition={dirLightPosition}
-          dirLightColor={dirLightColor}
-          dirLightIntensity={dirLightIntensity}
-          spotLightPosition={spotLightPosition}
-          spotLightColor={spotLightColor}
-          spotLightAngle={spotLightAngle}
-          spotLightIntensity={spotLightIntensity}
-          controlsMinDistance={
-            halfBody ? CAMERA.CONTROLS.HALF_BODY.MIN_DISTANCE : CAMERA.CONTROLS.FULL_BODY.MIN_DISTANCE
-          }
-          controlsMaxDistance={
-            halfBody ? CAMERA.CONTROLS.HALF_BODY.MAX_DISTANCE : CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE
-          }
-          updateCameraTargetOnZoom={!halfBody}
+    <BaseCanvas position={new Vector3(0, 0, 3)} fov={50} style={style} dpr={dpr} className={className}>
+      <Environment environment={environment} />
+      <CameraLighting
+        cameraTarget={cameraTarget}
+        cameraInitialDistance={cameraInitialDistance}
+        cameraZoomTarget={cameraZoomTarget}
+        ambientLightColor={ambientLightColor}
+        ambientLightIntensity={ambientLightIntensity}
+        dirLightPosition={dirLightPosition}
+        dirLightColor={dirLightColor}
+        dirLightIntensity={dirLightIntensity}
+        spotLightPosition={spotLightPosition}
+        spotLightColor={spotLightColor}
+        spotLightAngle={spotLightAngle}
+        spotLightIntensity={spotLightIntensity}
+        controlsMinDistance={halfBody ? CAMERA.CONTROLS.HALF_BODY.MIN_DISTANCE : CAMERA.CONTROLS.FULL_BODY.MIN_DISTANCE}
+        controlsMaxDistance={halfBody ? CAMERA.CONTROLS.HALF_BODY.MAX_DISTANCE : CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE}
+        updateCameraTargetOnZoom={!halfBody}
+      />
+      {AvatarModel}
+      {shadows && <Shadow />}
+      {background?.src && <Box {...background} />}
+      {capture && <Capture {...capture} />}
+      <EffectComposer disableNormalPass>
+        <Bloom
+          luminanceThreshold={bloom?.luminanceThreshold}
+          luminanceSmoothing={bloom?.luminanceSmoothing}
+          intensity={bloom?.intensity}
+          kernelSize={bloom?.kernelSize}
+          mipmapBlur={bloom?.mipmapBlur}
         />
-        {AvatarModel}
-        {shadows && <Shadow />}
-        {background?.src && <Box {...background} />}
-        {capture && <Capture {...capture} />}
-        <EffectComposer multisampling={0} disableNormalPass>
-          <Bloom
-            luminanceThreshold={bloom?.luminanceThreshold}
-            luminanceSmoothing={bloom?.luminanceSmoothing}
-            mipmapBlur={bloom?.mipmapBlur}
-          />
-        </EffectComposer>
-      </BaseCanvas>
+      </EffectComposer>
+    </BaseCanvas>
   );
 };
 
 const AvatarWrapper = (props: AvatarProps) => (
-    <Suspense fallback={<Loader />}>
-      <Provider>
-        <Avatar {...props} />
-      </Provider>
-    </Suspense>
-  );
+  <Suspense fallback={props.loader ?? <Loader />}>
+    <Provider>
+      <Avatar {...props} />
+    </Provider>
+  </Suspense>
+);
 
 export default AvatarWrapper;

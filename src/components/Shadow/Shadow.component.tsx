@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 const Shadow: FC = () => (
   <group position={[0, 0, 0]}>
     <mesh key="shadow-catcher" receiveShadow position={[0, 0, 0]} rotation-x={-Math.PI / 2}>
-      <planeBufferGeometry attach="geometry" args={[5, 5]} />
+      <planeGeometry attach="geometry" args={[5, 5]} />
       <shadowMaterial attach="material" transparent opacity={0.2} />
     </mesh>
   </group>
