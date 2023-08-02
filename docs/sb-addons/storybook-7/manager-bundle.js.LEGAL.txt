@@ -1,0 +1,44 @@
+Bundled license information:
+
+react-reconciler/cjs/react-reconciler-constants.production.min.js:
+  /**
+   * @license React
+   * react-reconciler-constants.production.min.js
+   *
+   * Copyright (c) Facebook, Inc. and its affiliates.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   */
+
+scheduler/cjs/scheduler.production.min.js:
+  /**
+   * @license React
+   * scheduler.production.min.js
+   *
+   * Copyright (c) Facebook, Inc. and its affiliates.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   */
+
+react-reconciler/cjs/react-reconciler.production.min.js:
+  /**
+   * @license React
+   * react-reconciler.production.min.js
+   *
+   * Copyright (c) Facebook, Inc. and its affiliates.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   */
+
+three/build/three.module.js:
+  /**
+   * @license
+   * Copyright 2010-2023 Three.js Authors
+   * SPDX-License-Identifier: MIT
+   */
+
+opentype.js/dist/opentype.module.js:
+  /*! https://mths.be/codepointat v0.2.0 by @mathias */
