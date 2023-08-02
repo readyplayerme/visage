@@ -15,29 +15,29 @@ function App() {
       </div>
       <div className={styles.container}>
         <div className={styles.card}>
-            <Avatar
+          <Avatar
             modelSrc="/male.glb"
             poseSrc="/male-pose-standing.glb"
             animationSrc="/male-idle.glb"
             shadows={false}
             onLoaded={() => console.log('male avatar loaded')}
-            />
+          />
         </div>
         <div className={styles.card}>
-           <Avatar
-                modelSrc="/female.glb"
-                poseSrc="/female-pose-standing.glb"
-                shadows={false}
-                animationSrc="/female-animation-catwalk.glb"
-                onMountEffect={{
-                    src: '/spawn-effect.glb',
-                    loop: 13
-                }}
-                onMountAnimation={{
-                    src: '/female-animation-chicken.glb',
-                }}
+          <Avatar
+            modelSrc="/female.glb"
+            poseSrc="/female-pose-standing.glb"
+            shadows={false}
+            animationSrc="/female-animation-catwalk.glb"
+            onMountEffect={{
+              src: '/spawn-effect.glb',
+              loop: 13
+            }}
+            onMountAnimation={{
+              src: '/female-animation-chicken.glb'
+            }}
             onLoaded={() => console.log('female avatar loaded')}
-           />
+          />
         </div>
       </div>
     </div>
