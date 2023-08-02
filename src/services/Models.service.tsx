@@ -207,6 +207,7 @@ export const useGltfLoader = (source: Blob | string): GLTF =>
       return (await loader.parseAsync(buffer, '')) as unknown as GLTF;
     }
 
+    console.log('====>', source);
     const gltf = await loader.loadAsync(source);
     return gltf;
   }, [source]);

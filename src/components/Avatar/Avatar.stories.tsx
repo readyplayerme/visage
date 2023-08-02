@@ -33,7 +33,6 @@ Static.args = {
   environment: 'hub',
   scale: 1,
   shadows: true,
-  halfBody: false,
   idleRotation: false,
   headMovement: false,
   ambientLightColor: '#fff5b6',
@@ -60,17 +59,11 @@ Static.args = {
     mipmapBlur: false,
     kernelSize: 1,
     intensity: 1.0
-  },
-  onMountEffect: {
-    src: '/spawn-effect.glb',
-    loop: 13
-  },
-  onMountAnimation: {
-    src: '/female-animation-chicken.glb'
   }
 };
 Static.argTypes = {
   headMovement: { control: false },
+  halfBody: { control: false },
   animationSrc: { control: false },
   poseSrc: { control: false }
 };
@@ -121,6 +114,33 @@ Posing.args = {
 };
 Posing.argTypes = {
   headMovement: { control: false }
+};
+
+/* eslint-disable */
+export const SpawnEffectAndAnimation: StoryFn<typeof Avatar> = Template.bind({});
+SpawnEffectAndAnimation.args = {
+  onMountEffect: {
+    src: '/spawn-effect.glb',
+    loop: 13
+  },
+  onMountAnimation: {
+    src: '/female-animation-chicken.glb',
+    loop: 1
+  },
+  ...Static.args,
+  emotion: undefined,
+  modelSrc: getStoryAssetPath('male.glb'),
+  animationSrc: getStoryAssetPath('male-idle.glb'),
+  cameraTarget: CAMERA.TARGET.FULL_BODY.MALE,
+  cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
+  /* eslint-disable no-console */
+  onLoaded: () => console.info('EVENT: animated avatar loaded'),
+  onLoading: () => console.info('EVENT: loading animated avatar')
+  /* eslint-enable no-console */
+};
+SpawnEffectAndAnimation.argTypes = {
+  poseSrc: { control: false },
+  emotion: { control: false }
 };
 
 /* eslint-disable */

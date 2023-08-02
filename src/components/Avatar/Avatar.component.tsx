@@ -189,6 +189,7 @@ const Avatar: FC<AvatarProps> = ({
   const setSpawnState = useSetAtom(spawnState);
 
   useEffect(() => {
+    console.log('here', { onMountEffect, onMountAnimation });
     setSpawnState({ onMountEffect, onMountAnimation });
   }, [onMountAnimation, onMountEffect, setSpawnState]);
 
