@@ -2,17 +2,18 @@ import React, { FC, Ref, useEffect } from 'react';
 import { Group, Mesh } from 'three';
 import { normaliseMaterialsConfig, triggerCallback } from 'src/services';
 import { useGraph } from '@react-three/fiber';
-import { BaseModelProps } from 'src/types';
+import { BaseModelProps, BloomConfiguration } from 'src/types';
 
 interface ModelProps extends BaseModelProps {
   scene: Group;
   modelRef?: Ref<Group>;
   scale?: number;
+  bloom?: BloomConfiguration;
 }
 
-export const Model: FC<ModelProps> = ({ scene, scale = 1, modelRef, onLoaded }) => {
+export const Model: FC<ModelProps> = ({ scene, scale = 1, modelRef, onLoaded, bloom }) => {
   const { materials } = useGraph(scene);
-  normaliseMaterialsConfig(materials);
+  normaliseMaterialsConfig(materials, bloom);
   scene.traverse((object) => {
     const node = object;
 

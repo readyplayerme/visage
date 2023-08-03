@@ -2,17 +2,18 @@ import React, { Suspense, FC, useMemo, CSSProperties, ReactNode, useEffect } fro
 import { Vector3 } from 'three';
 import { CameraLighting } from 'src/components/Scene/CameraLighting.component';
 import { Environment } from 'src/components/Scene/Environment.component';
-import { LightingProps, BaseModelProps, EnvironmentProps } from 'src/types';
+import { LightingProps, BaseModelProps, EnvironmentProps, BloomConfiguration } from 'src/types';
 import { BaseCanvas } from 'src/components/BaseCanvas';
 import { AnimationModel, HalfBodyModel, StaticModel, PoseModel } from 'src/components/Models';
 import { isValidGlbFormat, triggerCallback } from 'src/services';
 import { Dpr } from '@react-three/fiber';
 import { EffectComposer } from '@react-three/postprocessing';
 import Capture, { CaptureType } from 'src/components/Capture/Capture.component';
-import Box, { Background } from 'src/components/Background/Box/Box.component';
+import { Box, Background } from 'src/components/Background/Box/Box.component';
+import { BackgroundColor } from 'src/components/Background';
 import Shadow from 'src/components/Shadow/Shadow.component';
 import Loader from 'src/components/Loader';
-import Bloom, { BloomConfiguration } from 'src/components/Bloom/Bloom.component';
+import Bloom from 'src/components/Bloom/Bloom.component';
 
 export const CAMERA = {
   TARGET: {
@@ -75,7 +76,7 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
    */
   cameraInitialDistance?: number;
   /**
-   * Pass styling to canvas.
+   * Apply styling to canvas DOM element.
    */
   style?: CSSProperties;
   /**
@@ -87,7 +88,8 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
    */
   emotion?: Emotion;
   /**
-   * Applies Box background for canvas, make sure that image is loadable to prevent bg errors.
+   * Applies Box background in the scene with a provided image.
+   * Make sure that image is loadable to prevent bg errors.
    */
   background?: Background;
   /**
@@ -227,6 +229,7 @@ export const Avatar: FC<AvatarProps> = ({
         {shadows && <Shadow />}
         {background?.src && <Box {...background} />}
         {capture && <Capture {...capture} />}
+        {style?.background && <BackgroundColor color={style.background as string} />}
         <EffectComposer disableNormalPass>
           <Bloom
             luminanceThreshold={bloom?.luminanceThreshold}

@@ -16,6 +16,7 @@ import type { ObjectMap } from '@react-three/fiber';
 import { GLTF, GLTFLoader } from 'three-stdlib';
 import { suspend } from 'suspend-react';
 import { Emotion } from 'src/components/Avatar/Avatar.component';
+import { BloomConfiguration } from 'src/types';
 
 export interface CustomNode extends Object3D {
   geometry: BufferGeometry;
@@ -70,16 +71,17 @@ export const lerp = (start: number, end: number, time = 0.05): number => start *
 /**
  * Avoid texture pixelation and add depth effect.
  */
-export const normaliseMaterialsConfig = (materials: Record<string, Material>) => {
+export const normaliseMaterialsConfig = (materials: Record<string, Material>, bloomConfig?: BloomConfiguration) => {
   Object.values(materials).forEach((material) => {
     const mat = material as MeshStandardMaterial;
     if (mat.map) {
       mat.map.minFilter = LinearFilter;
       mat.depthWrite = true;
+      mat.toneMapped = false;
     }
 
     if (mat.emissiveMap) {
-      mat.toneMapped = false;
+      mat.emissiveIntensity = bloomConfig?.materialIntensity || 2.0;
     }
   });
 };

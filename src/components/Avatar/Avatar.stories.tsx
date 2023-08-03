@@ -59,7 +59,8 @@ Static.args = {
     luminanceSmoothing: 1.0,
     mipmapBlur: true,
     kernelSize: 1,
-    intensity: 1.0
+    intensity: 1.0,
+    materialIntensity: 1.0
   }
 };
 Static.argTypes = {

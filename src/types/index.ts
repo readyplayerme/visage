@@ -108,3 +108,30 @@ export type HeadBlendShapeType =
   | 'viseme_kk'
   | 'viseme_nn'
   | 'viseme_sil';
+
+export type BloomConfiguration = {
+  /**
+   * The luminance threshold. Raise this value to mask out darker elements in the scene. Range is [0, 1].
+   */
+  luminanceThreshold?: number;
+  /**
+   * Controls the smoothness of the luminance threshold. Range is [0, 1].
+   */
+  luminanceSmoothing?: number;
+  /**
+   * Enables or disables mipmap blur.
+   */
+  mipmapBlur?: boolean;
+  /**
+   * The intensity of global bloom.
+   */
+  intensity?: number;
+  /**
+   * The kernel size of the blur. Values are 0, 1, 2, 3, 4.
+   */
+  kernelSize?: number;
+  /**
+   * Emissive material intensity.
+   */
+  materialIntensity?: number;
+};
