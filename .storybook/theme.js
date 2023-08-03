@@ -4,5 +4,5 @@ import { getStoryAssetPath } from '../src/services';
 export default create({
   base: 'light',
   brandImage: getStoryAssetPath('logo.png'),
-  brandUrl: 'https://readyplayer.me',
+  brandUrl: 'https://readyplayer.me'
 });

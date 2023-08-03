@@ -174,6 +174,7 @@ export const Avatar: FC<AvatarProps> = ({
           idleRotation={idleRotation}
           onLoaded={onLoaded}
           headMovement={headMovement}
+          bloom={bloom}
         />
       );
     }
@@ -187,16 +188,26 @@ export const Avatar: FC<AvatarProps> = ({
           idleRotation={idleRotation}
           onLoaded={onLoaded}
           headMovement={headMovement}
+          bloom={bloom}
         />
       );
     }
 
     if (isValidGlbFormat(poseSrc)) {
-      return <PoseModel emotion={emotion} modelSrc={modelSrc} scale={scale} poseSrc={poseSrc!} onLoaded={onLoaded} />;
+      return (
+        <PoseModel
+          emotion={emotion}
+          modelSrc={modelSrc}
+          scale={scale}
+          poseSrc={poseSrc!}
+          onLoaded={onLoaded}
+          bloom={bloom}
+        />
+      );
     }
 
-    return <StaticModel modelSrc={modelSrc} scale={scale} onLoaded={onLoaded} emotion={emotion} />;
-  }, [halfBody, animationSrc, modelSrc, scale, poseSrc, idleRotation, emotion, onLoaded, headMovement]);
+    return <StaticModel modelSrc={modelSrc} scale={scale} onLoaded={onLoaded} emotion={emotion} bloom={bloom} />;
+  }, [halfBody, animationSrc, modelSrc, scale, poseSrc, idleRotation, emotion, onLoaded, headMovement, bloom]);
 
   useEffect(() => triggerCallback(onLoading), [modelSrc, animationSrc, onLoading]);
 

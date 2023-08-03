@@ -42,6 +42,7 @@ export interface BaseModelProps {
    */
   onLoading?: () => void;
   setModelFallback?: (fallback: JSX.Element) => void;
+  bloom?: BloomConfiguration;
 }
 
 export type HeadBlendShapeType =
