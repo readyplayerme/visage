@@ -28,7 +28,7 @@ const Bloom: FC<BloomConfiguration> = ({
   luminanceThreshold = 1,
   luminanceSmoothing = 1,
   mipmapBlur = true,
-  intensity = 0.1,
+  intensity = 1.0,
   kernelSize = 0
 }) => (
   <BloomPostProcessing
