@@ -4,7 +4,8 @@ import { getStoryAssetPath } from 'src/services';
 import { Vector3 } from 'three';
 import { FileDropper } from 'src/components/FileDropper/FileDropper.component';
 import { environmentPresets } from 'src/services/EnvironmentMap.service';
-import { Avatar as AvatarWrapper, AvatarProps, CAMERA } from './Avatar.component';
+import { Avatar as AvatarWrapper, CAMERA } from './index';
+import { AvatarProps } from './Avatar.component';
 
 const Avatar = (args: AvatarProps) => <AvatarWrapper {...args} />;
 

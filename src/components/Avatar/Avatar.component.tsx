@@ -154,7 +154,7 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
  * Interactive avatar presentation with zooming and horizontal rotation controls.
  * Optimised for full-body and half-body avatars.
  */
-export const Avatar: FC<AvatarProps> = ({
+const Avatar: FC<AvatarProps> = ({
   modelSrc,
   animationSrc = undefined,
   poseSrc = undefined,
