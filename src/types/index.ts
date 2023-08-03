@@ -34,7 +34,7 @@ export interface LightingProps {
 
 export interface BaseModelProps {
   /**
-   * Detect when model is loaded and trigger custom logic.
+   * Detect when model is loaded (doesn't take into account animations and effects) and trigger custom logic.
    */
   onLoaded?: () => void;
   /**

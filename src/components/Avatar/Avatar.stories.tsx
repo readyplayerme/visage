@@ -4,7 +4,10 @@ import { getStoryAssetPath } from 'src/services';
 import { Vector3 } from 'three';
 import { FileDropper } from 'src/components/FileDropper/FileDropper.component';
 import { environmentPresets } from 'src/services/EnvironmentMap.service';
-import Avatar, { CAMERA } from './Avatar.component';
+import { Avatar as AvatarWrapper, CAMERA } from './index';
+import { AvatarProps } from './Avatar.component';
+
+const Avatar = (args: AvatarProps) => <AvatarWrapper {...args} />;
 
 const emotions = {
   smile: {
@@ -114,33 +117,6 @@ Posing.args = {
 };
 Posing.argTypes = {
   headMovement: { control: false }
-};
-
-/* eslint-disable */
-export const SpawnEffectAndAnimation: StoryFn<typeof Avatar> = Template.bind({});
-SpawnEffectAndAnimation.args = {
-  onMountEffect: {
-    src: '/spawn-effect.glb',
-    loop: 13
-  },
-  onMountAnimation: {
-    src: '/female-animation-chicken.glb',
-    loop: 1
-  },
-  ...Static.args,
-  emotion: undefined,
-  modelSrc: getStoryAssetPath('male.glb'),
-  animationSrc: getStoryAssetPath('male-idle.glb'),
-  cameraTarget: CAMERA.TARGET.FULL_BODY.MALE,
-  cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
-  /* eslint-disable no-console */
-  onLoaded: () => console.info('EVENT: animated avatar loaded'),
-  onLoading: () => console.info('EVENT: loading animated avatar')
-  /* eslint-enable no-console */
-};
-SpawnEffectAndAnimation.argTypes = {
-  poseSrc: { control: false },
-  emotion: { control: false }
 };
 
 /* eslint-disable */

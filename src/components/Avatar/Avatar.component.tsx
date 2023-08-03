@@ -146,6 +146,8 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
    * Spawn animation on mount.
    */
   onMountAnimation?: SpawnState['onMountAnimation'];
+
+  children?: ReactNode;
 }
 
 /**
@@ -184,7 +186,8 @@ const Avatar: FC<AvatarProps> = ({
   cameraZoomTarget = CAMERA.CONTROLS.FULL_BODY.ZOOM_TARGET,
   bloom,
   onMountEffect,
-  onMountAnimation
+  onMountAnimation,
+  children
 }) => {
   const setSpawnState = useSetAtom(spawnState);
 
@@ -253,6 +256,7 @@ const Avatar: FC<AvatarProps> = ({
         updateCameraTargetOnZoom={!halfBody}
       />
       {AvatarModel}
+      {children}
       {shadows && <Shadow />}
       {background?.src && <Box {...background} />}
       {capture && <Capture {...capture} />}

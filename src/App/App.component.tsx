@@ -1,5 +1,6 @@
 import React from 'react';
 import { Avatar } from 'src/components/Avatar';
+import { Sparkles } from '@react-three/drei';
 import styles from './App.module.scss';
 
 function App() {
@@ -37,7 +38,9 @@ function App() {
               src: '/female-animation-chicken.glb'
             }}
             onLoaded={() => console.log('female avatar loaded')}
-          />
+          >
+            <Sparkles count={70} scale={3} size={3} speed={1} opacity={0.1} />
+          </Avatar>
         </div>
       </div>
     </div>
