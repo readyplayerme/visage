@@ -5,13 +5,19 @@ describe('Models service unit tests', () => {
     const testCases = [
       { name: 'undefined URL/base64', format: undefined, expected: false },
       { name: 'null URL/base64', format: null, expected: false },
-      { name: 'invalid URL', format: '/3d-test-model.fbx', expected: false },
+      { name: 'invalid URL', format: '/3d-test-model.hello', expected: false },
       { name: 'invalid empty URL/base64', format: '', expected: false },
       { name: 'invalid URL with query parameters', format: '/3d-test-model.gl?morphTargets=true', expected: false },
       {
         name: 'invalid base64 format',
         format: 'data:application/octet-stream;base64Z2xURgIAAAC4aKAAqA4CAEpTT...',
         expected: false
+      },
+      { name: 'valid FBX URL', format: '/3d-test-model.fbx', expected: true },
+      {
+        name: 'valid FBX URL with query parameters',
+        format: '/3d-test-model.fbx?morphTargets=true&blendShapes=[1,2,3]',
+        expected: true
       },
       { name: 'valid URL', format: '/3d-test-model.glb', expected: true },
       {
