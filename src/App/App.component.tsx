@@ -30,11 +30,11 @@ function App() {
             poseSrc="/female-pose-standing.glb"
             shadows={false}
             animationSrc="/female-animation-catwalk.glb"
-            onMountEffect={{
+            onLoadedEffect={{
               src: '/spawn-effect.glb',
               loop: 13
             }}
-            onMountAnimation={{
+            onLoadedAnimation={{
               src: '/female-animation-chicken.glb'
             }}
             onLoaded={() => console.log('female avatar loaded')}

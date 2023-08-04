@@ -2,33 +2,33 @@ import React, { FC, useEffect, useMemo, useRef } from 'react';
 import { AnimationMixer, Group, LoopRepeat } from 'three';
 import { useFrame, useGraph } from '@react-three/fiber';
 import { triggerCallback, useGltfLoader } from '../../services';
-import { SpawnState } from '../Avatar/Avatar.component';
+import { SpawnState } from '../../types';
 
 interface SpawnEffectProps {
-  onSpawnEffectFinish: () => void;
-  onMountEffect: SpawnState['onMountEffect'];
+  onLoadedEffectFinish: () => void;
+  onLoadedEffect: SpawnState['onLoadedEffect'];
 }
-export const SpawnEffect: FC<SpawnEffectProps> = ({ onMountEffect, onSpawnEffectFinish }) => {
+export const SpawnEffect: FC<SpawnEffectProps> = ({ onLoadedEffect, onLoadedEffectFinish }) => {
   const ref = useRef<Group>(null);
 
   const [effectRunning, setEffectRunning] = React.useState(true);
 
-  const { scene: mountEffectScene } = useGltfLoader(onMountEffect?.src || '');
+  const { scene: mountEffectScene } = useGltfLoader(onLoadedEffect?.src || '');
   const { nodes: mountEffectNode } = useGraph(mountEffectScene);
 
-  const animationMountEffect = useGltfLoader(onMountEffect?.animationSrc || onMountEffect?.src || '');
+  const animationLoadedEffect = useGltfLoader(onLoadedEffect?.animationSrc || onLoadedEffect?.src || '');
 
   useEffect(() => {
     if (!effectRunning) {
-      triggerCallback(onSpawnEffectFinish);
+      triggerCallback(onLoadedEffectFinish);
     }
-  }, [onSpawnEffectFinish, effectRunning]);
+  }, [onLoadedEffectFinish, effectRunning]);
 
   const spawnEffectMixer = useMemo(() => {
     const mixer = new AnimationMixer(mountEffectNode.Scene);
-    const animation = mixer.clipAction(animationMountEffect.animations[0]);
+    const animation = mixer.clipAction(animationLoadedEffect.animations[0]);
 
-    animation.setLoop(LoopRepeat, onMountEffect?.loop || 1);
+    animation.setLoop(LoopRepeat, onLoadedEffect?.loop || 1);
     animation.clampWhenFinished = true;
 
     animation.play();
@@ -39,7 +39,7 @@ export const SpawnEffect: FC<SpawnEffectProps> = ({ onMountEffect, onSpawnEffect
     });
 
     return mixer;
-  }, [animationMountEffect.animations, mountEffectNode.Scene, onMountEffect?.loop]);
+  }, [animationLoadedEffect.animations, mountEffectNode.Scene, onLoadedEffect?.loop]);
 
   useFrame((state, delta) => {
     spawnEffectMixer?.update(delta);

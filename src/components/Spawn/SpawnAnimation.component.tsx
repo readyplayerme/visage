@@ -2,28 +2,28 @@ import { useFrame, useGraph } from '@react-three/fiber';
 import React, { useMemo, useEffect, FC } from 'react';
 import { AnimationMixer, Group, LoopRepeat } from 'three';
 import { triggerCallback, useGltfLoader } from '../../services';
-import { SpawnState } from '../Avatar/Avatar.component';
+import { SpawnState } from '../../types';
 
 interface SpawnAnimationProps {
   avatar: Group;
-  onSpawnAnimationFinish?: () => void;
-  onMountAnimation: SpawnState['onMountAnimation'];
+  onLoadedAnimationFinish?: () => void;
+  onLoadedAnimation: SpawnState['onLoadedAnimation'];
 }
 
-export const SpawnAnimation: FC<SpawnAnimationProps> = ({ avatar, onSpawnAnimationFinish, onMountAnimation }) => {
+export const SpawnAnimation: FC<SpawnAnimationProps> = ({ avatar, onLoadedAnimationFinish, onLoadedAnimation }) => {
   const [animationRunning, setAnimationRunning] = React.useState(true);
 
   useEffect(() => {
     if (!animationRunning) {
-      triggerCallback(onSpawnAnimationFinish);
+      triggerCallback(onLoadedAnimationFinish);
     }
-  }, [onSpawnAnimationFinish, animationRunning]);
+  }, [onLoadedAnimationFinish, animationRunning]);
 
   const { nodes: avatarNode } = useGraph(avatar);
-  const animationAvatar = useGltfLoader(onMountAnimation?.src || '');
+  const animationAvatar = useGltfLoader(onLoadedAnimation?.src || '');
 
   const animationMixerAvatar = useMemo(() => {
-    if (onMountAnimation?.src === '') {
+    if (onLoadedAnimation?.src === '') {
       return null;
     }
     const mixer = new AnimationMixer(avatarNode.Armature);
@@ -32,7 +32,7 @@ export const SpawnAnimation: FC<SpawnAnimationProps> = ({ avatar, onSpawnAnimati
     }
     const animation = mixer.clipAction(animationAvatar.animations[0]);
 
-    animation.setLoop(LoopRepeat, onMountAnimation?.loop || 1);
+    animation.setLoop(LoopRepeat, onLoadedAnimation?.loop || 1);
     animation.clampWhenFinished = true;
 
     animation.play();
@@ -43,7 +43,7 @@ export const SpawnAnimation: FC<SpawnAnimationProps> = ({ avatar, onSpawnAnimati
     });
 
     return mixer;
-  }, [animationAvatar.animations, avatarNode.Armature, onMountAnimation?.loop, onMountAnimation?.src]);
+  }, [animationAvatar.animations, avatarNode.Armature, onLoadedAnimation?.loop, onLoadedAnimation?.src]);
 
   useFrame((state, delta) => {
     animationMixerAvatar?.update(delta);

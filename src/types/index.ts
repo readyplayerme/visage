@@ -108,3 +108,21 @@ export type HeadBlendShapeType =
   | 'viseme_kk'
   | 'viseme_nn'
   | 'viseme_sil';
+
+export interface SpawnState {
+  /**
+   * Add a custom loaded effect like particles when avatar is loaded, animate them with a custom animation.
+   */
+  onLoadedEffect?: {
+    src: string | null;
+    animationSrc?: string | null;
+    loop?: number | null;
+  } | null;
+  /**
+   * Add a custom loaded animation when avatar is loaded.
+   */
+  onLoadedAnimation?: {
+    src: string | null;
+    loop?: number | null;
+  } | null;
+}

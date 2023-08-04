@@ -2,7 +2,7 @@ import React, { Suspense, FC, useMemo, CSSProperties, ReactNode, useEffect } fro
 import { Vector3 } from 'three';
 import { CameraLighting } from 'src/components/Scene/CameraLighting.component';
 import { Environment } from 'src/components/Scene/Environment.component';
-import { LightingProps, BaseModelProps, EnvironmentProps } from 'src/types';
+import { LightingProps, BaseModelProps, EnvironmentProps, SpawnState } from 'src/types';
 import { BaseCanvas } from 'src/components/BaseCanvas';
 import { AnimationModel, HalfBodyModel, StaticModel, PoseModel } from 'src/components/Models';
 import { isValidGlbFormat, triggerCallback } from 'src/services';
@@ -40,21 +40,10 @@ export const CAMERA = {
     }
   }
 };
-export interface SpawnState {
-  onMountEffect?: {
-    src: string | null;
-    animationSrc?: string | null;
-    loop?: number | null;
-  } | null;
-  onMountAnimation?: {
-    src: string | null;
-    loop?: number | null;
-  } | null;
-}
 
 const initialSpawnState: SpawnState = {
-  onMountEffect: null,
-  onMountAnimation: null
+  onLoadedEffect: null,
+  onLoadedAnimation: null
 };
 
 export const spawnState = atom(initialSpawnState);
@@ -139,13 +128,13 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
    */
   bloom?: BloomConfiguration;
   /**
-   * Spawn effect on mount.
+   * Spawn effect when model is loaded into scene.
    */
-  onMountEffect?: SpawnState['onMountEffect'];
+  onLoadedEffect?: SpawnState['onLoadedEffect'];
   /**
-   * Spawn animation on mount.
+   * Spawn animation when model is loaded into scene.
    */
-  onMountAnimation?: SpawnState['onMountAnimation'];
+  onLoadedAnimation?: SpawnState['onLoadedAnimation'];
 
   children?: ReactNode;
 }
@@ -185,15 +174,15 @@ const Avatar: FC<AvatarProps> = ({
   headMovement = false,
   cameraZoomTarget = CAMERA.CONTROLS.FULL_BODY.ZOOM_TARGET,
   bloom,
-  onMountEffect,
-  onMountAnimation,
+  onLoadedEffect,
+  onLoadedAnimation,
   children
 }) => {
   const setSpawnState = useSetAtom(spawnState);
 
   useEffect(() => {
-    setSpawnState({ onMountEffect, onMountAnimation });
-  }, [onMountAnimation, onMountEffect, setSpawnState]);
+    setSpawnState({ onLoadedEffect, onLoadedAnimation });
+  }, [onLoadedAnimation, onLoadedEffect, setSpawnState]);
 
   const AvatarModel = useMemo(() => {
     if (!isValidGlbFormat(modelSrc)) {

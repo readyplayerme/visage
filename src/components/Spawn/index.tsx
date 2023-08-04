@@ -13,8 +13,8 @@ interface SpawnProps {
 export const Spawn: FC<SpawnProps> = ({ avatar, onSpawnFinish }) => {
   const animationProps = useAtomValue(spawnState);
 
-  const usesMountEffect = Boolean(animationProps?.onMountEffect?.src);
-  const usesMountAnimation = Boolean(animationProps?.onMountAnimation?.src);
+  const usesMountEffect = Boolean(animationProps?.onLoadedEffect?.src);
+  const usesMountAnimation = Boolean(animationProps?.onLoadedAnimation?.src);
 
   const [effectRunning, setEffectRunning] = React.useState(usesMountEffect);
   const [animationRunning, setAnimationRunning] = React.useState(usesMountAnimation);
@@ -25,24 +25,24 @@ export const Spawn: FC<SpawnProps> = ({ avatar, onSpawnFinish }) => {
     }
   }, [onSpawnFinish, effectRunning, animationRunning]);
 
-  const onSpawnAnimationFinish = () => {
+  const onLoadedAnimationFinish = () => {
     setAnimationRunning(false);
   };
 
-  const onSpawnEffectFinish = () => {
+  const onLoadedEffectFinish = () => {
     setEffectRunning(false);
   };
 
   return (
     <>
       {usesMountEffect && (
-        <SpawnEffect onMountEffect={animationProps.onMountEffect} onSpawnEffectFinish={onSpawnEffectFinish} />
+        <SpawnEffect onLoadedEffect={animationProps.onLoadedEffect} onLoadedEffectFinish={onLoadedEffectFinish} />
       )}
       {usesMountAnimation && (
         <SpawnAnimation
-          onMountAnimation={animationProps.onMountAnimation}
+          onLoadedAnimation={animationProps.onLoadedAnimation}
           avatar={avatar}
-          onSpawnAnimationFinish={onSpawnAnimationFinish}
+          onLoadedAnimationFinish={onLoadedAnimationFinish}
         />
       )}
     </>

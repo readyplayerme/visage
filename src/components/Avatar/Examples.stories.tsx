@@ -37,8 +37,8 @@ const keysToIgnore = [
   'headMovement',
   'cameraZoomTarget',
   'bloom',
-  'onMountEffect',
-  'onMountAnimation',
+  'onLoadedEffect',
+  'onLoadedAnimation',
   'children'
 ];
 const ignoreArgTypesOnExamples = keysToIgnore.reduce(
@@ -83,11 +83,11 @@ Sparkless.argTypes = {
 /* eslint-disable */
 export const SpawnEffectAndAnimation: StoryFn<typeof Avatar> = Template.bind({});
 SpawnEffectAndAnimation.args = {
-  onMountEffect: {
+  onLoadedEffect: {
     src: '/spawn-effect.glb',
     loop: 13
   },
-  onMountAnimation: {
+  onLoadedAnimation: {
     src: '/female-animation-chicken.glb',
     loop: 1
   },
