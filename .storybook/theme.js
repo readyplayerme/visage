@@ -1,9 +1,8 @@
 import { create } from '@storybook/theming';
-import logo from './logo.png';
+import { getStoryAssetPath } from '../src/services';
 
 export default create({
   base: 'light',
-  brandImage: logo,
-  brandUlr: 'https://readyplayer.me',
-  appBg: '#fafafa'
+  brandImage: getStoryAssetPath('logo.png'),
+  brandUrl: 'https://readyplayer.me'
 });

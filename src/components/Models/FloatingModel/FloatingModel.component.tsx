@@ -10,7 +10,7 @@ export interface FloatingModelProps extends BaseModelProps {
   scale?: number;
 }
 
-export const FloatingModel: FC<FloatingModelProps> = ({ modelSrc, scale = 1.0, onLoaded }) => {
+export const FloatingModel: FC<FloatingModelProps> = ({ modelSrc, scale = 1.0, onLoaded, bloom }) => {
   const ref = useRef<Group>(null);
   const { scene } = useGltfLoader(modelSrc);
 
@@ -23,5 +23,5 @@ export const FloatingModel: FC<FloatingModelProps> = ({ modelSrc, scale = 1.0, o
     }
   });
 
-  return <Model modelRef={ref} scale={scale} scene={scene} onLoaded={onLoaded} />;
+  return <Model modelRef={ref} scale={scale} scene={scene} onLoaded={onLoaded} bloom={bloom} />;
 };

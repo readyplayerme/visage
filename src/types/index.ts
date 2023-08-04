@@ -34,7 +34,7 @@ export interface LightingProps {
 
 export interface BaseModelProps {
   /**
-   * Detect when model is loaded and trigger custom logic.
+   * Detect when model is loaded (doesn't take into account animations and effects) and trigger custom logic.
    */
   onLoaded?: () => void;
   /**
@@ -42,6 +42,7 @@ export interface BaseModelProps {
    */
   onLoading?: () => void;
   setModelFallback?: (fallback: JSX.Element) => void;
+  bloom?: BloomConfiguration;
 }
 
 export type HeadBlendShapeType =
@@ -108,3 +109,48 @@ export type HeadBlendShapeType =
   | 'viseme_kk'
   | 'viseme_nn'
   | 'viseme_sil';
+
+export type BloomConfiguration = {
+  /**
+   * The luminance threshold. Raise this value to mask out darker elements in the scene. Range is [0, 1].
+   */
+  luminanceThreshold?: number;
+  /**
+   * Controls the smoothness of the luminance threshold. Range is [0, 1].
+   */
+  luminanceSmoothing?: number;
+  /**
+   * Enables or disables mipmap blur.
+   */
+  mipmapBlur?: boolean;
+  /**
+   * The intensity of global bloom.
+   */
+  intensity?: number;
+  /**
+   * The kernel size of the blur. Values are 0, 1, 2, 3, 4.
+   */
+  kernelSize?: number;
+  /**
+   * Emissive material intensity.
+   */
+  materialIntensity?: number;
+};
+
+export interface SpawnState {
+  /**
+   * Add a custom loaded effect like particles when avatar is loaded, animate them with a custom animation.
+   */
+  onLoadedEffect?: {
+    src: string | null;
+    animationSrc?: string | null;
+    loop?: number | null;
+  } | null;
+  /**
+   * Add a custom loaded animation when avatar is loaded.
+   */
+  onLoadedAnimation?: {
+    src: string | null;
+    loop?: number | null;
+  } | null;
+}

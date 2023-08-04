@@ -6,8 +6,9 @@ import { BaseModelProps, CameraProps, EnvironmentProps } from 'src/types';
 import { FloatingModel } from 'src/components/Models/FloatingModel';
 import { StaticModel } from 'src/components/Models/StaticModel';
 import { BoundsModel } from 'src/components/Models/BoundsModel';
-import { BaseCanvas } from '../BaseCanvas';
-import Capture, { CaptureType } from '../Capture/Capture.component';
+import { BaseCanvas } from 'src/components/BaseCanvas';
+import Capture, { CaptureType } from 'src/components/Capture/Capture.component';
+import { BackgroundColor } from 'src/components/Background';
 
 export interface ExhibitProps extends CameraProps, EnvironmentProps, Omit<BaseModelProps, 'setModelFallback'> {
   /**
@@ -106,20 +107,11 @@ export const Exhibit: FC<ExhibitProps> = ({
             </Bounds>
           )}
         </PresentationControls>
-        {shadows && (
-          <ContactShadows
-            rotation-x={Math.PI / 2}
-            position={[0, -1.0, 0]}
-            opacity={0.75}
-            width={10}
-            height={10}
-            blur={2.6}
-            far={2}
-          />
-        )}
+        {shadows && <ContactShadows position={[0, -1.0, 0]} opacity={0.75} scale={10} blur={2.6} far={2} />}
         <Environment environment={environment} />
       </Suspense>
       {capture && <Capture {...capture} />}
+      {style?.background && <BackgroundColor color={style.background as string} />}
     </BaseCanvas>
   );
 };

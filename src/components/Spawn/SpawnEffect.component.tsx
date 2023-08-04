@@ -1,56 +1,49 @@
-import React, {FC, useEffect, useMemo, useRef} from "react";
-import {AnimationMixer, Group, LoopRepeat} from "three";
-import {useFrame, useGraph} from "@react-three/fiber";
-import {triggerCallback, useGltfLoader} from "../../services";
-import {SpawnState} from "../Avatar/Avatar.component";
+import React, { FC, useEffect, useMemo, useRef } from 'react';
+import { AnimationMixer, Group, LoopRepeat } from 'three';
+import { useFrame, useGraph } from '@react-three/fiber';
+import { triggerCallback, useGltfLoader } from '../../services';
+import { SpawnState } from '../../types';
 
 interface SpawnEffectProps {
-    onSpawnEffectFinish: () => void;
-    onMountEffect: SpawnState['onMountEffect']
+  onLoadedEffectFinish: () => void;
+  onLoadedEffect: SpawnState['onLoadedEffect'];
 }
-export const SpawnEffect: FC<SpawnEffectProps> = ({onMountEffect, onSpawnEffectFinish}) => {
-    const ref = useRef<Group>(null);
+export const SpawnEffect: FC<SpawnEffectProps> = ({ onLoadedEffect, onLoadedEffectFinish }) => {
+  const ref = useRef<Group>(null);
 
-    const [effectRunning, setEffectRunning] = React.useState(true);
+  const [effectRunning, setEffectRunning] = React.useState(true);
 
-    const {scene: mountEffectScene} = useGltfLoader(onMountEffect?.src || '');
-    const {nodes: mountEffectNode} = useGraph(mountEffectScene);
+  const { scene: mountEffectScene } = useGltfLoader(onLoadedEffect?.src || '');
+  const { nodes: mountEffectNode } = useGraph(mountEffectScene);
 
-    const animationMountEffect = useGltfLoader(onMountEffect?.animationSrc || onMountEffect?.src|| '');
+  const animationLoadedEffect = useGltfLoader(onLoadedEffect?.animationSrc || onLoadedEffect?.src || '');
 
+  useEffect(() => {
+    if (!effectRunning) {
+      triggerCallback(onLoadedEffectFinish);
+    }
+  }, [onLoadedEffectFinish, effectRunning]);
 
-    useEffect(() => {
-        if (!effectRunning) {
-            triggerCallback(onSpawnEffectFinish)
-        }
-    }, [onSpawnEffectFinish, effectRunning])
+  const spawnEffectMixer = useMemo(() => {
+    const mixer = new AnimationMixer(mountEffectNode.Scene);
+    const animation = mixer.clipAction(animationLoadedEffect.animations[0]);
 
-    const spawnEffectMixer = useMemo(() => {
+    animation.setLoop(LoopRepeat, onLoadedEffect?.loop || 1);
+    animation.clampWhenFinished = true;
 
-        const mixer = new AnimationMixer(mountEffectNode.Scene);
-        const animation = mixer.clipAction(animationMountEffect.animations[0])
+    animation.play();
 
-        animation.setLoop(LoopRepeat, onMountEffect?.loop || 1);
-        animation.clampWhenFinished = true;
-
-        animation.play();
-
-
-        mixer.addEventListener('finished', () => {
-            animation.fadeOut(0.5)
-            setEffectRunning(false)
-        })
-
-        return mixer;
-    }, [animationMountEffect.animations, mountEffectNode.Scene, onMountEffect?.loop]);
-
-    useFrame((state, delta) => {
-        spawnEffectMixer?.update(delta);
+    mixer.addEventListener('finished', () => {
+      animation.fadeOut(0.5);
+      setEffectRunning(false);
     });
 
-    return (
-        <>
-            {effectRunning && <primitive modelRef={ref} object={mountEffectScene}/>}
-        </>
-    )
-}
+    return mixer;
+  }, [animationLoadedEffect.animations, mountEffectNode.Scene, onLoadedEffect?.loop]);
+
+  useFrame((state, delta) => {
+    spawnEffectMixer?.update(delta);
+  });
+
+  return <>{effectRunning && <primitive modelRef={ref} object={mountEffectScene} />}</>;
+};

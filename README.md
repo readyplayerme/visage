@@ -12,7 +12,7 @@ npm install @readyplayerme/visage
 
 Make sure to install peer-dependencies if your project doesn't already include them:
 ```sh
-npm install @react-three/drei @react-three/fiber three three-stdlib suspend-react @react-three/postprocessing postprocessing
+npm install @react-three/drei@9.79.3 @react-three/fiber@8.13.5 @react-three/postprocessing@2.15.0 three@0.154.0 three-stdlib@2.23.13 suspend-react@0.1.3 postprocessing@6.32.2
 ```
 
 # Documentation & examples
@@ -46,7 +46,7 @@ Supported resource formats are:
 * Base64 strings
   * `data:application/octet-stream;base64`
   * `data:model/gltf-binary;base64`
-* Binary input as `model/gltf-binary`
+* Binary input such as `model/gltf-binary`
 
 ## License
 

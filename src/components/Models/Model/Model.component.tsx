@@ -1,9 +1,9 @@
-import React, {FC, Ref, useEffect} from 'react';
-import {Group, Mesh} from 'three';
-import {normaliseMaterialsConfig, triggerCallback} from 'src/services';
-import {useGraph} from '@react-three/fiber';
+import React, { FC, Ref, useEffect } from 'react';
+import { Group, Mesh } from 'three';
+import { normaliseMaterialsConfig, triggerCallback } from 'src/services';
+import { useGraph } from '@react-three/fiber';
 import { BaseModelProps } from 'src/types';
-import {Spawn} from "../../Spawn";
+import { Spawn } from '../../Spawn';
 
 interface ModelProps extends BaseModelProps {
   scene: Group;
@@ -12,9 +12,9 @@ interface ModelProps extends BaseModelProps {
   onSpawnAnimationFinish?: () => void;
 }
 
-export const Model: FC<ModelProps> = ({ scene, scale = 1, modelRef, onLoaded, onSpawnAnimationFinish }) => {
+export const Model: FC<ModelProps> = ({ scene, scale = 1, modelRef, onLoaded, onSpawnAnimationFinish, bloom }) => {
   const { materials } = useGraph(scene);
-  normaliseMaterialsConfig(materials);
+  normaliseMaterialsConfig(materials, bloom);
   scene.traverse((object) => {
     const node = object;
 
@@ -32,7 +32,7 @@ export const Model: FC<ModelProps> = ({ scene, scale = 1, modelRef, onLoaded, on
   return (
     <group ref={modelRef} dispose={null} rotation={[0, 0, 0]}>
       <primitive object={scene} scale={scale} />
-       <Spawn avatar={scene} onSpawnFinish={onSpawnAnimationFinish}/>
+      <Spawn avatar={scene} onSpawnFinish={onSpawnAnimationFinish} />
     </group>
   );
 };

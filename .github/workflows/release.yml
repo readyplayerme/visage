@@ -7,6 +7,7 @@ on:
       - "feature/**"
       - "feat/**"
       - "hotfix/**"
+      - "ACT-**"
 
 concurrency:
   group: ${{ github.ref }}
@@ -21,37 +22,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: '16.14.0'
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 7.9.0
+          node-version: '18.x'
       - name: Install deps
-        run: pnpm i --frozen-lockfile
+        run: npm ci
       - name: Run linter
-        run: pnpm run lint
+        run: npm run lint
   tests:
     name: Tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: '16.14.0'
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 7.9.0
+          node-version: '18.x'
       - name: Install deps
-        run: pnpm i --frozen-lockfile
+        run: npm ci
       - name: Run tests
-        run: pnpm test
+        run: npm run test
       - name: Run storybook build
-        run: pnpm build-storybook
+        run: npm run build-storybook
   build-and-deploy:
     name: Build, Deploy to GitHub pages, Release npm package
     needs: [linting, tests]
@@ -65,15 +60,12 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v2
         with:
-          node-version: '16.14.0'
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 7.9.0
+          node-version: '18.x'
       - name: 🛠 Install & Build
         run: |
-          pnpm i --frozen-lockfile
-          pnpm build-storybook
-          pnpm build-package
+          npm ci
+          npm run build-storybook
+          npm run build-package
       - name: 🚀 Release npm package
         uses: cycjimmy/semantic-release-action@v3
         with:

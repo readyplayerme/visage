@@ -1,17 +1,20 @@
 import React, { FC } from 'react';
 import { Bloom as BloomPostProcessing } from '@react-three/postprocessing';
+import { BloomConfiguration } from 'src/types';
 
-export type BloomTypes = {
-  luminanceThreshold?: number;
-  luminanceSmoothing?: number;
-  mipmapBlur?: boolean;
-};
-
-const Bloom: FC<BloomTypes> = ({ luminanceThreshold = 0.8, luminanceSmoothing = 0.05, mipmapBlur = false }) => (
+const Bloom: FC<BloomConfiguration> = ({
+  luminanceThreshold = 1,
+  luminanceSmoothing = 1,
+  mipmapBlur = true,
+  intensity = 1.0,
+  kernelSize = 0
+}) => (
   <BloomPostProcessing
     luminanceThreshold={luminanceThreshold}
     luminanceSmoothing={luminanceSmoothing}
     mipmapBlur={mipmapBlur}
+    intensity={intensity}
+    kernelSize={kernelSize}
   />
 );
 
