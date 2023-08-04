@@ -4,7 +4,7 @@ import { Group } from 'three';
 import { SpawnEffect } from './SpawnEffect.component';
 import { SpawnAnimation } from './SpawnAnimation.component';
 import { triggerCallback } from '../../services';
-import { spawnState } from '../Avatar/Avatar.component';
+import { spawnState } from '../../state/spawnAtom';
 
 interface SpawnProps {
   avatar: Group;

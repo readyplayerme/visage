@@ -8,13 +8,14 @@ import { AnimationModel, HalfBodyModel, StaticModel, PoseModel } from 'src/compo
 import { isValidGlbFormat, triggerCallback } from 'src/services';
 import { Dpr } from '@react-three/fiber';
 import { EffectComposer } from '@react-three/postprocessing';
-import { atom, Provider, useSetAtom } from 'jotai';
+import { Provider, useSetAtom } from 'jotai';
 import Capture, { CaptureType } from 'src/components/Capture/Capture.component';
 import { Box, Background } from 'src/components/Background/Box/Box.component';
 import { BackgroundColor } from 'src/components/Background';
 import Shadow from 'src/components/Shadow/Shadow.component';
 import Loader from 'src/components/Loader';
 import Bloom from 'src/components/Bloom/Bloom.component';
+import { spawnState } from '../../state/spawnAtom';
 
 export const CAMERA = {
   TARGET: {
@@ -41,13 +42,6 @@ export const CAMERA = {
     }
   }
 };
-
-const initialSpawnState: SpawnState = {
-  onLoadedEffect: null,
-  onLoadedAnimation: null
-};
-
-export const spawnState = atom(initialSpawnState);
 
 export type Emotion = Record<string, number>;
 
