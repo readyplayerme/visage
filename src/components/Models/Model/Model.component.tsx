@@ -10,9 +10,9 @@ interface ModelProps extends BaseModelProps {
   scale?: number;
 }
 
-export const Model: FC<ModelProps> = ({ scene, scale = 1, modelRef, onLoaded }) => {
+export const Model: FC<ModelProps> = ({ scene, scale = 1, modelRef, onLoaded, bloom }) => {
   const { materials } = useGraph(scene);
-  normaliseMaterialsConfig(materials);
+  normaliseMaterialsConfig(materials, bloom);
   scene.traverse((object) => {
     const node = object;
 

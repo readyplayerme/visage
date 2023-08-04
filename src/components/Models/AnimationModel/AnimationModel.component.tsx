@@ -24,7 +24,8 @@ export const AnimationModel: FC<AnimationModelProps> = ({
   idleRotation = false,
   setModelFallback,
   onLoaded,
-  headMovement = false
+  headMovement = false,
+  bloom
 }) => {
   const ref = useRef<Group>(null);
   const { scene } = useGltfLoader(modelSrc);
@@ -57,5 +58,5 @@ export const AnimationModel: FC<AnimationModelProps> = ({
   useHeadMovement({ nodes, enabled: headMovement });
   useFallback(nodes, setModelFallback);
 
-  return <Model modelRef={ref} scene={scene} scale={scale} onLoaded={onLoaded} />;
+  return <Model modelRef={ref} scene={scene} scale={scale} onLoaded={onLoaded} bloom={bloom} />;
 };

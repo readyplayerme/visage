@@ -5,7 +5,7 @@ import { MeshProps } from '@react-three/fiber/dist/declarations/src/three-types'
 
 export type Background = { src?: string } & MeshProps;
 
-const Box: FC<Background> = ({ src = '', ...baseProps }) => {
+export const Box: FC<Background> = ({ src = '', ...baseProps }) => {
   const ref = useRef<Mesh>(null);
   const texture = useLoader(TextureLoader, src);
 
@@ -16,5 +16,3 @@ const Box: FC<Background> = ({ src = '', ...baseProps }) => {
     </mesh>
   );
 };
-
-export default Box;
