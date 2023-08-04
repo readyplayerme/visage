@@ -8,6 +8,7 @@ import { StaticModel } from 'src/components/Models/StaticModel';
 import { BoundsModel } from 'src/components/Models/BoundsModel';
 import { BaseCanvas } from 'src/components/BaseCanvas';
 import Capture, { CaptureType } from 'src/components/Capture/Capture.component';
+import { BackgroundColor } from 'src/components/Background';
 
 export interface ExhibitProps extends CameraProps, EnvironmentProps, Omit<BaseModelProps, 'setModelFallback'> {
   /**
@@ -110,6 +111,7 @@ export const Exhibit: FC<ExhibitProps> = ({
         <Environment environment={environment} />
       </Suspense>
       {capture && <Capture {...capture} />}
+      {style?.background && <BackgroundColor color={style.background as string} />}
     </BaseCanvas>
   );
 };

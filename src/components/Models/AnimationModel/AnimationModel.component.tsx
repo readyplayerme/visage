@@ -24,7 +24,8 @@ export const AnimationModel: FC<AnimationModelProps> = ({
   idleRotation = false,
   setModelFallback,
   onLoaded,
-  headMovement = false
+  headMovement = false,
+  bloom
 }) => {
   const ref = useRef<Group>(null);
   const [animationRunning, setAnimationRunning] = React.useState(true);
@@ -74,6 +75,7 @@ export const AnimationModel: FC<AnimationModelProps> = ({
       scale={scale}
       onLoaded={onLoaded}
       onSpawnAnimationFinish={onSpawnAnimationFinish}
+      bloom={bloom}
     />
   );
 };

@@ -12,9 +12,9 @@ interface ModelProps extends BaseModelProps {
   onSpawnAnimationFinish?: () => void;
 }
 
-export const Model: FC<ModelProps> = ({ scene, scale = 1, modelRef, onLoaded, onSpawnAnimationFinish }) => {
+export const Model: FC<ModelProps> = ({ scene, scale = 1, modelRef, onLoaded, onSpawnAnimationFinish, bloom }) => {
   const { materials } = useGraph(scene);
-  normaliseMaterialsConfig(materials);
+  normaliseMaterialsConfig(materials, bloom);
   scene.traverse((object) => {
     const node = object;
 

@@ -50,19 +50,20 @@ Static.args = {
   cameraZoomTarget: CAMERA.CONTROLS.FULL_BODY.ZOOM_TARGET,
   cameraTarget: CAMERA.TARGET.FULL_BODY.FEMALE,
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
-  emotion: emotions.smile,
-  style: { background: '#ccc' },
-  /* eslint-disable no-console */
-  onLoaded: () => console.info('EVENT: static avatar loaded'),
-  onLoading: () => console.info('EVENT: loading static avatar'),
-  /* eslint-enable no-console */
   bloom: {
     luminanceThreshold: 1.0,
     luminanceSmoothing: 1.0,
-    mipmapBlur: false,
+    mipmapBlur: true,
     kernelSize: 1,
-    intensity: 1.0
-  }
+    intensity: 1.0,
+    materialIntensity: 3.3
+  },
+  emotion: emotions.smile,
+  style: { background: 'rgb(9,20,26)' },
+  /* eslint-disable no-console */
+  onLoaded: () => console.info('EVENT: static avatar loaded'),
+  onLoading: () => console.info('EVENT: loading static avatar')
+  /* eslint-enable no-console */
 };
 Static.argTypes = {
   headMovement: { control: false },
@@ -75,7 +76,7 @@ export const Animated: StoryFn<typeof Avatar> = Template.bind({});
 Animated.args = {
   ...Static.args,
   emotion: undefined,
-  modelSrc: getStoryAssetPath('male.glb'),
+  modelSrc: getStoryAssetPath('male-emissive.glb'),
   animationSrc: getStoryAssetPath('male-idle.glb'),
   cameraTarget: CAMERA.TARGET.FULL_BODY.MALE,
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
