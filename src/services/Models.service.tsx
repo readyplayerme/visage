@@ -54,7 +54,7 @@ const validateGlbSource = (source: GlbSource): boolean => {
   return false;
 };
 
-export const isValidGlbFormat = (source: GlbSource): boolean => {
+export const isValidGlbFormat = (source: GlbSource): source is Blob | string => {
   const isValid = validateGlbSource(source);
 
   if (!isValid) {

@@ -49,12 +49,12 @@ const ignoreArgTypesOnExamples = keysToIgnore.reduce(
   {} as Record<string, typeof disableTable>
 );
 
-const Template: StoryFn<typeof Avatar> = (args) => <Avatar {...args} />;
+const Template: StoryFn<typeof Avatar> = (args) => <Avatar style={{ background: 'rgb(9,20,26)' }} {...args} />;
 
 export const Sparkless: StoryFn<typeof SparklesDrei> = (args) => (
   <Avatar
     modelSrc="/female.glb"
-    style={{ background: '#000' }}
+    style={{ background: 'rgb(9,20,26)' }}
     cameraTarget={CAMERA.TARGET.FULL_BODY.FEMALE}
     cameraInitialDistance={CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE}
   >
@@ -67,7 +67,7 @@ Sparkless.args = {
   scale: 4,
   size: 3,
   speed: 1.0,
-  opacity: 0.5,
+  opacity: 0.04,
   color: '#ccff00'
 };
 
@@ -85,10 +85,10 @@ export const SpawnEffectAndAnimation: StoryFn<typeof Avatar> = Template.bind({})
 SpawnEffectAndAnimation.args = {
   onLoadedEffect: {
     src: '/spawn-effect.glb',
-    loop: 13
+    loop: 12
   },
   onLoadedAnimation: {
-    src: '/female-animation-chicken.glb',
+    src: '/male-spawn-animation.fbx',
     loop: 1
   },
   cameraTarget: CAMERA.TARGET.FULL_BODY.FEMALE,

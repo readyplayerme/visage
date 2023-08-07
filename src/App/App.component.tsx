@@ -21,6 +21,13 @@ function App() {
             poseSrc="/male-pose-standing.glb"
             animationSrc="/male-idle.glb"
             shadows={false}
+            onLoadedEffect={{
+              src: '/spawn-effect.glb',
+              loop: 13
+            }}
+            onLoadedAnimation={{
+              src: '/male-spawn-animation.fbx'
+            }}
             onLoaded={() => console.log('male avatar loaded')}
           />
         </div>
@@ -30,13 +37,6 @@ function App() {
             poseSrc="/female-pose-standing.glb"
             shadows={false}
             animationSrc="/female-animation-catwalk.glb"
-            onLoadedEffect={{
-              src: '/spawn-effect.glb',
-              loop: 13
-            }}
-            onLoadedAnimation={{
-              src: '/female-animation-chicken.glb'
-            }}
             onLoaded={() => console.log('female avatar loaded')}
           >
             <Sparkles count={70} scale={3} size={3} speed={1} opacity={0.1} />

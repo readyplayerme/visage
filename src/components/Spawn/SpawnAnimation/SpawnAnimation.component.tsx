@@ -1,14 +1,16 @@
 import { useFrame, useGraph } from '@react-three/fiber';
 import React, { useMemo, useEffect, FC } from 'react';
 import { AnimationMixer, Group, LoopRepeat } from 'three';
-import { triggerCallback } from '../../services';
-import { SpawnState } from '../../types';
-import { loadAnimationClip } from '../../services/Animation.service';
+import { triggerCallback } from '../../../services';
+import { loadAnimationClip } from '../../../services/Animation.service';
 
 interface SpawnAnimationProps {
   avatar: Group;
   onLoadedAnimationFinish?: () => void;
-  onLoadedAnimation: SpawnState['onLoadedAnimation'];
+  onLoadedAnimation: {
+    src: string;
+    loop?: number;
+  };
 }
 
 export const SpawnAnimation: FC<SpawnAnimationProps> = ({ avatar, onLoadedAnimationFinish, onLoadedAnimation }) => {
@@ -23,9 +25,6 @@ export const SpawnAnimation: FC<SpawnAnimationProps> = ({ avatar, onLoadedAnimat
   const { nodes: avatarNode } = useGraph(avatar);
 
   const animationMixerAvatar = useMemo(async () => {
-    if (onLoadedAnimation?.src === '') {
-      return null;
-    }
     const mixer = new AnimationMixer(avatarNode.Armature);
     if (!avatarNode.Armature) {
       return mixer;

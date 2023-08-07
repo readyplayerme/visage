@@ -1,9 +1,9 @@
 import { useAtomValue } from 'jotai/index';
 import React, { FC, useEffect } from 'react';
 import { Group } from 'three';
-import { SpawnEffect } from './SpawnEffect.component';
-import { SpawnAnimation } from './SpawnAnimation.component';
-import { triggerCallback } from '../../services';
+import { SpawnEffect } from './SpawnEffect/SpawnEffect.component';
+import { SpawnAnimation } from './SpawnAnimation/SpawnAnimation.component';
+import { isValidGlbFormat, triggerCallback } from '../../services';
 import { spawnState } from '../../state/spawnAtom';
 
 interface SpawnProps {
@@ -13,8 +13,8 @@ interface SpawnProps {
 export const Spawn: FC<SpawnProps> = ({ avatar, onSpawnFinish }) => {
   const animationProps = useAtomValue(spawnState);
 
-  const usesMountEffect = Boolean(animationProps?.onLoadedEffect?.src);
-  const usesMountAnimation = Boolean(animationProps?.onLoadedAnimation?.src);
+  const usesMountEffect = isValidGlbFormat(animationProps?.onLoadedEffect?.src);
+  const usesMountAnimation = isValidGlbFormat(animationProps?.onLoadedAnimation?.src);
 
   const [effectRunning, setEffectRunning] = React.useState(usesMountEffect);
   const [animationRunning, setAnimationRunning] = React.useState(usesMountAnimation);
@@ -36,11 +36,14 @@ export const Spawn: FC<SpawnProps> = ({ avatar, onSpawnFinish }) => {
   return (
     <>
       {usesMountEffect && (
-        <SpawnEffect onLoadedEffect={animationProps.onLoadedEffect} onLoadedEffectFinish={onLoadedEffectFinish} />
+        <SpawnEffect
+          onLoadedEffect={animationProps.onLoadedEffect as { src: string; animationSrc?: string; loop?: number }}
+          onLoadedEffectFinish={onLoadedEffectFinish}
+        />
       )}
       {usesMountAnimation && (
         <SpawnAnimation
-          onLoadedAnimation={animationProps.onLoadedAnimation}
+          onLoadedAnimation={animationProps.onLoadedAnimation as { src: string; loop?: number }}
           avatar={avatar}
           onLoadedAnimationFinish={onLoadedAnimationFinish}
         />

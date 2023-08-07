@@ -3,7 +3,7 @@ import { Group, Mesh } from 'three';
 import { normaliseMaterialsConfig, triggerCallback } from 'src/services';
 import { useGraph } from '@react-three/fiber';
 import { BaseModelProps } from 'src/types';
-import { Spawn } from '../../Spawn';
+import { Spawn } from '../../Spawn/Spawn';
 
 interface ModelProps extends BaseModelProps {
   scene: Group;
