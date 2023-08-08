@@ -5,7 +5,7 @@ import { Environment } from 'src/components/Scene/Environment.component';
 import { LightingProps, BaseModelProps, EnvironmentProps, BloomConfiguration, SpawnState } from 'src/types';
 import { BaseCanvas } from 'src/components/BaseCanvas';
 import { AnimationModel, HalfBodyModel, StaticModel, PoseModel } from 'src/components/Models';
-import { isValidGlbFormat, triggerCallback } from 'src/services';
+import { isValidFormat, triggerCallback } from 'src/services';
 import { Dpr } from '@react-three/fiber';
 import { EffectComposer } from '@react-three/postprocessing';
 import { Provider, useSetAtom } from 'jotai';
@@ -181,11 +181,11 @@ const Avatar: FC<AvatarProps> = ({
   }, [onLoadedAnimation, onLoadedEffect, setSpawnState]);
 
   const AvatarModel = useMemo(() => {
-    if (!isValidGlbFormat(modelSrc)) {
+    if (!isValidFormat(modelSrc)) {
       return null;
     }
 
-    if (!!animationSrc && !halfBody && isValidGlbFormat(animationSrc)) {
+    if (!!animationSrc && !halfBody && isValidFormat(animationSrc)) {
       return (
         <AnimationModel
           modelSrc={modelSrc}
@@ -213,7 +213,7 @@ const Avatar: FC<AvatarProps> = ({
       );
     }
 
-    if (isValidGlbFormat(poseSrc)) {
+    if (isValidFormat(poseSrc)) {
       return (
         <PoseModel
           emotion={emotion}

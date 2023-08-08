@@ -1,7 +1,7 @@
 import React, { Suspense, FC, CSSProperties, useMemo, useEffect } from 'react';
 import { PresentationControls, ContactShadows, Bounds } from '@react-three/drei';
 import { Environment } from 'src/components/Scene/Environment.component';
-import { isValidGlbFormat, triggerCallback } from 'src/services';
+import { isValidFormat, triggerCallback } from 'src/services';
 import { BaseModelProps, CameraProps, EnvironmentProps } from 'src/types';
 import { FloatingModel } from 'src/components/Models/FloatingModel';
 import { StaticModel } from 'src/components/Models/StaticModel';
@@ -73,7 +73,7 @@ export const Exhibit: FC<ExhibitProps> = ({
   onLoading
 }) => {
   const model = useMemo(() => {
-    if (!isValidGlbFormat(modelSrc)) {
+    if (!isValidFormat(modelSrc)) {
       return null;
     }
 

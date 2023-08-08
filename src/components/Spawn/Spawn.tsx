@@ -3,7 +3,7 @@ import React, { FC, useEffect } from 'react';
 import { Group } from 'three';
 import { SpawnEffect } from './SpawnEffect/SpawnEffect.component';
 import { SpawnAnimation } from './SpawnAnimation/SpawnAnimation.component';
-import { isValidGlbFormat, triggerCallback } from '../../services';
+import { isValidFormat, triggerCallback } from '../../services';
 import { spawnState } from '../../state/spawnAtom';
 
 interface SpawnProps {
@@ -13,8 +13,8 @@ interface SpawnProps {
 export const Spawn: FC<SpawnProps> = ({ avatar, onSpawnFinish }) => {
   const animationProps = useAtomValue(spawnState);
 
-  const usesMountEffect = isValidGlbFormat(animationProps?.onLoadedEffect?.src);
-  const usesMountAnimation = isValidGlbFormat(animationProps?.onLoadedAnimation?.src);
+  const usesMountEffect = isValidFormat(animationProps?.onLoadedEffect?.src);
+  const usesMountAnimation = isValidFormat(animationProps?.onLoadedAnimation?.src);
 
   const [effectRunning, setEffectRunning] = React.useState(usesMountEffect);
   const [animationRunning, setAnimationRunning] = React.useState(usesMountAnimation);

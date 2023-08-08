@@ -11,7 +11,7 @@ interface DropContainerProps {
  */
 export const FileDropper: FC<DropContainerProps> = ({
   children,
-  placeholder = `Drag n' Drop a .glb model here, then Drop an animation .glb`
+  placeholder = `Drag n' Drop a .glb model here, then Drop an animation .glb or .fbx`
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [modelSrc, setModelSrc] = useState('');
@@ -45,7 +45,7 @@ export const FileDropper: FC<DropContainerProps> = ({
     if (e.dataTransfer?.items[0].kind === 'file') {
       const file = e.dataTransfer.items[0].getAsFile();
 
-      if (!file!.name?.endsWith('.glb')) {
+      if (!(file!.name?.endsWith('.glb') || file!.name?.endsWith('.fbx'))) {
         return;
       }
 

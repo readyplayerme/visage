@@ -1,4 +1,4 @@
-import { isValidGlbFormat } from './Models.service';
+import { isValidFormat } from './Models.service';
 
 describe('Models service unit tests', () => {
   describe('#isValidGlbFormat', () => {
@@ -48,7 +48,7 @@ describe('Models service unit tests', () => {
     ];
 
     test.each(testCases)('$name', ({ format, expected }): void => {
-      expect(isValidGlbFormat(format)).toBe(expected);
+      expect(isValidFormat(format)).toBe(expected);
     });
   });
 });
