@@ -36,6 +36,7 @@ export const getStoryAssetPath = (publicAsset: string) =>
   `${process.env.NODE_ENV === 'production' ? '/visage' : ''}/${publicAsset}`;
 
 const validateSource = (source: Source): boolean => {
+  console.log({ source });
   if (Array.isArray(source)) {
     return source.length > 0 && source.every(validateSource);
   }

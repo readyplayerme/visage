@@ -2,6 +2,11 @@ import { AnimationClip, Group } from 'three';
 
 import { FBXLoader, GLTFLoader } from 'three-stdlib';
 
+interface ClipWithType {
+  group: Group;
+  isFbx: boolean;
+}
+
 const MIXAMO_PREFIX = 'mixamorig';
 const POSITION_SUFFIX = '.position';
 const MIXAMO_SCALE = 0.01;
@@ -16,10 +21,8 @@ function normaliseFbxAnimation(fbx: Group, index: number = 0) {
     if (tracks[i].name.includes(POSITION_SUFFIX)) {
       for (let j = 0; j < tracks[i].values.length; j += 1) {
         // Scale the bound size down to match the size of the model
-        if (hasMixamoPrefix) {
-          // eslint-disable-next-line operator-assignment
-          tracks[i].values[j] = tracks[i].values[j] * MIXAMO_SCALE;
-        }
+        // eslint-disable-next-line operator-assignment
+        tracks[i].values[j] = tracks[i].values[j] * MIXAMO_SCALE;
       }
     }
   }
@@ -27,30 +30,42 @@ function normaliseFbxAnimation(fbx: Group, index: number = 0) {
   return fbx.animations[index];
 }
 
-const loadBlobFile = async (blob: Blob): Promise<Group> => {
+const loadBlobFile = async (blob: Blob): Promise<ClipWithType> => {
   const fbxLoader = new FBXLoader();
   const gltfLoader = new GLTFLoader();
 
   try {
     const buffer = await blob.arrayBuffer();
-    return (await gltfLoader.parseAsync(buffer, '')) as unknown as Group;
+    return {
+      group: (await gltfLoader.parseAsync(buffer, '')) as unknown as Group,
+      isFbx: false
+    };
   } catch (e) {
-    return (await fbxLoader.loadAsync(URL.createObjectURL(blob))) as unknown as Group;
+    return {
+      group: (await fbxLoader.loadAsync(URL.createObjectURL(blob))) as unknown as Group,
+      isFbx: true
+    };
   }
 };
 
-const loadPathFile = async (source: string): Promise<Group> => {
+const loadPathFile = async (source: string): Promise<ClipWithType> => {
   const fbxLoader = new FBXLoader();
   const gltfLoader = new GLTFLoader();
 
   try {
-    return (await gltfLoader.loadAsync(source)) as unknown as Group;
+    return {
+      group: (await gltfLoader.loadAsync(source)) as unknown as Group,
+      isFbx: false
+    };
   } catch (e) {
-    return (await fbxLoader.loadAsync(source)) as Group;
+    return {
+      group: (await fbxLoader.loadAsync(source)) as Group,
+      isFbx: true
+    };
   }
 };
 export const loadAnimationClip = async (source: Blob | string): Promise<AnimationClip> => {
   const animation = source instanceof Blob ? await loadBlobFile(source) : await loadPathFile(source);
 
-  return normaliseFbxAnimation(animation);
+  return animation.isFbx ? normaliseFbxAnimation(animation.group) : animation.group.animations[0];
 };
