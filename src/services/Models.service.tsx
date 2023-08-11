@@ -30,18 +30,18 @@ export interface Nodes {
   [node: string]: Object3D;
 }
 
-type GlbSource = string | string[] | Blob | undefined | null;
+type Source = string | string[] | Blob | undefined | null;
 
 export const getStoryAssetPath = (publicAsset: string) =>
   `${process.env.NODE_ENV === 'production' ? '/visage' : ''}/${publicAsset}`;
 
-const validateGlbSource = (source: GlbSource): boolean => {
+const validateSource = (source: Source): boolean => {
   if (Array.isArray(source)) {
-    return source.length > 0 && source.every(validateGlbSource);
+    return source.length > 0 && source.every(validateSource);
   }
 
   if (typeof source === 'string') {
-    const fileEndExpression = new RegExp(/(.glb|.glb[?].*)$/g);
+    const fileEndExpression = new RegExp(/(.glb|.fbx|.fbx[?].*|.glb[?].*)$/g);
     const uploadFileExpression = new RegExp(/^data:application\/octet-stream;base64,/g);
     const gltfModelExpression = new RegExp(/^data:model\/gltf-binary;base64,/g);
     return fileEndExpression.test(source) || uploadFileExpression.test(source) || gltfModelExpression.test(source);
@@ -54,11 +54,13 @@ const validateGlbSource = (source: GlbSource): boolean => {
   return false;
 };
 
-export const isValidGlbFormat = (source: GlbSource): boolean => {
-  const isValid = validateGlbSource(source);
+export const isValidFormat = (source: Source): source is Blob | string => {
+  const isValid = validateSource(source);
 
   if (!isValid) {
-    console.warn('Provided GLB is invalid. Check docs for supported formats: https://github.com/readyplayerme/visage');
+    console.warn(
+      'Provided GLB/FBX is invalid. Check docs for supported formats: https://github.com/readyplayerme/visage'
+    );
   }
 
   return isValid;
@@ -81,7 +83,7 @@ export const normaliseMaterialsConfig = (materials: Record<string, Material>, bl
     }
 
     if (mat.emissiveMap) {
-      mat.emissiveIntensity = bloomConfig?.materialIntensity || 2.0;
+      mat.emissiveIntensity = bloomConfig?.materialIntensity || 3.3;
     }
   });
 };

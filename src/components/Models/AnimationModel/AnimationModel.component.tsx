@@ -4,6 +4,7 @@ import { AnimationMixer, Group } from 'three';
 import { Model } from 'src/components/Models/Model';
 import { useHeadMovement, useGltfLoader, useFallback } from 'src/services';
 import { BaseModelProps } from 'src/types';
+import { loadAnimationClip } from '../../../services/Animation.service';
 
 export interface AnimationModelProps extends BaseModelProps {
   modelSrc: string | Blob;
@@ -28,22 +29,33 @@ export const AnimationModel: FC<AnimationModelProps> = ({
   bloom
 }) => {
   const ref = useRef<Group>(null);
+  const [animationRunning, setAnimationRunning] = React.useState(true);
+  const onSpawnAnimationFinish = () => {
+    setAnimationRunning(false);
+  };
+
   const { scene } = useGltfLoader(modelSrc);
   const { nodes } = useGraph(scene);
 
-  const animationSource = useGltfLoader(animationSrc);
-
-  const animationMixer = useMemo(() => {
+  const animationMixer = useMemo(async () => {
     const mixer = new AnimationMixer(nodes.Armature);
+    if (animationRunning) {
+      return mixer;
+    }
 
-    mixer.clipAction(animationSource.animations[0]).play();
+    const animationClip = await loadAnimationClip(animationSrc);
+
+    const animation = mixer.clipAction(animationClip);
+    animation.fadeIn(0.5);
+    animation.play();
+
     mixer.update(0);
 
     return mixer;
-  }, [animationSource.animations, nodes.Armature]);
+  }, [animationRunning, animationSrc, nodes.Armature]);
 
-  useFrame((state, delta) => {
-    animationMixer?.update(delta);
+  useFrame(async (state, delta) => {
+    (await animationMixer)?.update(delta);
 
     if (!idleRotation) {
       return;
@@ -58,5 +70,14 @@ export const AnimationModel: FC<AnimationModelProps> = ({
   useHeadMovement({ nodes, enabled: headMovement });
   useFallback(nodes, setModelFallback);
 
-  return <Model modelRef={ref} scene={scene} scale={scale} onLoaded={onLoaded} bloom={bloom} />;
+  return (
+    <Model
+      modelRef={ref}
+      scene={scene}
+      scale={scale}
+      onLoaded={onLoaded}
+      onSpawnAnimationFinish={onSpawnAnimationFinish}
+      bloom={bloom}
+    />
+  );
 };

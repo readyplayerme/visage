@@ -34,7 +34,7 @@ export interface LightingProps {
 
 export interface BaseModelProps {
   /**
-   * Detect when model is loaded and trigger custom logic.
+   * Detect when model is loaded (doesn't take into account animations and effects) and trigger custom logic.
    */
   onLoaded?: () => void;
   /**
@@ -136,3 +136,21 @@ export type BloomConfiguration = {
    */
   materialIntensity?: number;
 };
+
+export interface SpawnState {
+  /**
+   * Add a custom loaded effect like particles when avatar is loaded, animate them with a custom animation.
+   */
+  onLoadedEffect?: {
+    src: string | null;
+    animationSrc?: string | null;
+    loop?: number | null;
+  } | null;
+  /**
+   * Add a custom loaded animation when avatar is loaded.
+   */
+  onLoadedAnimation?: {
+    src: string | null;
+    loop?: number | null;
+  } | null;
+}

@@ -147,5 +147,8 @@
   "volta": {
     "node": "18.0.0",
     "npm": "8.6.0"
+  },
+  "dependencies": {
+    "jotai": "^2.2.2"
   }
 }
