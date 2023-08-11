@@ -3,7 +3,7 @@ import { StoryFn } from '@storybook/react';
 import { Sparkles as SparklesDrei } from '@react-three/drei';
 import type { Meta } from '@storybook/react';
 import { Avatar as AvatarWrapper, CAMERA } from 'src/components/Avatar';
-import { getStoryAssetPath } from '../../services';
+import { getStoryAssetPath } from 'src/services';
 import { AvatarProps } from './Avatar.component';
 
 const Avatar = (args: AvatarProps) => <AvatarWrapper {...args} />;
@@ -53,7 +53,7 @@ const Template: StoryFn<typeof Avatar> = (args) => <Avatar style={{ background: 
 
 export const FloatingSparkles: StoryFn<typeof SparklesDrei> = (args) => (
   <Avatar
-    modelSrc="/female.glb"
+    modelSrc={getStoryAssetPath('female.glb')}
     cameraTarget={CAMERA.TARGET.FULL_BODY.FEMALE}
     cameraInitialDistance={CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE}
   >
@@ -82,11 +82,11 @@ FloatingSparkles.argTypes = {
 export const SpawnEffectAndAnimation: StoryFn<typeof Avatar> = Template.bind({});
 SpawnEffectAndAnimation.args = {
   onLoadedEffect: {
-    src: '/spawn-effect.glb',
+    src: getStoryAssetPath('spawn-effect.glb'),
     loop: 12
   },
   onLoadedAnimation: {
-    src: '/male-spawn-animation.fbx',
+    src: getStoryAssetPath('male-spawn-animation.fbx'),
     loop: 1
   },
   cameraTarget: CAMERA.TARGET.FULL_BODY.FEMALE,
