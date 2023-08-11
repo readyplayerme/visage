@@ -1,5 +1,6 @@
 import React from 'react';
 import { Avatar } from 'src/components/Avatar';
+import { Sparkles } from '@react-three/drei';
 import styles from './App.module.scss';
 
 function App() {
@@ -18,7 +19,15 @@ function App() {
           <Avatar
             modelSrc="/male.glb"
             poseSrc="/male-pose-standing.glb"
+            animationSrc="/male-idle.glb"
             shadows={false}
+            onLoadedEffect={{
+              src: '/spawn-effect.glb',
+              loop: 13
+            }}
+            onLoadedAnimation={{
+              src: '/male-spawn-animation.fbx'
+            }}
             onLoaded={() => console.log('male avatar loaded')}
           />
         </div>
@@ -27,8 +36,11 @@ function App() {
             modelSrc="/female.glb"
             poseSrc="/female-pose-standing.glb"
             shadows={false}
+            animationSrc="/female-animation-catwalk.glb"
             onLoaded={() => console.log('female avatar loaded')}
-          />
+          >
+            <Sparkles count={70} scale={3} size={3} speed={1} opacity={0.1} />
+          </Avatar>
         </div>
       </div>
     </div>

@@ -4,7 +4,10 @@ import { getStoryAssetPath } from 'src/services';
 import { Vector3 } from 'three';
 import { FileDropper } from 'src/components/FileDropper/FileDropper.component';
 import { environmentPresets } from 'src/services/EnvironmentMap.service';
-import { Avatar, CAMERA } from './Avatar.component';
+import { Avatar as AvatarWrapper, CAMERA } from './index';
+import { AvatarProps } from './Avatar.component';
+
+const Avatar = (args: AvatarProps) => <AvatarWrapper {...args} />;
 
 const emotions = {
   smile: {
@@ -33,7 +36,6 @@ Static.args = {
   environment: 'hub',
   scale: 1,
   shadows: true,
-  halfBody: false,
   idleRotation: false,
   headMovement: false,
   ambientLightColor: '#fff5b6',
@@ -53,7 +55,7 @@ Static.args = {
     luminanceSmoothing: 1.0,
     mipmapBlur: true,
     kernelSize: 1,
-    intensity: 1.0,
+    intensity: 0.1,
     materialIntensity: 3.3
   },
   emotion: emotions.smile,
@@ -65,6 +67,7 @@ Static.args = {
 };
 Static.argTypes = {
   headMovement: { control: false },
+  halfBody: { control: false },
   animationSrc: { control: false },
   poseSrc: { control: false }
 };

@@ -3,14 +3,16 @@ import { Group, Mesh } from 'three';
 import { normaliseMaterialsConfig, triggerCallback } from 'src/services';
 import { useGraph } from '@react-three/fiber';
 import { BaseModelProps } from 'src/types';
+import { Spawn } from '../../Spawn/Spawn';
 
 interface ModelProps extends BaseModelProps {
   scene: Group;
   modelRef?: Ref<Group>;
   scale?: number;
+  onSpawnAnimationFinish?: () => void;
 }
 
-export const Model: FC<ModelProps> = ({ scene, scale = 1, modelRef, onLoaded, bloom }) => {
+export const Model: FC<ModelProps> = ({ scene, scale = 1, modelRef, onLoaded, onSpawnAnimationFinish, bloom }) => {
   const { materials } = useGraph(scene);
   normaliseMaterialsConfig(materials, bloom);
   scene.traverse((object) => {
@@ -30,6 +32,7 @@ export const Model: FC<ModelProps> = ({ scene, scale = 1, modelRef, onLoaded, bl
   return (
     <group ref={modelRef} dispose={null} rotation={[0, 0, 0]}>
       <primitive object={scene} scale={scale} />
+      <Spawn avatar={scene} onSpawnFinish={onSpawnAnimationFinish} />
     </group>
   );
 };
