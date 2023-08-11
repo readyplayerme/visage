@@ -51,10 +51,9 @@ const ignoreArgTypesOnExamples = keysToIgnore.reduce(
 
 const Template: StoryFn<typeof Avatar> = (args) => <Avatar style={{ background: 'rgb(9,20,26)' }} {...args} />;
 
-export const Sparkless: StoryFn<typeof SparklesDrei> = (args) => (
+export const FloatingSparkles: StoryFn<typeof SparklesDrei> = (args) => (
   <Avatar
     modelSrc="/female.glb"
-    style={{ background: 'rgb(9,20,26)' }}
     cameraTarget={CAMERA.TARGET.FULL_BODY.FEMALE}
     cameraInitialDistance={CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE}
   >
@@ -62,16 +61,16 @@ export const Sparkless: StoryFn<typeof SparklesDrei> = (args) => (
   </Avatar>
 );
 
-Sparkless.args = {
+FloatingSparkles.args = {
   count: 70,
   scale: 4,
-  size: 3,
-  speed: 1.0,
-  opacity: 0.04,
-  color: '#ccff00'
+  size: 5,
+  speed: 0.25,
+  opacity: 0.6,
+  color: '#124cca'
 };
 
-Sparkless.argTypes = {
+FloatingSparkles.argTypes = {
   count: { control: { type: 'range', min: 0, max: 70 } },
   scale: { control: { type: 'number' } },
   size: { control: { type: 'range', min: 0, max: 10 } },
