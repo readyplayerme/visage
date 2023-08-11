@@ -1,14 +1,14 @@
+import React from 'react';
 import { StoryFn } from '@storybook/react';
 import { Sparkles as SparklesDrei } from '@react-three/drei';
 import type { Meta } from '@storybook/react';
-import React from 'react';
 import { Avatar as AvatarWrapper, CAMERA } from 'src/components/Avatar';
 import { getStoryAssetPath } from '../../services';
 import { AvatarProps } from './Avatar.component';
 
 const Avatar = (args: AvatarProps) => <AvatarWrapper {...args} />;
-// @ts-ignore
-const Sparkles: FC<typeof SparklesDrei> = (args) => <SparklesDrei {...args} />;
+
+const Sparkles: StoryFn<typeof SparklesDrei> = (args: any) => <SparklesDrei {...args} />;
 const meta: Meta<typeof Avatar> = {
   component: Avatar,
   // @ts-ignore
@@ -79,7 +79,6 @@ FloatingSparkles.argTypes = {
   ...ignoreArgTypesOnExamples
 };
 
-/* eslint-disable */
 export const SpawnEffectAndAnimation: StoryFn<typeof Avatar> = Template.bind({});
 SpawnEffectAndAnimation.args = {
   onLoadedEffect: {
@@ -92,6 +91,13 @@ SpawnEffectAndAnimation.args = {
   },
   cameraTarget: CAMERA.TARGET.FULL_BODY.FEMALE,
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
-  modelSrc: getStoryAssetPath('male.glb'),
+  modelSrc: getStoryAssetPath('male-emissive.glb'),
   animationSrc: getStoryAssetPath('male-idle.glb')
+};
+SpawnEffectAndAnimation.argTypes = {
+  ...ignoreArgTypesOnExamples,
+  onLoadedEffect: { control: { disable: false } },
+  onLoadedAnimation: { control: { disable: false } },
+  modelSrc: { control: { disable: false } },
+  animationSrc: { control: { disable: false } }
 };
