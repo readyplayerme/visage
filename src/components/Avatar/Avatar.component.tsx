@@ -51,7 +51,7 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
    */
   modelSrc: string | Blob;
   /**
-   * Arbitrary binary data (base64 string, Blob) of a `.glb` file or path (URL) to a `.glb` resource.
+   * Arbitrary binary data (base64 string, Blob) of a `.glb|.fbx` file or path (URL) to a `.glb|.fbx` resource.
    * The animation will be run for the 3D model provided in `modelSrc`.
    */
   animationSrc?: string | Blob;

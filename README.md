@@ -37,9 +37,10 @@ ReactDOM.render(<App />, document.querySelector('#app'));
 ```
 
 ### Validation
-Props such as `modelSrc`, `animationSrc` and `poseSrc` are validated before rendering on the scene.
+Props such as `modelSrc`, `animationSrc`, `poseSrc` and `onLoadedAnimation.src` are **validated** before rendering on the scene.
+Animation source props support both `.glb` and `.fbx` formats. All other props mentioned before only support `.glb`.
 
-Supported resource formats are:
+Examples on supported resource formats:
 * URL resources
   * relative `/headwear.glb`
   * absolute `https://readyplayerme.github.io/visage/male.glb?queryParams=allowed`

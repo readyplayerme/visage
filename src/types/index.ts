@@ -148,6 +148,7 @@ export interface SpawnState {
   } | null;
   /**
    * Add a custom loaded animation when avatar is loaded.
+   * Supports `.fbx` and `.glb` files.
    */
   onLoadedAnimation?: {
     src: string | null;
