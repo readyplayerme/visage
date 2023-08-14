@@ -1,6 +1,6 @@
 import React from 'react';
 import { Avatar } from 'src/components/Avatar';
-import { Sparkles } from '@react-three/drei';
+import { Sparkles, Stats, StatsGl } from '@react-three/drei';
 import styles from './App.module.scss';
 
 function App() {
@@ -28,8 +28,12 @@ function App() {
             onLoadedAnimation={{
               src: '/male-spawn-animation.fbx'
             }}
+            style={{ background: 'rgb(9,20,26)' }}
             onLoaded={() => console.log('male avatar loaded')}
-          />
+          >
+            <Stats showPanel={2} />
+            <StatsGl className={styles.stats} />
+          </Avatar>
         </div>
         <div className={styles.card}>
           <Avatar
@@ -37,9 +41,10 @@ function App() {
             poseSrc="/female-pose-standing.glb"
             shadows={false}
             animationSrc="/female-animation-catwalk.glb"
+            style={{ background: 'rgb(9,20,26)' }}
             onLoaded={() => console.log('female avatar loaded')}
           >
-            <Sparkles count={70} scale={3} size={3} speed={1} opacity={0.1} />
+            <Sparkles count={70} scale={3} size={3} speed={1} opacity={0.04} color="#ccff00" />
           </Avatar>
         </div>
       </div>

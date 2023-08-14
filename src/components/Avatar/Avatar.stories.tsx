@@ -7,7 +7,7 @@ import { environmentPresets } from 'src/services/EnvironmentMap.service';
 import { Avatar as AvatarWrapper, CAMERA } from './index';
 import { AvatarProps } from './Avatar.component';
 
-const Avatar = (args: AvatarProps) => <AvatarWrapper {...args} />;
+const Avatar = (args: AvatarProps) => <AvatarWrapper {...args}>{args.children}</AvatarWrapper>;
 
 const emotions = {
   smile: {
@@ -48,8 +48,8 @@ Static.args = {
   spotLightPosition: new Vector3(12, 10, 7.5),
   spotLightAngle: 0.314,
   cameraZoomTarget: CAMERA.CONTROLS.FULL_BODY.ZOOM_TARGET,
-  cameraTarget: CAMERA.TARGET.FULL_BODY.FEMALE,
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
+  cameraTarget: CAMERA.TARGET.FULL_BODY.FEMALE,
   bloom: {
     luminanceThreshold: 1.0,
     luminanceSmoothing: 1.0,
