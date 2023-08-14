@@ -85,7 +85,6 @@ Animated.args = {
   onLoading: () => console.info('EVENT: loading animated avatar')
   /* eslint-enable no-console */
 };
-console.log({ test: Animated.args });
 Animated.argTypes = {
   poseSrc: { control: false },
   emotion: { control: false }
