@@ -13,7 +13,7 @@ import {
 } from 'three';
 import { useFrame } from '@react-three/fiber';
 import type { ObjectMap } from '@react-three/fiber';
-import { GLTF, GLTFLoader } from 'three-stdlib';
+import { GLTF, GLTFLoader, DRACOLoader } from 'three-stdlib';
 import { suspend } from 'suspend-react';
 import { Emotion } from 'src/components/Avatar/Avatar.component';
 import { BloomConfiguration } from 'src/types';
@@ -208,6 +208,9 @@ export const useEmotion = (nodes: ObjectMap['nodes'], emotion?: Emotion) => {
 export const useGltfLoader = (source: Blob | string): GLTF =>
   suspend(async () => {
     const loader = new GLTFLoader();
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.5/');
+    loader.setDRACOLoader(dracoLoader);
 
     if (source instanceof Blob) {
       const buffer = await source.arrayBuffer();
