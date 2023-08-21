@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StoryFn } from '@storybook/react';
 import { getStoryAssetPath } from 'src/services';
 import { Vector3 } from 'three';
@@ -61,11 +61,52 @@ Static.argTypes = {
   poseSrc: { control: false }
 };
 
-export const Showcase: StoryFn<typeof Avatar> = (args) => (
-  <Avatar {...args}>
-    <Sparkles color="white" count={50} opacity={0.9} scale={5} size={0.5} speed={0.35} />
-  </Avatar>
-);
+const initialValue = 1.0;
+const maxValue = 9.0;
+const stepSize = 0.3;
+const animationUpdateStepMs = 60;
+
+export const Showcase: StoryFn<typeof Avatar> = (args) => {
+  const [currentValue, setCurrentValue] = useState(args.bloom?.materialIntensity);
+  const [increasing, setIncreasing] = useState(true);
+  const pulsatingBloom = {
+    ...args.bloom,
+    intensity: 1.0,
+    materialIntensity: currentValue
+  };
+
+  useEffect(() => {
+    const animationInterval = setInterval(() => {
+      if (increasing) {
+        setCurrentValue((prevValue) => {
+          const newValue = prevValue! + stepSize;
+          if (newValue >= maxValue) {
+            setIncreasing(false);
+            return maxValue;
+          }
+          return newValue;
+        });
+      } else {
+        setCurrentValue((prevValue) => {
+          const newValue = prevValue! - stepSize;
+          if (newValue <= initialValue) {
+            setIncreasing(true);
+            return initialValue;
+          }
+          return newValue;
+        });
+      }
+    }, animationUpdateStepMs);
+
+    return () => clearInterval(animationInterval);
+  }, [currentValue, increasing, initialValue, maxValue]);
+
+  return (
+    <Avatar {...args} bloom={pulsatingBloom}>
+      <Sparkles color="white" count={50} opacity={0.9} scale={5} size={0.5} speed={0.35} />
+    </Avatar>
+  );
+};
 Showcase.args = {
   cameraTarget: CAMERA.TARGET.FULL_BODY.FEMALE,
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
@@ -78,7 +119,7 @@ Showcase.args = {
     mipmapBlur: true,
     kernelSize: 1,
     intensity: 1,
-    materialIntensity: 6
+    materialIntensity: 1
   },
   style: { background: '#282038' },
   dpr: 2,
