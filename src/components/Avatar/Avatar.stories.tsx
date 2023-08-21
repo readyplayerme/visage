@@ -2,32 +2,22 @@ import React from 'react';
 import { StoryFn } from '@storybook/react';
 import { getStoryAssetPath } from 'src/services';
 import { Vector3 } from 'three';
+import { Sparkles as SparklesDrei } from '@react-three/drei';
 import { FileDropper } from 'src/components/FileDropper/FileDropper.component';
 import { environmentPresets } from 'src/services/EnvironmentMap.service';
+import { ignoreArgTypesOnExamples, modelPresets, animationPresets } from 'src/services/Stories.service';
 import { Avatar as AvatarWrapper, CAMERA } from './index';
 import { AvatarProps } from './Avatar.component';
 
 const Avatar = (args: AvatarProps) => <AvatarWrapper {...args}>{args.children}</AvatarWrapper>;
+const Sparkles: StoryFn<typeof SparklesDrei> = (args: any) => <SparklesDrei {...args} />;
 
-const emotions = {
-  smile: {
-    eyeSquintLeft: 0.4,
-    eyeSquintRight: 0.2,
-    mouthSmileLeft: 0.37,
-    mouthSmileRight: 0.36,
-    mouthShrugUpper: 0.27,
-    browInnerUp: 0.3,
-    browOuterUpLeft: 0.37,
-    browOuterUpRight: 0.49
-  }
-};
 const Template: StoryFn<typeof Avatar> = (args) => <Avatar {...args} />;
 const DropTemplate: StoryFn<typeof Avatar> = (args) => (
   <FileDropper>
     <Avatar {...args} />
   </FileDropper>
 );
-
 export const Static: StoryFn<typeof Avatar> = Template.bind({});
 Static.args = {
   modelSrc: getStoryAssetPath('female.glb'),
@@ -58,7 +48,6 @@ Static.args = {
     intensity: 0.1,
     materialIntensity: 3.3
   },
-  emotion: emotions.smile,
   style: { background: 'rgb(9,20,26)' },
   /* eslint-disable no-console */
   onLoaded: () => console.info('EVENT: static avatar loaded'),
@@ -70,6 +59,59 @@ Static.argTypes = {
   halfBody: { control: false },
   animationSrc: { control: false },
   poseSrc: { control: false }
+};
+
+export const Showcase: StoryFn<typeof Avatar> = (args) => (
+  <Avatar {...args}>
+    <Sparkles color="white" count={50} opacity={0.9} scale={5} size={0.5} speed={0.35} />
+  </Avatar>
+);
+Showcase.args = {
+  cameraTarget: CAMERA.TARGET.FULL_BODY.FEMALE,
+  cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
+  modelSrc: modelPresets.one,
+  animationSrc: animationPresets.one,
+  scale: 1.0,
+  bloom: {
+    luminanceThreshold: 1.0,
+    luminanceSmoothing: 1.0,
+    mipmapBlur: true,
+    kernelSize: 1,
+    intensity: 1,
+    materialIntensity: 6
+  },
+  style: { background: '#282038' },
+  dpr: 2,
+  ambientLightColor: '#ffffff',
+  dirLightColor: '#ffffff',
+  spotLightColor: '#adbfe5',
+  ambientLightIntensity: 0,
+  dirLightIntensity: 2.2,
+  spotLightIntensity: 0.5,
+  environment: 'apartment',
+  shadows: true,
+  emotion: {
+    jawOpen: 0.1,
+    mouthSmileLeft: 0.2,
+    mouthSmileRight: 0.1,
+    mouthPressLeft: 0.1,
+    cheekSquintLeft: 0.3,
+    eyeLookOutLeft: 0.6,
+    eyeLookInRight: 0.6,
+    mouthDimpleLeft: 0.3
+  }
+};
+Showcase.argTypes = {
+  ...ignoreArgTypesOnExamples,
+  modelSrc: { options: Object.values(modelPresets), control: { type: 'select' } },
+  animationSrc: { options: Object.values(animationPresets), control: { type: 'select' } },
+  environment: { table: { disable: true } },
+  ambientLightColor: { table: { disable: true } },
+  dirLightColor: { table: { disable: true } },
+  spotLightColor: { table: { disable: true } },
+  ambientLightIntensity: { table: { disable: true } },
+  dirLightIntensity: { table: { disable: true } },
+  spotLightIntensity: { table: { disable: true } }
 };
 
 export const Animated: StoryFn<typeof Avatar> = Template.bind({});
@@ -101,23 +143,6 @@ HalfBody.args = {
   onLoaded: () => console.info('EVENT: half body avatar loaded'),
   onLoading: () => console.info('EVENT: loading half body avatar')
   /* eslint-enable no-console */
-};
-
-export const Posing: StoryFn<typeof Avatar> = Template.bind({});
-Posing.args = {
-  ...Static.args,
-  modelSrc: getStoryAssetPath('male.glb'),
-  poseSrc: getStoryAssetPath('male-pose-standing.glb'),
-  cameraTarget: CAMERA.TARGET.FULL_BODY.MALE,
-  cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
-  /* eslint-disable no-console */
-  onLoaded: () => console.info('EVENT: posing avatar loaded'),
-  onLoading: () => console.info('EVENT: loading posing avatar'),
-  /* eslint-enable no-console */
-  emotion: emotions.smile
-};
-Posing.argTypes = {
-  headMovement: { control: false }
 };
 
 /* eslint-disable */
