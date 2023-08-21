@@ -3,6 +3,7 @@ import { Group, Mesh } from 'three';
 import { normaliseMaterialsConfig, triggerCallback } from 'src/services';
 import { useGraph } from '@react-three/fiber';
 import { BaseModelProps } from 'src/types';
+import { ArcballControls } from 'three-stdlib';
 import { Spawn } from '../../Spawn/Spawn';
 
 interface ModelProps extends BaseModelProps {
@@ -14,6 +15,7 @@ interface ModelProps extends BaseModelProps {
 
 export const Model: FC<ModelProps> = ({ scene, scale = 1, modelRef, onLoaded, onSpawnAnimationFinish, bloom }) => {
   const { materials } = useGraph(scene);
+  console.log(scene);
   normaliseMaterialsConfig(materials, bloom);
   scene.traverse((object) => {
     const node = object;
@@ -28,6 +30,19 @@ export const Model: FC<ModelProps> = ({ scene, scale = 1, modelRef, onLoaded, on
   });
 
   useEffect(() => triggerCallback(onLoaded), [scene, materials, onLoaded]);
+
+  useEffect(() => {
+    if (scene.children.length === 1) {
+      document.addEventListener('mousemove', onMouseMove);
+    }
+    return () => {
+      document.removeEventListener('mousemove', onMouseMove);
+    };
+  });
+
+  function onMouseMove(event) {
+    scene.rotation.y += event.movementX * 0.005;
+  }
 
   return (
     <group ref={modelRef} dispose={null} rotation={[0, 0, 0]}>
