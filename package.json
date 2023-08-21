@@ -139,8 +139,7 @@
     "webpack": "^5.88.2"
   },
   "overrides": {
-    "react-refresh": "0.11.0",
-    "telejson": "7.0.3"
+    "react-refresh": "0.11.0"
   },
   "engines": {
     "node": ">=18.0.0",
