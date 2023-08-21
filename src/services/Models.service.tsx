@@ -57,7 +57,7 @@ const validateSource = (source: Source): boolean => {
 export const isValidFormat = (source: Source): source is Blob | string => {
   const isValid = validateSource(source);
 
-  if (!isValid) {
+  if (source && !isValid) {
     console.warn(
       'Provided GLB/FBX is invalid. Check docs for supported formats: https://github.com/readyplayerme/visage'
     );

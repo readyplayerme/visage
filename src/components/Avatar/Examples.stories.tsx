@@ -4,7 +4,9 @@ import { Sparkles as SparklesDrei } from '@react-three/drei';
 import type { Meta } from '@storybook/react';
 import { Avatar as AvatarWrapper, CAMERA } from 'src/components/Avatar';
 import { getStoryAssetPath } from 'src/services';
+import { ignoreArgTypesOnExamples, emotions } from 'src/services/Stories.service';
 import { AvatarProps } from './Avatar.component';
+import { Static } from './Avatar.stories';
 
 const Avatar = (args: AvatarProps) => <AvatarWrapper {...args} />;
 
@@ -16,40 +18,6 @@ const meta: Meta<typeof Avatar> = {
 };
 
 export default meta;
-
-const disableTable = { table: { disable: true } };
-const keysToIgnore = [
-  'modelSrc',
-  'animationSrc',
-  'poseSrc',
-  'halfBody',
-  'shadows',
-  'cameraTarget',
-  'cameraInitialDistance',
-  'style',
-  'idleRotation',
-  'emotion',
-  'background',
-  'capture',
-  'loader',
-  'dpr',
-  'className',
-  'headMovement',
-  'cameraZoomTarget',
-  'bloom',
-  'onLoadedEffect',
-  'onLoadedAnimation',
-  'children'
-];
-const ignoreArgTypesOnExamples = keysToIgnore.reduce(
-  (acc, key) => {
-    acc[key] = disableTable;
-    return acc;
-  },
-  {} as Record<string, typeof disableTable>
-);
-
-const Template: StoryFn<typeof Avatar> = (args) => <Avatar style={{ background: 'rgb(9,20,26)' }} {...args} />;
 
 export const FloatingSparkles: StoryFn<typeof SparklesDrei> = (args) => (
   <Avatar
@@ -79,7 +47,11 @@ FloatingSparkles.argTypes = {
   ...ignoreArgTypesOnExamples
 };
 
-export const SpawnEffectAndAnimation: StoryFn<typeof Avatar> = Template.bind({});
+export const SpawnEffectAndAnimation: StoryFn<typeof Avatar> = (args) => (
+  <Avatar {...args}>
+    <Sparkles color="white" count={50} opacity={0.9} scale={5} size={0.5} speed={0.35} />
+  </Avatar>
+);
 SpawnEffectAndAnimation.args = {
   onLoadedEffect: {
     src: getStoryAssetPath('spawn-effect.glb'),
@@ -100,4 +72,21 @@ SpawnEffectAndAnimation.argTypes = {
   onLoadedAnimation: { control: { disable: false } },
   modelSrc: { control: { disable: false } },
   animationSrc: { control: { disable: false } }
+};
+
+export const Posing: StoryFn<typeof Avatar> = (args) => <Avatar {...args} />;
+Posing.args = {
+  ...Static.args,
+  modelSrc: getStoryAssetPath('male.glb'),
+  poseSrc: getStoryAssetPath('male-pose-standing.glb'),
+  cameraTarget: CAMERA.TARGET.FULL_BODY.MALE,
+  cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
+  /* eslint-disable no-console */
+  onLoaded: () => console.info('EVENT: posing avatar loaded'),
+  onLoading: () => console.info('EVENT: loading posing avatar'),
+  /* eslint-enable no-console */
+  emotion: emotions.smile
+};
+Posing.argTypes = {
+  headMovement: { control: false }
 };

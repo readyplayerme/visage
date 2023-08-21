@@ -1,14 +1,16 @@
 import { StoryFn } from '@storybook/react';
 import { StatsGl } from '@react-three/drei';
 import type { Meta } from '@storybook/react';
+import { Perf } from 'r3f-perf';
 import React from 'react';
 import { Vector3 } from 'three';
+import { getStoryAssetPath } from 'src/services';
 import { Avatar as AvatarWrapper } from './index';
-import { getStoryAssetPath } from '../../services';
 import { AvatarProps } from './Avatar.component';
 
 const Avatar = (args: AvatarProps) => (
   <AvatarWrapper {...args}>
+    <Perf />
     <StatsGl />
   </AvatarWrapper>
 );
