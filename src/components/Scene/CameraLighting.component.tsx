@@ -78,6 +78,7 @@ export const CameraLighting: FC<CameraLightingProps> = ({
     }
 
     controls = new OrbitControls(camera, gl.domElement);
+    controls.enableRotate = false;
     controls.enablePan = false;
 
     controls.minDistance = headScaleAdjustedMinDistance;
