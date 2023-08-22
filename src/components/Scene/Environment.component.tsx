@@ -1,6 +1,6 @@
 import React, { FC, useMemo } from 'react';
 import { Environment as DreiEnvironment } from '@react-three/drei';
-import { environmentPresets, getPresetEnvironmentMap, EnvironmentPresets } from 'src/services/EnvironmentMap.service';
+import { environmentPresets, getPresetEnvironmentMap, EnvironmentPresets } from 'src/services/Environment.service';
 
 export interface EnvironmentProps {
   environment: string | EnvironmentPresets;

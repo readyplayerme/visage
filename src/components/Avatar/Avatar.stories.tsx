@@ -4,7 +4,7 @@ import { getStoryAssetPath } from 'src/services';
 import { Vector3 } from 'three';
 import { Sparkles as SparklesDrei } from '@react-three/drei';
 import { FileDropper } from 'src/components/FileDropper/FileDropper.component';
-import { environmentPresets } from 'src/services/EnvironmentMap.service';
+import { environmentPresets } from 'src/services/Environment.service';
 import { ignoreArgTypesOnExamples, modelPresets, animationPresets } from 'src/services/Stories.service';
 import { Avatar as AvatarWrapper, CAMERA } from './index';
 import { AvatarProps } from './Avatar.component';

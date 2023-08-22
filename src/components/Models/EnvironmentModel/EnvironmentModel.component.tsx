@@ -2,18 +2,19 @@ import React, { FC } from 'react';
 import { useFallback, useGltfLoader, CustomNode, Transform } from 'src/services';
 import { useGraph } from '@react-three/fiber';
 import { BaseModelProps } from 'src/types';
+import { EnvironmentModels } from 'src/services/Environment.service';
 
 export interface EnvironmentModelProps extends BaseModelProps {
-  modelSrc: string | Blob;
+  environment: string | EnvironmentModels;
   scale?: number;
 }
 
-export const EnvironmentModel: FC<EnvironmentModelProps> = ({ modelSrc, scale = 1, setModelFallback }) => {
-  const { scene } = useGltfLoader(modelSrc);
+export const EnvironmentModel: FC<EnvironmentModelProps> = ({ environment, scale = 1, setModelFallback }) => {
+  const transform = new Transform();
+  const { scene } = useGltfLoader(environment);
   const { nodes } = useGraph(scene);
 
   useFallback(nodes, setModelFallback);
-  const transform = new Transform();
 
   return (
     <group>

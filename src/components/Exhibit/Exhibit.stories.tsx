@@ -3,7 +3,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { getStoryAssetPath } from 'src/services';
 import { FileDropper } from 'src/components/FileDropper/FileDropper.component';
 import { Vector3 } from 'three';
-import { environmentPresets } from 'src/services/EnvironmentMap.service';
+import { environmentPresets } from 'src/services/Environment.service';
 import { Exhibit } from './Exhibit.component';
 
 const Template: ComponentStory<typeof Exhibit> = (args) => <Exhibit {...args} />;

@@ -221,7 +221,7 @@ export const useGltfLoader = (source: Blob | string): GLTF =>
     return gltf;
   }, [source]);
 
-class Transform {
+export class Transform {
   constructor() {
     this.scale = new Vector3(1, 1, 1);
     this.rotation = new Euler(0, 0, 0);
