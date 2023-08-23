@@ -1,6 +1,6 @@
 import React, { FC, Suspense, useState } from 'react';
-import { EnvironmentModel, EnvironmentModelProps } from './EnvironmentModel.component';
 import { EnvironmentModels, environmentModels } from 'src/services/Environment.service';
+import { EnvironmentModel, EnvironmentModelProps } from './EnvironmentModel.component';
 
 /**
  * Contains model to handle suspense fallback.
