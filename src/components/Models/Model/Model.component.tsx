@@ -23,12 +23,12 @@ export const Model: FC<ModelProps> = ({ scene, scale = 1, modelRef, onLoaded, on
   const onTouchMove = useCallback(
     (event: MouseEvent | TouchEvent) => {
       if (isTouching && event instanceof MouseEvent) {
-        // eslint-disable no-param-reassign
+        /* eslint-disable-next-line no-param-reassign */
         scene.rotation.y += event.movementX * ROTATION_STEP;
       }
 
       if (isTouching && event instanceof TouchEvent) {
-        // eslint-disable no-param-reassign
+        /* eslint-disable-next-line no-param-reassign */
         scene.rotation.y += event.touches[0].clientX * ROTATION_STEP;
       }
     },

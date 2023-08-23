@@ -4,17 +4,22 @@ import { Sparkles as SparklesDrei } from '@react-three/drei';
 import type { Meta } from '@storybook/react';
 import { Avatar as AvatarWrapper, CAMERA } from 'src/components/Avatar';
 import { getStoryAssetPath } from 'src/services';
-import { ignoreArgTypesOnExamples, emotions } from 'src/services/Stories.service';
+import { ignoreArgTypesOnExamples, emotions, modelPresets, animationPresets } from 'src/services/Stories.service';
+import { environmentModels, environmentPresets } from 'src/services/Environment.service';
+import { EnvironmentModel as EnvironmentModelContainer } from 'src/components/Models';
 import { AvatarProps } from './Avatar.component';
 import { Static } from './Avatar.stories';
 
 const Avatar = (args: AvatarProps) => <AvatarWrapper {...args} />;
 
 const Sparkles: StoryFn<typeof SparklesDrei> = (args: any) => <SparklesDrei {...args} />;
+const EnvironmentModel: StoryFn<typeof EnvironmentModelContainer> = (args: any) => (
+  <EnvironmentModelContainer {...args} />
+);
 const meta: Meta<typeof Avatar> = {
   component: Avatar,
   // @ts-ignore
-  subcomponents: { Sparkles }
+  subcomponents: { Sparkles, EnvironmentModel }
 };
 
 export default meta;
@@ -64,7 +69,8 @@ SpawnEffectAndAnimation.args = {
   cameraTarget: CAMERA.TARGET.FULL_BODY.FEMALE,
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
   modelSrc: getStoryAssetPath('male-emissive.glb'),
-  animationSrc: getStoryAssetPath('male-idle.glb')
+  animationSrc: getStoryAssetPath('male-idle.glb'),
+  style: { background: 'rgb(9,20,26)' }
 };
 SpawnEffectAndAnimation.argTypes = {
   ...ignoreArgTypesOnExamples,
@@ -89,4 +95,39 @@ Posing.args = {
 };
 Posing.argTypes = {
   headMovement: { control: false }
+};
+
+// @ts-ignore
+export const environmentModel: StoryFn<typeof Avatar> = (
+  args: AvatarProps & { environmentModel: string; environmentScale: number }
+) => (
+  <Avatar {...args}>
+    <EnvironmentModel environment={args.environmentModel! as string} scale={args.environmentScale! as number} />
+  </Avatar>
+);
+environmentModel.args = {
+  environmentModel: 'spaceStation',
+  ...Static.args,
+  fov: 50,
+  // @ts-ignore
+  environmentScale: 1.0,
+  shadows: true,
+  modelSrc: modelPresets.one,
+  animationSrc: animationPresets.one
+};
+environmentModel.argTypes = {
+  ...ignoreArgTypesOnExamples,
+  onLoading: { table: { disable: true } },
+  dirLightPosition: { table: { disable: true } },
+  spotLightPosition: { table: { disable: true } },
+  scale: { table: { disable: true } },
+  // @ts-ignore
+  environmentModel: { options: Object.keys(environmentModels), control: { type: 'select' } },
+  fov: { control: { type: 'range', min: 30, max: 100, step: 1 } },
+  // @ts-ignore
+  environmentScale: { control: { type: 'range', min: 0.01, max: 10, step: 0.01 } },
+  ambientLightIntensity: { control: { type: 'range', min: 0, max: 20, step: 0.1 } },
+  dirLightIntensity: { control: { type: 'range', min: 0, max: 20, step: 0.1 } },
+  spotLightIntensity: { control: { type: 'range', min: 0, max: 20, step: 0.1 } },
+  environment: { options: Object.keys(environmentPresets), control: { type: 'select' } }
 };
