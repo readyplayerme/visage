@@ -1,6 +1,7 @@
 import React from 'react';
 import { Avatar } from 'src/components/Avatar';
-import { Sparkles, Stats, StatsGl } from '@react-three/drei';
+import { Sparkles, StatsGl } from '@react-three/drei';
+import { EnvironmentModel } from '../components/Models';
 import styles from './App.module.scss';
 
 function App() {
@@ -18,32 +19,15 @@ function App() {
         <div className={styles.card}>
           <Avatar
             modelSrc="/male.glb"
-            poseSrc="/male-pose-standing.glb"
-            animationSrc="/male-idle.glb"
-            shadows={false}
-            onLoadedEffect={{
-              src: '/spawn-effect.glb',
-              loop: 13
-            }}
-            onLoadedAnimation={{
-              src: '/male-spawn-animation.fbx'
-            }}
-            style={{ background: 'rgb(9,20,26)' }}
-            onLoaded={() => console.log('male avatar loaded')}
-          >
-            <Stats showPanel={2} />
-            <StatsGl className={styles.stats} />
-          </Avatar>
-        </div>
-        <div className={styles.card}>
-          <Avatar
-            modelSrc="/female.glb"
-            poseSrc="/female-pose-standing.glb"
-            shadows={false}
-            animationSrc="/female-animation-catwalk.glb"
+            shadows
+            animationSrc="/M_Standing_Idle_Variations_002.fbx"
             style={{ background: 'rgb(9,20,26)' }}
             onLoaded={() => console.log('female avatar loaded')}
+            fov={45}
+            ambientLightIntensity={0}
           >
+            <StatsGl />
+            <EnvironmentModel environment="spaceStation" scale={1} />
             <Sparkles count={70} scale={3} size={3} speed={1} opacity={0.04} color="#ccff00" />
           </Avatar>
         </div>
