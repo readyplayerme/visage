@@ -21,6 +21,7 @@ export const BaseCanvas: FC<BaseCanvasProps> = ({
   className
 }) => (
   <Canvas
+    key={fov}
     className={`${styles['base-canvas']} ${className ?? ''}`}
     shadows
     gl={{ preserveDrawingBuffer: true }}
