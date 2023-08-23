@@ -32,8 +32,8 @@ export const CAMERA = {
   CONTROLS: {
     FULL_BODY: {
       MIN_DISTANCE: 0.5,
-      MAX_DISTANCE: 2.5,
-      ZOOM_TARGET: new Vector3(-0.11, 0, 0.48)
+      MAX_DISTANCE: 3.2,
+      ZOOM_TARGET: new Vector3(-0.11, 0, 3.2)
     },
     HALF_BODY: {
       MIN_DISTANCE: 0.4,
