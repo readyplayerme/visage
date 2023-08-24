@@ -113,7 +113,11 @@ environmentModel.args = {
   environmentScale: 1.0,
   shadows: true,
   modelSrc: modelPresets.one,
-  animationSrc: animationPresets.one
+  animationSrc: animationPresets.one,
+  environment: 'warehouse',
+  /* eslint-disable no-console */
+  onLoaded: () => console.info('EVENT: environment model loaded')
+  /* eslint-enable no-console */
 };
 environmentModel.argTypes = {
   ...ignoreArgTypesOnExamples,
