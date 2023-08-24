@@ -32,8 +32,8 @@ export const CAMERA = {
   CONTROLS: {
     FULL_BODY: {
       MIN_DISTANCE: 0.5,
-      MAX_DISTANCE: 2.5,
-      ZOOM_TARGET: new Vector3(-0.11, 0, 0.48)
+      MAX_DISTANCE: 3.2,
+      ZOOM_TARGET: new Vector3(-0.11, 0, 3.2)
     },
     HALF_BODY: {
       MIN_DISTANCE: 0.4,
@@ -131,6 +131,10 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
    * Spawn animation when model is loaded into scene.
    */
   onLoadedAnimation?: SpawnState['onLoadedAnimation'];
+  /**
+   * Field of view of the camera.
+   */
+  fov?: number;
 
   children?: ReactNode;
 }
@@ -172,7 +176,8 @@ const Avatar: FC<AvatarProps> = ({
   bloom,
   onLoadedEffect,
   onLoadedAnimation,
-  children
+  children,
+  fov = 50
 }) => {
   const setSpawnState = useSetAtom(spawnState);
 
@@ -232,7 +237,7 @@ const Avatar: FC<AvatarProps> = ({
   useEffect(() => triggerCallback(onLoading), [modelSrc, animationSrc, onLoading]);
 
   return (
-    <BaseCanvas position={new Vector3(0, 0, 3)} fov={50} style={style} dpr={dpr} className={className}>
+    <BaseCanvas position={new Vector3(0, 0, 3)} fov={fov} style={style} dpr={dpr} className={className}>
       <Environment environment={environment} />
       <CameraLighting
         cameraTarget={cameraTarget}

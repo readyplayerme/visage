@@ -4,7 +4,7 @@ import { getStoryAssetPath } from 'src/services';
 import { Vector3 } from 'three';
 import { Sparkles as SparklesDrei } from '@react-three/drei';
 import { FileDropper } from 'src/components/FileDropper/FileDropper.component';
-import { environmentPresets } from 'src/services/EnvironmentMap.service';
+import { environmentPresets } from 'src/services/Environment.service';
 import { ignoreArgTypesOnExamples, modelPresets, animationPresets } from 'src/services/Stories.service';
 import { Avatar as AvatarWrapper, CAMERA } from './index';
 import { AvatarProps } from './Avatar.component';
@@ -37,6 +37,7 @@ Static.args = {
   dirLightPosition: new Vector3(-3, 5, -5),
   spotLightPosition: new Vector3(12, 10, 7.5),
   spotLightAngle: 0.314,
+  fov: 50,
   cameraZoomTarget: CAMERA.CONTROLS.FULL_BODY.ZOOM_TARGET,
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
   cameraTarget: CAMERA.TARGET.FULL_BODY.FEMALE,
@@ -58,7 +59,8 @@ Static.argTypes = {
   headMovement: { control: false },
   halfBody: { control: false },
   animationSrc: { control: false },
-  poseSrc: { control: false }
+  poseSrc: { control: false },
+  fov: { control: { type: 'range', min: 30, max: 100, step: 1 } }
 };
 
 const initialValue = 1.0;
@@ -152,7 +154,8 @@ Showcase.argTypes = {
   spotLightColor: { table: { disable: true } },
   ambientLightIntensity: { table: { disable: true } },
   dirLightIntensity: { table: { disable: true } },
-  spotLightIntensity: { table: { disable: true } }
+  spotLightIntensity: { table: { disable: true } },
+  fov: { table: { disable: true } }
 };
 
 export const Animated: StoryFn<typeof Avatar> = Template.bind({});
@@ -170,7 +173,8 @@ Animated.args = {
 };
 Animated.argTypes = {
   poseSrc: { control: false },
-  emotion: { control: false }
+  emotion: { control: false },
+  fov: { control: { type: 'range', min: 30, max: 100, step: 1 } }
 };
 
 export const HalfBody: StoryFn<typeof Avatar> = Template.bind({});
@@ -224,6 +228,7 @@ export default {
     scale: { control: { type: 'range', min: 0.01, max: 10, step: 0.01 } },
     cameraInitialDistance: { control: { type: 'range', min: 0, max: 2.5, step: 0.01 } },
     onLoaded: { control: false },
-    environment: { options: Object.keys(environmentPresets), control: { type: 'select' } }
+    environment: { options: Object.keys(environmentPresets), control: { type: 'select' } },
+    fov: { control: { type: 'range', min: 30, max: 100, step: 1 } }
   }
 };
