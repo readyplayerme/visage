@@ -18,8 +18,19 @@ export const Model: FC<ModelProps> = ({ scene, scale = 1, modelRef, onLoaded, on
   const { materials } = useGraph(scene);
   const { gl } = useThree();
   const [isTouching, setIsTouching] = useState(false);
-  const setTouchingOn = () => setIsTouching(true);
-  const setTouchingOff = () => setIsTouching(false);
+  const [touchEvent, setTouchEvent] = useState<TouchEvent | null>(null);
+  const setTouchingOn = (e: MouseEvent | TouchEvent) => {
+    if (e instanceof TouchEvent) {
+      setTouchEvent(e as TouchEvent);
+    }
+    setIsTouching(true);
+  };
+  const setTouchingOff = (e: MouseEvent | TouchEvent) => {
+    if (e instanceof TouchEvent) {
+      setTouchEvent(null);
+    }
+    setIsTouching(false);
+  };
   const onTouchMove = useCallback(
     (event: MouseEvent | TouchEvent) => {
       if (isTouching && event instanceof MouseEvent) {
@@ -29,10 +40,13 @@ export const Model: FC<ModelProps> = ({ scene, scale = 1, modelRef, onLoaded, on
 
       if (isTouching && event instanceof TouchEvent) {
         /* eslint-disable-next-line no-param-reassign */
-        scene.rotation.y += event.touches[0].clientX * ROTATION_STEP;
+        const movementX = Math.round(event.touches[0].pageX - touchEvent!.touches[0].pageX);
+        /* eslint-disable-next-line no-param-reassign */
+        scene.rotation.y += movementX * ROTATION_STEP;
+        setTouchEvent(event);
       }
     },
-    [isTouching]
+    [isTouching, touchEvent]
   );
 
   normaliseMaterialsConfig(materials, bloom);
