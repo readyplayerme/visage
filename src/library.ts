@@ -7,4 +7,14 @@ import { PoseModel } from './components/Models/PoseModel';
 import { EnvironmentModel } from './components/Models/EnvironmentModel';
 import { Avatar, CAMERA } from './components/Avatar';
 
-export { Exhibit, FloatingModel, EnvironmentModel, AnimationModel, HalfBodyModel, StaticModel, PoseModel, Avatar, CAMERA };
+export {
+  Exhibit,
+  FloatingModel,
+  EnvironmentModel,
+  AnimationModel,
+  HalfBodyModel,
+  StaticModel,
+  PoseModel,
+  Avatar,
+  CAMERA
+};
