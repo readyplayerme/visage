@@ -7,6 +7,8 @@ import { getStoryAssetPath } from 'src/services';
 import { ignoreArgTypesOnExamples, emotions, modelPresets, animationPresets } from 'src/services/Stories.service';
 import { environmentModels, environmentPresets } from 'src/services/Environment.service';
 import { EnvironmentModel as EnvironmentModelContainer } from 'src/components/Models';
+import { SSAO} from "@react-three/postprocessing";
+import {BlendFunction} from "postprocessing";
 import { AvatarProps } from './Avatar.component';
 import { Static } from './Avatar.stories';
 
@@ -23,6 +25,59 @@ const meta: Meta<typeof Avatar> = {
 };
 
 export default meta;
+
+export const AmbientOclusion: StoryFn<typeof SSAO> = (args) => (
+    <Avatar
+        modelSrc={getStoryAssetPath('female.glb')}
+        cameraTarget={CAMERA.TARGET.FULL_BODY.FEMALE}
+        cameraInitialDistance={CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE}
+        effectComposer={
+          <SSAO {...args} />
+        }
+>
+      <EnvironmentModel environment={environmentModels.spaceStation}/>
+
+    </Avatar>
+);
+
+AmbientOclusion.args = {
+  blendFunction: BlendFunction.NORMAL ,// blend mode
+  samples: 30 ,// amount of samples per pixel (shouldn't be a multiple of the ring count)
+  rings: 4 ,// amount of rings in the occlusion sampling pattern
+  distanceThreshold: 1 ,// global distance threshold at which the occlusion effect starts to fade out. min: 0, max: 1
+  distanceFalloff: 0 ,// distance falloff. min: 0, max: 1
+  rangeThreshold: 5 ,// local occlusion range threshold at which the occlusion starts to fade out. min: 0, max: 1
+  rangeFalloff: 1 ,// occlusion range falloff. min: 0, max: 1
+  luminanceInfluence: 9 ,// how much the luminance of the scene influences the ambient occlusion
+  radius: 20, // occlusion sampling radius
+  bias: 5, // occlusion bias
+  worldDistanceThreshold: 0,
+  worldDistanceFalloff: 0,
+  worldProximityThreshold: 0,
+  worldProximityFalloff: 0,
+  intensity: 100,
+};
+
+AmbientOclusion.argTypes = {
+  blendFunction: { control: { type: 'select' }, options: BlendFunction } ,
+  samples: { control: { type: 'range', min: 0, max: 100 } },
+  rings: { control: { type: 'range', min: 0, max: 100 } },
+  distanceThreshold: { control: { type: 'range', step: 0.01, min: 0, max: 1 } },
+  distanceFalloff: { control: { type: 'range', step: 0.01, min: 0, max: 1 } },
+  rangeThreshold: { control: { type: 'range', step: 0.01, min: 0, max: 1 } },
+  luminanceInfluence: { control: { type: 'range', min: 0, max: 100 } },
+  radius: { control: { type: 'range', min: 0, max: 100 } },
+  worldDistanceThreshold: { control: { type: 'range', min: 0, max: 100 } },
+  worldDistanceFalloff: { control: { type: 'range', min: 0, max: 100 } },
+  worldProximityThreshold: { control: { type: 'range', min: 0, max: 100 } },
+  worldProximityFalloff: { control: { type: 'range', min: 0, max: 100 } },
+  // scale: { control: { type: 'number' } },
+  // size: { control: { type: 'range', min: 0, max: 10 } },
+  // speed: { control: { type: 'range', step: 0.01, min: 0, max: 20 } },
+  // opacity: { control: { type: 'range', step: 0.01, min: 0, max: 1.1 } },
+  ...ignoreArgTypesOnExamples
+};
+
 
 export const FloatingSparkles: StoryFn<typeof SparklesDrei> = (args) => (
   <Avatar

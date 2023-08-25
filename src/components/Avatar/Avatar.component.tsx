@@ -7,15 +7,16 @@ import { BaseCanvas } from 'src/components/BaseCanvas';
 import { AnimationModel, HalfBodyModel, StaticModel, PoseModel } from 'src/components/Models';
 import { isValidFormat, triggerCallback } from 'src/services';
 import { Dpr } from '@react-three/fiber';
-import { EffectComposer } from '@react-three/postprocessing';
+import {EffectComposer} from '@react-three/postprocessing';
 import { Provider, useSetAtom } from 'jotai';
 import Capture, { CaptureType } from 'src/components/Capture/Capture.component';
 import { Box, Background } from 'src/components/Background/Box/Box.component';
 import { BackgroundColor } from 'src/components/Background';
 import Shadow from 'src/components/Shadow/Shadow.component';
 import Loader from 'src/components/Loader';
-import Bloom from 'src/components/Bloom/Bloom.component';
+// import Bloom from 'src/components/Bloom/Bloom.component';
 import { spawnState } from '../../state/spawnAtom';
+import Bloom from "../Bloom/Bloom.component";
 
 export const CAMERA = {
   TARGET: {
@@ -137,6 +138,7 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
   fov?: number;
 
   children?: ReactNode;
+  effectComposer?: any;
 }
 
 /**
@@ -177,6 +179,7 @@ const Avatar: FC<AvatarProps> = ({
   onLoadedEffect,
   onLoadedAnimation,
   children,
+                                   effectComposer,
   fov = 50
 }) => {
   const setSpawnState = useSetAtom(spawnState);
@@ -262,14 +265,17 @@ const Avatar: FC<AvatarProps> = ({
       {background?.src && <Box {...background} />}
       {capture && <Capture {...capture} />}
       {style?.background && <BackgroundColor color={style.background as string} />}
-      <EffectComposer disableNormalPass>
-        <Bloom
+      <EffectComposer  >
+          <Bloom
           luminanceThreshold={bloom?.luminanceThreshold}
           luminanceSmoothing={bloom?.luminanceSmoothing}
           intensity={bloom?.intensity}
           kernelSize={bloom?.kernelSize}
           mipmapBlur={bloom?.mipmapBlur}
-        />
+          />
+
+          {effectComposer} 
+
       </EffectComposer>
     </BaseCanvas>
   );

@@ -82,6 +82,7 @@ export const normaliseMaterialsConfig = (materials: Record<string, Material>, bl
       mat.toneMapped = false;
     }
 
+
     if (mat.emissiveMap) {
       mat.emissiveIntensity = bloomConfig?.materialIntensity || 3.3;
     }
