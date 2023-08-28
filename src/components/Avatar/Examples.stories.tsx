@@ -9,6 +9,7 @@ import { environmentModels, environmentPresets } from 'src/services/Environment.
 import { EnvironmentModel as EnvironmentModelContainer } from 'src/components/Models';
 import { AvatarProps } from './Avatar.component';
 import { Static } from './Avatar.stories';
+import { BloomConfiguration } from '../../types';
 
 const Avatar = (args: AvatarProps) => <AvatarWrapper {...args} />;
 
@@ -23,6 +24,44 @@ const meta: Meta<typeof Avatar> = {
 };
 
 export default meta;
+
+export const Bloom: StoryFn<BloomConfiguration> = (args: BloomConfiguration | undefined) => (
+  <Avatar
+    modelSrc={modelPresets.one}
+    cameraTarget={CAMERA.TARGET.FULL_BODY.FEMALE}
+    cameraInitialDistance={CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE}
+    bloom={{ ...args }}
+    ambientLightColor="#ffffff"
+    dirLightColor="#ffffff"
+    spotLightColor="#adbfe5"
+    ambientLightIntensity={0}
+    dirLightIntensity={2.2}
+    spotLightIntensity={0.5}
+    environment="apartment"
+    style={{
+      background: 'rgb(9,20,26)'
+    }}
+  />
+);
+
+Bloom.args = {
+  luminanceThreshold: 1.0,
+  luminanceSmoothing: 1.0,
+  mipmapBlur: true,
+  kernelSize: 1,
+  intensity: 4,
+  materialIntensity: 1
+};
+
+Bloom.argTypes = {
+  luminanceThreshold: { control: { type: 'range', step: 0.01, min: 0, max: 1 } },
+  luminanceSmoothing: { control: { type: 'range', step: 0.01, min: 0, max: 1 } },
+  mipmapBlur: { control: { type: 'boolean' } },
+  intensity: { control: { type: 'range', min: 0, max: 100 } },
+  materialIntensity: { control: { type: 'range', step: 0.01, min: 0, max: 1 } },
+  kernelSize: { control: { type: 'range', min: 0, max: 4 } },
+  ...ignoreArgTypesOnExamples
+};
 
 export const FloatingSparkles: StoryFn<typeof SparklesDrei> = (args) => (
   <Avatar
