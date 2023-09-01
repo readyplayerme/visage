@@ -138,6 +138,9 @@ export type BloomConfiguration = {
 };
 
 export type EffectConfiguration = {
+  /**
+   * Enables ambient occlusion for the current scene.
+   */
   ambientOcclusion?: boolean
 }
 

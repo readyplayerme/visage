@@ -143,9 +143,14 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
    * Field of view of the camera.
    */
   fov?: number;
-
-  children?: ReactNode;
+  /**
+   * Control some effects like post-processing effects
+   */
   effects?: EffectConfiguration;
+  /**
+   * Use any three.js(fiber, post-processing) compatible components to render in the scene.
+   */
+  children?: ReactNode;
 }
 
 /**
