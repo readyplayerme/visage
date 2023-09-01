@@ -246,7 +246,6 @@ const Avatar: FC<AvatarProps> = ({
 
   useEffect(() => triggerCallback(onLoading), [modelSrc, animationSrc, onLoading]);
 
-  console.log({ effects })
   return (
     <BaseCanvas position={new Vector3(0, 0, 3)} fov={fov} style={style} dpr={dpr} className={className}>
       <Environment environment={environment} />
@@ -274,17 +273,26 @@ const Avatar: FC<AvatarProps> = ({
       {capture && <Capture {...capture} />}
       {style?.background && <BackgroundColor color={style.background as string} />}
       <EffectComposer multisampling={0} autoClear={false}>
-          <Bloom
-          luminanceThreshold={bloom?.luminanceThreshold}
-          luminanceSmoothing={bloom?.luminanceSmoothing}
-          intensity={bloom?.intensity}
-          kernelSize={bloom?.kernelSize}
-          mipmapBlur={bloom?.mipmapBlur}
-          />
-            <SSAO
-                blendFunction={BlendFunction.MULTIPLY} samples={14} radius={0.60} intensity={16}
-                worldDistanceThreshold={20} worldDistanceFalloff={4} worldProximityThreshold={0.8}
-                worldProximityFalloff={1}               />
+        <Bloom
+            luminanceThreshold={bloom?.luminanceThreshold}
+            luminanceSmoothing={bloom?.luminanceSmoothing}
+            intensity={bloom?.intensity}
+            kernelSize={bloom?.kernelSize}
+            mipmapBlur={bloom?.mipmapBlur}
+        />
+        <>
+          {effects?.ambientOcclusion && (
+              <SSAO
+                  blendFunction={BlendFunction.MULTIPLY}
+                  samples={14}
+                  radius={0.60}
+                  intensity={16}
+                  worldDistanceThreshold={20}
+                  worldDistanceFalloff={4}
+                  worldProximityThreshold={0.8}
+                  worldProximityFalloff={1}/>
+          )}
+        </>
       </EffectComposer>
     </BaseCanvas>
   );

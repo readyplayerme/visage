@@ -1,8 +1,6 @@
 import React from 'react';
 import { Avatar } from 'src/components/Avatar';
 import { Sparkles, StatsGl } from '@react-three/drei';
-import {EffectComposer, SSAO} from "@react-three/postprocessing";
-import {BlendFunction} from "postprocessing";
 import { EnvironmentModel } from '../components/Models';
 import styles from './App.module.scss';
 
@@ -23,7 +21,7 @@ function App() {
             modelSrc="/male.glb"
             shadows
             animationSrc="/M_Standing_Idle_Variations_002.fbx"
-            style={{ background: 'red' }}
+            style={{ background: 'rgb(9,20,26)' }}
             onLoaded={() => console.log('female avatar loaded')}
             fov={45}
             ambientLightIntensity={0}
@@ -34,7 +32,6 @@ function App() {
             <StatsGl />
             <EnvironmentModel environment="spaceStation" scale={1} />
             <Sparkles count={70} scale={3} size={3} speed={1} opacity={0.04} color="#ccff00" />
-
           </Avatar>
         </div>
       </div>

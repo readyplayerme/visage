@@ -1,6 +1,6 @@
 import React, { FC, Ref, useEffect, useState, useCallback } from 'react';
 import { Group, Mesh } from 'three';
-import { triggerCallback, normaliseMaterialsConfig } from 'src/services';
+import { normaliseMaterialsConfig, triggerCallback } from 'src/services';
 import { useGraph, useThree } from '@react-three/fiber';
 import { BaseModelProps } from 'src/types';
 import { Spawn } from '../../Spawn/Spawn';
