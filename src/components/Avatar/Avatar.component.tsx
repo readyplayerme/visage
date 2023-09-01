@@ -289,13 +289,16 @@ const Avatar: FC<AvatarProps> = ({
           {effects?.ambientOcclusion && (
               <SSAO
                   blendFunction={BlendFunction.MULTIPLY}
-                  samples={14}
-                  radius={0.60}
-                  intensity={16}
-                  worldDistanceThreshold={20}
-                  worldDistanceFalloff={4}
-                  worldProximityThreshold={0.8}
-                  worldProximityFalloff={1}/>
+                  distanceScaling={false}
+                  radius={0.09}
+                  bias={0.02}
+                  intensity={3}
+                  samples={20}
+                  worldDistanceThreshold={24}
+                  worldDistanceFalloff={0}
+                  worldProximityThreshold={0}
+                  worldProximityFalloff={6}
+              />
           )}
         </>
       </EffectComposer>
