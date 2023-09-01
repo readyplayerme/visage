@@ -1,5 +1,8 @@
 import { Color, Vector3 } from 'three';
 import { PresetsType } from '@react-three/drei/helpers/environment-assets';
+import {SSAO} from "@react-three/postprocessing";
+import React from "react";
+import {SSAOEffect} from "postprocessing";
 
 export type Required<T> = {
   [P in keyof T]-?: T[P];
@@ -136,6 +139,10 @@ export type BloomConfiguration = {
    */
   materialIntensity?: number;
 };
+
+export type EffectConfiguration = {
+  ambientOcclusion?: boolean
+}
 
 export interface SpawnState {
   /**

@@ -27,14 +27,9 @@ function App() {
             onLoaded={() => console.log('female avatar loaded')}
             fov={45}
             ambientLightIntensity={0}
-
-            effectComposer={<SSAO
-                blendFunction={BlendFunction.NORMAL} // blend mode
-                samples={30} // amount of samples per pixel (shouldn't be a multiple of the ring count)
-                rings={1} // amount of rings in the occlusion sampling pattern
-                intensity={1} worldDistanceThreshold={10} worldDistanceFalloff={10} worldProximityThreshold={10}
-                worldProximityFalloff={20}
-            />}
+            effects={{
+              ambientOcclusion: true
+            }}
           >
             <StatsGl />
             <EnvironmentModel environment="spaceStation" scale={1} />
