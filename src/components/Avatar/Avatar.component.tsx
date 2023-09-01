@@ -11,10 +11,10 @@ import {
   EffectConfiguration
 } from 'src/types';
 import { BaseCanvas } from 'src/components/BaseCanvas';
-import {AnimationModel, HalfBodyModel, StaticModel, PoseModel} from 'src/components/Models';
+import { AnimationModel, HalfBodyModel, StaticModel, PoseModel } from 'src/components/Models';
 import { isValidFormat, triggerCallback } from 'src/services';
 import { Dpr } from '@react-three/fiber';
-import {EffectComposer, SSAO} from '@react-three/postprocessing';
+import { EffectComposer } from '@react-three/postprocessing';
 import { Provider, useSetAtom } from 'jotai';
 import Capture, { CaptureType } from 'src/components/Capture/Capture.component';
 import { Box, Background } from 'src/components/Background/Box/Box.component';
@@ -22,7 +22,6 @@ import { BackgroundColor } from 'src/components/Background';
 import Shadow from 'src/components/Shadow/Shadow.component';
 import Loader from 'src/components/Loader';
 import Bloom from 'src/components/Bloom/Bloom.component';
-import {BlendFunction} from "postprocessing";
 import { spawnState } from '../../state/spawnAtom';
 
 export const CAMERA = {
@@ -151,6 +150,7 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
    * Use any three.js(fiber, post-processing) compatible components to render in the scene.
    */
   children?: ReactNode;
+  ff?: any;
 }
 
 /**
@@ -191,10 +191,12 @@ const Avatar: FC<AvatarProps> = ({
   onLoadedEffect,
   onLoadedAnimation,
   children,
-                                   effects,
+  effects,
+  ff,
   fov = 50
 }) => {
   const setSpawnState = useSetAtom(spawnState);
+  console.log(effects);
 
   useEffect(() => {
     setSpawnState({ onLoadedEffect, onLoadedAnimation });
@@ -279,25 +281,13 @@ const Avatar: FC<AvatarProps> = ({
       {style?.background && <BackgroundColor color={style.background as string} />}
       <EffectComposer multisampling={0} autoClear={false}>
         <Bloom
-            luminanceThreshold={bloom?.luminanceThreshold}
-            luminanceSmoothing={bloom?.luminanceSmoothing}
-            intensity={bloom?.intensity}
-            kernelSize={bloom?.kernelSize}
-            mipmapBlur={bloom?.mipmapBlur}
+          luminanceThreshold={bloom?.luminanceThreshold}
+          luminanceSmoothing={bloom?.luminanceSmoothing}
+          intensity={bloom?.intensity}
+          kernelSize={bloom?.kernelSize}
+          mipmapBlur={bloom?.mipmapBlur}
         />
-        <>
-          {effects?.ambientOcclusion && (
-              <SSAO
-                  blendFunction={BlendFunction.MULTIPLY}
-                  samples={14}
-                  radius={0.60}
-                  intensity={16}
-                  worldDistanceThreshold={20}
-                  worldDistanceFalloff={4}
-                  worldProximityThreshold={0.8}
-                  worldProximityFalloff={1}/>
-          )}
-        </>
+        <>{ff && ff}</>
       </EffectComposer>
     </BaseCanvas>
   );
