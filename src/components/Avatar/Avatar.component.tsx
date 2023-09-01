@@ -279,25 +279,25 @@ const Avatar: FC<AvatarProps> = ({
       {style?.background && <BackgroundColor color={style.background as string} />}
       <EffectComposer multisampling={0} autoClear={false}>
         <Bloom
-            luminanceThreshold={bloom?.luminanceThreshold}
-            luminanceSmoothing={bloom?.luminanceSmoothing}
-            intensity={bloom?.intensity}
-            kernelSize={bloom?.kernelSize}
-            mipmapBlur={bloom?.mipmapBlur}
+          luminanceThreshold={bloom?.luminanceThreshold}
+          luminanceSmoothing={bloom?.luminanceSmoothing}
+          intensity={bloom?.intensity}
+          kernelSize={bloom?.kernelSize}
+          mipmapBlur={bloom?.mipmapBlur}
         />
         <>
           {effects?.ambientOcclusion && (
               <SSAO
-                  blendFunction={BlendFunction.MULTIPLY}
-                  distanceScaling={false}
-                  radius={0.09}
-                  bias={0.02}
-                  intensity={3}
-                  samples={20}
-                  worldDistanceThreshold={24}
-                  worldDistanceFalloff={0}
-                  worldProximityThreshold={0}
-                  worldProximityFalloff={6}
+                blendFunction={BlendFunction.MULTIPLY}
+                distanceScaling={false}
+                radius={0.09}
+                bias={0.02}
+                intensity={3}
+                samples={20}
+                worldDistanceThreshold={24}
+                worldDistanceFalloff={0}
+                worldProximityThreshold={0}
+                worldProximityFalloff={6}
               />
           )}
         </>
