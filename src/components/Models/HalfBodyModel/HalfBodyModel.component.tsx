@@ -2,7 +2,7 @@ import React, { FC, useRef } from 'react';
 import { useFrame, useGraph } from '@react-three/fiber';
 import { Model } from 'src/components/Models/Model';
 import { BaseModelProps } from 'src/types';
-import { useEmotion, useHeadMovement, useGltfLoader, useFallback, useIdleExpression } from "src/services";
+import { useEmotion, useHeadMovement, useGltfLoader, useFallback, useIdleExpression } from 'src/services';
 import { Group } from 'three';
 import { Emotion } from '../../Avatar/Avatar.component';
 
