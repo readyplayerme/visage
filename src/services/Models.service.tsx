@@ -12,7 +12,7 @@ import {
   Skeleton
 } from 'three';
 import { useFrame } from '@react-three/fiber';
-import type { ObjectMap } from '@react-three/fiber';
+import type { ObjectMap, SkinnedMeshProps } from '@react-three/fiber';
 import { GLTF, GLTFLoader, DRACOLoader } from 'three-stdlib';
 import { suspend } from 'suspend-react';
 import { Emotion } from 'src/components/Avatar/Avatar.component';
@@ -294,4 +294,92 @@ export const triggerCallback = (callback?: () => void) => {
   if (typeof callback === 'function') {
     callback();
   }
+};
+
+export const expressions = {
+  blink: [
+    {
+      morphTarget: 'eyesClosed',
+      morphTargetIndex: -1,
+      offset: 0,
+      duration: 0.2
+    },
+    {
+      morphTarget: 'eyeSquintLeft',
+      morphTargetIndex: -1,
+      offset: 0,
+      duration: 0.2
+    },
+    {
+      morphTarget: 'eyeSquintRight',
+      morphTargetIndex: -1,
+      offset: 0,
+      duration: 0.2
+    }
+  ]
+};
+
+/**
+ * Animates avatars facial expressions when morphTargets=Default,ARKit is provided with the avatar.
+ */
+export const useIdleExpression = (expression: keyof typeof expressions, nodes: Nodes) => {
+  const headMesh = (nodes.Wolf3D_Head || nodes.Wolf3D_Avatar) as unknown as SkinnedMeshProps;
+  const selectedExpression = expression in expressions ? expressions[expression] : undefined;
+  let duration = Number.POSITIVE_INFINITY;
+  let timeout: NodeJS.Timeout;
+
+  useEffect(() => {
+    if (headMesh.morphTargetDictionary && selectedExpression) {
+      for (let i = 0; i < selectedExpression.length; i++) {
+        selectedExpression[i].morphTargetIndex = headMesh.morphTargetDictionary[selectedExpression[i].morphTarget];
+      }
+    }
+  }, [selectedExpression]);
+
+  const animateExpression = (delta: number) => {
+    if (headMesh?.morphTargetInfluences && selectedExpression) {
+      duration += delta;
+
+      for (let i = 0; i < selectedExpression.length; i++) {
+        const section = selectedExpression[i];
+
+        if (duration < section.duration + section.offset) {
+          if (duration > section.offset) {
+            const pivot = ((duration - section.offset) / section.duration) * Math.PI;
+            const morphInfluence = Math.sin(pivot);
+            headMesh.morphTargetInfluences[section.morphTargetIndex] = morphInfluence;
+          }
+        } else {
+          headMesh.morphTargetInfluences[section.morphTargetIndex] = 0;
+        }
+      }
+    }
+  };
+
+  const setNextInterval = () => {
+    duration = 0;
+    const delay = Math.random() * 5000 + 3000;
+
+    clearTimeout(timeout);
+    timeout = setTimeout(setNextInterval, delay);
+  };
+
+  useEffect(() => {
+    if (!selectedExpression) {
+      return;
+    }
+
+    timeout = setTimeout(setNextInterval, 3000);
+
+    return function () {
+      clearTimeout(timeout);
+    };
+  });
+
+  useFrame((_, delta) => {
+    if (!headMesh || !selectedExpression) {
+      return null;
+    }
+    animateExpression(delta);
+  });
 };

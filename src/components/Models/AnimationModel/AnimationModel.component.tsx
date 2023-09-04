@@ -2,7 +2,7 @@ import React, { useRef, FC, useMemo } from 'react';
 import { useFrame, useGraph } from '@react-three/fiber';
 import { AnimationMixer, Group } from 'three';
 import { Model } from 'src/components/Models/Model';
-import { useHeadMovement, useGltfLoader, useFallback } from 'src/services';
+import { useHeadMovement, useGltfLoader, useFallback, useIdleExpression } from 'src/services';
 import { BaseModelProps } from 'src/types';
 import { loadAnimationClip } from '../../../services/Animation.service';
 
@@ -68,6 +68,7 @@ export const AnimationModel: FC<AnimationModelProps> = ({
   });
 
   useHeadMovement({ nodes, enabled: headMovement });
+  useIdleExpression('blink', nodes);
   useFallback(nodes, setModelFallback);
 
   return (
