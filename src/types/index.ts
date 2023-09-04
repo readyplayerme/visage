@@ -137,6 +137,13 @@ export type BloomConfiguration = {
   materialIntensity?: number;
 };
 
+export type EffectConfiguration = {
+  /**
+   * Enables ambient occlusion for the current scene.
+   */
+  ambientOcclusion?: boolean
+}
+
 export interface SpawnState {
   /**
    * Add a custom loaded effect like particles when avatar is loaded, animate them with a custom animation.

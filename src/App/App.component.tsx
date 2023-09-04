@@ -25,6 +25,9 @@ function App() {
             onLoaded={() => console.log('female avatar loaded')}
             fov={45}
             ambientLightIntensity={0}
+            effects={{
+              ambientOcclusion: true
+            }}
           >
             <StatsGl />
             <EnvironmentModel environment="spaceStation" scale={1} />

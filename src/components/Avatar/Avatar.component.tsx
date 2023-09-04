@@ -2,12 +2,19 @@ import React, { Suspense, FC, useMemo, CSSProperties, ReactNode, useEffect } fro
 import { Vector3 } from 'three';
 import { CameraLighting } from 'src/components/Scene/CameraLighting.component';
 import { Environment } from 'src/components/Scene/Environment.component';
-import { LightingProps, BaseModelProps, EnvironmentProps, BloomConfiguration, SpawnState } from 'src/types';
+import {
+  LightingProps,
+  BaseModelProps,
+  EnvironmentProps,
+  BloomConfiguration,
+  SpawnState,
+  EffectConfiguration
+} from 'src/types';
 import { BaseCanvas } from 'src/components/BaseCanvas';
-import { AnimationModel, HalfBodyModel, StaticModel, PoseModel } from 'src/components/Models';
+import {AnimationModel, HalfBodyModel, StaticModel, PoseModel} from 'src/components/Models';
 import { isValidFormat, triggerCallback } from 'src/services';
 import { Dpr } from '@react-three/fiber';
-import { EffectComposer } from '@react-three/postprocessing';
+import {EffectComposer, SSAO} from '@react-three/postprocessing';
 import { Provider, useSetAtom } from 'jotai';
 import Capture, { CaptureType } from 'src/components/Capture/Capture.component';
 import { Box, Background } from 'src/components/Background/Box/Box.component';
@@ -15,6 +22,7 @@ import { BackgroundColor } from 'src/components/Background';
 import Shadow from 'src/components/Shadow/Shadow.component';
 import Loader from 'src/components/Loader';
 import Bloom from 'src/components/Bloom/Bloom.component';
+import {BlendFunction} from "postprocessing";
 import { spawnState } from '../../state/spawnAtom';
 
 export const CAMERA = {
@@ -135,7 +143,13 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
    * Field of view of the camera.
    */
   fov?: number;
-
+  /**
+   * Control some effects like post-processing effects
+   */
+  effects?: EffectConfiguration;
+  /**
+   * Use any three.js(fiber, post-processing) compatible components to render in the scene.
+   */
   children?: ReactNode;
 }
 
@@ -177,6 +191,7 @@ const Avatar: FC<AvatarProps> = ({
   onLoadedEffect,
   onLoadedAnimation,
   children,
+                                   effects,
   fov = 50
 }) => {
   const setSpawnState = useSetAtom(spawnState);
@@ -262,7 +277,7 @@ const Avatar: FC<AvatarProps> = ({
       {background?.src && <Box {...background} />}
       {capture && <Capture {...capture} />}
       {style?.background && <BackgroundColor color={style.background as string} />}
-      <EffectComposer disableNormalPass>
+      <EffectComposer multisampling={0} autoClear={false}>
         <Bloom
           luminanceThreshold={bloom?.luminanceThreshold}
           luminanceSmoothing={bloom?.luminanceSmoothing}
@@ -270,6 +285,22 @@ const Avatar: FC<AvatarProps> = ({
           kernelSize={bloom?.kernelSize}
           mipmapBlur={bloom?.mipmapBlur}
         />
+        <>
+          {effects?.ambientOcclusion && (
+              <SSAO
+                blendFunction={BlendFunction.MULTIPLY}
+                distanceScaling={false}
+                radius={0.09}
+                bias={0.02}
+                intensity={3}
+                samples={20}
+                worldDistanceThreshold={24}
+                worldDistanceFalloff={0}
+                worldProximityThreshold={0}
+                worldProximityFalloff={6}
+              />
+          )}
+        </>
       </EffectComposer>
     </BaseCanvas>
   );

@@ -140,7 +140,7 @@ Posing.argTypes = {
 export const environmentModel: StoryFn<typeof Avatar> = (
   args: AvatarProps & { environmentModel: string; environmentScale: number }
 ) => (
-  <Avatar {...args}>
+  <Avatar {...args} effects={{ ambientOcclusion: true }}>
     <EnvironmentModel environment={args.environmentModel! as string} scale={args.environmentScale! as number} />
   </Avatar>
 );
