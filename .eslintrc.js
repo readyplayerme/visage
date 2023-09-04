@@ -49,7 +49,8 @@ module.exports = {
         tsx: 'never'
       }
     ],
-    'prefer-regex-literals': ['error', { disallowRedundantWrapping: false }]
+    'prefer-regex-literals': ['error', { disallowRedundantWrapping: false }],
+    'no-plusplus': 'off'
   },
   settings: {
     'import/resolver': {
