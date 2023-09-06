@@ -365,21 +365,18 @@ export const useIdleExpression = (expression: keyof typeof expressions, nodes: N
   };
 
   useEffect(() => {
-    if (!selectedExpression) {
-      return;
+    if (selectedExpression) {
+      timeout = setTimeout(setNextInterval, 3000);
     }
 
-    timeout = setTimeout(setNextInterval, 3000);
-
-    return function () {
+    return () => {
       clearTimeout(timeout);
     };
   });
 
   useFrame((_, delta) => {
-    if (!headMesh || !selectedExpression) {
-      return null;
+    if (headMesh && selectedExpression) {
+      animateExpression(delta);
     }
-    animateExpression(delta);
   });
 };
