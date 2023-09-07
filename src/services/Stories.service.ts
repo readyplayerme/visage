@@ -32,7 +32,12 @@ const keysToIgnore = [
   'dirLightIntensity',
   'spotLightIntensity',
   'spotLightAngle',
-  'onLoaded'
+  'onLoaded',
+  'onLoading',
+  'fov',
+  'spotLightPosition',
+  'dirLightPosition',
+  'scale'
 ];
 export const ignoreArgTypesOnExamples = keysToIgnore.reduce(
   (acc, key) => {
@@ -43,16 +48,19 @@ export const ignoreArgTypesOnExamples = keysToIgnore.reduce(
 );
 
 export const modelPresets = {
-  one: 'https://models.readyplayer.me/64d61e9e17883fd73ebe5eb7.glb?lod=0&morphTargets=Default&textureAtlas=none',
-  two: 'https://models.readyplayer.me/64d61f67f0367d07504924be.glb?lod=0&morphTargets=Default&textureAtlas=none',
-  three: 'https://models.readyplayer.me/64d62255f0367d0750492913.glb?lod=0&morphTargets=Default&textureAtlas=none',
-  five: 'https://models.readyplayer.me/64d6235e2d3bea6e4267b01d.glb?lod=0&morphTargets=Default&textureAtlas=none',
-  six: 'https://models.readyplayer.me/64d5d4eb651a0d350005c672.glb?lod=0&morphTargets=Default&textureAtlas=none'
+  one: 'https://models.readyplayer.me/64d61e9e17883fd73ebe5eb7.glb?morphTargets=ARKit,Eyes Extra&textureAtlas=none&lod=0',
+  two: 'https://models.readyplayer.me/64d61f67f0367d07504924be.glb?morphTargets=ARKit,Eyes Extra&textureAtlas=none&lod=0',
+  three:
+    'https://models.readyplayer.me/64d62255f0367d0750492913.glb?lod=0&morphTargets=ARKit,Eyes Extra&textureAtlas=none',
+  five: 'https://models.readyplayer.me/64d6235e2d3bea6e4267b01d.glb?lod=0&morphTargets=ARKit,Eyes Extra&textureAtlas=none',
+  six: 'https://models.readyplayer.me/64d5d4eb651a0d350005c672.glb?lod=0&morphTargets=ARKit,Eyes Extra&textureAtlas=none',
+  seven: 'https://models.readyplayer.me/64e3055495439dfcf3f0b665.glb?morphTargets=ARKit,Eyes%20Extra&textureAtlas=none'
 };
 
 export const animationPresets = {
-  one: getStoryAssetPath('M_Standing_Idle_Variations_002.fbx'),
-  two: getStoryAssetPath('M_Standing_Idle_001.fbx')
+  one: getStoryAssetPath('male-idle-1.fbx'),
+  two: getStoryAssetPath('male-idle-2.fbx'),
+  three: getStoryAssetPath('male-idle-3.fbx')
 };
 
 export const emotions = {

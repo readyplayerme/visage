@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback, useRef } from 'react';
 import {
   LinearFilter,
   MeshStandardMaterial,
@@ -12,7 +12,7 @@ import {
   Skeleton
 } from 'three';
 import { useFrame } from '@react-three/fiber';
-import type { ObjectMap } from '@react-three/fiber';
+import type { ObjectMap, SkinnedMeshProps } from '@react-three/fiber';
 import { GLTF, GLTFLoader, DRACOLoader } from 'three-stdlib';
 import { suspend } from 'suspend-react';
 import { Emotion } from 'src/components/Avatar/Avatar.component';
@@ -294,4 +294,92 @@ export const triggerCallback = (callback?: () => void) => {
   if (typeof callback === 'function') {
     callback();
   }
+};
+
+export const expressions = {
+  blink: [
+    {
+      morphTarget: 'eyesClosed',
+      morphTargetIndex: -1,
+      offset: 0,
+      duration: 0.2
+    },
+    {
+      morphTarget: 'eyeSquintLeft',
+      morphTargetIndex: -1,
+      offset: 0,
+      duration: 0.2
+    },
+    {
+      morphTarget: 'eyeSquintRight',
+      morphTargetIndex: -1,
+      offset: 0,
+      duration: 0.2
+    }
+  ]
+};
+
+/**
+ * Animates avatars facial expressions when morphTargets=ARKit,Eyes Extra is provided with the avatar.
+ */
+export const useIdleExpression = (expression: keyof typeof expressions, nodes: Nodes) => {
+  const headMesh = (nodes.Wolf3D_Head || nodes.Wolf3D_Avatar) as unknown as SkinnedMeshProps;
+  const selectedExpression = expression in expressions ? expressions[expression] : undefined;
+  const timeout = useRef<NodeJS.Timeout>();
+  const duration = useRef<number>(Number.POSITIVE_INFINITY);
+
+  useEffect(() => {
+    if (headMesh.morphTargetDictionary && selectedExpression) {
+      for (let i = 0; i < selectedExpression.length; i++) {
+        selectedExpression[i].morphTargetIndex = headMesh.morphTargetDictionary[selectedExpression[i].morphTarget];
+      }
+    }
+  }, [selectedExpression?.length]);
+
+  const animateExpression = useCallback(
+    (delta: number) => {
+      if (headMesh?.morphTargetInfluences && selectedExpression) {
+        duration.current += delta;
+
+        for (let i = 0; i < selectedExpression.length; i++) {
+          const section = selectedExpression[i];
+
+          if (duration.current < section.duration + section.offset) {
+            if (duration.current > section.offset) {
+              const pivot = ((duration.current - section.offset) / section.duration) * Math.PI;
+              const morphInfluence = Math.sin(pivot);
+              headMesh.morphTargetInfluences[section.morphTargetIndex] = morphInfluence;
+            }
+          } else {
+            headMesh.morphTargetInfluences[section.morphTargetIndex] = 0;
+          }
+        }
+      }
+    },
+    [headMesh?.morphTargetInfluences, selectedExpression, duration.current, timeout.current]
+  );
+
+  const setNextInterval = () => {
+    duration.current = 0;
+    const delay = Math.random() * 3000 + 3000;
+
+    clearTimeout(timeout.current);
+    timeout.current = setTimeout(setNextInterval, delay);
+  };
+
+  useEffect(() => {
+    if (selectedExpression) {
+      timeout.current = setTimeout(setNextInterval, 3000);
+    }
+
+    return () => {
+      clearTimeout(timeout.current);
+    };
+  }, [selectedExpression]);
+
+  useFrame((_, delta) => {
+    if (headMesh && selectedExpression) {
+      animateExpression(delta);
+    }
+  });
 };
