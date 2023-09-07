@@ -18,9 +18,9 @@ function App() {
       <div className={styles.container}>
         <div className={styles.card}>
           <Avatar
-            modelSrc="/male.glb"
+            modelSrc="https://models.readyplayer.me/64d61e9e17883fd73ebe5eb7.glb?morphTargets=ARKit,Eyes Extra&textureAtlas=none&lod=0"
             shadows
-            animationSrc="/M_Standing_Idle_Variations_002.fbx"
+            animationSrc="/male-idle-2.fbx"
             style={{ background: 'rgb(9,20,26)' }}
             onLoaded={() => console.log('female avatar loaded')}
             fov={45}

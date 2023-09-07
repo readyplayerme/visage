@@ -32,7 +32,12 @@ const keysToIgnore = [
   'dirLightIntensity',
   'spotLightIntensity',
   'spotLightAngle',
-  'onLoaded'
+  'onLoaded',
+  'onLoading',
+  'fov',
+  'spotLightPosition',
+  'dirLightPosition',
+  'scale'
 ];
 export const ignoreArgTypesOnExamples = keysToIgnore.reduce(
   (acc, key) => {
@@ -48,12 +53,14 @@ export const modelPresets = {
   three:
     'https://models.readyplayer.me/64d62255f0367d0750492913.glb?lod=0&morphTargets=ARKit,Eyes Extra&textureAtlas=none',
   five: 'https://models.readyplayer.me/64d6235e2d3bea6e4267b01d.glb?lod=0&morphTargets=ARKit,Eyes Extra&textureAtlas=none',
-  six: 'https://models.readyplayer.me/64d5d4eb651a0d350005c672.glb?lod=0&morphTargets=ARKit,Eyes Extra&textureAtlas=none'
+  six: 'https://models.readyplayer.me/64d5d4eb651a0d350005c672.glb?lod=0&morphTargets=ARKit,Eyes Extra&textureAtlas=none',
+  seven: 'https://models.readyplayer.me/64e3055495439dfcf3f0b665.glb?morphTargets=ARKit,Eyes%20Extra&textureAtlas=none'
 };
 
 export const animationPresets = {
-  one: getStoryAssetPath('M_Standing_Idle_Variations_002.fbx'),
-  two: getStoryAssetPath('M_Standing_Idle_001.fbx')
+  one: getStoryAssetPath('male-idle-1.fbx'),
+  two: getStoryAssetPath('male-idle-2.fbx'),
+  three: getStoryAssetPath('male-idle-3.fbx')
 };
 
 export const emotions = {

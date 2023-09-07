@@ -136,6 +136,24 @@ Posing.argTypes = {
   headMovement: { control: false }
 };
 
+export const IdleBlinking: StoryFn<typeof Avatar> = (args) => <Avatar {...args} />;
+IdleBlinking.args = {
+  // @ts-ignore
+  Comment: "Idle blinking works when avatar includes morph targets for 'ARKit' and 'Eyes Extra'.",
+  ...Static.args,
+  modelSrc: modelPresets.seven,
+  animationSrc: animationPresets.three,
+  cameraTarget: CAMERA.TARGET.FULL_BODY.MALE,
+  cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
+  headMovement: true,
+  emotion: emotions.smile
+};
+IdleBlinking.argTypes = {
+  ...ignoreArgTypesOnExamples,
+  modelSrc: { options: Object.values({ seven: modelPresets.seven }), control: { type: 'select' } },
+  animationSrc: { options: Object.values(animationPresets), control: { type: 'select' } }
+};
+
 // @ts-ignore
 export const environmentModel: StoryFn<typeof Avatar> = (
   args: AvatarProps & { environmentModel: string; environmentScale: number }
