@@ -192,7 +192,7 @@ export const useEmotion = (nodes: ObjectMap['nodes'], emotion?: Emotion) => {
 
       meshes.forEach((mesh) => {
         Object.entries(emotion).forEach(([shape, value]) => {
-          const shapeId = mesh!.morphTargetDictionary?.[shape];
+          const shapeId = mesh?.morphTargetDictionary?.[shape];
 
           if (shapeId) {
             mesh!.morphTargetInfluences![shapeId] = value;
@@ -329,7 +329,7 @@ export const useIdleExpression = (expression: keyof typeof expressions, nodes: N
   const duration = useRef<number>(Number.POSITIVE_INFINITY);
 
   useEffect(() => {
-    if (headMesh.morphTargetDictionary && selectedExpression) {
+    if (headMesh?.morphTargetDictionary && selectedExpression) {
       for (let i = 0; i < selectedExpression.length; i++) {
         selectedExpression[i].morphTargetIndex = headMesh.morphTargetDictionary[selectedExpression[i].morphTarget];
       }
