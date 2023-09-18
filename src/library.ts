@@ -6,6 +6,7 @@ import { StaticModel } from './components/Models/StaticModel';
 import { PoseModel } from './components/Models/PoseModel';
 import { EnvironmentModel } from './components/Models/EnvironmentModel';
 import { Avatar, CAMERA } from './components/Avatar';
+import { FloorReflection } from './components/FloorReflection';
 
 export {
   Exhibit,
@@ -16,5 +17,6 @@ export {
   StaticModel,
   PoseModel,
   Avatar,
-  CAMERA
+  CAMERA,
+  FloorReflection
 };
