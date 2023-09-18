@@ -210,10 +210,10 @@ ReflectiveFloor.args = {
   /* eslint-disable no-console */
   onLoaded: () => console.info('EVENT: environment model loaded'),
   /* eslint-enable no-console */
-  style: { background: 'rgb(9,20,26)' },
+  style: { background: '#050B2D' },
   // @ts-ignore
   resolution: 2048,
-  mixBlur: 1.5,
+  mixBlur: 0.8,
   mixStrength: 80,
   metalness: 0.5,
   blur: [300, 200],
@@ -226,8 +226,7 @@ ReflectiveFloor.args = {
   mixContrast: 1,
   reflectorOffset: 0,
   roughness: 1,
-  color: '#020411',
-  style: { background: '#050B2D' }
+  color: '#020411'
 };
 
 ReflectiveFloor.argTypes = {

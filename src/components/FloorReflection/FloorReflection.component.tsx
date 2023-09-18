@@ -20,7 +20,7 @@ export interface FloorReflectionProps {
 }
 export const FloorReflection: FC<FloorReflectionProps> = ({
   resolution = 2048,
-  mixBlur = 1.5,
+  mixBlur = 0.8,
   mixStrength = 80,
   metalness = 0.5,
   blur = [300, 200],
