@@ -1,6 +1,6 @@
 import React from 'react';
 import { StoryFn } from '@storybook/react';
-import { Sparkles as SparklesDrei } from '@react-three/drei';
+import { Sparkles as SparklesDrei, StatsGl } from '@react-three/drei';
 import type { Meta } from '@storybook/react';
 import { Avatar as AvatarWrapper, CAMERA } from 'src/components/Avatar';
 import { getStoryAssetPath } from 'src/services';
@@ -194,9 +194,12 @@ environmentModel.argTypes = {
   environment: { options: Object.keys(environmentPresets), control: { type: 'select' } }
 };
 // @ts-ignore
-export const ReflectiveFloor: StoryFn<typeof Avatar> = (args: AvatarProps & FloorReflectionProps) => (
-  <Avatar {...args} effects={{ ambientOcclusion: true }}>
+export const ReflectiveFloor: StoryFn<typeof Avatar> = (
+  args: AvatarProps & FloorReflectionProps & { debug: boolean }
+) => (
+  <Avatar {...args} effects={{ ambientOcclusion: true }} style={{ background: args.color }}>
     <FloorReflection {...args} />
+    {args?.debug && <StatsGl />}
   </Avatar>
 );
 ReflectiveFloor.args = {
@@ -210,9 +213,8 @@ ReflectiveFloor.args = {
   /* eslint-disable no-console */
   onLoaded: () => console.info('EVENT: environment model loaded'),
   /* eslint-enable no-console */
-  style: { background: '#050B2D' },
   // @ts-ignore
-  resolution: 2048,
+  resolution: 512,
   mixBlur: 0.8,
   mixStrength: 80,
   metalness: 0.5,
@@ -226,7 +228,8 @@ ReflectiveFloor.args = {
   mixContrast: 1,
   reflectorOffset: 0,
   roughness: 1,
-  color: '#020411'
+  color: 'rgb(9,20,26)',
+  debug: false
 };
 
 ReflectiveFloor.argTypes = {

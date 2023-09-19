@@ -16,10 +16,13 @@ export interface FloorReflectionProps {
   mixContrast?: number;
   reflectorOffset?: number;
   roughness?: number;
-  color?: string;
+  /**
+   * The color should match the canvas background color to provide a seamless transition from background to the reflective plane.
+   */
+  color: string;
 }
 export const FloorReflection: FC<FloorReflectionProps> = ({
-  resolution = 2048,
+  resolution = 512,
   mixBlur = 0.8,
   mixStrength = 80,
   metalness = 0.5,
@@ -33,28 +36,34 @@ export const FloorReflection: FC<FloorReflectionProps> = ({
   mixContrast = 1,
   reflectorOffset = 0,
   roughness = 1,
+  color,
   ...props
 }) => (
-  <group position={[0, -0.01, 0]}>
-    <mesh rotation={[-Math.PI / 2, 0, 0]}>
-      <planeGeometry args={[20, 5]} />
-      <MeshReflectorMaterial
-        resolution={resolution}
-        mixBlur={mixBlur}
-        mixStrength={mixStrength}
-        metalness={metalness}
-        blur={blur}
-        mirror={mirror}
-        minDepthThreshold={minDepthThreshold}
-        maxDepthThreshold={maxDepthThreshold}
-        depthScale={depthScale}
-        depthToBlurRatioBias={depthToBlurRatioBias}
-        distortion={distortion}
-        mixContrast={mixContrast}
-        reflectorOffset={reflectorOffset}
-        roughness={roughness}
-        {...props}
-      />
-    </mesh>
-  </group>
+  <>
+    <fog attach="fog" args={[color, 4, 8]} />
+    <group position={[0, 0, 0]}>
+      <mesh rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[20, 10]} />
+        <MeshReflectorMaterial
+          resolution={resolution}
+          mixBlur={mixBlur}
+          mixStrength={mixStrength}
+          metalness={metalness}
+          blur={blur}
+          mirror={mirror}
+          minDepthThreshold={minDepthThreshold}
+          maxDepthThreshold={maxDepthThreshold}
+          depthScale={depthScale}
+          depthToBlurRatioBias={depthToBlurRatioBias}
+          distortion={distortion}
+          mixContrast={mixContrast}
+          reflectorOffset={reflectorOffset}
+          roughness={roughness}
+          color={color}
+          envMapIntensity={0}
+          {...props}
+        />
+      </mesh>
+    </group>
+  </>
 );
