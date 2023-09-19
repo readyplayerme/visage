@@ -243,7 +243,7 @@ ReflectiveFloor.argTypes = {
   mixBlur: { control: { type: 'range', min: 0, max: 10, step: 0.1 } },
   mixStrength: { control: { type: 'range', min: 0, max: 100, step: 1 } },
   metalness: { control: { type: 'range', min: 0, max: 1, step: 0.01 } },
-  mirror: { control: { type: 'range', min: 0, max: 10, step: 1 } },
+  mirror: { control: { type: 'range', min: 0, max: 1, step: 1 } },
   minDepthThreshold: { control: { type: 'range', min: 0, max: 10, step: 0.01 } },
   maxDepthThreshold: { control: { type: 'range', min: 0, max: 10, step: 0.01 } },
   depthScale: { control: { type: 'range', min: 0, max: 20, step: 0.01 } },
