@@ -141,8 +141,8 @@ export type EffectConfiguration = {
   /**
    * Enables ambient occlusion for the current scene.
    */
-  ambientOcclusion?: boolean
-}
+  ambientOcclusion?: boolean;
+};
 
 export interface SpawnState {
   /**
