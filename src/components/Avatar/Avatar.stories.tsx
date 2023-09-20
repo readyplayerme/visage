@@ -68,7 +68,7 @@ const maxValue = 9.0;
 const stepSize = 0.3;
 const animationUpdateStepMs = 60;
 
-export const Showcase: StoryFn<typeof Avatar> = (args) => {
+export const Showcase: StoryFn<typeof Avatar> = (args: AvatarProps & { ambientOcclusion?: boolean }) => {
   const [currentValue, setCurrentValue] = useState(args.bloom?.materialIntensity);
   const [increasing, setIncreasing] = useState(true);
   const pulsatingBloom = {
@@ -79,6 +79,10 @@ export const Showcase: StoryFn<typeof Avatar> = (args) => {
 
   useEffect(() => {
     const animationInterval = setInterval(() => {
+      if (args?.ambientOcclusion) {
+        return;
+      }
+
       if (increasing) {
         setCurrentValue((prevValue) => {
           const newValue = prevValue! + stepSize;
@@ -101,10 +105,10 @@ export const Showcase: StoryFn<typeof Avatar> = (args) => {
     }, animationUpdateStepMs);
 
     return () => clearInterval(animationInterval);
-  }, [currentValue, increasing, initialValue, maxValue]);
+  }, [currentValue, increasing, initialValue, maxValue, args?.ambientOcclusion]);
 
   return (
-    <Avatar {...args} bloom={pulsatingBloom}>
+    <Avatar {...args} bloom={pulsatingBloom} effects={{ ambientOcclusion: args?.ambientOcclusion }}>
       <Sparkles color="white" count={50} opacity={0.9} scale={5} size={0.5} speed={0.35} />
     </Avatar>
   );
@@ -142,7 +146,9 @@ Showcase.args = {
     eyeLookOutLeft: 0.6,
     eyeLookInRight: 0.6,
     mouthDimpleLeft: 0.3
-  }
+  },
+  // @ts-ignore
+  ambientOcclusion: false
 };
 Showcase.argTypes = {
   ...ignoreArgTypesOnExamples,
