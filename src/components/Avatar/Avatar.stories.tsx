@@ -49,7 +49,10 @@ Static.args = {
     intensity: 0.1,
     materialIntensity: 3.3
   },
-  style: { background: 'rgb(9,20,26)' },
+  background: {
+    color: 'rgb(9,20,26)'
+  },
+  style: {},
   /* eslint-disable no-console */
   onLoaded: () => console.info('EVENT: static avatar loaded'),
   onLoading: () => console.info('EVENT: loading static avatar')
@@ -123,7 +126,9 @@ Showcase.args = {
     intensity: 1,
     materialIntensity: 1
   },
-  style: { background: '#282038' },
+  background: {
+    color: '#282038'
+  },
   dpr: 2,
   ambientLightColor: '#ffffff',
   dirLightColor: '#ffffff',

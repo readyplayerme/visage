@@ -38,8 +38,8 @@ export const Bloom: StoryFn<BloomConfiguration> = (args: BloomConfiguration | un
     dirLightIntensity={2.2}
     spotLightIntensity={0.5}
     environment="apartment"
-    style={{
-      background: 'rgb(9,20,26)'
+    background={{
+      color: 'rgb(9,20,26)'
     }}
   />
 );
@@ -109,7 +109,7 @@ SpawnEffectAndAnimation.args = {
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
   modelSrc: getStoryAssetPath('male-emissive.glb'),
   animationSrc: getStoryAssetPath('male-idle.glb'),
-  style: { background: 'rgb(9,20,26)' }
+  background: { color: 'rgb(9,20,26)' }
 };
 SpawnEffectAndAnimation.argTypes = {
   ...ignoreArgTypesOnExamples,

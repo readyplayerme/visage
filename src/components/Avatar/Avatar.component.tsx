@@ -87,6 +87,8 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
   cameraInitialDistance?: number;
   /**
    * Apply styling to canvas DOM element.
+   * Note that background property can not be set via style prop, it will always be overridden to `transparent`.
+   * Instead, use `background` prop for that purpose.
    */
   style?: CSSProperties;
   /**
@@ -98,8 +100,10 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
    */
   emotion?: Emotion;
   /**
-   * Applies Box background in the scene with a provided image.
+   * Allows adding a background image and background color to the scene.
    * Make sure that image is loadable to prevent bg errors.
+   * background.src - Accepts URL string.
+   * background.color - Accepts Hexadeximal, RGB, X11 color name, HSL string, doesn't support CSS gradients.
    */
   background?: Background;
   /**
@@ -276,7 +280,7 @@ const Avatar: FC<AvatarProps> = ({
       {shadows && <Shadow />}
       {background?.src && <Box {...background} />}
       {capture && <Capture {...capture} />}
-      {style?.background && <BackgroundColor color={style.background as string} />}
+      {background?.color && <BackgroundColor color={background.color} />}
       <EffectComposer autoClear={false}>
         <Bloom
           luminanceThreshold={bloom?.luminanceThreshold}
