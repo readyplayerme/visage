@@ -22,16 +22,21 @@ export const SpawnEffect: FC<SpawnEffectProps> = ({ onLoadedEffect, onLoadedEffe
     }
   }, [onLoadedEffectFinish, effectRunning]);
 
-  const spawnEffectMixer = useMemo(async () => {
-    const animationLoadedEffect = await loadAnimationClip(onLoadedEffect?.animationSrc || onLoadedEffect.src);
-    const mixer = new AnimationMixer(mountEffectNode.Scene);
+  const animationLoadedEffect = useMemo(
+    async () => loadAnimationClip(onLoadedEffect?.animationSrc || onLoadedEffect.src),
+    [onLoadedEffect?.animationSrc, onLoadedEffect.src]
+  );
 
-    if (!animationLoadedEffect) {
+  const spawnEffectMixer = useMemo(async () => {
+    const mixer = new AnimationMixer(mountEffectNode.Scene);
+    const loadedEffect = await animationLoadedEffect;
+
+    if (!loadedEffect) {
       setEffectRunning(false);
       return mixer;
     }
 
-    const animation = mixer.clipAction(animationLoadedEffect);
+    const animation = mixer.clipAction(loadedEffect);
 
     animation.setLoop(LoopRepeat, onLoadedEffect?.loop || 1);
     animation.clampWhenFinished = true;
@@ -44,7 +49,7 @@ export const SpawnEffect: FC<SpawnEffectProps> = ({ onLoadedEffect, onLoadedEffe
     });
 
     return mixer;
-  }, [mountEffectNode.Scene, onLoadedEffect?.animationSrc, onLoadedEffect?.loop, onLoadedEffect.src]);
+  }, [mountEffectNode.Scene, animationLoadedEffect, onLoadedEffect?.loop]);
 
   useFrame(async (state, delta) => {
     (await spawnEffectMixer)?.update(delta);

@@ -10,6 +10,10 @@ interface ClipWithType {
 const MIXAMO_PREFIX = 'mixamorig';
 const POSITION_SUFFIX = '.position';
 const MIXAMO_SCALE = 0.01;
+
+const fbxLoader = new FBXLoader();
+const gltfLoader = new GLTFLoader();
+
 function normaliseFbxAnimation(fbx: Group, index: number = 0) {
   const { tracks } = fbx.animations[index];
 
@@ -31,9 +35,6 @@ function normaliseFbxAnimation(fbx: Group, index: number = 0) {
 }
 
 const loadBlobFile = async (blob: Blob): Promise<ClipWithType> => {
-  const fbxLoader = new FBXLoader();
-  const gltfLoader = new GLTFLoader();
-
   try {
     const buffer = await blob.arrayBuffer();
     return {
@@ -49,9 +50,6 @@ const loadBlobFile = async (blob: Blob): Promise<ClipWithType> => {
 };
 
 const loadPathFile = async (source: string): Promise<ClipWithType> => {
-  const fbxLoader = new FBXLoader();
-  const gltfLoader = new GLTFLoader();
-
   try {
     return {
       group: (await gltfLoader.loadAsync(source)) as unknown as Group,

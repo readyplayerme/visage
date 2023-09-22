@@ -205,13 +205,13 @@ export const useEmotion = (nodes: ObjectMap['nodes'], emotion?: Emotion) => {
   });
 };
 
+const loader = new GLTFLoader();
+const dracoLoader = new DRACOLoader();
+dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.5/');
+loader.setDRACOLoader(dracoLoader);
+
 export const useGltfLoader = (source: Blob | string): GLTF =>
   suspend(async () => {
-    const loader = new GLTFLoader();
-    const dracoLoader = new DRACOLoader();
-    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.5/');
-    loader.setDRACOLoader(dracoLoader);
-
     if (source instanceof Blob) {
       const buffer = await source.arrayBuffer();
       return (await loader.parseAsync(buffer, '')) as unknown as GLTF;

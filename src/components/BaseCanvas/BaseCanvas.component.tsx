@@ -17,7 +17,7 @@ export const BaseCanvas: FC<BaseCanvasProps> = ({
   fov = 50,
   position = new Vector3(0, 0, 5),
   style,
-  dpr = [1, 2],
+  dpr = [window.devicePixelRatio * 0.5, 2],
   className
 }) => (
   <Canvas
