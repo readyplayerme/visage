@@ -37,22 +37,22 @@ export const AnimationModel: FC<AnimationModelProps> = ({
   const { scene } = useGltfLoader(modelSrc);
   const { nodes } = useGraph(scene);
 
+  const animationClip = useMemo(async () => loadAnimationClip(animationSrc), [animationSrc]);
+
   const animationMixer = useMemo(async () => {
     const mixer = new AnimationMixer(nodes.Armature);
     if (animationRunning) {
       return mixer;
     }
 
-    const animationClip = await loadAnimationClip(animationSrc);
-
-    const animation = mixer.clipAction(animationClip);
+    const animation = mixer.clipAction(await animationClip);
     animation.fadeIn(0.5);
     animation.play();
 
     mixer.update(0);
 
     return mixer;
-  }, [animationRunning, animationSrc, nodes.Armature]);
+  }, [animationRunning, animationClip, nodes.Armature]);
 
   useFrame(async (state, delta) => {
     (await animationMixer)?.update(delta);

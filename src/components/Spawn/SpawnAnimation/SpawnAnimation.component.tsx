@@ -24,14 +24,15 @@ export const SpawnAnimation: FC<SpawnAnimationProps> = ({ avatar, onLoadedAnimat
 
   const { nodes: avatarNode } = useGraph(avatar);
 
+  const animationClip = useMemo(async () => loadAnimationClip(onLoadedAnimation?.src || ''), [onLoadedAnimation?.src]);
+
   const animationMixerAvatar = useMemo(async () => {
     const mixer = new AnimationMixer(avatarNode.Armature);
     if (!avatarNode.Armature) {
       return mixer;
     }
-    const animationClip = await loadAnimationClip(onLoadedAnimation?.src || '');
 
-    const animation = mixer.clipAction(animationClip);
+    const animation = mixer.clipAction(await animationClip);
 
     animation.setLoop(LoopRepeat, onLoadedAnimation?.loop || 1);
     animation.clampWhenFinished = true;
@@ -44,7 +45,7 @@ export const SpawnAnimation: FC<SpawnAnimationProps> = ({ avatar, onLoadedAnimat
     });
 
     return mixer;
-  }, [avatarNode.Armature, onLoadedAnimation?.loop, onLoadedAnimation?.src]);
+  }, [avatarNode.Armature, onLoadedAnimation?.loop, animationClip]);
 
   useFrame(async (state, delta) => {
     (await animationMixerAvatar)?.update(delta);
