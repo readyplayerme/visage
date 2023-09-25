@@ -197,7 +197,7 @@ environmentModel.argTypes = {
 export const ReflectiveFloor: StoryFn<typeof Avatar> = (
   args: AvatarProps & FloorReflectionProps & { debug: boolean }
 ) => (
-  <Avatar {...args} effects={{ ambientOcclusion: true }} style={{ background: args.color }}>
+  <Avatar {...args} effects={{ ambientOcclusion: true }} background={{ color: args?.color }}>
     <FloorReflection {...args} />
     {args?.debug && <StatsGl />}
   </Avatar>
