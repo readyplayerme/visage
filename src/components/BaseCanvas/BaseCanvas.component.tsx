@@ -2,6 +2,7 @@ import React, { ReactNode, FC, CSSProperties } from 'react';
 import { Canvas, Dpr } from '@react-three/fiber';
 import { Vector3 } from 'three';
 import { CameraProps } from 'src/types';
+import { hasWindow } from 'src/services/Client.service';
 import styles from './BaseCanvas.module.scss';
 
 interface BaseCanvasProps extends CameraProps {
@@ -12,12 +13,14 @@ interface BaseCanvasProps extends CameraProps {
   className?: string;
 }
 
+const BASE_DPR = hasWindow ? window.devicePixelRatio : 1;
+
 export const BaseCanvas: FC<BaseCanvasProps> = ({
   children = undefined,
   fov = 50,
   position = new Vector3(0, 0, 5),
   style,
-  dpr = [window.devicePixelRatio * 0.5, 2],
+  dpr = [BASE_DPR * 0.5, 2],
   className
 }) => (
   <Canvas
