@@ -5,7 +5,7 @@ import { HalfBodyModel } from './components/Models/HalfBodyModel';
 import { StaticModel } from './components/Models/StaticModel';
 import { PoseModel } from './components/Models/PoseModel';
 import { EnvironmentModel } from './components/Models/EnvironmentModel';
-import { Avatar, CAMERA } from './components/Avatar';
+import { Avatar, CAMERA, AvatarProps } from './components/Avatar';
 import { FloorReflection } from './components/FloorReflection';
 
 export {
@@ -20,3 +20,5 @@ export {
   CAMERA,
   FloorReflection
 };
+
+export type { AvatarProps };
