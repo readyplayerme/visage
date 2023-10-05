@@ -7,7 +7,7 @@ export interface FloorReflectionProps {
   mixStrength?: number;
   metalness?: number;
   blur?: [number, number] | number;
-  mirror: number;
+  mirror?: number;
   minDepthThreshold?: number;
   maxDepthThreshold?: number;
   depthScale?: number;
