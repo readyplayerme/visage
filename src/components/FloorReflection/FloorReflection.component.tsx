@@ -7,7 +7,7 @@ export interface FloorReflectionProps {
   mixStrength?: number;
   metalness?: number;
   blur?: [number, number] | number;
-  mirror: number;
+  mirror?: number;
   minDepthThreshold?: number;
   maxDepthThreshold?: number;
   depthScale?: number;
@@ -40,7 +40,7 @@ export const FloorReflection: FC<FloorReflectionProps> = ({
   ...props
 }) => (
   <>
-    <fog attach="fog" args={[color, 4, 8]} />
+    <fog attach="fog" args={[color, 2, 6]} />
     <group position={[0, 0, 0]}>
       <mesh rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[20, 10]} />

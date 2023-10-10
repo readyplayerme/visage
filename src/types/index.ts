@@ -142,6 +142,10 @@ export type EffectConfiguration = {
    * Enables ambient occlusion for the current scene.
    */
   ambientOcclusion?: boolean;
+  /**
+   * Bloom post-processing effect.
+   */
+  bloom?: BloomConfiguration;
 };
 
 export interface SpawnState {

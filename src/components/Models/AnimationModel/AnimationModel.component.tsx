@@ -1,4 +1,4 @@
-import React, { useRef, FC, useMemo } from 'react';
+import React, { useRef, FC, useMemo, useState } from 'react';
 import { useFrame, useGraph } from '@react-three/fiber';
 import { AnimationMixer, Group } from 'three';
 import { Model } from 'src/components/Models/Model';
@@ -29,7 +29,7 @@ export const AnimationModel: FC<AnimationModelProps> = ({
   bloom
 }) => {
   const ref = useRef<Group>(null);
-  const [animationRunning, setAnimationRunning] = React.useState(true);
+  const [animationRunning, setAnimationRunning] = useState(true);
   const onSpawnAnimationFinish = () => {
     setAnimationRunning(false);
   };
@@ -46,7 +46,7 @@ export const AnimationModel: FC<AnimationModelProps> = ({
     }
 
     const animation = mixer.clipAction(await animationClip);
-    animation.fadeIn(0.5);
+    animation.fadeIn(0);
     animation.play();
 
     mixer.update(0);

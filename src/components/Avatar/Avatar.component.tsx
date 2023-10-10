@@ -2,14 +2,7 @@ import React, { Suspense, FC, useMemo, CSSProperties, ReactNode, useEffect } fro
 import { Vector3 } from 'three';
 import { CameraLighting } from 'src/components/Scene/CameraLighting.component';
 import { Environment } from 'src/components/Scene/Environment.component';
-import {
-  LightingProps,
-  BaseModelProps,
-  EnvironmentProps,
-  BloomConfiguration,
-  SpawnState,
-  EffectConfiguration
-} from 'src/types';
+import { LightingProps, BaseModelProps, EnvironmentProps, SpawnState, EffectConfiguration } from 'src/types';
 import { BaseCanvas } from 'src/components/BaseCanvas';
 import { AnimationModel, HalfBodyModel, StaticModel, PoseModel } from 'src/components/Models';
 import { isValidFormat, triggerCallback } from 'src/services';
@@ -132,10 +125,6 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
    */
   cameraZoomTarget?: Vector3;
   /**
-   * Bloom post-processing effect.
-   */
-  bloom?: BloomConfiguration;
-  /**
    * Spawn effect when model is loaded into scene.
    */
   onLoadedEffect?: SpawnState['onLoadedEffect'];
@@ -191,7 +180,6 @@ const Avatar: FC<AvatarProps> = ({
   className,
   headMovement = false,
   cameraZoomTarget = CAMERA.CONTROLS.FULL_BODY.ZOOM_TARGET,
-  bloom,
   onLoadedEffect,
   onLoadedAnimation,
   children,
@@ -218,7 +206,7 @@ const Avatar: FC<AvatarProps> = ({
           idleRotation={idleRotation}
           onLoaded={onLoaded}
           headMovement={headMovement}
-          bloom={bloom}
+          bloom={effects?.bloom}
         />
       );
     }
@@ -232,7 +220,7 @@ const Avatar: FC<AvatarProps> = ({
           idleRotation={idleRotation}
           onLoaded={onLoaded}
           headMovement={headMovement}
-          bloom={bloom}
+          bloom={effects?.bloom}
         />
       );
     }
@@ -245,13 +233,15 @@ const Avatar: FC<AvatarProps> = ({
           scale={scale}
           poseSrc={poseSrc!}
           onLoaded={onLoaded}
-          bloom={bloom}
+          bloom={effects?.bloom}
         />
       );
     }
 
-    return <StaticModel modelSrc={modelSrc} scale={scale} onLoaded={onLoaded} emotion={emotion} bloom={bloom} />;
-  }, [halfBody, animationSrc, modelSrc, scale, poseSrc, idleRotation, emotion, onLoaded, headMovement, bloom]);
+    return (
+      <StaticModel modelSrc={modelSrc} scale={scale} onLoaded={onLoaded} emotion={emotion} bloom={effects?.bloom} />
+    );
+  }, [halfBody, animationSrc, modelSrc, scale, poseSrc, idleRotation, emotion, onLoaded, headMovement, effects?.bloom]);
 
   useEffect(() => triggerCallback(onLoading), [modelSrc, animationSrc, onLoading]);
 
@@ -281,31 +271,35 @@ const Avatar: FC<AvatarProps> = ({
       {background?.src && <Box {...background} />}
       {capture && <Capture {...capture} />}
       {background?.color && <BackgroundColor color={background.color} />}
-      <EffectComposer autoClear={false}>
-        <Bloom
-          luminanceThreshold={bloom?.luminanceThreshold}
-          luminanceSmoothing={bloom?.luminanceSmoothing}
-          intensity={bloom?.intensity}
-          kernelSize={bloom?.kernelSize}
-          mipmapBlur={bloom?.mipmapBlur}
-        />
-        <>
-          {effects?.ambientOcclusion && (
-            <SSAO
-              blendFunction={BlendFunction.MULTIPLY}
-              distanceScaling={false}
-              radius={0.09}
-              bias={0.02}
-              intensity={3}
-              samples={20}
-              worldDistanceThreshold={24}
-              worldDistanceFalloff={0}
-              worldProximityThreshold={0}
-              worldProximityFalloff={6}
-            />
-          )}
-        </>
-      </EffectComposer>
+      {effects && (
+        <EffectComposer autoClear={false} multisampling={4}>
+          <>
+            {effects?.ambientOcclusion && (
+              <SSAO
+                blendFunction={BlendFunction.MULTIPLY}
+                distanceScaling={false}
+                radius={0.09}
+                bias={0.02}
+                intensity={3}
+                samples={20}
+                worldDistanceThreshold={24}
+                worldDistanceFalloff={0}
+                worldProximityThreshold={0}
+                worldProximityFalloff={6}
+              />
+            )}
+            {effects?.bloom && (
+              <Bloom
+                luminanceThreshold={effects?.bloom?.luminanceThreshold}
+                luminanceSmoothing={effects?.bloom?.luminanceSmoothing}
+                intensity={effects?.bloom?.intensity}
+                kernelSize={effects?.bloom?.kernelSize}
+                mipmapBlur={effects?.bloom?.mipmapBlur}
+              />
+            )}
+          </>
+        </EffectComposer>
+      )}
     </BaseCanvas>
   );
 };
