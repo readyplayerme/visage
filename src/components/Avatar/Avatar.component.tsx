@@ -272,7 +272,7 @@ const Avatar: FC<AvatarProps> = ({
       {capture && <Capture {...capture} />}
       {background?.color && <BackgroundColor color={background.color} />}
       {effects && (
-        <EffectComposer autoClear={false} multisampling={4}>
+        <EffectComposer autoClear multisampling={4}>
           <>
             {effects?.ambientOcclusion && (
               <SSAO
