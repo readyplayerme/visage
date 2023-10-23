@@ -281,11 +281,13 @@ const Avatar: FC<AvatarProps> = ({
                 radius={0.09}
                 bias={0.02}
                 intensity={3}
-                samples={20}
+                samples={23}
                 worldDistanceThreshold={24}
                 worldDistanceFalloff={0}
                 worldProximityThreshold={0}
                 worldProximityFalloff={6}
+                fade={0.02}
+                rings={16}
               />
             )}
             {effects?.bloom && (

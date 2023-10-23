@@ -111,7 +111,7 @@ export const Showcase: StoryFn<typeof Avatar> = (args: AvatarProps & { ambientOc
   }, [currentValue, increasing, initialValue, maxValue, args?.ambientOcclusion]);
 
   return (
-    <Avatar {...args} bloom={pulsatingBloom} effects={{ ambientOcclusion: args?.ambientOcclusion }}>
+    <Avatar {...args} effects={{ ambientOcclusion: args?.ambientOcclusion, bloom: pulsatingBloom }}>
       <Sparkles color="white" count={50} opacity={0.9} scale={5} size={0.5} speed={0.35} />
     </Avatar>
   );
@@ -141,7 +141,7 @@ Showcase.args = {
   dirLightIntensity: 2.2,
   spotLightIntensity: 0.5,
   environment: 'apartment',
-  shadows: true,
+  shadows: false,
   emotion: {
     jawOpen: 0.1,
     mouthSmileLeft: 0.2,
