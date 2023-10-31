@@ -1,10 +1,12 @@
 import React, { useRef, FC, useMemo, useState } from 'react';
 import { useFrame, useGraph } from '@react-three/fiber';
 import { AnimationMixer, Group } from 'three';
+
 import { Model } from 'src/components/Models/Model';
-import { useHeadMovement, useGltfLoader, useFallback, useIdleExpression } from 'src/services';
+import { useHeadMovement, useGltfLoader, useFallback, useIdleExpression, useEmotion } from 'src/services';
 import { BaseModelProps } from 'src/types';
-import { loadAnimationClip } from '../../../services/Animation.service';
+import { loadAnimationClip } from 'src/services/Animation.service';
+import { Emotion } from 'src/components/Avatar/Avatar.component';
 
 export interface AnimationModelProps extends BaseModelProps {
   modelSrc: string | Blob;
@@ -13,6 +15,7 @@ export interface AnimationModelProps extends BaseModelProps {
   scale?: number;
   idleRotation?: boolean;
   headMovement?: boolean;
+  emotion?: Emotion;
 }
 
 let currentRotation = 0;
@@ -26,6 +29,7 @@ export const AnimationModel: FC<AnimationModelProps> = ({
   setModelFallback,
   onLoaded,
   headMovement = false,
+  emotion,
   bloom
 }) => {
   const ref = useRef<Group>(null);
@@ -68,6 +72,7 @@ export const AnimationModel: FC<AnimationModelProps> = ({
   });
 
   useHeadMovement({ nodes, enabled: headMovement });
+  useEmotion(nodes, emotion);
   useIdleExpression('blink', nodes);
   useFallback(nodes, setModelFallback);
 
