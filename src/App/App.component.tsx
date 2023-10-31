@@ -1,7 +1,9 @@
 import React from 'react';
-import { Avatar } from 'src/components/Avatar';
 import { Sparkles, StatsGl } from '@react-three/drei';
-import { EnvironmentModel } from '../components/Models';
+
+import { Avatar } from 'src/components/Avatar';
+import { EnvironmentModel } from 'src/components/Models';
+
 import styles from './App.module.scss';
 
 function App() {
@@ -25,16 +27,6 @@ function App() {
             onLoaded={() => console.log('female avatar loaded')}
             fov={45}
             ambientLightIntensity={0}
-            emotion={{
-              eyeSquintLeft: 0.4,
-              eyeSquintRight: 0.2,
-              mouthSmileLeft: 0.37,
-              mouthSmileRight: 0.36,
-              mouthShrugUpper: 0.27,
-              browInnerUp: 0.3,
-              browOuterUpLeft: 0.37,
-              browOuterUpRight: 0.49
-            }}
             effects={{
               ambientOcclusion: true
             }}

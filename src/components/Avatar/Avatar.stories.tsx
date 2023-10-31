@@ -5,7 +5,7 @@ import { Vector3 } from 'three';
 import { Sparkles as SparklesDrei } from '@react-three/drei';
 import { FileDropper } from 'src/components/FileDropper/FileDropper.component';
 import { environmentPresets } from 'src/services/Environment.service';
-import { ignoreArgTypesOnExamples, modelPresets, animationPresets } from 'src/services/Stories.service';
+import { ignoreArgTypesOnExamples, modelPresets, animationPresets, emotions } from 'src/services/Stories.service';
 import { Avatar as AvatarWrapper, CAMERA } from './index';
 import { AvatarProps } from './Avatar.component';
 
@@ -172,11 +172,11 @@ Showcase.argTypes = {
 export const Animated: StoryFn<typeof Avatar> = Template.bind({});
 Animated.args = {
   ...Static.args,
-  emotion: undefined,
   modelSrc: getStoryAssetPath('male-emissive.glb'),
   animationSrc: getStoryAssetPath('male-idle.glb'),
   cameraTarget: CAMERA.TARGET.FULL_BODY.MALE,
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
+  emotion: emotions.smile,
   /* eslint-disable no-console */
   onLoaded: () => console.info('EVENT: animated avatar loaded'),
   onLoading: () => console.info('EVENT: loading animated avatar')
@@ -184,7 +184,18 @@ Animated.args = {
 };
 Animated.argTypes = {
   poseSrc: { control: false },
-  emotion: { control: false },
+  emotion: {
+    options: {
+      idle: emotions.idle,
+      angry: emotions.angry,
+      smile: emotions.smile,
+      sad: emotions.sad
+    },
+    defaultValue: emotions.smile,
+    control: {
+      type: 'select'
+    }
+  },
   fov: { control: { type: 'range', min: 30, max: 100, step: 1 } }
 };
 

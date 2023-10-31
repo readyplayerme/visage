@@ -1,3 +1,4 @@
+import { Emotion } from 'src/components/Avatar/Avatar.component';
 import { getStoryAssetPath } from './Models.service';
 
 const disableTable = { table: { disable: true } };
@@ -63,7 +64,20 @@ export const animationPresets = {
   three: getStoryAssetPath('male-idle-3.fbx')
 };
 
-export const emotions = {
+type FacialExpressionT = 'idle' | 'angry' | 'smile' | 'sad';
+
+export const emotions: Record<FacialExpressionT, Emotion> = {
+  idle: {},
+  angry: {
+    mouthDimpleLeft: 0.48,
+    mouthShrugLower: 0.385,
+    eyeSquintLeft: 0.63,
+    eyeSquintRight: 0.614,
+    browDownLeft: 0.842,
+    browDownRight: 0.56,
+    noseSneerLeft: 0.3,
+    noseSneerRight: 0.3
+  },
   smile: {
     eyeSquintLeft: 0.4,
     eyeSquintRight: 0.2,
@@ -73,5 +87,18 @@ export const emotions = {
     browInnerUp: 0.3,
     browOuterUpLeft: 0.37,
     browOuterUpRight: 0.49
+  },
+  sad: {
+    eyeWideLeft: 0.5,
+    eyeWideRight: 0.4,
+    mouthPucker: 0.19,
+    mouthFrownLeft: 0.6,
+    mouthFrownRight: 0.6,
+    mouthRollLower: 0.33,
+    mouthRollUpper: 0.02,
+    mouthShrugLower: 0.4,
+    browInnerUp: 0.78,
+    noseSneerLeft: 0.115,
+    noseSneerRight: 0.1
   }
 };
