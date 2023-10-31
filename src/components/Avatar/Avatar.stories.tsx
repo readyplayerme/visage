@@ -176,7 +176,7 @@ Animated.args = {
   animationSrc: getStoryAssetPath('male-idle.glb'),
   cameraTarget: CAMERA.TARGET.FULL_BODY.MALE,
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
-  emotion: emotions.smile,
+  emotion: emotions.idle,
   /* eslint-disable no-console */
   onLoaded: () => console.info('EVENT: animated avatar loaded'),
   onLoading: () => console.info('EVENT: loading animated avatar')
@@ -191,7 +191,7 @@ Animated.argTypes = {
       smile: emotions.smile,
       sad: emotions.sad
     },
-    defaultValue: emotions.smile,
+    defaultValue: emotions.idle,
     control: {
       type: 'select'
     }
