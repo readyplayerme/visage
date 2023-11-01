@@ -1,7 +1,9 @@
 import React from 'react';
-import { Avatar } from 'src/components/Avatar';
 import { Sparkles, StatsGl } from '@react-three/drei';
-import { EnvironmentModel } from '../components/Models';
+
+import { Avatar } from 'src/components/Avatar';
+import { EnvironmentModel } from 'src/components/Models';
+
 import styles from './App.module.scss';
 
 function App() {

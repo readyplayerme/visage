@@ -200,6 +200,7 @@ const Avatar: FC<AvatarProps> = ({
     if (!!animationSrc && !halfBody && isValidFormat(animationSrc)) {
       return (
         <AnimationModel
+          emotion={emotion}
           modelSrc={modelSrc}
           animationSrc={animationSrc}
           scale={scale}
