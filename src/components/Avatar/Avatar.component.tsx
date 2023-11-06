@@ -16,6 +16,7 @@ import Shadow from 'src/components/Shadow/Shadow.component';
 import Loader from 'src/components/Loader';
 import Bloom from 'src/components/Bloom/Bloom.component';
 import { BlendFunction } from 'postprocessing';
+import { RadialGradient, RadialGradientProps } from "src/components/Background/Gradient/RadialGradient.component";
 import { spawnState } from '../../state/spawnAtom';
 
 export const CAMERA = {
@@ -144,6 +145,10 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
    * Use any three.js(fiber, post-processing) compatible components to render in the scene.
    */
   children?: ReactNode;
+  /**
+   * Background radial gradient colors
+   */
+  radialGradient?: RadialGradientProps;
 }
 
 /**
@@ -184,7 +189,8 @@ const Avatar: FC<AvatarProps> = ({
   onLoadedAnimation,
   children,
   effects,
-  fov = 50
+  fov = 50,
+  radialGradient,
 }) => {
   const setSpawnState = useSetAtom(spawnState);
 
@@ -247,6 +253,7 @@ const Avatar: FC<AvatarProps> = ({
 
   return (
     <BaseCanvas position={new Vector3(0, 0, 3)} fov={fov} style={style} dpr={dpr} className={className}>
+      {radialGradient && <RadialGradient {...radialGradient} />}
       <Environment environment={environment} />
       <CameraLighting
         cameraTarget={cameraTarget}

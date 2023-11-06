@@ -28,6 +28,10 @@ function App() {
             effects={{
               ambientOcclusion: true
             }}
+            // radialGradient={{
+            //   startColor: "#0000ff",
+            //   endColor: "#ff0000"
+            // }}
           >
             <StatsGl />
             <EnvironmentModel environment="spaceStation" scale={1} />
