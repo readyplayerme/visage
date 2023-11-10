@@ -14,7 +14,7 @@ import {
 import { useFrame } from '@react-three/fiber';
 import type { ObjectMap, SkinnedMeshProps } from '@react-three/fiber';
 import { GLTF, GLTFLoader, DRACOLoader } from 'three-stdlib';
-import { suspend, clear } from 'suspend-react';
+import { suspend } from 'suspend-react';
 import { Emotion } from 'src/components/Avatar/Avatar.component';
 import { BloomConfiguration } from 'src/types';
 
@@ -211,16 +211,19 @@ dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5
 loader.setDRACOLoader(dracoLoader);
 
 export const useGltfLoader = (source: Blob | string): GLTF =>
-  suspend(async () => {
-    clear();
-    if (source instanceof Blob) {
-      const buffer = await source.arrayBuffer();
-      return (await loader.parseAsync(buffer, '')) as unknown as GLTF;
-    }
+  suspend(
+    async () => {
+      if (source instanceof Blob) {
+        const buffer = await source.arrayBuffer();
+        return (await loader.parseAsync(buffer, '')) as unknown as GLTF;
+      }
 
-    const gltf = await loader.loadAsync(source);
-    return gltf;
-  }, [source]);
+      const gltf = await loader.loadAsync(source);
+      return gltf;
+    },
+    [source],
+    { lifespan: 100 }
+  );
 
 export class Transform {
   constructor() {
