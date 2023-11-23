@@ -210,8 +210,9 @@ const dracoLoader = new DRACOLoader();
 dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.5/');
 loader.setDRACOLoader(dracoLoader);
 
-export const useGltfLoader = (source: Blob | string): GLTF =>
-  suspend(
+export const useGltfLoader = (source: Blob | string): GLTF => {
+  const gltfRef = useRef<GLTF>();
+  return suspend(
     async () => {
       if (source instanceof Blob) {
         const buffer = await source.arrayBuffer();
@@ -219,11 +220,19 @@ export const useGltfLoader = (source: Blob | string): GLTF =>
       }
 
       const gltf = await loader.loadAsync(source);
+
+      if (gltfRef.current) {
+        gltf.scene.rotation.y = gltfRef.current.scene.rotation.y;
+      }
+
+      gltfRef.current = gltf;
+
       return gltf;
     },
     [source],
     { lifespan: 100 }
   );
+};
 
 export class Transform {
   constructor() {
