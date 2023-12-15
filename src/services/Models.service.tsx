@@ -79,7 +79,6 @@ export const normaliseMaterialsConfig = (materials: Record<string, Material>, bl
     if (mat.map) {
       mat.map.minFilter = LinearFilter;
       mat.depthWrite = true;
-      mat.toneMapped = false;
     }
 
     if (mat.emissiveMap) {

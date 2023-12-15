@@ -3,7 +3,6 @@ import { StatsGl } from '@react-three/drei';
 import type { Meta } from '@storybook/react';
 import { Perf } from 'r3f-perf';
 import React from 'react';
-import { Vector3 } from 'three';
 import { getStoryAssetPath } from 'src/services';
 import { Avatar as AvatarWrapper } from './index';
 import { AvatarProps } from './Avatar.component';
@@ -33,15 +32,6 @@ Debug.args = {
   shadows: true,
   idleRotation: false,
   headMovement: false,
-  ambientLightColor: '#fff5b6',
-  dirLightColor: '#002aff',
-  spotLightColor: '#fff5b6',
-  ambientLightIntensity: 0.25,
-  dirLightIntensity: 5,
-  spotLightIntensity: 1,
-  dirLightPosition: new Vector3(-3, 5, -5),
-  spotLightPosition: new Vector3(12, 10, 7.5),
-  spotLightAngle: 0.314,
   /* eslint-disable no-console */
   onLoaded: () => console.info('EVENT: static avatar loaded'),
   onLoading: () => console.info('EVENT: loading static avatar')

@@ -1,11 +1,10 @@
 import { useEffect, FC, useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
-import { Camera, Vector3, DirectionalLight, AmbientLight, SpotLight } from 'three';
+import { Camera, Vector3 } from 'three';
 import { OrbitControls } from 'three-stdlib';
 import { clamp, lerp } from 'src/services';
-import { LightingProps, Required } from 'src/types';
 
-type CameraLightingProps = Required<LightingProps> & {
+type CameraLightingProps = {
   // eslint-disable-next-line react/no-unused-prop-types
   fullBody?: boolean;
   headScale?: number;
@@ -49,21 +48,12 @@ export const CameraLighting: FC<CameraLightingProps> = ({
   cameraInitialDistance,
   cameraZoomTarget,
   headScale = 1,
-  ambientLightColor,
-  ambientLightIntensity,
-  dirLightPosition,
-  dirLightColor,
-  dirLightIntensity,
-  spotLightPosition,
-  spotLightColor,
-  spotLightAngle,
-  spotLightIntensity,
   controlsMinDistance = 0.4,
   controlsMaxDistance = 2.5,
   updateCameraTargetOnZoom = false
 }) => {
   const cameraZoomTargetRef = useRef(cameraZoomTarget);
-  const { camera, gl, scene } = useThree();
+  const { camera, gl } = useThree();
   const fallbackCameraTarget = cameraTarget || 1.475 + headScale / 10;
   const headScaleAdjustedMinDistance = controlsMinDistance + headScale / 10;
 
@@ -107,59 +97,6 @@ export const CameraLighting: FC<CameraLightingProps> = ({
     gl.domElement,
     headScaleAdjustedMinDistance,
     cameraZoomTarget
-  ]);
-
-  useEffect(() => {
-    if (!scene.getObjectByName('back-highlight')) {
-      const dirLight = new DirectionalLight(dirLightColor, dirLightIntensity);
-      dirLight.name = 'back-highlight';
-      dirLight.position.set(dirLightPosition.x, dirLightPosition.y, dirLightPosition.z);
-      dirLight.castShadow = true;
-      dirLight.shadow.bias = -0.0001;
-      dirLight.shadow.mapSize.height = 1024;
-      dirLight.shadow.mapSize.width = 1024;
-      dirLight.shadow.blurSamples = 100;
-
-      const ambientLight = new AmbientLight(ambientLightColor, ambientLightIntensity);
-      ambientLight.name = 'ambient-light';
-      ambientLight.position.set(0, 0, 0);
-
-      const spotLight = new SpotLight(spotLightColor, spotLightIntensity, 0, spotLightAngle, 0, 1);
-      spotLight.name = 'spot-light';
-      spotLight.position.set(spotLightPosition.x, spotLightPosition.y, spotLightPosition.z);
-
-      camera.add(ambientLight);
-      camera.add(spotLight);
-      camera.add(dirLight);
-      scene.add(camera);
-    } else {
-      const dirLight = scene.getObjectByName('back-highlight') as DirectionalLight;
-      dirLight.color.set(dirLightColor);
-      dirLight.intensity = dirLightIntensity;
-      dirLight.position.set(dirLightPosition.x, dirLightPosition.y, dirLightPosition.z);
-
-      const ambientLight = scene.getObjectByName('ambient-light') as AmbientLight;
-      ambientLight.color.set(ambientLightColor);
-      ambientLight.intensity = ambientLightIntensity;
-
-      const spotLight = scene.getObjectByName('spot-light') as SpotLight;
-      spotLight.color.set(spotLightColor);
-      spotLight.intensity = spotLightIntensity;
-      spotLight.angle = spotLightAngle;
-      spotLight.position.set(spotLightPosition.x, spotLightPosition.y, spotLightPosition.z);
-    }
-  }, [
-    ambientLightColor,
-    ambientLightIntensity,
-    dirLightPosition,
-    dirLightColor,
-    dirLightIntensity,
-    spotLightPosition,
-    spotLightColor,
-    spotLightIntensity,
-    spotLightAngle,
-    camera,
-    scene
   ]);
 
   useFrame((_, delta) => {

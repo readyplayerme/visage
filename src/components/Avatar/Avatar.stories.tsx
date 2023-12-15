@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StoryFn } from '@storybook/react';
 import { getStoryAssetPath } from 'src/services';
-import { Vector3 } from 'three';
 import { Sparkles as SparklesDrei } from '@react-three/drei';
 import { FileDropper } from 'src/components/FileDropper/FileDropper.component';
 import { environmentPresets } from 'src/services/Environment.service';
@@ -28,15 +27,6 @@ Static.args = {
   shadows: true,
   idleRotation: false,
   headMovement: false,
-  ambientLightColor: '#fff5b6',
-  dirLightColor: '#002aff',
-  spotLightColor: '#fff5b6',
-  ambientLightIntensity: 0.25,
-  dirLightIntensity: 5,
-  spotLightIntensity: 1,
-  dirLightPosition: new Vector3(-3, 5, -5),
-  spotLightPosition: new Vector3(12, 10, 7.5),
-  spotLightAngle: 0.314,
   fov: 50,
   cameraZoomTarget: CAMERA.CONTROLS.FULL_BODY.ZOOM_TARGET,
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
@@ -134,12 +124,6 @@ Showcase.args = {
     color: '#282038'
   },
   dpr: 2,
-  ambientLightColor: '#ffffff',
-  dirLightColor: '#ffffff',
-  spotLightColor: '#adbfe5',
-  ambientLightIntensity: 0,
-  dirLightIntensity: 2.2,
-  spotLightIntensity: 0.5,
   environment: 'apartment',
   shadows: false,
   emotion: {
@@ -160,12 +144,6 @@ Showcase.argTypes = {
   modelSrc: { options: Object.values(modelPresets), control: { type: 'select' } },
   animationSrc: { options: Object.values(animationPresets), control: { type: 'select' } },
   environment: { table: { disable: true } },
-  ambientLightColor: { table: { disable: true } },
-  dirLightColor: { table: { disable: true } },
-  spotLightColor: { table: { disable: true } },
-  ambientLightIntensity: { table: { disable: true } },
-  dirLightIntensity: { table: { disable: true } },
-  spotLightIntensity: { table: { disable: true } },
   fov: { table: { disable: true } }
 };
 

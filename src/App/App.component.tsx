@@ -26,7 +26,6 @@ function App() {
             style={{ background: 'rgb(9,20,26)' }}
             onLoaded={() => console.log('female avatar loaded')}
             fov={45}
-            ambientLightIntensity={0}
             effects={{
               ambientOcclusion: true
             }}

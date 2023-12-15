@@ -32,12 +32,6 @@ export const Bloom: StoryFn<BloomConfiguration> = (args: BloomConfiguration | un
     cameraTarget={CAMERA.TARGET.FULL_BODY.FEMALE}
     cameraInitialDistance={CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE}
     effects={{ bloom: { ...args } }}
-    ambientLightColor="#ffffff"
-    dirLightColor="#ffffff"
-    spotLightColor="#adbfe5"
-    ambientLightIntensity={0}
-    dirLightIntensity={2.2}
-    spotLightIntensity={0.5}
     environment="apartment"
     background={{
       color: 'rgb(9,20,26)'
@@ -180,17 +174,12 @@ environmentModel.args = {
 environmentModel.argTypes = {
   ...ignoreArgTypesOnExamples,
   onLoading: { table: { disable: true } },
-  dirLightPosition: { table: { disable: true } },
-  spotLightPosition: { table: { disable: true } },
   scale: { table: { disable: true } },
   // @ts-ignore
   environmentModel: { options: Object.keys(environmentModels), control: { type: 'select' } },
   fov: { control: { type: 'range', min: 30, max: 100, step: 1 } },
   // @ts-ignore
   environmentScale: { control: { type: 'range', min: 0.01, max: 10, step: 0.01 } },
-  ambientLightIntensity: { control: { type: 'range', min: 0, max: 20, step: 0.1 } },
-  dirLightIntensity: { control: { type: 'range', min: 0, max: 20, step: 0.1 } },
-  spotLightIntensity: { control: { type: 'range', min: 0, max: 20, step: 0.1 } },
   environment: { options: Object.keys(environmentPresets), control: { type: 'select' } }
 };
 // @ts-ignore
