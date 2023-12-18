@@ -5,6 +5,7 @@ import { Sparkles as SparklesDrei } from '@react-three/drei';
 import { FileDropper } from 'src/components/FileDropper/FileDropper.component';
 import { environmentPresets } from 'src/services/Environment.service';
 import { ignoreArgTypesOnExamples, modelPresets, animationPresets, emotions } from 'src/services/Stories.service';
+import { Vector3 } from 'three';
 import { Avatar as AvatarWrapper, CAMERA } from './index';
 import { AvatarProps } from './Avatar.component';
 
@@ -22,11 +23,20 @@ Static.args = {
   modelSrc: getStoryAssetPath('female.glb'),
   animationSrc: undefined,
   poseSrc: undefined,
-  environment: 'hub',
+  environment: 'soft',
   scale: 1,
   shadows: true,
   idleRotation: false,
   headMovement: false,
+  keyLightIntensity: 1.2,
+  keyLightColor: '#e8e3df',
+  fillLightIntensity: 2.0,
+  fillLightColor: '#99ccff',
+  fillLightPosition: new Vector3(-0.5, 1.6, -0.5),
+  backLightIntensity: 1.2,
+  backLightColor: '#fff0d6',
+  backLightPosition: new Vector3(0.5, 1.6, -1.0),
+  lightTarget: new Vector3(0.0, 1.7, 0.0),
   fov: 50,
   cameraZoomTarget: CAMERA.CONTROLS.FULL_BODY.ZOOM_TARGET,
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
@@ -124,7 +134,16 @@ Showcase.args = {
     color: '#282038'
   },
   dpr: 2,
-  environment: 'apartment',
+  keyLightIntensity: 1.2,
+  keyLightColor: '#e8e3df',
+  fillLightIntensity: 2.0,
+  fillLightColor: '#99ccff',
+  fillLightPosition: new Vector3(-0.5, 1.6, -0.5),
+  backLightIntensity: 1.2,
+  backLightColor: '#fff0d6',
+  backLightPosition: new Vector3(0.5, 1.6, -1.0),
+  lightTarget: new Vector3(0.0, 1.7, 0.0),
+  environment: 'soft',
   shadows: false,
   emotion: {
     jawOpen: 0.1,
@@ -144,6 +163,15 @@ Showcase.argTypes = {
   modelSrc: { options: Object.values(modelPresets), control: { type: 'select' } },
   animationSrc: { options: Object.values(animationPresets), control: { type: 'select' } },
   environment: { table: { disable: true } },
+  keyLightIntensity: { table: { disable: true } },
+  keyLightColor: { table: { disable: true } },
+  fillLightIntensity: { table: { disable: true } },
+  fillLightColor: { table: { disable: true } },
+  fillLightPosition: { table: { disable: true } },
+  backLightIntensity: { table: { disable: true } },
+  backLightColor: { table: { disable: true } },
+  backLightPosition: { table: { disable: true } },
+  lightTarget: { table: { disable: true } },
   fov: { table: { disable: true } }
 };
 
@@ -197,7 +225,7 @@ _DragNDrop.args = {
   modelSrc: undefined,
   animationSrc: undefined,
   poseSrc: '',
-  environment: 'city',
+  environment: 'soft',
   cameraTarget: CAMERA.TARGET.FULL_BODY.FEMALE,
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
   /* eslint-disable no-console */
@@ -217,13 +245,12 @@ export default {
   title: 'Components/Avatar',
   component: Avatar,
   argTypes: {
-    ambientLightColor: { control: 'color' },
-    dirLightColor: { control: 'color' },
-    spotLightColor: { control: 'color' },
-    ambientLightIntensity: { control: { type: 'range', min: 0, max: 20, step: 0.1 } },
-    dirLightIntensity: { control: { type: 'range', min: 0, max: 20, step: 0.1 } },
-    spotLightIntensity: { control: { type: 'range', min: 0, max: 20, step: 0.1 } },
-    spotLightAngle: { control: { type: 'range', min: 0, max: 10, step: 0.01 } },
+    keyLightIntensity: { control: { type: 'range', min: 0, max: 20, step: 0.1 } },
+    keyLightColor: { control: 'color' },
+    fillLightIntensity: { control: { type: 'range', min: 0, max: 20, step: 0.1 } },
+    fillLightColor: { control: 'color' },
+    backLightIntensity: { control: { type: 'range', min: 0, max: 20, step: 0.1 } },
+    backLightColor: { control: 'color' },
     cameraTarget: { control: { type: 'range', min: 0, max: 10, step: 0.01 } },
     scale: { control: { type: 'range', min: 0.01, max: 10, step: 0.01 } },
     cameraInitialDistance: { control: { type: 'range', min: 0, max: 2.5, step: 0.01 } },

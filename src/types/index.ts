@@ -1,4 +1,4 @@
-import { Color, Vector3 } from 'three';
+import { Vector3 } from 'three';
 import { PresetsType } from '@react-three/drei/helpers/environment-assets';
 
 export type Required<T> = {
@@ -25,14 +25,14 @@ export interface EnvironmentProps {
  */
 export interface LightingProps {
   keyLightIntensity?: number;
-  keyLightColor?: Color;
+  keyLightColor?: string; // css-color string
 
   fillLightIntensity?: number;
-  fillLightColor?: Color;
+  fillLightColor?: string; // css-color string
   fillLightPosition?: Vector3;
 
   backLightIntensity?: number;
-  backLightColor?: Color;
+  backLightColor?: string; // css-color string
   backLightPosition?: Vector3;
 
   /**

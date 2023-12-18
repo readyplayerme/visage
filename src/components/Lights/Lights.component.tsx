@@ -2,7 +2,7 @@ import { ContactShadows } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
 import React, { FC, useEffect, useState } from 'react';
 import { LightingProps } from 'src/types';
-import { Color, Object3D, Vector3 } from 'three';
+import { Object3D, Vector3 } from 'three';
 
 const LIGHT_CONFIG = Object.freeze({
   fillLightAngle: Math.PI / 3,
@@ -12,19 +12,27 @@ const LIGHT_CONFIG = Object.freeze({
   liftLightPosition: new Vector3(0.25, 1.7, 2.0),
   defaultProps: {
     keyLightIntensity: 1.2,
-    keyLightColor: new Color(0xe8e3df),
+    keyLightColor: '#e8e3df',
     fillLightIntensity: 2.0,
-    fillLightColor: new Color(0x99ccff),
+    fillLightColor: '#99ccff',
     fillLightPosition: new Vector3(-0.5, 1.6, -0.5),
     backLightIntensity: 1.2,
-    backLightColor: new Color(0xfff0d6),
+    backLightColor: '#fff0d6',
     backLightPosition: new Vector3(0.5, 1.6, -1.0),
     lightTarget: new Vector3(0.0, 1.7, 0.0)
   } as Required<LightingProps>
 });
 
+Object.fromEntries = (arr: Array<any>) => Object.assign({}, ...arr.map(([k, v]) => ({ [k]: v })));
+
+const definedProps = (obj: Object) =>
+  Object.fromEntries(
+    // eslint-disable-next-line
+    Object.entries(obj).filter(([k, v]) => v !== undefined)
+  );
+
 const Lights: FC<LightingProps> = (lightingProps) => {
-  // use default props as fallback if no custom lighting settings is provided
+  // use default props as fallback if no custom lighting settings are provided
   const {
     keyLightIntensity,
     keyLightColor,
@@ -35,7 +43,7 @@ const Lights: FC<LightingProps> = (lightingProps) => {
     backLightColor,
     backLightPosition,
     lightTarget
-  } = { ...lightingProps, ...LIGHT_CONFIG.defaultProps };
+  } = Object.assign(LIGHT_CONFIG.defaultProps, definedProps(lightingProps));
 
   const { scene } = useThree();
 

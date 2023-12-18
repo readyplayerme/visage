@@ -8,6 +8,7 @@ import { ignoreArgTypesOnExamples, emotions, modelPresets, animationPresets } fr
 import { environmentModels, environmentPresets } from 'src/services/Environment.service';
 import { EnvironmentModel as EnvironmentModelContainer } from 'src/components/Models';
 import { FloorReflection, FloorReflectionProps } from 'src/components/FloorReflection';
+import { Vector3 } from 'three';
 import { AvatarProps } from './Avatar.component';
 import { Static } from './Avatar.stories';
 import { BloomConfiguration } from '../../types';
@@ -32,6 +33,15 @@ export const Bloom: StoryFn<BloomConfiguration> = (args: BloomConfiguration | un
     cameraTarget={CAMERA.TARGET.FULL_BODY.FEMALE}
     cameraInitialDistance={CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE}
     effects={{ bloom: { ...args } }}
+    keyLightIntensity={1.2}
+    keyLightColor="#e8e3df"
+    fillLightIntensity={2.0}
+    fillLightColor="#99ccff"
+    fillLightPosition={new Vector3(-0.5, 1.6, -0.5)}
+    backLightIntensity={1.2}
+    backLightColor="#fff0d6"
+    backLightPosition={new Vector3(0.5, 1.6, -1.0)}
+    lightTarget={new Vector3(0.0, 1.7, 0.0)}
     environment="apartment"
     background={{
       color: 'rgb(9,20,26)'
@@ -175,11 +185,19 @@ environmentModel.argTypes = {
   ...ignoreArgTypesOnExamples,
   onLoading: { table: { disable: true } },
   scale: { table: { disable: true } },
+  keyLightColor: { table: { disable: true } },
+  fillLightColor: { table: { disable: true } },
+  fillLightPosition: { table: { disable: true } },
+  backLightColor: { table: { disable: true } },
+  backLightPosition: { table: { disable: true } },
+  lightTarget: { table: { disable: true } },
   // @ts-ignore
   environmentModel: { options: Object.keys(environmentModels), control: { type: 'select' } },
   fov: { control: { type: 'range', min: 30, max: 100, step: 1 } },
   // @ts-ignore
   environmentScale: { control: { type: 'range', min: 0.01, max: 10, step: 0.01 } },
+  fillLightIntensity: { control: { type: 'range', min: 0, max: 20, step: 0.1 } },
+  backLightIntensity: { control: { type: 'range', min: 0, max: 20, step: 0.1 } },
   environment: { options: Object.keys(environmentPresets), control: { type: 'select' } }
 };
 // @ts-ignore

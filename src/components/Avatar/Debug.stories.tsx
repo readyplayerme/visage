@@ -4,6 +4,7 @@ import type { Meta } from '@storybook/react';
 import { Perf } from 'r3f-perf';
 import React from 'react';
 import { getStoryAssetPath } from 'src/services';
+import { Vector3 } from 'three';
 import { Avatar as AvatarWrapper } from './index';
 import { AvatarProps } from './Avatar.component';
 
@@ -32,6 +33,15 @@ Debug.args = {
   shadows: true,
   idleRotation: false,
   headMovement: false,
+  keyLightIntensity: 1.2,
+  keyLightColor: '#e8e3df',
+  fillLightIntensity: 2.0,
+  fillLightColor: '#99ccff',
+  fillLightPosition: new Vector3(-0.5, 1.6, -0.5),
+  backLightIntensity: 1.2,
+  backLightColor: '#fff0d6',
+  backLightPosition: new Vector3(0.5, 1.6, -1.0),
+  lightTarget: new Vector3(0.0, 1.7, 0.0),
   /* eslint-disable no-console */
   onLoaded: () => console.info('EVENT: static avatar loaded'),
   onLoading: () => console.info('EVENT: loading static avatar')

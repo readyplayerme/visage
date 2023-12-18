@@ -176,6 +176,15 @@ const Avatar: FC<AvatarProps> = ({
   onLoadedAnimation,
   children,
   effects,
+  keyLightIntensity,
+  keyLightColor,
+  fillLightIntensity,
+  fillLightColor,
+  fillLightPosition,
+  backLightIntensity,
+  backLightColor,
+  backLightPosition,
+  lightTarget,
   fov = 50
 }) => {
   const setSpawnState = useSetAtom(spawnState);
@@ -287,7 +296,17 @@ const Avatar: FC<AvatarProps> = ({
           </>
         </EffectComposer>
       )}
-      <Lights />
+      <Lights
+        keyLightIntensity={keyLightIntensity}
+        keyLightColor={keyLightColor}
+        fillLightIntensity={fillLightIntensity}
+        fillLightColor={fillLightColor}
+        fillLightPosition={fillLightPosition}
+        backLightIntensity={backLightIntensity}
+        backLightColor={backLightColor}
+        backLightPosition={backLightPosition}
+        lightTarget={lightTarget}
+      />
     </BaseCanvas>
   );
 };
