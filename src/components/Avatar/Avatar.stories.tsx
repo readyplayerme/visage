@@ -5,9 +5,9 @@ import { Sparkles as SparklesDrei } from '@react-three/drei';
 import { FileDropper } from 'src/components/FileDropper/FileDropper.component';
 import { environmentPresets } from 'src/services/Environment.service';
 import { ignoreArgTypesOnExamples, modelPresets, animationPresets, emotions } from 'src/services/Stories.service';
-import { Vector3 } from 'three';
 import { Avatar as AvatarWrapper, CAMERA } from './index';
 import { AvatarProps } from './Avatar.component';
+import { LIGHT_CONFIG } from '../Lights/Lights.component';
 
 const Avatar = (args: AvatarProps) => <AvatarWrapper {...args}>{args.children}</AvatarWrapper>;
 const Sparkles: StoryFn<typeof SparklesDrei> = (args: any) => <SparklesDrei {...args} />;
@@ -28,15 +28,6 @@ Static.args = {
   shadows: true,
   idleRotation: false,
   headMovement: false,
-  keyLightIntensity: 1.2,
-  keyLightColor: '#e8e3df',
-  fillLightIntensity: 2.0,
-  fillLightColor: '#99ccff',
-  fillLightPosition: new Vector3(-0.5, 1.6, -0.5),
-  backLightIntensity: 1.2,
-  backLightColor: '#fff0d6',
-  backLightPosition: new Vector3(0.5, 1.6, -1.0),
-  lightTarget: new Vector3(0.0, 1.7, 0.0),
   fov: 50,
   cameraZoomTarget: CAMERA.CONTROLS.FULL_BODY.ZOOM_TARGET,
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
@@ -55,8 +46,9 @@ Static.args = {
   style: {},
   /* eslint-disable no-console */
   onLoaded: () => console.info('EVENT: static avatar loaded'),
-  onLoading: () => console.info('EVENT: loading static avatar')
+  onLoading: () => console.info('EVENT: loading static avatar'),
   /* eslint-enable no-console */
+  ...LIGHT_CONFIG.defaultProps
 };
 Static.argTypes = {
   headMovement: { control: false },
@@ -134,15 +126,6 @@ Showcase.args = {
     color: '#282038'
   },
   dpr: 2,
-  keyLightIntensity: 1.2,
-  keyLightColor: '#e8e3df',
-  fillLightIntensity: 2.0,
-  fillLightColor: '#99ccff',
-  fillLightPosition: new Vector3(-0.5, 1.6, -0.5),
-  backLightIntensity: 1.2,
-  backLightColor: '#fff0d6',
-  backLightPosition: new Vector3(0.5, 1.6, -1.0),
-  lightTarget: new Vector3(0.0, 1.7, 0.0),
   environment: 'soft',
   shadows: false,
   emotion: {
@@ -156,7 +139,8 @@ Showcase.args = {
     mouthDimpleLeft: 0.3
   },
   // @ts-ignore
-  ambientOcclusion: false
+  ambientOcclusion: false,
+  ...LIGHT_CONFIG.defaultProps
 };
 Showcase.argTypes = {
   ...ignoreArgTypesOnExamples,
