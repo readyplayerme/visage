@@ -81,6 +81,10 @@ export const normaliseMaterialsConfig = (materials: Record<string, Material>, bl
       mat.depthWrite = true;
     }
 
+    if (mat.name.toLowerCase().includes('hair')) {
+      mat.roughness = 0.9;
+    }
+
     if (mat.emissiveMap) {
       mat.emissiveIntensity = bloomConfig?.materialIntensity || 3.3;
     }

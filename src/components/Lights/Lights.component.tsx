@@ -13,10 +13,10 @@ const LIGHT_CONFIG = Object.freeze({
   defaultProps: {
     keyLightIntensity: 1.2,
     keyLightColor: '#e8e3df',
-    fillLightIntensity: 2.0,
+    fillLightIntensity: 0.7,
     fillLightColor: '#99ccff',
     fillLightPosition: new Vector3(-0.5, 1.6, -0.5),
-    backLightIntensity: 1.2,
+    backLightIntensity: 2.3,
     backLightColor: '#fff0d6',
     backLightPosition: new Vector3(0.5, 1.6, -1.0),
     lightTarget: new Vector3(0.0, 1.7, 0.0)

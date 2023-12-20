@@ -271,16 +271,16 @@ const Avatar: FC<AvatarProps> = ({
               <SSAO
                 blendFunction={BlendFunction.MULTIPLY}
                 distanceScaling={false}
-                radius={0.09}
-                bias={0.02}
+                radius={0.08}
+                bias={0.01}
                 intensity={3}
-                samples={23}
+                samples={31}
                 worldDistanceThreshold={24}
                 worldDistanceFalloff={0}
                 worldProximityThreshold={0}
                 worldProximityFalloff={6}
                 fade={0.02}
-                rings={16}
+                rings={8}
               />
             )}
             {effects?.bloom && (
