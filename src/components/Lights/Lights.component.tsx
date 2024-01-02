@@ -1,6 +1,7 @@
 import { useThree } from '@react-three/fiber';
 import React, { FC, useEffect, useState } from 'react';
 import { LightingProps } from 'src/types';
+import { definedProps } from 'src/utils/props';
 import { Object3D, Vector3 } from 'three';
 
 export const LIGHT_CONFIG = Object.freeze({
@@ -21,14 +22,6 @@ export const LIGHT_CONFIG = Object.freeze({
     lightTarget: new Vector3(0.0, 1.7, 0.0)
   } as Required<LightingProps>
 });
-
-Object.fromEntries = (arr: Array<any>) => Object.assign({}, ...arr.map(([k, v]) => ({ [k]: v })));
-
-const definedProps = (obj: Object) =>
-  Object.fromEntries(
-    // eslint-disable-next-line
-    Object.entries(obj).filter(([k, v]) => v !== undefined)
-  );
 
 const Lights: FC<LightingProps> = (lightingProps) => {
   // use default props as fallback if no custom lighting settings are provided
