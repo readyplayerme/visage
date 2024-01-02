@@ -1,4 +1,3 @@
-import { ContactShadows } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
 import React, { FC, useEffect, useState } from 'react';
 import { LightingProps } from 'src/types';
@@ -96,12 +95,6 @@ const Lights: FC<LightingProps> = (lightingProps) => {
         color={keyLightColor}
         intensity={keyLightIntensity * 0.16}
       />
-      <ContactShadows opacity={1.0} scale={2.0} blur={1.0} far={0.25} resolution={256} color="#000000" />
-      {/* Invisble "shadow catcher" used by contact shadows with small offset on y axis to reduce clipping and artifacts. */}
-      <mesh rotation={[Math.PI * -0.5, 0.0, 0.0]} position={[0.0, -0.05, 0.0]}>
-        <planeGeometry args={[4.0, 4.0, 4.0]} />
-        <meshBasicMaterial opacity={0.0} transparent depthWrite={false} />
-      </mesh>
     </group>
   );
 };

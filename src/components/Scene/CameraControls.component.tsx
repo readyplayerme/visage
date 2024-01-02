@@ -4,7 +4,7 @@ import { Camera, Vector3 } from 'three';
 import { OrbitControls } from 'three-stdlib';
 import { clamp, lerp } from 'src/services';
 
-type CameraLightingProps = {
+type CameraControlsProps = {
   // eslint-disable-next-line react/no-unused-prop-types
   fullBody?: boolean;
   headScale?: number;
@@ -43,7 +43,7 @@ const updateCameraTarget = (camera: Camera, target: number, minDistance: number,
   }
 };
 
-export const CameraLighting: FC<CameraLightingProps> = ({
+export const CameraControls: FC<CameraControlsProps> = ({
   cameraTarget,
   cameraInitialDistance,
   cameraZoomTarget,

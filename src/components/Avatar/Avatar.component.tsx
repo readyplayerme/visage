@@ -1,6 +1,6 @@
 import React, { Suspense, FC, useMemo, CSSProperties, ReactNode, useEffect } from 'react';
 import { Vector3 } from 'three';
-import { CameraLighting } from 'src/components/Scene/CameraLighting.component';
+import { CameraControls } from 'src/components/Scene/CameraControls.component';
 import { Environment } from 'src/components/Scene/Environment.component';
 import { BaseModelProps, EnvironmentProps, SpawnState, EffectConfiguration, LightingProps } from 'src/types';
 import { BaseCanvas } from 'src/components/BaseCanvas';
@@ -250,7 +250,7 @@ const Avatar: FC<AvatarProps> = ({
   return (
     <BaseCanvas position={new Vector3(0, 0, 3)} fov={fov} style={style} dpr={dpr} className={className}>
       <Environment environment={environment} />
-      <CameraLighting
+      <CameraControls
         cameraTarget={cameraTarget}
         cameraInitialDistance={cameraInitialDistance}
         cameraZoomTarget={cameraZoomTarget}
