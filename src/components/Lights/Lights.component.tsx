@@ -7,9 +7,10 @@ import { Object3D, Vector3 } from 'three';
 export const LIGHT_CONFIG = Object.freeze({
   fillLightAngle: Math.PI / 3,
   backLightAngle: Math.PI / 8,
-  keyLightAngle: Math.PI / 2,
+  keyLightAngle: Math.PI,
   keyLightPosition: new Vector3(0.5, 1.55, 0.5),
   liftLightPosition: new Vector3(0.25, 1.7, 2.0),
+  dirLightPosition: new Vector3(-0.75, 2.5, -1.0),
   defaultProps: {
     keyLightIntensity: 1.2,
     keyLightColor: '#e8e3df',
@@ -88,6 +89,8 @@ const Lights: FC<LightingProps> = (lightingProps) => {
         color={keyLightColor}
         intensity={keyLightIntensity * 0.16}
       />
+      {/* Dummy directional light for shadow casting. */}
+      <directionalLight position={LIGHT_CONFIG.dirLightPosition} target={targets.shoe} castShadow intensity={0.0} />
     </group>
   );
 };
