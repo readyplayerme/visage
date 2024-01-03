@@ -89,7 +89,7 @@ const Lights: FC<LightingProps> = (lightingProps) => {
         color={keyLightColor}
         intensity={keyLightIntensity * 0.16}
       />
-      {/* Dummy directional light for shadow casting. */}
+      {/* Dummy directional light for shadow casting from behind avatar. */}
       <directionalLight position={LIGHT_CONFIG.dirLightPosition} target={targets.shoe} castShadow intensity={0.0} />
     </group>
   );
