@@ -8,17 +8,19 @@ export const LIGHT_CONFIG = Object.freeze({
   fillLightAngle: Math.PI / 3,
   backLightAngle: Math.PI / 8,
   keyLightAngle: Math.PI,
+  silhouetteLightAngle: Math.PI * 1.5,
   keyLightPosition: new Vector3(0.5, 1.55, 0.5),
   liftLightPosition: new Vector3(0.25, 1.7, 2.0),
   dirLightPosition: new Vector3(-0.75, 2.5, -1.0),
+  silhouetteLightPosition: new Vector3(-1.5, 0.1, -1.5),
   defaultProps: {
     keyLightIntensity: 1.2,
-    keyLightColor: '#e8e3df',
-    fillLightIntensity: 0.7,
-    fillLightColor: '#99ccff',
+    keyLightColor: '#FFFFFF',
+    fillLightIntensity: 0.8,
+    fillLightColor: '#6794FF',
     fillLightPosition: new Vector3(-0.5, 1.6, -0.5),
-    backLightIntensity: 2.3,
-    backLightColor: '#fff0d6',
+    backLightIntensity: 2.2,
+    backLightColor: '#FFB878',
     backLightPosition: new Vector3(0.5, 1.6, -1.0),
     lightTarget: new Vector3(0.0, 1.7, 0.0)
   } as Required<LightingProps>
@@ -87,7 +89,15 @@ const Lights: FC<LightingProps> = (lightingProps) => {
         target={targets.shoe}
         angle={LIGHT_CONFIG.keyLightAngle}
         color={keyLightColor}
-        intensity={keyLightIntensity * 0.16}
+        intensity={keyLightIntensity * 0.25}
+      />
+      {/* Silhouette light on arms and legs. */}
+      <spotLight
+        position={LIGHT_CONFIG.silhouetteLightPosition}
+        target={targets.head}
+        angle={LIGHT_CONFIG.silhouetteLightAngle}
+        color={keyLightColor}
+        intensity={keyLightIntensity * 0.25}
       />
       {/* Dummy directional light for shadow casting from behind avatar. */}
       <directionalLight position={LIGHT_CONFIG.dirLightPosition} target={targets.shoe} castShadow intensity={0.0} />
