@@ -1,13 +1,13 @@
 import React, { Suspense, FC, useMemo, CSSProperties, ReactNode, useEffect } from 'react';
 import { Vector3 } from 'three';
-import { CameraLighting } from 'src/components/Scene/CameraLighting.component';
+import { CameraControls } from 'src/components/Scene/CameraControls.component';
 import { Environment } from 'src/components/Scene/Environment.component';
-import { LightingProps, BaseModelProps, EnvironmentProps, SpawnState, EffectConfiguration } from 'src/types';
+import { BaseModelProps, EnvironmentProps, SpawnState, EffectConfiguration, LightingProps } from 'src/types';
 import { BaseCanvas } from 'src/components/BaseCanvas';
 import { AnimationModel, HalfBodyModel, StaticModel, PoseModel } from 'src/components/Models';
 import { isValidFormat, triggerCallback } from 'src/services';
 import { Dpr } from '@react-three/fiber';
-import { EffectComposer, SSAO } from '@react-three/postprocessing';
+import { EffectComposer, SSAO, Vignette } from '@react-three/postprocessing';
 import { Provider, useSetAtom } from 'jotai';
 import Capture, { CaptureType } from 'src/components/Capture/Capture.component';
 import { Box, Background } from 'src/components/Background/Box/Box.component';
@@ -16,6 +16,7 @@ import Shadow from 'src/components/Shadow/Shadow.component';
 import Loader from 'src/components/Loader';
 import Bloom from 'src/components/Bloom/Bloom.component';
 import { BlendFunction } from 'postprocessing';
+import Lights from 'src/components/Lights/Lights.component';
 import { spawnState } from '../../state/spawnAtom';
 
 export const CAMERA = {
@@ -154,19 +155,10 @@ const Avatar: FC<AvatarProps> = ({
   modelSrc,
   animationSrc = undefined,
   poseSrc = undefined,
-  environment = 'city',
+  environment = 'soft',
   halfBody = false,
   shadows = false,
   scale = 1,
-  ambientLightColor = '#fff5b6',
-  ambientLightIntensity = 0.25,
-  dirLightPosition = new Vector3(-3, 5, -5),
-  dirLightColor = '#002aff',
-  dirLightIntensity = 5,
-  spotLightPosition = new Vector3(12, 10, 7.5),
-  spotLightColor = '#fff5b6',
-  spotLightAngle = 0.314,
-  spotLightIntensity = 1,
   cameraTarget = CAMERA.TARGET.FULL_BODY.MALE,
   cameraInitialDistance = CAMERA.INITIAL_DISTANCE.FULL_BODY,
   style,
@@ -184,6 +176,15 @@ const Avatar: FC<AvatarProps> = ({
   onLoadedAnimation,
   children,
   effects,
+  keyLightIntensity,
+  keyLightColor,
+  fillLightIntensity,
+  fillLightColor,
+  fillLightPosition,
+  backLightIntensity,
+  backLightColor,
+  backLightPosition,
+  lightTarget,
   fov = 50
 }) => {
   const setSpawnState = useSetAtom(spawnState);
@@ -249,19 +250,10 @@ const Avatar: FC<AvatarProps> = ({
   return (
     <BaseCanvas position={new Vector3(0, 0, 3)} fov={fov} style={style} dpr={dpr} className={className}>
       <Environment environment={environment} />
-      <CameraLighting
+      <CameraControls
         cameraTarget={cameraTarget}
         cameraInitialDistance={cameraInitialDistance}
         cameraZoomTarget={cameraZoomTarget}
-        ambientLightColor={ambientLightColor}
-        ambientLightIntensity={ambientLightIntensity}
-        dirLightPosition={dirLightPosition}
-        dirLightColor={dirLightColor}
-        dirLightIntensity={dirLightIntensity}
-        spotLightPosition={spotLightPosition}
-        spotLightColor={spotLightColor}
-        spotLightAngle={spotLightAngle}
-        spotLightIntensity={spotLightIntensity}
         controlsMinDistance={halfBody ? CAMERA.CONTROLS.HALF_BODY.MIN_DISTANCE : CAMERA.CONTROLS.FULL_BODY.MIN_DISTANCE}
         controlsMaxDistance={halfBody ? CAMERA.CONTROLS.HALF_BODY.MAX_DISTANCE : CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE}
         updateCameraTargetOnZoom={!halfBody}
@@ -272,23 +264,23 @@ const Avatar: FC<AvatarProps> = ({
       {background?.src && <Box {...background} />}
       {capture && <Capture {...capture} />}
       {background?.color && <BackgroundColor color={background.color} />}
-      {(effects?.ambientOcclusion || effects?.bloom) && (
+      {(effects?.ambientOcclusion || effects?.bloom || effects?.vignette) && (
         <EffectComposer autoClear multisampling={4}>
           <>
             {effects?.ambientOcclusion && (
               <SSAO
                 blendFunction={BlendFunction.MULTIPLY}
                 distanceScaling={false}
-                radius={0.09}
-                bias={0.02}
+                radius={0.08}
+                bias={0.01}
                 intensity={3}
-                samples={23}
+                samples={31}
                 worldDistanceThreshold={24}
                 worldDistanceFalloff={0}
                 worldProximityThreshold={0}
                 worldProximityFalloff={6}
                 fade={0.02}
-                rings={16}
+                rings={8}
               />
             )}
             {effects?.bloom && (
@@ -300,9 +292,21 @@ const Avatar: FC<AvatarProps> = ({
                 mipmapBlur={effects?.bloom?.mipmapBlur}
               />
             )}
+            {effects?.vignette && <Vignette eskil={false} offset={0.5} darkness={0.5} />}
           </>
         </EffectComposer>
       )}
+      <Lights
+        keyLightIntensity={keyLightIntensity}
+        keyLightColor={keyLightColor}
+        fillLightIntensity={fillLightIntensity}
+        fillLightColor={fillLightColor}
+        fillLightPosition={fillLightPosition}
+        backLightIntensity={backLightIntensity}
+        backLightColor={backLightColor}
+        backLightPosition={backLightPosition}
+        lightTarget={lightTarget}
+      />
     </BaseCanvas>
   );
 };

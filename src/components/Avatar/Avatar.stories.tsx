@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { StoryFn } from '@storybook/react';
 import { getStoryAssetPath } from 'src/services';
-import { Vector3 } from 'three';
 import { Sparkles as SparklesDrei } from '@react-three/drei';
 import { FileDropper } from 'src/components/FileDropper/FileDropper.component';
 import { environmentPresets } from 'src/services/Environment.service';
 import { ignoreArgTypesOnExamples, modelPresets, animationPresets, emotions } from 'src/services/Stories.service';
 import { Avatar as AvatarWrapper, CAMERA } from './index';
 import { AvatarProps } from './Avatar.component';
+import { LIGHT_CONFIG } from '../Lights/Lights.component';
 
 const Avatar = (args: AvatarProps) => <AvatarWrapper {...args}>{args.children}</AvatarWrapper>;
 const Sparkles: StoryFn<typeof SparklesDrei> = (args: any) => <SparklesDrei {...args} />;
@@ -23,20 +23,11 @@ Static.args = {
   modelSrc: getStoryAssetPath('female.glb'),
   animationSrc: undefined,
   poseSrc: undefined,
-  environment: 'hub',
+  environment: 'soft',
   scale: 1,
   shadows: true,
   idleRotation: false,
   headMovement: false,
-  ambientLightColor: '#fff5b6',
-  dirLightColor: '#002aff',
-  spotLightColor: '#fff5b6',
-  ambientLightIntensity: 0.25,
-  dirLightIntensity: 5,
-  spotLightIntensity: 1,
-  dirLightPosition: new Vector3(-3, 5, -5),
-  spotLightPosition: new Vector3(12, 10, 7.5),
-  spotLightAngle: 0.314,
   fov: 50,
   cameraZoomTarget: CAMERA.CONTROLS.FULL_BODY.ZOOM_TARGET,
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
@@ -55,8 +46,9 @@ Static.args = {
   style: {},
   /* eslint-disable no-console */
   onLoaded: () => console.info('EVENT: static avatar loaded'),
-  onLoading: () => console.info('EVENT: loading static avatar')
+  onLoading: () => console.info('EVENT: loading static avatar'),
   /* eslint-enable no-console */
+  ...LIGHT_CONFIG.defaultProps
 };
 Static.argTypes = {
   headMovement: { control: false },
@@ -134,13 +126,7 @@ Showcase.args = {
     color: '#282038'
   },
   dpr: 2,
-  ambientLightColor: '#ffffff',
-  dirLightColor: '#ffffff',
-  spotLightColor: '#adbfe5',
-  ambientLightIntensity: 0,
-  dirLightIntensity: 2.2,
-  spotLightIntensity: 0.5,
-  environment: 'apartment',
+  environment: 'soft',
   shadows: false,
   emotion: {
     jawOpen: 0.1,
@@ -153,19 +139,23 @@ Showcase.args = {
     mouthDimpleLeft: 0.3
   },
   // @ts-ignore
-  ambientOcclusion: false
+  ambientOcclusion: false,
+  ...LIGHT_CONFIG.defaultProps
 };
 Showcase.argTypes = {
   ...ignoreArgTypesOnExamples,
   modelSrc: { options: Object.values(modelPresets), control: { type: 'select' } },
   animationSrc: { options: Object.values(animationPresets), control: { type: 'select' } },
   environment: { table: { disable: true } },
-  ambientLightColor: { table: { disable: true } },
-  dirLightColor: { table: { disable: true } },
-  spotLightColor: { table: { disable: true } },
-  ambientLightIntensity: { table: { disable: true } },
-  dirLightIntensity: { table: { disable: true } },
-  spotLightIntensity: { table: { disable: true } },
+  keyLightIntensity: { table: { disable: true } },
+  keyLightColor: { table: { disable: true } },
+  fillLightIntensity: { table: { disable: true } },
+  fillLightColor: { table: { disable: true } },
+  fillLightPosition: { table: { disable: true } },
+  backLightIntensity: { table: { disable: true } },
+  backLightColor: { table: { disable: true } },
+  backLightPosition: { table: { disable: true } },
+  lightTarget: { table: { disable: true } },
   fov: { table: { disable: true } }
 };
 
@@ -219,7 +209,7 @@ _DragNDrop.args = {
   modelSrc: undefined,
   animationSrc: undefined,
   poseSrc: '',
-  environment: 'city',
+  environment: 'soft',
   cameraTarget: CAMERA.TARGET.FULL_BODY.FEMALE,
   cameraInitialDistance: CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE,
   /* eslint-disable no-console */
@@ -239,13 +229,12 @@ export default {
   title: 'Components/Avatar',
   component: Avatar,
   argTypes: {
-    ambientLightColor: { control: 'color' },
-    dirLightColor: { control: 'color' },
-    spotLightColor: { control: 'color' },
-    ambientLightIntensity: { control: { type: 'range', min: 0, max: 20, step: 0.1 } },
-    dirLightIntensity: { control: { type: 'range', min: 0, max: 20, step: 0.1 } },
-    spotLightIntensity: { control: { type: 'range', min: 0, max: 20, step: 0.1 } },
-    spotLightAngle: { control: { type: 'range', min: 0, max: 10, step: 0.01 } },
+    keyLightIntensity: { control: { type: 'range', min: 0, max: 20, step: 0.1 } },
+    keyLightColor: { control: 'color' },
+    fillLightIntensity: { control: { type: 'range', min: 0, max: 20, step: 0.1 } },
+    fillLightColor: { control: 'color' },
+    backLightIntensity: { control: { type: 'range', min: 0, max: 20, step: 0.1 } },
+    backLightColor: { control: 'color' },
     cameraTarget: { control: { type: 'range', min: 0, max: 10, step: 0.01 } },
     scale: { control: { type: 'range', min: 0.01, max: 10, step: 0.01 } },
     cameraInitialDistance: { control: { type: 'range', min: 0, max: 2.5, step: 0.01 } },

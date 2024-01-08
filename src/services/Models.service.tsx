@@ -79,11 +79,15 @@ export const normaliseMaterialsConfig = (materials: Record<string, Material>, bl
     if (mat.map) {
       mat.map.minFilter = LinearFilter;
       mat.depthWrite = true;
-      mat.toneMapped = false;
+    }
+
+    if (mat.name.toLowerCase().includes('hair')) {
+      mat.roughness = 0.9;
     }
 
     if (mat.emissiveMap) {
       mat.emissiveIntensity = bloomConfig?.materialIntensity || 3.3;
+      mat.toneMapped = false;
     }
   });
 };

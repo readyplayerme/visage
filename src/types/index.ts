@@ -1,4 +1,4 @@
-import { Color, Vector3 } from 'three';
+import { Vector3 } from 'three';
 import { PresetsType } from '@react-three/drei/helpers/environment-assets';
 
 export type Required<T> = {
@@ -20,16 +20,25 @@ export interface EnvironmentProps {
   environment?: PresetsType | string;
 }
 
+/**
+ * Three point spotlight setup with an additional body lift light.
+ */
 export interface LightingProps {
-  ambientLightColor?: Color | string;
-  ambientLightIntensity?: number;
-  dirLightPosition?: Vector3;
-  dirLightColor?: Color | string;
-  dirLightIntensity?: number;
-  spotLightPosition?: Vector3;
-  spotLightColor?: string;
-  spotLightAngle?: number;
-  spotLightIntensity?: number;
+  keyLightIntensity?: number;
+  keyLightColor?: string; // css-color string
+
+  fillLightIntensity?: number;
+  fillLightColor?: string; // css-color string
+  fillLightPosition?: Vector3;
+
+  backLightIntensity?: number;
+  backLightColor?: string; // css-color string
+  backLightPosition?: Vector3;
+
+  /**
+   * The position in space which is used by the lights to shine at. (Defaults to approximate head height)
+   */
+  lightTarget?: Vector3;
 }
 
 export interface BaseModelProps {
@@ -146,6 +155,10 @@ export type EffectConfiguration = {
    * Bloom post-processing effect.
    */
   bloom?: BloomConfiguration;
+  /**
+   * Vignette post-processing effect.
+   */
+  vignette?: boolean;
 };
 
 export interface SpawnState {

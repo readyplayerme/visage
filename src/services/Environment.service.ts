@@ -9,7 +9,8 @@ export const environmentPresets = {
   studio: 'studio',
   city: 'city',
   park: 'park',
-  lobby: 'lobby'
+  lobby: 'lobby',
+  soft: 'soft'
 };
 export type EnvironmentPresets = keyof typeof environmentPresets;
 
