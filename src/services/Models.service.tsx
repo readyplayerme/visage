@@ -9,7 +9,8 @@ import {
   Euler,
   Vector3,
   BufferGeometry,
-  Skeleton
+  Skeleton,
+  Group
 } from 'three';
 import { useFrame } from '@react-three/fiber';
 import type { ObjectMap, SkinnedMeshProps } from '@react-three/fiber';
@@ -214,29 +215,31 @@ const dracoLoader = new DRACOLoader();
 dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.5/');
 loader.setDRACOLoader(dracoLoader);
 
-export const useGltfLoader = (source: Blob | string): GLTF => {
-  const gltfRef = useRef<GLTF>();
-  return suspend(
+export const useGltfLoader = (source: Blob | string): GLTF =>
+  suspend(
     async () => {
       if (source instanceof Blob) {
         const buffer = await source.arrayBuffer();
         return (await loader.parseAsync(buffer, '')) as unknown as GLTF;
       }
 
-      const gltf = await loader.loadAsync(source);
-
-      if (gltfRef.current) {
-        gltf.scene.rotation.y = gltfRef.current.scene.rotation.y;
-      }
-
-      gltfRef.current = gltf;
-
-      return gltf;
+      return loader.loadAsync(source);
     },
     [source],
     { lifespan: 100 }
   );
-};
+
+export function usePersistantRotation(scene: Group) {
+  const refToPreviousScene = useRef(scene);
+
+  useEffect(() => {
+    if (refToPreviousScene.current !== scene) {
+      // eslint-disable-next-line no-param-reassign
+      scene.rotation.y = refToPreviousScene.current.rotation.y;
+      refToPreviousScene.current = scene;
+    }
+  }, [scene]);
+}
 
 export class Transform {
   constructor() {
