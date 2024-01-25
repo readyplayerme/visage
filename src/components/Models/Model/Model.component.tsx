@@ -1,6 +1,6 @@
 import React, { FC, Ref, useEffect, useState, useCallback, useMemo } from 'react';
 import { Group, Mesh } from 'three';
-import { normaliseMaterialsConfig, triggerCallback } from 'src/services';
+import { normaliseMaterialsConfig, triggerCallback, usePersistantRotation } from 'src/services';
 import { useGraph, useThree } from '@react-three/fiber';
 import { hasWindow } from 'src/services/Client.service';
 import { BaseModelProps } from 'src/types';
@@ -32,6 +32,9 @@ export const Model: FC<ModelProps> = ({ scene, scale = 1, modelRef, onLoaded, on
     }
     setIsTouching(false);
   };
+
+  usePersistantRotation(scene);
+
   const onTouchMove = useCallback(
     (event: MouseEvent | TouchEvent) => {
       if (isTouching && event instanceof MouseEvent) {
@@ -47,7 +50,7 @@ export const Model: FC<ModelProps> = ({ scene, scale = 1, modelRef, onLoaded, on
         setTouchEvent(event);
       }
     },
-    [isTouching, touchEvent]
+    [isTouching, touchEvent, scene]
   );
 
   normaliseMaterialsConfig(materials, bloom);
