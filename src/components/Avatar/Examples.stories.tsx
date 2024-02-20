@@ -98,7 +98,7 @@ FloatingSparkles.argTypes = {
 
 export const SpawnEffectAndAnimation: StoryFn<typeof Avatar> = (args) => (
   <Avatar {...args}>
-    <Sparkles color="white" count={50} opacity={0.9} scale={5} size={0.5} speed={0.35} />
+    <Sparkles color="white" count={50} opacity={0.9} scale={5} size={0.5} speed={0.35} position={[0, 3, 0]}/>
   </Avatar>
 );
 SpawnEffectAndAnimation.args = {

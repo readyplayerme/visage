@@ -1,5 +1,6 @@
 import React, { Suspense, FC, useMemo, CSSProperties, ReactNode, useEffect } from 'react';
 import { Vector3 } from 'three';
+import { ContactShadows } from "@react-three/drei";
 import { CameraControls } from 'src/components/Scene/CameraControls.component';
 import { Environment } from 'src/components/Scene/Environment.component';
 import { BaseModelProps, EnvironmentProps, SpawnState, EffectConfiguration, LightingProps } from 'src/types';
@@ -12,7 +13,6 @@ import { Provider, useSetAtom } from 'jotai';
 import Capture, { CaptureType } from 'src/components/Capture/Capture.component';
 import { Box, Background } from 'src/components/Background/Box/Box.component';
 import { BackgroundColor } from 'src/components/Background';
-import Shadow from 'src/components/Shadow/Shadow.component';
 import Loader from 'src/components/Loader';
 import Bloom from 'src/components/Bloom/Bloom.component';
 import { BlendFunction } from 'postprocessing';
@@ -260,7 +260,7 @@ const Avatar: FC<AvatarProps> = ({
       />
       {AvatarModel}
       {children}
-      {shadows && <Shadow />}
+      {shadows && <ContactShadows position={[0, 0, 0]} opacity={1} scale={10} blur={1.0} far={0.5} />}
       {background?.src && <Box {...background} />}
       {capture && <Capture {...capture} />}
       {background?.color && <BackgroundColor color={background.color} />}
