@@ -14,12 +14,12 @@ export const LIGHT_CONFIG = Object.freeze({
   dirLightPosition: new Vector3(-0.75, 2.5, -1.0),
   silhouetteLightPosition: new Vector3(-1.5, 0.1, -1.5),
   defaultProps: {
-    keyLightIntensity: 1.2,
+    keyLightIntensity: 0.8,
     keyLightColor: '#FFFFFF',
-    fillLightIntensity: 9.0,
+    fillLightIntensity: 3.0,
     fillLightColor: '#6794FF',
     fillLightPosition: new Vector3(-0.5, 1.6, -0.5),
-    backLightIntensity: 9.0,
+    backLightIntensity: 6.0,
     backLightColor: '#FFB878',
     backLightPosition: new Vector3(0.5, 1.6, -1.0),
     lightTarget: new Vector3(0.0, 1.7, 0.0)
@@ -104,8 +104,6 @@ const Lights: FC<LightingProps> = (lightingProps) => {
         intensity={keyLightIntensity * 0.25}
         castShadow
       />
-      {/* Dummy directional light for shadow casting from behind avatar. */}
-      <directionalLight position={LIGHT_CONFIG.dirLightPosition} target={targets.shoe} castShadow intensity={0.0} />
     </group>
   );
 };

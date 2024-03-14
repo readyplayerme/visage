@@ -73,6 +73,7 @@ export const FloatingSparkles: StoryFn<typeof SparklesDrei> = (args) => (
     modelSrc={getStoryAssetPath('female.glb')}
     cameraTarget={CAMERA.TARGET.FULL_BODY.FEMALE}
     cameraInitialDistance={CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE}
+    shadows
   >
     <Sparkles {...args} />
   </Avatar>
@@ -84,7 +85,8 @@ FloatingSparkles.args = {
   size: 5,
   speed: 0.25,
   opacity: 0.6,
-  color: '#124cca'
+  color: '#124cca',
+  position: [0, 3, 0],
 };
 
 FloatingSparkles.argTypes = {
@@ -98,7 +100,7 @@ FloatingSparkles.argTypes = {
 
 export const SpawnEffectAndAnimation: StoryFn<typeof Avatar> = (args) => (
   <Avatar {...args}>
-    <Sparkles color="white" count={50} opacity={0.9} scale={5} size={0.5} speed={0.35} />
+    <Sparkles color="white" count={50} opacity={0.9} scale={5} size={0.5} speed={0.35} position={[0, 3, 0]}/>
   </Avatar>
 );
 SpawnEffectAndAnimation.args = {
