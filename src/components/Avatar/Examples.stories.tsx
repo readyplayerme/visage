@@ -35,10 +35,10 @@ export const Bloom: StoryFn<BloomConfiguration> = (args: BloomConfiguration | un
     effects={{ bloom: { ...args } }}
     keyLightIntensity={1.2}
     keyLightColor="#e8e3df"
-    fillLightIntensity={2.0}
+    fillLightIntensity={3.0}
     fillLightColor="#99ccff"
     fillLightPosition={new Vector3(-0.5, 1.6, -0.5)}
-    backLightIntensity={1.2}
+    backLightIntensity={6.0}
     backLightColor="#fff0d6"
     backLightPosition={new Vector3(0.5, 1.6, -1.0)}
     lightTarget={new Vector3(0.0, 1.7, 0.0)}
@@ -73,6 +73,7 @@ export const FloatingSparkles: StoryFn<typeof SparklesDrei> = (args) => (
     modelSrc={getStoryAssetPath('female.glb')}
     cameraTarget={CAMERA.TARGET.FULL_BODY.FEMALE}
     cameraInitialDistance={CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE}
+    shadows
   >
     <Sparkles {...args} />
   </Avatar>
@@ -84,7 +85,8 @@ FloatingSparkles.args = {
   size: 5,
   speed: 0.25,
   opacity: 0.6,
-  color: '#124cca'
+  color: '#124cca',
+  position: [0, 3, 0],
 };
 
 FloatingSparkles.argTypes = {
@@ -98,7 +100,7 @@ FloatingSparkles.argTypes = {
 
 export const SpawnEffectAndAnimation: StoryFn<typeof Avatar> = (args) => (
   <Avatar {...args}>
-    <Sparkles color="white" count={50} opacity={0.9} scale={5} size={0.5} speed={0.35} />
+    <Sparkles color="white" count={50} opacity={0.9} scale={5} size={0.5} speed={0.35} position={[0, 3, 0]}/>
   </Avatar>
 );
 SpawnEffectAndAnimation.args = {
