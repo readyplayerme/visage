@@ -16,10 +16,10 @@ export const LIGHT_CONFIG = Object.freeze({
   defaultProps: {
     keyLightIntensity: 1.2,
     keyLightColor: '#FFFFFF',
-    fillLightIntensity: 0.8,
+    fillLightIntensity: 9.0,
     fillLightColor: '#6794FF',
     fillLightPosition: new Vector3(-0.5, 1.6, -0.5),
-    backLightIntensity: 2.2,
+    backLightIntensity: 9.0,
     backLightColor: '#FFB878',
     backLightPosition: new Vector3(0.5, 1.6, -1.0),
     lightTarget: new Vector3(0.0, 1.7, 0.0)
@@ -66,6 +66,7 @@ const Lights: FC<LightingProps> = (lightingProps) => {
         angle={LIGHT_CONFIG.fillLightAngle}
         color={fillLightColor}
         intensity={fillLightIntensity}
+        castShadow
       />
       {/* Back light that by default creates light warm rim on the left face side. */}
       <spotLight
@@ -74,6 +75,7 @@ const Lights: FC<LightingProps> = (lightingProps) => {
         angle={LIGHT_CONFIG.backLightAngle}
         color={backLightColor}
         intensity={backLightIntensity}
+        castShadow
       />
       {/* Key light that creates soft face light. */}
       <spotLight
@@ -82,6 +84,7 @@ const Lights: FC<LightingProps> = (lightingProps) => {
         angle={LIGHT_CONFIG.keyLightAngle}
         color={keyLightColor}
         intensity={keyLightIntensity}
+        castShadow
       />
       {/* Lift light that creates soft light on body and shoes. */}
       <spotLight
@@ -90,6 +93,7 @@ const Lights: FC<LightingProps> = (lightingProps) => {
         angle={LIGHT_CONFIG.keyLightAngle}
         color={keyLightColor}
         intensity={keyLightIntensity * 0.25}
+        castShadow
       />
       {/* Silhouette light on arms and legs. */}
       <spotLight
@@ -98,6 +102,7 @@ const Lights: FC<LightingProps> = (lightingProps) => {
         angle={LIGHT_CONFIG.silhouetteLightAngle}
         color={keyLightColor}
         intensity={keyLightIntensity * 0.25}
+        castShadow
       />
       {/* Dummy directional light for shadow casting from behind avatar. */}
       <directionalLight position={LIGHT_CONFIG.dirLightPosition} target={targets.shoe} castShadow intensity={0.0} />
