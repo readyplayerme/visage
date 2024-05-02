@@ -15,13 +15,13 @@ export const environmentPresets = {
 export type EnvironmentPresets = keyof typeof environmentPresets;
 
 export const getPresetEnvironmentMap = (preset: EnvironmentPresets) =>
-  `https://readyplayerme-assets.s3.amazonaws.com/environment/${preset}.hdr`;
+  `https://files.readyplayer.me/visage/environment/${preset}.hdr`;
 
 export const environmentModels = {
-  spaceStation: 'https://readyplayerme-assets.s3.amazonaws.com/props/environment-space-station.glb',
-  platformDark: 'https://readyplayerme-assets.s3.amazonaws.com/props/simple-platform-dark.glb',
-  platformGreen: 'https://readyplayerme-assets.s3.amazonaws.com/props/simple-platform-green.glb',
-  platformBlue: 'https://readyplayerme-assets.s3.amazonaws.com/props/simple-platform-blue.glb'
+  spaceStation: 'https://files.readyplayer.me/visage/props/environment-space-station.glb',
+  platformDark: 'https://files.readyplayer.me/visage/props/simple-platform-dark.glb',
+  platformGreen: 'https://files.readyplayer.me/visage/props/simple-platform-green.glb',
+  platformBlue: 'https://files.readyplayer.me/visage/props/simple-platform-blue.glb'
 };
 
 export type EnvironmentModels = keyof typeof environmentModels;
