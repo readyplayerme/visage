@@ -1,6 +1,6 @@
 import React, { Suspense, FC, useMemo, CSSProperties, ReactNode, useEffect } from 'react';
 import { Vector3 } from 'three';
-import { ContactShadows } from "@react-three/drei";
+import { ContactShadows } from '@react-three/drei';
 import { CameraControls } from 'src/components/Scene/CameraControls.component';
 import { Environment } from 'src/components/Scene/Environment.component';
 import { BaseModelProps, EnvironmentProps, SpawnState, EffectConfiguration, LightingProps } from 'src/types';
@@ -260,7 +260,7 @@ const Avatar: FC<AvatarProps> = ({
       />
       {AvatarModel}
       {children}
-      {shadows && <ContactShadows position={[0, 0, 0]} opacity={2} scale={10} blur={1.0} far={1.0}/>}
+      {shadows && <ContactShadows position={[0, 0, 0]} opacity={2} scale={10} blur={1.0} far={1.0} />}
       {background?.src && <Box {...background} />}
       {capture && <Capture {...capture} />}
       {background?.color && <BackgroundColor color={background.color} />}
