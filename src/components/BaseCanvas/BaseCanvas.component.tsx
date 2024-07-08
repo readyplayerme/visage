@@ -27,7 +27,13 @@ export const BaseCanvas: FC<BaseCanvasProps> = ({
     key={fov}
     className={`${styles['base-canvas']} ${className ?? ''}`}
     shadows="soft"
-    gl={{ preserveDrawingBuffer: true, alpha: true, toneMappingExposure: 1.6, toneMapping: ACESFilmicToneMapping }}
+    gl={{
+      preserveDrawingBuffer: true,
+      alpha: true,
+      toneMappingExposure: 1.6,
+      toneMapping: ACESFilmicToneMapping,
+      useLegacyLights: true
+    }}
     dpr={dpr}
     camera={{ fov, position }}
     resize={{ scroll: true, debounce: { scroll: 50, resize: 0 } }}
