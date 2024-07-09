@@ -1,6 +1,7 @@
 import { AnimationClip, Group } from 'three';
 
 import { FBXLoader, GLTFLoader } from 'three-stdlib';
+import { MeshoptDecoder } from './meshopt_decoder';
 
 interface ClipWithType {
   group: Group;
@@ -13,6 +14,7 @@ const MIXAMO_SCALE = 0.01;
 
 const fbxLoader = new FBXLoader();
 const gltfLoader = new GLTFLoader();
+gltfLoader.setMeshoptDecoder(MeshoptDecoder);
 
 function normaliseFbxAnimation(fbx: Group, index: number = 0) {
   const { tracks } = fbx.animations[index];

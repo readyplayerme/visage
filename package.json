@@ -150,6 +150,7 @@
     "npm": "8.6.0"
   },
   "dependencies": {
+    "gltfpack": "^0.21.0",
     "jotai": "^2.2.2"
   }
 }
