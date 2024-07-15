@@ -29,7 +29,6 @@ export const BaseCanvas: FC<BaseCanvasProps> = (
       toneMapping: ACESFilmicToneMapping,
       useLegacyLights: true,
     }}
-    legacy
     dpr={dpr}
     camera={{ fov, position }}
     resize={{ scroll: true, debounce: { scroll: 50, resize: 0 } }}

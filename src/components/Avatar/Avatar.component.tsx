@@ -8,7 +8,7 @@ import { BaseCanvas } from 'src/components/BaseCanvas';
 import { AnimationModel, HalfBodyModel, StaticModel, PoseModel } from 'src/components/Models';
 import { isValidFormat, triggerCallback } from 'src/services';
 import { Dpr } from '@react-three/fiber';
-import { EffectComposer, SSAO, Vignette } from '@react-three/postprocessing';
+import { BrightnessContrast, EffectComposer, SSAO, Vignette } from '@react-three/postprocessing';
 import { Provider, useSetAtom } from 'jotai';
 import Capture, { CaptureType } from 'src/components/Capture/Capture.component';
 import { Box, Background } from 'src/components/Background/Box/Box.component';
@@ -44,9 +44,9 @@ export const CAMERA = {
     }
   }
 };
-
+// prettier-ignore
 export type Emotion = Record<string, number>;
-
+// prettier-ignore
 export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseModelProps, 'setModelFallback'> {
   /**
    * Arbitrary binary data (base64 string, Blob) of a `.glb` file or path (URL) to a `.glb` resource.
@@ -151,6 +151,7 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
  * Interactive avatar presentation with zooming and horizontal rotation controls.
  * Optimised for full-body and half-body avatars.
  */
+// prettier-ignore
 const Avatar: FC<AvatarProps> = ({
   modelSrc,
   animationSrc = undefined,
@@ -265,7 +266,7 @@ const Avatar: FC<AvatarProps> = ({
       {capture && <Capture {...capture} />}
       {background?.color && <BackgroundColor color={background.color} />}
       {(effects?.ambientOcclusion || effects?.bloom || effects?.vignette) && (
-        <EffectComposer autoClear multisampling={4}>
+        <EffectComposer autoClear multisampling={4} enableNormalPass={effects?.ambientOcclusion}>
           <>
             {effects?.ambientOcclusion && (
               <SSAO
@@ -293,6 +294,7 @@ const Avatar: FC<AvatarProps> = ({
               />
             )}
             {effects?.vignette && <Vignette eskil={false} offset={0.5} darkness={0.5} />}
+            <BrightnessContrast brightness={0.05} contrast={0.25} />
           </>
         </EffectComposer>
       )}
