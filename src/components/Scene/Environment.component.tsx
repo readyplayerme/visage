@@ -1,7 +1,6 @@
 import React, { FC, useMemo } from 'react';
 import { Environment as DreiEnvironment } from '@react-three/drei';
 import { environmentPresets, getPresetEnvironmentMap, EnvironmentPresets } from 'src/services/Environment.service';
-import { LinearEncoding } from '@react-three/drei/helpers/deprecated';
 
 export interface EnvironmentProps {
   environment: string | EnvironmentPresets;
@@ -17,5 +16,5 @@ export const Environment: FC<EnvironmentProps> = ({ environment }) => {
     };
   }, [environment]);
 
-  return <DreiEnvironment files={config.files} encoding={LinearEncoding} environmentIntensity={10}/>;
+  return <DreiEnvironment files={config.files} environmentIntensity={12}/>;
 };

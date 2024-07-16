@@ -1,6 +1,6 @@
 import React, { ReactNode, FC, CSSProperties } from 'react';
 import { Canvas, Dpr } from '@react-three/fiber';
-import { Vector3, ACESFilmicToneMapping } from 'three';
+import { Vector3 } from 'three';
 import { CameraProps } from 'src/types';
 import { hasWindow } from 'src/services/Client.service';
 import styles from './BaseCanvas.module.scss';
@@ -25,10 +25,9 @@ export const BaseCanvas: FC<BaseCanvasProps> = (
     gl={{
       preserveDrawingBuffer: true,
       alpha: true,
-      toneMappingExposure: 1.6,
-      toneMapping: ACESFilmicToneMapping,
       useLegacyLights: true,
     }}
+    flat
     dpr={dpr}
     camera={{ fov, position }}
     resize={{ scroll: true, debounce: { scroll: 50, resize: 0 } }}

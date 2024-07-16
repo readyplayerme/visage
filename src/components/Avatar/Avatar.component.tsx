@@ -294,7 +294,7 @@ const Avatar: FC<AvatarProps> = ({
               />
             )}
             {effects?.vignette && <Vignette eskil={false} offset={0.5} darkness={0.5} />}
-            <BrightnessContrast brightness={0.05} contrast={0.25} />
+            <BrightnessContrast brightness={0.025} contrast={0.2} />
           </>
         </EffectComposer>
       )}
