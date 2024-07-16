@@ -248,9 +248,11 @@ const Avatar: FC<AvatarProps> = ({
 
   useEffect(() => triggerCallback(onLoading), [modelSrc, animationSrc, onLoading]);
 
+  const enablePostProcessing = Boolean(effects?.ambientOcclusion || effects?.bloom || effects?.vignette);
+
   return (
-    <BaseCanvas position={new Vector3(0, 0, 3)} fov={fov} style={style} dpr={dpr} className={className}>
-      <Environment environment={environment} />
+    <BaseCanvas enablePostProcessing={enablePostProcessing} position={new Vector3(0, 0, 3)} fov={fov} style={style} dpr={dpr} className={className}>
+      <Environment environment={environment} enablePostProcessing={enablePostProcessing}/>
       <CameraControls
         cameraTarget={cameraTarget}
         cameraInitialDistance={cameraInitialDistance}
@@ -265,7 +267,7 @@ const Avatar: FC<AvatarProps> = ({
       {background?.src && <Box {...background} />}
       {capture && <Capture {...capture} />}
       {background?.color && <BackgroundColor color={background.color} />}
-      {(effects?.ambientOcclusion || effects?.bloom || effects?.vignette) && (
+      {enablePostProcessing && (
         <EffectComposer autoClear multisampling={4} enableNormalPass={effects?.ambientOcclusion}>
           <>
             {effects?.ambientOcclusion && (
