@@ -44,9 +44,9 @@ export const CAMERA = {
     }
   }
 };
-// prettier-ignore
+
 export type Emotion = Record<string, number>;
-// prettier-ignore
+
 export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseModelProps, 'setModelFallback'> {
   /**
    * Arbitrary binary data (base64 string, Blob) of a `.glb` file or path (URL) to a `.glb` resource.
@@ -151,7 +151,7 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
  * Interactive avatar presentation with zooming and horizontal rotation controls.
  * Optimised for full-body and half-body avatars.
  */
-// prettier-ignore
+
 const Avatar: FC<AvatarProps> = ({
   modelSrc,
   animationSrc = undefined,

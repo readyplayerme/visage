@@ -5,7 +5,7 @@ import { environmentPresets, getPresetEnvironmentMap, EnvironmentPresets } from 
 export interface EnvironmentProps {
   environment: string | EnvironmentPresets;
 }
-// prettier-ignore
+
 export const Environment: FC<EnvironmentProps> = ({ environment }) => {
   const config = useMemo<{ files: string }>(() => {
     const isStaticPreset = environment in environmentPresets;

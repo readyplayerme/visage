@@ -24,7 +24,6 @@ function App() {
             shadows
             animationSrc="/male-idle-2.fbx"
             style={{ background: 'rgb(9,20,26)' }}
-            onLoaded={() => console.log('female avatar loaded')}
             fov={45}
             effects={{
               ambientOcclusion: true
