@@ -251,8 +251,15 @@ const Avatar: FC<AvatarProps> = ({
   const enablePostProcessing = Boolean(effects?.ambientOcclusion || effects?.bloom || effects?.vignette);
 
   return (
-    <BaseCanvas enablePostProcessing={enablePostProcessing} position={new Vector3(0, 0, 3)} fov={fov} style={style} dpr={dpr} className={className}>
-      <Environment environment={environment} enablePostProcessing={enablePostProcessing}/>
+    <BaseCanvas
+      enablePostProcessing={enablePostProcessing}
+      position={new Vector3(0, 0, 3)}
+      fov={fov}
+      style={style}
+      dpr={dpr}
+      className={className}
+    >
+      <Environment environment={environment} enablePostProcessing={enablePostProcessing} />
       <CameraControls
         cameraTarget={cameraTarget}
         cameraInitialDistance={cameraInitialDistance}
@@ -296,8 +303,8 @@ const Avatar: FC<AvatarProps> = ({
               />
             )}
             {effects?.vignette && <Vignette eskil={false} offset={0.5} darkness={0.5} />}
-            <BrightnessContrast brightness={0.025} contrast={0.2} />
-            <HueSaturation hue={0} saturation={-0.1} />
+            <BrightnessContrast brightness={0.025} contrast={0.25} />
+            <HueSaturation hue={0} saturation={-0.2} />
           </>
         </EffectComposer>
       )}

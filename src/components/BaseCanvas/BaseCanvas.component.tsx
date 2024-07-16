@@ -16,10 +16,16 @@ interface BaseCanvasProps extends CameraProps {
 
 const BASE_DPR = hasWindow ? window.devicePixelRatio : 1;
 
-
-export const BaseCanvas: FC<BaseCanvasProps> = (
-  { enablePostProcessing, children = undefined, fov = 50, position = new Vector3(0, 0, 5), style, dpr = [BASE_DPR * 0.5, 2], className }
-) => (<Canvas
+export const BaseCanvas: FC<BaseCanvasProps> = ({
+  enablePostProcessing,
+  children = undefined,
+  fov = 50,
+  position = new Vector3(0, 0, 5),
+  style,
+  dpr = [BASE_DPR * 0.5, 2],
+  className
+}) => (
+  <Canvas
     key={fov}
     className={`${styles['base-canvas']} ${className ?? ''}`}
     shadows="soft"
@@ -27,8 +33,7 @@ export const BaseCanvas: FC<BaseCanvasProps> = (
       preserveDrawingBuffer: true,
       alpha: true,
       toneMapping: ACESFilmicToneMapping,
-      toneMappingExposure: 1.6,
-      useLegacyLights: true,
+      toneMappingExposure: 1.8
     }}
     flat={enablePostProcessing}
     dpr={dpr}
@@ -37,4 +42,5 @@ export const BaseCanvas: FC<BaseCanvasProps> = (
     style={{ ...style, background: 'transparent' }}
   >
     {children}
-  </Canvas>);
+  </Canvas>
+);

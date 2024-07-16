@@ -37,8 +37,8 @@ Static.args = {
     luminanceSmoothing: 1.0,
     mipmapBlur: true,
     kernelSize: 1,
-    intensity: 0.1,
-    materialIntensity: 3.3
+    intensity: 1,
+    materialIntensity: 1
   },
   background: {
     color: 'rgb(9,20,26)'

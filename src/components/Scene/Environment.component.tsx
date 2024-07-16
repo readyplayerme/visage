@@ -19,5 +19,5 @@ export const Environment: FC<EnvironmentProps> = ({ environment, enablePostProce
 
   const environmentIntensity = enablePostProcessing ? 12 : 4;
 
-  return <DreiEnvironment files={config.files} environmentIntensity={environmentIntensity}/>;
+  return <DreiEnvironment files={config.files} environmentIntensity={environmentIntensity} />;
 };
