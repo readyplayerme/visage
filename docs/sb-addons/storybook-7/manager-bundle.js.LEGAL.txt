@@ -33,12 +33,30 @@ react-reconciler/cjs/react-reconciler.production.min.js:
    * LICENSE file in the root directory of this source tree.
    */
 
+react/cjs/react-jsx-runtime.production.min.js:
+  /**
+   * @license React
+   * react-jsx-runtime.production.min.js
+   *
+   * Copyright (c) Facebook, Inc. and its affiliates.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   */
+
 three/build/three.module.js:
   /**
    * @license
-   * Copyright 2010-2023 Three.js Authors
+   * Copyright 2010-2024 Three.js Authors
    * SPDX-License-Identifier: MIT
    */
 
-opentype.js/dist/opentype.module.js:
-  /*! https://mths.be/codepointat v0.2.0 by @mathias */
+three-stdlib/libs/lottie.js:
+  /*!
+  Transformation Matrix v2.0
+  (c) Epistemex 2014-2015
+  www.epistemex.com
+  By Ken Fyrstenberg
+  Contributions by leeoniya.
+  License: MIT, header required.
+  */
