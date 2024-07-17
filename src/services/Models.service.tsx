@@ -18,6 +18,7 @@ import { GLTF, GLTFLoader, DRACOLoader } from 'three-stdlib';
 import { suspend } from 'suspend-react';
 import { Emotion } from 'src/components/Avatar/Avatar.component';
 import { BloomConfiguration } from 'src/types';
+import { MeshoptDecoder } from './meshopt_decoder';
 
 export interface CustomNode extends Object3D {
   geometry: BufferGeometry;
@@ -211,6 +212,8 @@ export const useEmotion = (nodes: ObjectMap['nodes'], emotion?: Emotion) => {
 };
 
 const loader = new GLTFLoader();
+loader.setMeshoptDecoder(MeshoptDecoder);
+
 const dracoLoader = new DRACOLoader();
 dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.5/');
 loader.setDRACOLoader(dracoLoader);

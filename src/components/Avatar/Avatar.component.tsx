@@ -8,7 +8,7 @@ import { BaseCanvas } from 'src/components/BaseCanvas';
 import { AnimationModel, HalfBodyModel, StaticModel, PoseModel } from 'src/components/Models';
 import { isValidFormat, triggerCallback } from 'src/services';
 import { Dpr } from '@react-three/fiber';
-import { EffectComposer, SSAO, Vignette } from '@react-three/postprocessing';
+import { BrightnessContrast, EffectComposer, HueSaturation, SSAO, Vignette } from '@react-three/postprocessing';
 import { Provider, useSetAtom } from 'jotai';
 import Capture, { CaptureType } from 'src/components/Capture/Capture.component';
 import { Box, Background } from 'src/components/Background/Box/Box.component';
@@ -151,6 +151,7 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
  * Interactive avatar presentation with zooming and horizontal rotation controls.
  * Optimised for full-body and half-body avatars.
  */
+
 const Avatar: FC<AvatarProps> = ({
   modelSrc,
   animationSrc = undefined,
@@ -247,9 +248,18 @@ const Avatar: FC<AvatarProps> = ({
 
   useEffect(() => triggerCallback(onLoading), [modelSrc, animationSrc, onLoading]);
 
+  const enablePostProcessing = Boolean(effects?.ambientOcclusion || effects?.bloom || effects?.vignette);
+
   return (
-    <BaseCanvas position={new Vector3(0, 0, 3)} fov={fov} style={style} dpr={dpr} className={className}>
-      <Environment environment={environment} />
+    <BaseCanvas
+      enablePostProcessing={enablePostProcessing}
+      position={new Vector3(0, 0, 3)}
+      fov={fov}
+      style={style}
+      dpr={dpr}
+      className={className}
+    >
+      <Environment environment={environment} enablePostProcessing={enablePostProcessing} />
       <CameraControls
         cameraTarget={cameraTarget}
         cameraInitialDistance={cameraInitialDistance}
@@ -264,8 +274,8 @@ const Avatar: FC<AvatarProps> = ({
       {background?.src && <Box {...background} />}
       {capture && <Capture {...capture} />}
       {background?.color && <BackgroundColor color={background.color} />}
-      {(effects?.ambientOcclusion || effects?.bloom || effects?.vignette) && (
-        <EffectComposer autoClear multisampling={4}>
+      {enablePostProcessing && (
+        <EffectComposer autoClear multisampling={4} enableNormalPass={effects?.ambientOcclusion}>
           <>
             {effects?.ambientOcclusion && (
               <SSAO
@@ -293,6 +303,8 @@ const Avatar: FC<AvatarProps> = ({
               />
             )}
             {effects?.vignette && <Vignette eskil={false} offset={0.5} darkness={0.5} />}
+            <BrightnessContrast brightness={0.025} contrast={0.25} />
+            <HueSaturation hue={0} saturation={-0.2} />
           </>
         </EffectComposer>
       )}

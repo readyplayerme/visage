@@ -42,7 +42,7 @@ export const Bloom: StoryFn<BloomConfiguration> = (args: BloomConfiguration | un
     backLightColor="#fff0d6"
     backLightPosition={new Vector3(0.5, 1.6, -1.0)}
     lightTarget={new Vector3(0.0, 1.7, 0.0)}
-    environment="apartment"
+    environment="soft"
     background={{
       color: 'rgb(9,20,26)'
     }}
@@ -54,7 +54,7 @@ Bloom.args = {
   luminanceSmoothing: 1.0,
   mipmapBlur: true,
   kernelSize: 1,
-  intensity: 4,
+  intensity: 1,
   materialIntensity: 1
 };
 
@@ -178,7 +178,7 @@ environmentModel.args = {
   shadows: true,
   modelSrc: modelPresets.one,
   animationSrc: animationPresets.one,
-  environment: 'warehouse',
+  environment: 'soft',
   /* eslint-disable no-console */
   onLoaded: () => console.info('EVENT: environment model loaded')
   /* eslint-enable no-console */
@@ -218,7 +218,7 @@ ReflectiveFloor.args = {
   shadows: false,
   modelSrc: modelPresets.one,
   animationSrc: animationPresets.three,
-  environment: 'warehouse',
+  environment: 'soft',
   /* eslint-disable no-console */
   onLoaded: () => console.info('EVENT: environment model loaded'),
   /* eslint-enable no-console */
