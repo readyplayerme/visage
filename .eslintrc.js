@@ -67,6 +67,12 @@ module.exports = {
       rules: {
         'import/no-anonymous-default-export': 'off'
       }
+    },
+    {
+      files: ['test/**/*.ts'],
+      rules: {
+        'import/no-import-module-exports': 'off'
+      }
     }
   ],
   ignorePatterns: ['docs/*']
