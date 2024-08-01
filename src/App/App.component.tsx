@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Avatar, CAMERA } from 'src/components/Avatar';
 
 import { Sparkles, StatsGl } from '@react-three/drei';
-import { EnvironmentModel } from 'src/library';
+import { EnvironmentModel } from 'src/components/Models';
 import styles from './App.module.scss';
 
 const AvatarDevelop: React.FC = () => (
