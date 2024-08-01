@@ -20,6 +20,8 @@ function compareSnapshot(zoomLevel: number, side: number) {
     }`
   );
 
+  cy.intercept('GET', 'https://files.readyplayer.me/visage/environment/soft.hdr', { fixture: 'soft.hdr' });
+
   cy.intercept(VISUAL_TEST_CONFIG.modelUrl).as('modelDownloading');
   cy.wait('@modelDownloading');
 
