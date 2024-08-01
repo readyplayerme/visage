@@ -1,5 +1,4 @@
 import { defineConfig } from 'cypress';
-// @ts-ignore
 import getCompareSnapshotsPlugin from 'cypress-image-diff-js/plugin';
 
 module.exports = defineConfig({
@@ -13,9 +12,9 @@ module.exports = defineConfig({
     experimentalModifyObstructiveThirdPartyCode: true,
     responseTimeout: 60000
   },
-  env: {},
-  retries: {
-    runMode: 3,
-    openMode: 2
-  }
+  env: {}
+  // retries: {
+  //   runMode: 3,
+  //   openMode: 2
+  // }
 });
