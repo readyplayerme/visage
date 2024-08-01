@@ -4,10 +4,10 @@ on:
   push:
     branches:
       - main
-      - "feature/**"
-      - "feat/**"
-      - "hotfix/**"
-      - "ACT-**"
+      - 'feature/**'
+      - 'feat/**'
+      - 'hotfix/**'
+      - 'ACT-**'
 
 concurrency:
   group: ${{ github.ref }}
@@ -17,22 +17,8 @@ env:
   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
 jobs:
-  linting:
-    name: Linting
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18.x'
-      - name: Install deps
-        run: npm ci
-      - name: Run linter
-        run: npm run lint
-  tests:
-    name: Tests
+  test:
+    name: Unit Test + Linting + Storybook
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -47,9 +33,31 @@ jobs:
         run: npm run test
       - name: Run storybook build
         run: npm run build-storybook
+      - name: Run linter
+        run: npm run lint
+
+  visual-test:
+    name: Visual testing with baseline comparison
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+      - name: Install deps
+        run: npm ci
+      - name: Start dev server
+        run: npm run start
+      - uses: cypress-io/github-action@v6
+        with:
+          browser: chrome
+          headed: true
+          project: ./test/functional
   build-and-deploy:
     name: Build, Deploy to GitHub pages, Release npm package
-    needs: [linting, tests]
+    needs: [test, visual-test]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' # Trigger release process only on main
     steps:
