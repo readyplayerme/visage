@@ -43,6 +43,9 @@ const AvatarTest: React.FC = () => {
   const modelUrl = urlParams.get('modelUrl')
     ? decodeURIComponent(urlParams.get('modelUrl') || '')
     : 'https://models.readyplayer.me/64d61e9e17883fd73ebe5eb7.glb?morphTargets=ARKit,Eyes Extra&textureAtlas=none&lod=0';
+  const zoomLevel = urlParams.get('zoomLevel')
+    ? parseFloat(urlParams.get('zoomLevel') || '1')
+    : CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE;
 
   return (
     <div className={styles.app}>
@@ -53,7 +56,7 @@ const AvatarTest: React.FC = () => {
             shadows
             style={{ background: 'rgb(9,20,26)' }}
             fov={45}
-            cameraInitialDistance={CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE}
+            cameraInitialDistance={zoomLevel}
             effects={{
               ambientOcclusion: true
             }}

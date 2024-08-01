@@ -6,15 +6,10 @@ module.exports = defineConfig({
     setupNodeEvents(on, config) {
       return getCompareSnapshotsPlugin(on, config);
     },
-    viewportWidth: 1280,
-    viewportHeight: 720,
+    viewportWidth: 576,
+    viewportHeight: 1024,
     chromeWebSecurity: false,
     experimentalModifyObstructiveThirdPartyCode: true,
     responseTimeout: 60000
-  },
-  env: {}
-  // retries: {
-  //   runMode: 3,
-  //   openMode: 2
-  // }
+  }
 });
