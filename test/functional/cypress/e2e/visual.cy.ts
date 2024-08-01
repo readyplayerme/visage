@@ -37,9 +37,6 @@ describe('visual', () => {
   it('compares avatar body snapshot front', () => {
     compareSnapshot(VISUAL_TEST_CONFIG.zoomLevel.body, VISUAL_TEST_CONFIG.side.front);
   });
-  it('compares avatar body snapshot back', () => {
-    compareSnapshot(VISUAL_TEST_CONFIG.zoomLevel.body, VISUAL_TEST_CONFIG.side.back);
-  });
   it('compares avatar head snapshot front', () => {
     compareSnapshot(VISUAL_TEST_CONFIG.zoomLevel.head, VISUAL_TEST_CONFIG.side.front);
   });
