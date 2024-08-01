@@ -12,5 +12,9 @@ module.exports = defineConfig({
     chromeWebSecurity: false,
     experimentalModifyObstructiveThirdPartyCode: true,
     responseTimeout: 60000
+  },
+  retries: {
+    runMode: 3,
+    openMode: 2
   }
 });
