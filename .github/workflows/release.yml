@@ -48,7 +48,6 @@ jobs:
           headed: true
           start: npm start
           project: ./test/functional
-            - name: upload diffs
       - name: upload diffs
         if: failure()
         uses: actions/upload-artifact@v3
