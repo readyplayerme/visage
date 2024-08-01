@@ -42,25 +42,26 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18.x'
-      - name: Install deps
-        run: npm ci
-      - name: Start dev server
-        run: npm run start &
-      - name: Check the deployed service URL
-        uses: jtalk/url-health-check-action@v3
-        with:
-          url: http://localhost:3000/test
-          max-attempts: 5
-          retry-delay: 10s
-          retry-all: true
+      # - name: Setup node
+      #   uses: actions/setup-node@v3
+      #   with:
+      #     node-version: '18.x'
+      # - name: Install deps
+      #   run: npm ci
+      # - name: Start dev server
+      #   run: npm run start &
+      # - name: Check the deployed service URL
+      #   uses: jtalk/url-health-check-action@v3
+      #   with:
+      #     url: http://localhost:3000/test
+      #     max-attempts: 5
+      #     retry-delay: 10s
+      #     retry-all: true
       - uses: cypress-io/github-action@v6
         with:
           browser: chrome
           headed: true
+          start: npm start
           project: ./test/functional
   build-and-deploy:
     name: Build, Deploy to GitHub pages, Release npm package
