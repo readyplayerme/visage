@@ -18,7 +18,6 @@
     "declarationDir": "src",
     "sourceMap": false,
     "outDir": "dist",
-    "noEmit": false,
     "emitDeclarationOnly": true,
     "plugins": [{ "name": "typescript-plugin-css-modules", "options": { "customMatcher": "\\.(c|sc)ss$" } }],
     "baseUrl": "."

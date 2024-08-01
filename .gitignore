@@ -79,3 +79,4 @@ storybook-static
 
 # e2e test comparison images
 test/functional/cypress-image-diff-screenshots/comparison
+test/functional/cypress-image-diff-html-report

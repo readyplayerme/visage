@@ -5,11 +5,7 @@ import getCompareSnapshotsPlugin from 'cypress-image-diff-js/plugin';
 module.exports = defineConfig({
   e2e: {
     setupNodeEvents(on, config) {
-      return getCompareSnapshotsPlugin(on, {
-        ...config,
-        generateHtmlReport: false,
-        generateJsonReport: false
-      });
+      return getCompareSnapshotsPlugin(on, config);
     },
     viewportWidth: 576,
     viewportHeight: 1024,
