@@ -71,7 +71,8 @@ module.exports = {
     {
       files: ['test/**/*.ts'],
       rules: {
-        'import/no-import-module-exports': 'off'
+        'import/no-import-module-exports': 'off',
+        'no-restricted-syntax': 'off'
       }
     }
   ],

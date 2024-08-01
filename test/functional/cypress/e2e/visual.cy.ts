@@ -3,27 +3,43 @@ const VISUAL_TEST_CONFIG = Object.freeze({
     head: 0.5,
     body: 3.0
   },
+  side: {
+    front: 1,
+    back: -1
+  },
   testUrl: 'http://localhost:3000/test',
-  modelUrl: 'https://api.readyplayer.dev/v3/avatars/65f82db95462c113fe5c5bb6.glb'
+  modelUrl: 'https://api.readyplayer.dev/v3/avatars/65f82db95462c113fe5c5bb6.glb',
+  testThreshold: 0.05
 });
 
-function compareSnapshot(zoomLevel: number) {
+function compareSnapshot(zoomLevel: number, side: number) {
+  // use zoom level to rotate camera by 180 degrees
   cy.visit(
-    `${VISUAL_TEST_CONFIG.testUrl}/?modelUrl=${encodeURIComponent(VISUAL_TEST_CONFIG.modelUrl)}&zoomLevel=${zoomLevel}`
+    `${VISUAL_TEST_CONFIG.testUrl}/?modelUrl=${encodeURIComponent(VISUAL_TEST_CONFIG.modelUrl)}&zoomLevel=${
+      zoomLevel * side
+    }`
   );
 
   cy.intercept(VISUAL_TEST_CONFIG.modelUrl).as('modelDownloading');
   cy.wait('@modelDownloading');
 
   cy.wait(2000);
-  cy.compareSnapshot(`avatar-zoom-${zoomLevel}`);
+
+  const name = `avatar-zoom-${zoomLevel}-side-[${side}]`;
+  cy.compareSnapshot({ name, testThreshold: VISUAL_TEST_CONFIG.testThreshold });
 }
 
 describe('visual', () => {
-  it('compares avatar body snapshot', () => {
-    compareSnapshot(VISUAL_TEST_CONFIG.zoomLevel.body);
+  it('compares avatar body snapshot front', () => {
+    compareSnapshot(VISUAL_TEST_CONFIG.zoomLevel.body, VISUAL_TEST_CONFIG.side.front);
   });
-  it('compares avatar head snapshot', () => {
-    compareSnapshot(VISUAL_TEST_CONFIG.zoomLevel.head);
+  it('compares avatar body snapshot back', () => {
+    compareSnapshot(VISUAL_TEST_CONFIG.zoomLevel.body, VISUAL_TEST_CONFIG.side.back);
+  });
+  it('compares avatar head snapshot front', () => {
+    compareSnapshot(VISUAL_TEST_CONFIG.zoomLevel.head, VISUAL_TEST_CONFIG.side.front);
+  });
+  it('compares avatar head snapshot back', () => {
+    compareSnapshot(VISUAL_TEST_CONFIG.zoomLevel.head, VISUAL_TEST_CONFIG.side.back);
   });
 });
