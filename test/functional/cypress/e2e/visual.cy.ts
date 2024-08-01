@@ -45,3 +45,5 @@ describe('visual', () => {
     compareSnapshot(VISUAL_TEST_CONFIG.zoomLevel.head, VISUAL_TEST_CONFIG.side.back);
   });
 });
+
+export {};
