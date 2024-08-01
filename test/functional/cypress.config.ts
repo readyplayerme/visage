@@ -14,7 +14,9 @@ module.exports = defineConfig({
     responseTimeout: 60000
   },
   retries: {
+    /*
     runMode: 3,
     openMode: 2
+    */
   }
 });

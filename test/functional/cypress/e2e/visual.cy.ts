@@ -23,7 +23,7 @@ function compareSnapshot(zoomLevel: number, side: number) {
   cy.intercept(VISUAL_TEST_CONFIG.modelUrl).as('modelDownloading');
   cy.wait('@modelDownloading');
 
-  cy.wait(2000);
+  cy.wait(7500);
 
   const name = `avatar-zoom-${zoomLevel}-side-[${side}]`;
 
