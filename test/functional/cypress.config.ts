@@ -1,4 +1,5 @@
 import { defineConfig } from 'cypress';
+// @ts-ignore
 import getCompareSnapshotsPlugin from 'cypress-image-diff-js/plugin';
 
 module.exports = defineConfig({

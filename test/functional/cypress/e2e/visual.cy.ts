@@ -26,6 +26,8 @@ function compareSnapshot(zoomLevel: number, side: number) {
   cy.wait(2000);
 
   const name = `avatar-zoom-${zoomLevel}-side-[${side}]`;
+
+  // @ts-ignore
   cy.compareSnapshot({ name, testThreshold: VISUAL_TEST_CONFIG.testThreshold });
 }
 
