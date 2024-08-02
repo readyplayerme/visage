@@ -20,11 +20,10 @@ function compareSnapshot(zoomLevel: number, side: number) {
     }`
   );
 
-  // cy.intercept('GET', 'https://files.readyplayer.me/visage/environment/soft.hdr', { fixture: 'soft.hdr' });
-
   cy.intercept(VISUAL_TEST_CONFIG.modelUrl).as('modelDownloading');
   cy.wait('@modelDownloading');
 
+  // wait for the shadow under the avatar to build up with high wait time
   cy.wait(20000);
 
   const name = `avatar-zoom-${zoomLevel}-side-[${side}]`;

@@ -60,9 +60,7 @@ const AvatarTest: React.FC = () => {
             effects={{
               ambientOcclusion: true
             }}
-          >
-            {/* <StatsGl /> */}
-          </Avatar>
+          />
         </div>
       </div>
     </div>
