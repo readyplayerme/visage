@@ -50,7 +50,8 @@ module.exports = {
       }
     ],
     'prefer-regex-literals': ['error', { disallowRedundantWrapping: false }],
-    'no-plusplus': 'off'
+    'no-plusplus': 'off',
+    "no-console": 'off'
   },
   settings: {
     'import/resolver': {

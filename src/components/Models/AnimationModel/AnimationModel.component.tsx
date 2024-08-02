@@ -3,7 +3,7 @@ import { useFrame, useGraph } from '@react-three/fiber';
 import { AnimationMixer, Group } from 'three';
 
 import { Model } from 'src/components/Models/Model';
-import { useHeadMovement, useGltfLoader, useFallback, useIdleExpression, useEmotion } from 'src/services';
+import { useHeadMovement, useGltfLoader, useIdleExpression, useEmotion } from 'src/services';
 import { BaseModelProps } from 'src/types';
 import { loadAnimationClip } from 'src/services/Animation.service';
 import { Emotion } from 'src/components/Avatar/Avatar.component';
@@ -26,7 +26,6 @@ export const AnimationModel: FC<AnimationModelProps> = ({
   rotation = 20 * (Math.PI / 180),
   scale = 1,
   idleRotation = false,
-  setModelFallback,
   onLoaded,
   headMovement = false,
   emotion,
@@ -74,7 +73,6 @@ export const AnimationModel: FC<AnimationModelProps> = ({
   useHeadMovement({ nodes, enabled: headMovement });
   useEmotion(nodes, emotion);
   useIdleExpression('blink', nodes);
-  useFallback(nodes, setModelFallback);
 
   return (
     <Model

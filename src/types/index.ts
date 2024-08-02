@@ -50,7 +50,6 @@ export interface BaseModelProps {
    * Detect when model is being loaded and trigger custom logic.
    */
   onLoading?: () => void;
-  setModelFallback?: (fallback: JSX.Element) => void;
   bloom?: BloomConfiguration;
 }
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useRef } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
 import {
   LinearFilter,
   MeshStandardMaterial,
@@ -257,61 +257,6 @@ export class Transform {
 
   position: Vector3;
 }
-
-/**
- * Builds a fallback model for given nodes.
- * Useful for displaying as the suspense fallback object.
- */
-function buildFallback(nodes: Nodes, transform: Transform = new Transform()): JSX.Element {
-  return (
-    <group>
-      {Object.keys(nodes).map((key) => {
-        const node = nodes[key] as CustomNode;
-        if (node.type === 'SkinnedMesh') {
-          return (
-            <skinnedMesh
-              castShadow
-              receiveShadow
-              key={node.name}
-              scale={transform.scale}
-              position={transform.position}
-              rotation={transform.rotation}
-              geometry={node.geometry}
-              material={node.material}
-              skeleton={node.skeleton}
-              morphTargetInfluences={node.morphTargetInfluences || []}
-            />
-          );
-        }
-
-        if (node.type === 'Mesh') {
-          return (
-            <mesh
-              castShadow
-              receiveShadow
-              key={node.name}
-              scale={transform.scale}
-              position={transform.position}
-              rotation={transform.rotation}
-              geometry={node.geometry}
-              material={node.material}
-              morphTargetInfluences={node.morphTargetInfluences || []}
-            />
-          );
-        }
-
-        return null;
-      })}
-    </group>
-  );
-}
-
-export const useFallback = (nodes: Nodes, setter?: (fallback: JSX.Element) => void) =>
-  useEffect(() => {
-    if (typeof setter === 'function') {
-      setter(buildFallback(nodes));
-    }
-  }, [setter, nodes]);
 
 export const triggerCallback = (callback?: () => void) => {
   if (typeof callback === 'function') {

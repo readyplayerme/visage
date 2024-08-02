@@ -10,7 +10,7 @@ import { BaseCanvas } from 'src/components/BaseCanvas';
 import Capture, { CaptureType } from 'src/components/Capture/Capture.component';
 import { BackgroundColor } from 'src/components/Background';
 
-export interface ExhibitProps extends CameraProps, EnvironmentProps, Omit<BaseModelProps, 'setModelFallback'> {
+export interface ExhibitProps extends CameraProps, EnvironmentProps, BaseModelProps {
   /**
    * Arbitrary binary data (base64 string | Blob) of a `.glb` file or path (URL) to a `.glb` resource.
    */

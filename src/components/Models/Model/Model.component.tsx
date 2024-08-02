@@ -15,7 +15,7 @@ interface ModelProps extends BaseModelProps {
 
 const ROTATION_STEP = 0.005;
 
-export const Model: FC<ModelProps> = ({ scene, scale = 1, modelRef, onLoaded, onSpawnAnimationFinish, bloom }) => {
+export const Model: FC<ModelProps> = ({ scene, scale = 1, modelRef, onLoaded, onSpawnAnimationFinish, bloom }) => { 
   const { materials } = useGraph(scene);
   const { gl } = useThree();
   const [isTouching, setIsTouching] = useState(false);
@@ -66,7 +66,9 @@ export const Model: FC<ModelProps> = ({ scene, scale = 1, modelRef, onLoaded, on
     }
   });
 
-  useEffect(() => triggerCallback(onLoaded), [scene, materials, onLoaded]);
+  useEffect(() => {
+    console.log("avatar model loaded");
+    triggerCallback(onLoaded); }, [scene, materials, onLoaded]);
 
   useEffect(() => {
     gl.domElement.addEventListener('mousedown', setTouchingOn);
@@ -98,7 +100,7 @@ export const Model: FC<ModelProps> = ({ scene, scale = 1, modelRef, onLoaded, on
   return (
     <group ref={modelRef} dispose={null} rotation={[0, 0, 0]}>
       <primitive object={scene} scale={scale} />
-      {spawnComponent}
+        {spawnComponent}
     </group>
   );
 };

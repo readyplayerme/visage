@@ -13,11 +13,11 @@ import { Provider, useSetAtom } from 'jotai';
 import Capture, { CaptureType } from 'src/components/Capture/Capture.component';
 import { Box, Background } from 'src/components/Background/Box/Box.component';
 import { BackgroundColor } from 'src/components/Background';
-import Loader from 'src/components/Loader';
 import Bloom from 'src/components/Bloom/Bloom.component';
 import { BlendFunction } from 'postprocessing';
 import Lights from 'src/components/Lights/Lights.component';
 import { spawnState } from '../../state/spawnAtom';
+import { Loader } from '../Loader/Loader.component';
 
 export const CAMERA = {
   TARGET: {
@@ -47,7 +47,7 @@ export const CAMERA = {
 
 export type Emotion = Record<string, number>;
 
-export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseModelProps, 'setModelFallback'> {
+export interface AvatarProps extends LightingProps, EnvironmentProps, BaseModelProps {
   /**
    * Arbitrary binary data (base64 string, Blob) of a `.glb` file or path (URL) to a `.glb` resource.
    */
@@ -187,7 +187,7 @@ const Avatar: FC<AvatarProps> = ({
   backLightPosition,
   lightTarget,
   fov = 50
-}) => {
+}) => {  
   const setSpawnState = useSetAtom(spawnState);
 
   useEffect(() => {
@@ -268,7 +268,14 @@ const Avatar: FC<AvatarProps> = ({
         controlsMaxDistance={halfBody ? CAMERA.CONTROLS.HALF_BODY.MAX_DISTANCE : CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE}
         updateCameraTargetOnZoom={!halfBody}
       />
-      {AvatarModel}
+      <Suspense fallback={
+          <StaticModel
+          modelSrc={`${modelSrc}?textureQuality=low`}
+          scale={scale} emotion={emotion} bloom={effects?.bloom}
+        />
+      }>
+        {AvatarModel}
+      </Suspense>
       {children}
       {shadows && <ContactShadows position={[0, 0, 0]} opacity={2} scale={10} blur={1.0} far={1.0} />}
       {background?.src && <Box {...background} />}
@@ -324,7 +331,8 @@ const Avatar: FC<AvatarProps> = ({
 };
 
 const AvatarWrapper = (props: AvatarProps) => (
-  <Suspense fallback={props.loader ?? <Loader />}>
+  // <Avatar modelSrc={`${props.modelSrc  }?textureChannels=none`} />
+  <Suspense fallback={<Loader />} >
     <Provider>
       <Avatar {...props} />
     </Provider>

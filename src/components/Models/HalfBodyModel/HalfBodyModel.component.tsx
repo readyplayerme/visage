@@ -2,7 +2,7 @@ import React, { FC, useRef } from 'react';
 import { useFrame, useGraph } from '@react-three/fiber';
 import { Model } from 'src/components/Models/Model';
 import { BaseModelProps } from 'src/types';
-import { useEmotion, useHeadMovement, useGltfLoader, useFallback, useIdleExpression } from 'src/services';
+import { useEmotion, useHeadMovement, useGltfLoader, useIdleExpression } from 'src/services';
 import { Group } from 'three';
 import { Emotion } from '../../Avatar/Avatar.component';
 
@@ -23,7 +23,6 @@ export const HalfBodyModel: FC<HalfBodyModelProps> = ({
   rotation = 20 * (Math.PI / 180),
   idleRotation = false,
   emotion,
-  setModelFallback,
   onLoaded,
   headMovement = false,
   bloom
@@ -61,7 +60,6 @@ export const HalfBodyModel: FC<HalfBodyModelProps> = ({
   useHeadMovement({ nodes, isHalfBody: true, enabled: headMovement });
   useIdleExpression('blink', nodes);
   useEmotion(nodes, emotion);
-  useFallback(nodes, setModelFallback);
 
   return <Model modelRef={ref} scene={scene} scale={scale} onLoaded={onLoaded} bloom={bloom} />;
 };
