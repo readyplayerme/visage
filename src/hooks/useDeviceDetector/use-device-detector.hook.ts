@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { getGPUTier, TierResult } from 'detect-gpu';
+import { getGPUTier, TierResult as GpuTierResult } from 'detect-gpu';
 import { stringify } from 'qs';
+import { checkDownloadSpeed } from 'src/services/DownloadSpeed.service';
 
 type TierPresets = { [key: number]: Record<string, any> };
 
@@ -16,25 +17,48 @@ const TIER_PRESETS: TierPresets = {
   }
 };
 
+type NetworkTierResult = {
+  downloadSpeed: number;
+  tier: number;
+};
+
+// in mbps
+const networkTierGrades = {
+  1: 1,
+  2: 3,
+  3: Infinity
+};
+
 type DeviceDetectorServiceProps = {
-  gpuTierResult: TierResult;
+  gpuTierResult: GpuTierResult;
+  networkTierResult: NetworkTierResult;
   tierPresets?: TierPresets;
 };
 
 class DeviceDetectorService {
   private tierPresets: TierPresets = TIER_PRESETS;
 
-  private gpuTierResult: TierResult;
+  private gpuTierResult: GpuTierResult;
+
+  private networkTierResult: NetworkTierResult;
 
   constructor(props: DeviceDetectorServiceProps) {
     this.gpuTierResult = props.gpuTierResult;
+    this.networkTierResult = props.networkTierResult;
     if (props.tierPresets) {
-      this.tierPresets = props.tierPresets;
+      this.tierPresets = { ...TIER_PRESETS, ...props.tierPresets };
     }
   }
 
+  get result() {
+    return {
+      gpu: this.gpuTierResult,
+      network: this.networkTierResult
+    };
+  }
+
   toQueryString() {
-    return stringify(this.tierPresets[this.gpuTierResult.tier]);
+    return stringify(this.tierPresets[Math.min(this.gpuTierResult.tier, this.networkTierResult.tier)]);
   }
 }
 
@@ -47,20 +71,33 @@ export function useDeviceDetector(options?: DeviceDetectorHookProps) {
 
   useEffect(() => {
     const fetchDeviceDetector = async () => {
-      let gpuTierResult: TierResult = { type: 'BENCHMARK', tier: 3 };
-
+      let gpuTierResult: GpuTierResult = { type: 'BENCHMARK', tier: 3 };
+      let networkTierResult: NetworkTierResult = { downloadSpeed: 100, tier: 3 };
       try {
         gpuTierResult = await getGPUTier();
-
         // Safari fails to detect the GPU tier, so we set it to the highest tier
         if (gpuTierResult.type !== 'BENCHMARK') {
           gpuTierResult.tier = 3;
         }
+
+        const downloadSpeed = await checkDownloadSpeed('https://models.readyplayer.me/6613f5defa73bfcb698a92fd.png');
+
+        let tier = 3;
+        if (downloadSpeed < networkTierGrades[1]) {
+          tier = 1;
+        } else if (downloadSpeed < networkTierGrades[2]) {
+          tier = 2;
+        }
+
+        networkTierResult = {
+          downloadSpeed,
+          tier
+        };
       } catch (error) {
         console.error(error);
       }
 
-      setDeviceDetector(new DeviceDetectorService({ gpuTierResult, ...options }));
+      setDeviceDetector(new DeviceDetectorService({ gpuTierResult, networkTierResult, ...options }));
     };
     fetchDeviceDetector();
   }, []);
