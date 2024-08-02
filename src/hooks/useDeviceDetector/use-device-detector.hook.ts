@@ -17,24 +17,24 @@ const TIER_PRESETS: TierPresets = {
 };
 
 type DeviceDetectorServiceProps = {
-  gpuTierResults: TierResult;
+  gpuTierResult: TierResult;
   tierPresets?: TierPresets;
 };
 
 class DeviceDetectorService {
   private tierPresets: TierPresets = TIER_PRESETS;
 
-  private gpuTierResults: TierResult;
+  private gpuTierResult: TierResult;
 
   constructor(props: DeviceDetectorServiceProps) {
-    this.gpuTierResults = props.gpuTierResults;
+    this.gpuTierResult = props.gpuTierResult;
     if (props.tierPresets) {
       this.tierPresets = props.tierPresets;
     }
   }
 
   toQueryString() {
-    return stringify(this.tierPresets[this.gpuTierResults.tier]);
+    return stringify(this.tierPresets[this.gpuTierResult.tier]);
   }
 }
 
@@ -47,13 +47,13 @@ export function useDeviceDetector(options?: DeviceDetectorHookProps) {
 
   useEffect(() => {
     const fetchDeviceDetector = async () => {
-      const gpuTier = await getGPUTier();
+      const gpuTierResult = await getGPUTier();
 
-      if (gpuTier.type !== 'BENCHMARK') {
-        gpuTier.tier = 3;
+      if (gpuTierResult.type !== 'BENCHMARK') {
+        gpuTierResult.tier = 3;
       }
 
-      setDeviceDetector(new DeviceDetectorService({ gpuTierResults: gpuTier, tierPresets: options?.tierPresets }));
+      setDeviceDetector(new DeviceDetectorService({ gpuTierResult, ...options }));
     };
     fetchDeviceDetector();
   }, []);
