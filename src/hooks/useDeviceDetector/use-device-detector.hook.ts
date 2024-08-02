@@ -47,10 +47,17 @@ export function useDeviceDetector(options?: DeviceDetectorHookProps) {
 
   useEffect(() => {
     const fetchDeviceDetector = async () => {
-      const gpuTierResult = await getGPUTier();
+      let gpuTierResult: TierResult = { type: 'BENCHMARK', tier: 3 };
 
-      if (gpuTierResult.type !== 'BENCHMARK') {
-        gpuTierResult.tier = 3;
+      try {
+        gpuTierResult = await getGPUTier();
+
+        // Safari fails to detect the GPU tier, so we set it to the highest tier
+        if (gpuTierResult.type !== 'BENCHMARK') {
+          gpuTierResult.tier = 3;
+        }
+      } catch (error) {
+        console.error(error);
       }
 
       setDeviceDetector(new DeviceDetectorService({ gpuTierResult, ...options }));
