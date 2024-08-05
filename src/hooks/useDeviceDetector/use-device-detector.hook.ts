@@ -25,7 +25,7 @@ type NetworkTierResult = {
 // in mbps
 const networkTierGrades = {
   1: 1,
-  2: 3,
+  2: 10,
   3: Infinity
 };
 
@@ -80,7 +80,7 @@ export function useDeviceDetector(options?: DeviceDetectorHookProps) {
           gpuTierResult.tier = 3;
         }
 
-        const downloadSpeed = await checkDownloadSpeed('https://models.readyplayer.me/6613f5defa73bfcb698a92fd.png');
+        const downloadSpeed = await checkDownloadSpeed('https://api.readyplayer.me/v3/avatars/editor/benchmark');
 
         let tier = 3;
         if (downloadSpeed < networkTierGrades[1]) {
