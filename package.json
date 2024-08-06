@@ -150,8 +150,10 @@
     "npm": "8.6.0"
   },
   "dependencies": {
+    "detect-gpu": "^5.0.41",
     "gltfpack": "^0.21.0",
     "jest-canvas-mock": "^2.5.2",
-    "jotai": "^2.2.2"
+    "jotai": "^2.2.2",
+    "qs": "^6.12.3"
   }
 }
