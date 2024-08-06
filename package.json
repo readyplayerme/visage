@@ -65,6 +65,7 @@
     ]
   },
   "peerDependencies": {
+    "@amplitude/analytics-browser": "^1.13.6",
     "@react-three/drei": "9.108.4",
     "@react-three/fiber": "8.16.8",
     "@react-three/postprocessing": "2.16.2",
