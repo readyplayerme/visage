@@ -7,6 +7,7 @@ import { PoseModel } from './components/Models/PoseModel';
 import { EnvironmentModel } from './components/Models/EnvironmentModel';
 import { Avatar, CAMERA, AvatarProps } from './components/Avatar';
 import { FloorReflection } from './components/FloorReflection';
+import { useDeviceDetector } from './hooks/useDeviceDetector/use-device-detector.hook';
 
 export {
   Exhibit,
@@ -18,7 +19,8 @@ export {
   PoseModel,
   Avatar,
   CAMERA,
-  FloorReflection
+  FloorReflection,
+  useDeviceDetector
 };
 
 export type { AvatarProps };
