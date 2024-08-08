@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { getGPUTier, TierResult as GpuTierResult } from 'detect-gpu';
 import { stringify } from 'qs';
 import { checkDownloadSpeed } from 'src/services/DownloadSpeed.service';
+import { trackEvent } from 'src/services/Analytics.service';
 
 type TierPresets = { [key: number]: Record<string, any> };
 
@@ -48,6 +49,8 @@ class DeviceDetectorService {
     if (props.tierPresets) {
       this.tierPresets = { ...TIER_PRESETS, ...props.tierPresets };
     }
+
+    trackEvent('device detected', this.result);
   }
 
   get result() {
