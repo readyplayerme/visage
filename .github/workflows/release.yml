@@ -54,7 +54,8 @@ jobs:
     name: Build, Deploy to GitHub pages, Release npm package
     needs: [test, visual-test]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' # Trigger release process only on main
+   # EVIL SHIT
+   # if: github.ref == 'refs/heads/main' # Trigger release process only on main
     steps:
       - name: Checkout
         uses: actions/checkout@v2
