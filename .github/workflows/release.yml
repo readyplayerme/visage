@@ -1,8 +1,7 @@
 name: Release pipeline
 
 on:
-  push:
-    branches:
+  pull_request:
 
 concurrency:
   group: ${{ github.ref }}
