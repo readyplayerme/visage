@@ -1,4 +1,4 @@
-# [Visage](https://readyplayerme.github.io/visage/) &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/readyplayerme/visage/blob/main/LICENSE) [![npm version](https://img.shields.io/npm/v/@readyplayerme/visage)](https://www.npmjs.com/package/@readyplayerme/visage)
+# [Visage](https://readyplayerme.github.io/visage/) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/readyplayerme/visage/blob/main/LICENSE) [![npm version](https://img.shields.io/npm/v/@readyplayerme/visage)](https://www.npmjs.com/package/@readyplayerme/visage)
 Visage is a collection of components for showcasing Ready Player Me avatars and 3D on the web!
 
 Built with [`three.js`](https://github.com/mrdoob/three.js), [`react-three-fiber`](https://github.com/pmndrs/react-three-fiber), [`drei`](https://github.com/pmndrs/drei), [`three-stdlib`](https://github.com/pmndrs/three-stdlib) and [`react`](https://github.com/facebook/react/).
