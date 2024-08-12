@@ -3,11 +3,6 @@ name: Release pipeline
 on:
   push:
     branches:
-      - main
-      - 'feature/**'
-      - 'feat/**'
-      - 'hotfix/**'
-      - 'ACT-**'
 
 concurrency:
   group: ${{ github.ref }}

@@ -27,6 +27,7 @@
     "src",
     "src/**/*.ts",
     "src/**/*.tsx",
+    "test/**/*.ts",
     "css-modules.d.ts",
     "react-app-env.d.ts",
     "rollup.config.js",
