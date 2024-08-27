@@ -346,7 +346,7 @@ export const expressions = {
  * Animates avatars facial expressions when morphTargets=ARKit,Eyes Extra is provided with the avatar.
  */
 export const useIdleExpression = (expression: keyof typeof expressions, nodes: Nodes) => {
-  const headMesh = (nodes.Wolf3D_Head || nodes.Wolf3D_Avatar) as unknown as SkinnedMeshProps;
+  const headMesh = (nodes.Wolf3D_Head || nodes.Wolf3D_Avatar || nodes.head) as unknown as SkinnedMeshProps;
   const selectedExpression = expression in expressions ? expressions[expression] : undefined;
   const timeout = useRef<NodeJS.Timeout>();
   const duration = useRef<number>(Number.POSITIVE_INFINITY);
