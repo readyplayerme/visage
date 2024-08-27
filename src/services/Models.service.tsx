@@ -357,7 +357,7 @@ export const useIdleExpression = (expression: keyof typeof expressions, nodes: N
         selectedExpression[i].morphTargetIndex = headMesh.morphTargetDictionary[selectedExpression[i].morphTarget];
       }
     }
-  }, [selectedExpression?.length]);
+  }, [selectedExpression, headMesh?.morphTargetDictionary]);
 
   const animateExpression = useCallback(
     (delta: number) => {
