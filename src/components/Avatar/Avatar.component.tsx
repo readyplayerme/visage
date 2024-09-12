@@ -18,6 +18,7 @@ import Bloom from 'src/components/Bloom/Bloom.component';
 import { BlendFunction } from 'postprocessing';
 import Lights from 'src/components/Lights/Lights.component';
 import { spawnState } from '../../state/spawnAtom';
+import { MultipleAnimationModel } from '../Models/MultipleAnimationModel/MultipleAnimationModel.component';
 
 export const CAMERA = {
   TARGET: {
@@ -145,6 +146,8 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
    * Use any three.js(fiber, post-processing) compatible components to render in the scene.
    */
   children?: ReactNode;
+  animations?: Record<string, string>;
+  activeAnimation?: string;
 }
 
 /**
@@ -155,6 +158,8 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
 const Avatar: FC<AvatarProps> = ({
   modelSrc,
   animationSrc = undefined,
+  animations = undefined,
+  activeAnimation = undefined,
   poseSrc = undefined,
   environment = 'soft',
   halfBody = false,
@@ -197,6 +202,19 @@ const Avatar: FC<AvatarProps> = ({
   const AvatarModel = useMemo(() => {
     if (!isValidFormat(modelSrc)) {
       return null;
+    }
+
+    if (!!activeAnimation && !halfBody && animations) {
+      return (
+        <MultipleAnimationModel
+          modelSrc={modelSrc}
+          animations={animations}
+          activeAnimation={activeAnimation}
+          scale={scale}
+          onLoaded={onLoaded}
+          bloom={effects?.bloom}
+        />
+      );
     }
 
     if (!!animationSrc && !halfBody && isValidFormat(animationSrc)) {
@@ -244,7 +262,20 @@ const Avatar: FC<AvatarProps> = ({
     return (
       <StaticModel modelSrc={modelSrc} scale={scale} onLoaded={onLoaded} emotion={emotion} bloom={effects?.bloom} />
     );
-  }, [halfBody, animationSrc, modelSrc, scale, poseSrc, idleRotation, emotion, onLoaded, headMovement, effects?.bloom]);
+  }, [
+    modelSrc,
+    activeAnimation,
+    halfBody,
+    animations,
+    animationSrc,
+    poseSrc,
+    scale,
+    onLoaded,
+    emotion,
+    effects?.bloom,
+    idleRotation,
+    headMovement
+  ]);
 
   useEffect(() => triggerCallback(onLoading), [modelSrc, animationSrc, onLoading]);
 

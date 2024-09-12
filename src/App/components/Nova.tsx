@@ -27,7 +27,8 @@ export const AvatarNova: React.FC = () => {
       </SettingsPanel>
       <Avatar
         modelSrc={modelUrl}
-        animationSrc={animations[activeAnimation]}
+        animations={animations}
+        activeAnimation={activeAnimation}
         shadows
         style={{ background: 'rgb(9,20,26)' }}
         fov={45}
