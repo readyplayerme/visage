@@ -5,7 +5,6 @@ import type { Meta } from '@storybook/react';
 import { Avatar as AvatarWrapper, CAMERA } from 'src/components/Avatar';
 import { getStoryAssetPath } from 'src/services';
 import { ignoreArgTypesOnExamples, emotions, modelPresets, animationPresets } from 'src/services/Stories.service';
-import { EnvironmentModel as EnvironmentModelContainer } from 'src/components/Models';
 import { Vector3 } from 'three';
 import { AvatarProps } from './Avatar.component';
 import { Static } from './Avatar.stories';
@@ -14,13 +13,10 @@ import { BloomConfiguration } from '../../types';
 const Avatar = (args: AvatarProps) => <AvatarWrapper {...args} />;
 
 const Sparkles: StoryFn<typeof SparklesDrei> = (args: any) => <SparklesDrei {...args} />;
-const EnvironmentModel: StoryFn<typeof EnvironmentModelContainer> = (args: any) => (
-  <EnvironmentModelContainer {...args} />
-);
 const meta: Meta<typeof Avatar> = {
   component: Avatar,
   // @ts-ignore
-  subcomponents: { Sparkles, EnvironmentModel }
+  subcomponents: { Sparkles }
 };
 
 export default meta;
