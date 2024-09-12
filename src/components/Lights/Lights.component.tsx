@@ -19,9 +19,9 @@ export const LIGHT_CONFIG = Object.freeze({
     fillLightIntensity: 3.0,
     fillLightColor: '#6794FF',
     fillLightPosition: new Vector3(-0.5, 1.6, -0.5),
-    backLightIntensity: 3.0,
+    backLightIntensity: 6.0,
     backLightColor: '#FFB878',
-    backLightPosition: new Vector3(0.5, 1.6, -0.9),
+    backLightPosition: new Vector3(0.5, 1.6, -1.0),
     lightTarget: new Vector3(0.0, 1.7, 0.0)
   } as Required<LightingProps>
 });
