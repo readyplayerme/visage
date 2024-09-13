@@ -8,7 +8,7 @@ const VISUAL_TEST_CONFIG = Object.freeze({
     back: -1
   },
   testUrl: 'http://localhost:3000/test',
-  modelUrl: 'https://api.readyplayer.dev/v3/avatars/65f82db95462c113fe5c5bb6.glb',
+  modelUrl: 'https://api.readyplayer.dev/v3/avatars/66e06ad13f0d3ce06690b656.glb',
   testThreshold: 0.05
 });
 
