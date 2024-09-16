@@ -1,11 +1,13 @@
 import React from 'react';
 
 import { Avatar, CAMERA } from 'src/components/Avatar';
+import { emotions } from 'src/services/Stories.service';
 import { SettingsPanel } from './SettingsPanel';
 
 const idleUrl = 'https://readyplayerme-assets.s3.amazonaws.com/animations/nova-male-idle.glb';
 const victoryUrl = 'https://readyplayerme-assets.s3.amazonaws.com/animations/nova-victory-03.glb';
-const modelUrl = 'https://api.readyplayer.dev/v3/avatars/66e2cecfbd5d3e60f8cdbde5.glb';
+const modelUrl =
+  'https://api.readyplayer.dev/v3/avatars/66e2cecfbd5d3e60f8cdbde5.glb?meshCompression=true&textureQuality=medium&meshSimplify=0&morphTargetsGroup=Editor+combined';
 
 const animations: Record<string, string> = {
   idle: idleUrl,
@@ -27,6 +29,7 @@ export const AvatarNova: React.FC = () => {
       </SettingsPanel>
       <Avatar
         modelSrc={modelUrl}
+        emotion={emotions.smile}
         animations={animations}
         activeAnimation={activeAnimation}
         shadows

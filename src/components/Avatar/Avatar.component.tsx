@@ -207,6 +207,7 @@ const Avatar: FC<AvatarProps> = ({
     if (!!activeAnimation && !halfBody && animations) {
       return (
         <MultipleAnimationModel
+          emotion={emotion}
           modelSrc={modelSrc}
           animations={animations}
           activeAnimation={activeAnimation}

@@ -1,16 +1,19 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
-import { useFrame, useLoader } from '@react-three/fiber';
+import { useFrame, useGraph } from '@react-three/fiber';
 import { AnimationAction, AnimationClip, AnimationMixer, Group } from 'three';
 import { GLTFLoader } from 'three-stdlib';
 
 import { Model } from 'src/components/Models/Model';
 import { BaseModelProps } from 'src/types';
+import { useEmotion, useGltfLoader } from 'src/services';
+import { Emotion } from 'src/components/Avatar/Avatar.component';
 
 export interface MultipleAnimationModelProps extends BaseModelProps {
   modelSrc: string | Blob;
   animations: Record<string, string>;
   activeAnimation: string;
   scale?: number;
+  emotion?: Emotion;
 }
 
 export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
@@ -19,6 +22,7 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
   activeAnimation,
   scale = 1,
   onLoaded,
+  emotion,
   bloom
 }) => {
   const groupRef = useRef<Group>(null);
@@ -26,7 +30,8 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
   const [loadedAnimations, setLoadedAnimations] = useState<Record<string, AnimationClip>>({});
   const [activeAction, setActiveAction] = useState<AnimationAction | null>(null);
 
-  const { scene } = useLoader(GLTFLoader, String(modelSrc));
+  const { scene } = useGltfLoader(modelSrc);
+  const { nodes } = useGraph(scene);
 
   useEffect(() => {
     if (scene && groupRef.current) {
@@ -74,6 +79,8 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
   useFrame((state, delta) => {
     mixerRef.current?.update(delta);
   });
+
+  useEmotion(nodes, emotion);
 
   return <Model modelRef={groupRef} scene={scene} scale={scale} onLoaded={onLoaded} bloom={bloom} />;
 };
