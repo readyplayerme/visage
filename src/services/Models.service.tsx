@@ -102,6 +102,7 @@ interface UseHeadMovement {
   rotationMargin?: Vector2;
   enabled?: boolean;
 }
+
 /**
  * Avatar head movement relative to cursor.
  * When the model isn't a standard Ready Player Me avatar, the head movement won't take effect.
@@ -218,19 +219,33 @@ const dracoLoader = new DRACOLoader();
 dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.5/');
 loader.setDRACOLoader(dracoLoader);
 
-export const useGltfLoader = (source: Blob | string): GLTF =>
-  suspend(
-    async () => {
-      if (source instanceof Blob) {
-        const buffer = await source.arrayBuffer();
-        return (await loader.parseAsync(buffer, '')) as unknown as GLTF;
+export const useGltfLoader = (source: Blob | string): GLTF => {
+  const cachedGltf = useRef<GLTF | null>(null);
+  const prevSource = useRef<Blob | string | null>(null);
+
+  return suspend(
+    async (): Promise<GLTF> => {
+      if (source === prevSource.current && cachedGltf.current) {
+        return cachedGltf.current;
       }
 
-      return loader.loadAsync(source);
+      let gltf: GLTF;
+      if (source instanceof Blob) {
+        const buffer = await source.arrayBuffer();
+        gltf = (await loader.parseAsync(buffer, '')) as GLTF;
+      } else {
+        gltf = await loader.loadAsync(source);
+      }
+
+      cachedGltf.current = gltf;
+      prevSource.current = source;
+
+      return gltf;
     },
     [source],
     { lifespan: 100 }
   );
+};
 
 export function usePersistantRotation(scene: Group) {
   const refToPreviousScene = useRef(scene);
