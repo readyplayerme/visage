@@ -219,7 +219,21 @@ const dracoLoader = new DRACOLoader();
 dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.5/');
 loader.setDRACOLoader(dracoLoader);
 
-export const useGltfLoader = (source: Blob | string): GLTF => {
+export const useGltfLoader = (source: Blob | string): GLTF =>
+  suspend(
+    async () => {
+      if (source instanceof Blob) {
+        const buffer = await source.arrayBuffer();
+        return (await loader.parseAsync(buffer, '')) as unknown as GLTF;
+      }
+
+      return loader.loadAsync(source);
+    },
+    [source],
+    { lifespan: 100 }
+  );
+
+export const useGltfCachedLoader = (source: Blob | string): GLTF => {
   const cachedGltf = useRef<Map<string, GLTF>>(new Map<string, GLTF>());
 
   return suspend(async (): Promise<GLTF> => {

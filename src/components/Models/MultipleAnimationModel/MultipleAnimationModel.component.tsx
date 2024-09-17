@@ -5,7 +5,7 @@ import { GLTFLoader } from 'three-stdlib';
 
 import { Model } from 'src/components/Models/Model';
 import { BaseModelProps } from 'src/types';
-import { useEmotion, useGltfLoader } from 'src/services';
+import { useEmotion, useGltfCachedLoader } from 'src/services';
 import { Emotion } from 'src/components/Avatar/Avatar.component';
 
 export interface MultipleAnimationModelProps extends BaseModelProps {
@@ -30,7 +30,7 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
   const [loadedAnimations, setLoadedAnimations] = useState<Record<string, AnimationClip>>({});
   const [activeAction, setActiveAction] = useState<AnimationAction | null>(null);
 
-  const { scene } = useGltfLoader(modelSrc);
+  const { scene } = useGltfCachedLoader(modelSrc);
   const { nodes } = useGraph(scene);
 
   useEffect(() => {
