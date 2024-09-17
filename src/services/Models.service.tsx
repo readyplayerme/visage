@@ -88,7 +88,7 @@ export const normaliseMaterialsConfig = (materials: Record<string, Material>, bl
     }
 
     if (mat.emissiveMap) {
-      mat.emissiveIntensity = bloomConfig?.materialIntensity || 3.3;
+      mat.emissiveIntensity = bloomConfig?.materialIntensity || 1.0;
     }
   });
 };
