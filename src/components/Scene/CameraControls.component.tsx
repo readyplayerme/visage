@@ -1,4 +1,5 @@
-import { useEffect, FC, useRef } from 'react';
+import React, { FC, useEffect, useRef } from 'react';
+import { OrbitControls as OrbitControlsComponent } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Camera, Vector3 } from 'three';
 import { OrbitControls } from 'three-stdlib';
@@ -22,18 +23,13 @@ type CameraControlsProps = {
   updateCameraTargetOnZoom?: boolean;
 };
 
-let controls: any;
-let progress = Number.POSITIVE_INFINITY;
-
-const updateCameraFocus = (camera: Camera, delta: number, target?: Vector3) => {
-  if (target && progress <= 1) {
-    camera.position.setX(lerp(camera.position.x, target.x, progress));
-    camera.position.setZ(lerp(camera.position.z, target.z, progress));
-    progress += delta;
-  }
-};
-
-const updateCameraTarget = (camera: Camera, target: number, minDistance: number, maxDistance: number) => {
+const updateCameraTarget = (
+  controls: OrbitControls,
+  camera: Camera,
+  target: number,
+  minDistance: number,
+  maxDistance: number
+) => {
   if (controls) {
     let distance = controls.target.distanceTo(camera.position);
     distance = clamp(distance, maxDistance, minDistance);
@@ -54,8 +50,18 @@ export const CameraControls: FC<CameraControlsProps> = ({
 }) => {
   const cameraZoomTargetRef = useRef(cameraZoomTarget);
   const { camera, gl } = useThree();
+  const controlsRef = useRef<OrbitControls>(null);
+  const progressRef = useRef(Number.POSITIVE_INFINITY);
   const fallbackCameraTarget = cameraTarget || 1.475 + headScale / 10;
   const headScaleAdjustedMinDistance = controlsMinDistance + headScale / 10;
+
+  const updateCameraFocus = (delta: number, target?: Vector3) => {
+    if (target && progressRef.current <= 1) {
+      camera.position.setX(lerp(camera.position.x, target.x, progressRef.current));
+      camera.position.setZ(lerp(camera.position.z, target.z, progressRef.current));
+      progressRef.current += delta;
+    }
+  };
 
   useEffect(() => {
     if (
@@ -64,50 +70,47 @@ export const CameraControls: FC<CameraControlsProps> = ({
       cameraZoomTargetRef.current?.z !== cameraZoomTarget?.z
     ) {
       cameraZoomTargetRef.current = cameraZoomTarget;
-      progress = 0;
+      progressRef.current = 0;
     }
 
-    controls = new OrbitControls(camera, gl.domElement);
-    controls.enableRotate = false;
-    controls.enablePan = false;
-
-    controls.minDistance = headScaleAdjustedMinDistance;
-    controls.maxDistance = controlsMaxDistance;
-    controls.minPolarAngle = 1.4;
-    controls.maxPolarAngle = 1.4;
-
-    controls.target.set(0, fallbackCameraTarget, 0);
-    controls.update();
-
-    // TODO: Look for a better distance initialiser, without progress value check it conflicts with cameraZoomTarget which also can update camera position.z
-    if (cameraInitialDistance && progress === Number.POSITIVE_INFINITY) {
-      camera.position.z = cameraInitialDistance;
-      controls.update();
+    const controls = controlsRef.current;
+    if (controls) {
+      // TODO: Look for a better distance initialiser, without progress value check it conflicts with cameraZoomTarget which also can update camera position.z
+      if (cameraInitialDistance && progressRef.current === Number.POSITIVE_INFINITY) {
+        camera.position.z = cameraInitialDistance;
+        controls.update();
+      }
     }
 
     return () => {
-      controls.dispose();
+      controls?.dispose();
     };
-  }, [
-    cameraInitialDistance,
-    camera,
-    controlsMinDistance,
-    controlsMaxDistance,
-    fallbackCameraTarget,
-    gl.domElement,
-    headScaleAdjustedMinDistance,
-    cameraZoomTarget
-  ]);
+  }, [cameraInitialDistance, camera, gl.domElement, cameraZoomTarget]);
 
   useFrame((_, delta) => {
-    if (updateCameraTargetOnZoom) {
-      updateCameraTarget(camera, fallbackCameraTarget, headScaleAdjustedMinDistance, controlsMaxDistance);
+    if (updateCameraTargetOnZoom && controlsRef.current) {
+      updateCameraTarget(
+        controlsRef.current,
+        camera,
+        fallbackCameraTarget,
+        headScaleAdjustedMinDistance,
+        controlsMaxDistance
+      );
     }
-    updateCameraFocus(camera, delta, cameraZoomTarget);
-    if (controls) {
-      controls.update();
-    }
+    updateCameraFocus(delta, cameraZoomTarget);
+    controlsRef.current?.update();
   });
 
-  return null;
+  return (
+    <OrbitControlsComponent
+      ref={controlsRef}
+      enableRotate={false}
+      enablePan={false}
+      target={[0, fallbackCameraTarget, 0]}
+      minDistance={headScaleAdjustedMinDistance}
+      maxDistance={controlsMaxDistance}
+      minPolarAngle={1.4}
+      maxPolarAngle={1.4}
+    />
+  );
 };
