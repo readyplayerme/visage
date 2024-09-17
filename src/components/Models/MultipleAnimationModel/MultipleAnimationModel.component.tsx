@@ -74,7 +74,7 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
 
     newAction.play();
     setActiveAction(newAction);
-  }, [activeAnimation, loadedAnimations, activeAction]);
+  }, [activeAnimation, loadedAnimations, activeAction, nodes.Armature]);
 
   useFrame((state, delta) => {
     mixerRef.current?.update(delta);
