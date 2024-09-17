@@ -3,7 +3,7 @@ import { useFrame, useGraph } from '@react-three/fiber';
 import { AnimationMixer, Group } from 'three';
 
 import { Model } from 'src/components/Models/Model';
-import { useHeadMovement, useFallback, useIdleExpression, useEmotion, useGltfLoader } from 'src/services';
+import { useHeadMovement, useGltfLoader, useFallback, useIdleExpression, useEmotion } from 'src/services';
 import { BaseModelProps } from 'src/types';
 import { loadAnimationClip } from 'src/services/Animation.service';
 import { Emotion } from 'src/components/Avatar/Avatar.component';
