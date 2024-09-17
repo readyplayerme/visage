@@ -1,10 +1,9 @@
 import React, { useRef, FC, useMemo, useState } from 'react';
-import { useFrame, useGraph, useLoader } from '@react-three/fiber';
+import { useFrame, useGraph } from '@react-three/fiber';
 import { AnimationMixer, Group } from 'three';
-import { GLTFLoader } from 'three-stdlib';
 
 import { Model } from 'src/components/Models/Model';
-import { useHeadMovement, useFallback, useIdleExpression, useEmotion } from 'src/services';
+import { useHeadMovement, useFallback, useIdleExpression, useEmotion, useGltfLoader } from 'src/services';
 import { BaseModelProps } from 'src/types';
 import { loadAnimationClip } from 'src/services/Animation.service';
 import { Emotion } from 'src/components/Avatar/Avatar.component';
@@ -39,7 +38,7 @@ export const AnimationModel: FC<AnimationModelProps> = ({
     setAnimationRunning(false);
   };
 
-  const { scene } = useLoader(GLTFLoader, String(modelSrc));
+  const { scene } = useGltfLoader(modelSrc);
   const { nodes } = useGraph(scene);
 
   const animationClip = useMemo(async () => loadAnimationClip(animationSrc), [animationSrc]);
