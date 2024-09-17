@@ -1,4 +1,5 @@
 import React from 'react';
+import { StatsGl } from '@react-three/drei';
 
 import { Avatar, CAMERA } from 'src/components/Avatar';
 import { emotions } from 'src/services/Stories.service';
@@ -36,7 +37,9 @@ export const AvatarNova: React.FC = () => {
         style={{ background: 'rgb(9,20,26)' }}
         fov={45}
         cameraInitialDistance={CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE}
-      />
+      >
+        <StatsGl />
+      </Avatar>
     </>
   );
 };
