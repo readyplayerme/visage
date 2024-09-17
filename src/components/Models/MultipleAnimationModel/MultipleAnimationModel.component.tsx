@@ -5,7 +5,7 @@ import { GLTFLoader } from 'three-stdlib';
 
 import { Model } from 'src/components/Models/Model';
 import { BaseModelProps } from 'src/types';
-import { useEmotion, useGltfCachedLoader } from 'src/services';
+import { useEmotion, useGltfCachedLoader, useIdleExpression } from 'src/services';
 import { Emotion } from 'src/components/Avatar/Avatar.component';
 
 export interface MultipleAnimationModelProps extends BaseModelProps {
@@ -81,6 +81,7 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
   });
 
   useEmotion(nodes, emotion);
+  useIdleExpression('blink', nodes);
 
   return <Model modelRef={groupRef} scene={scene} scale={scale} onLoaded={onLoaded} bloom={bloom} />;
 };
