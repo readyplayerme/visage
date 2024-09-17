@@ -220,31 +220,23 @@ dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5
 loader.setDRACOLoader(dracoLoader);
 
 export const useGltfLoader = (source: Blob | string): GLTF => {
-  const cachedGltf = useRef<GLTF | null>(null);
-  const prevSource = useRef<Blob | string | null>(null);
+  const cachedGltf = useRef<Map<string, GLTF>>(new Map<string, GLTF>());
 
-  return suspend(
-    async (): Promise<GLTF> => {
-      if (source === prevSource.current && cachedGltf.current) {
-        return cachedGltf.current;
-      }
+  return suspend(async (): Promise<GLTF> => {
+    if (cachedGltf.current.has(source as string)) {
+      return cachedGltf.current.get(source as string)!;
+    }
+    let result: GLTF;
+    if (source instanceof Blob) {
+      const buffer = await source.arrayBuffer();
+      result = (await loader.parseAsync(buffer, '')) as GLTF;
+    } else {
+      result = await loader.loadAsync(source);
+    }
 
-      let gltf: GLTF;
-      if (source instanceof Blob) {
-        const buffer = await source.arrayBuffer();
-        gltf = (await loader.parseAsync(buffer, '')) as GLTF;
-      } else {
-        gltf = await loader.loadAsync(source);
-      }
-
-      cachedGltf.current = gltf;
-      prevSource.current = source;
-
-      return gltf;
-    },
-    [source],
-    { lifespan: 100 }
-  );
+    cachedGltf.current.set(source as string, result);
+    return result;
+  }, [source]);
 };
 
 export function usePersistantRotation(scene: Group) {

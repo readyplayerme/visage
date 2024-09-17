@@ -17,8 +17,8 @@ import Loader from 'src/components/Loader';
 import Bloom from 'src/components/Bloom/Bloom.component';
 import { BlendFunction } from 'postprocessing';
 import Lights from 'src/components/Lights/Lights.component';
-import { spawnState } from '../../state/spawnAtom';
-import { MultipleAnimationModel } from '../Models/MultipleAnimationModel/MultipleAnimationModel.component';
+import { MultipleAnimationModel } from 'src/components/Models/MultipleAnimationModel/MultipleAnimationModel.component';
+import { spawnState } from 'src/state/spawnAtom';
 
 export const CAMERA = {
   TARGET: {
