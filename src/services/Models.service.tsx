@@ -89,7 +89,6 @@ export const normaliseMaterialsConfig = (materials: Record<string, Material>, bl
 
     if (mat.emissiveMap) {
       mat.emissiveIntensity = bloomConfig?.materialIntensity || 3.3;
-      mat.toneMapped = false;
     }
   });
 };
@@ -308,12 +307,17 @@ function buildFallback(nodes: Nodes, transform: Transform = new Transform()): JS
         if (node.type === 'Mesh') {
           return (
             <mesh
+              attach={(parent, self) => {
+                parent.add(self);
+                self.parent = node.parent;
+                return () => parent.remove(self);
+              }}
               castShadow
               receiveShadow
               key={node.name}
-              scale={transform.scale}
-              position={transform.position}
-              rotation={transform.rotation}
+              scale={node.scale}
+              position={node.position}
+              rotation={node.rotation}
               geometry={node.geometry}
               material={node.material}
               morphTargetInfluences={node.morphTargetInfluences || []}
