@@ -9,7 +9,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+  NPM_TOKEN: ${{ secrets.RPM_NPM_TOKEN }}
 
 jobs:
   test:
@@ -80,7 +80,7 @@ jobs:
             ]
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.RPM_NPM_TOKEN }}
       - name: 📃 Deploy
         uses: JamesIves/github-pages-deploy-action@v4.2.5
         with:
