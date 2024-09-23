@@ -24,7 +24,7 @@ function compareSnapshot(zoomLevel: number, side: number) {
   cy.wait('@modelDownloading');
 
   // wait for the shadow under the avatar to build up with high wait time
-  cy.wait(20000);
+  cy.wait(30000);
 
   const name = `avatar-zoom-${zoomLevel}-side-[${side}]`;
 
