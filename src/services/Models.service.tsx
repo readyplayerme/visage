@@ -101,6 +101,7 @@ interface UseHeadMovement {
   rotationMargin?: Vector2;
   enabled?: boolean;
 }
+
 /**
  * Avatar head movement relative to cursor.
  * When the model isn't a standard Ready Player Me avatar, the head movement won't take effect.
@@ -230,6 +231,26 @@ export const useGltfLoader = (source: Blob | string): GLTF =>
     [source],
     { lifespan: 100 }
   );
+
+export const useGltfCachedLoader = (source: Blob | string): GLTF => {
+  const cachedGltf = useRef<Map<string, GLTF>>(new Map<string, GLTF>());
+
+  return suspend(async (): Promise<GLTF> => {
+    if (cachedGltf.current.has(source as string)) {
+      return cachedGltf.current.get(source as string)!;
+    }
+    let result: GLTF;
+    if (source instanceof Blob) {
+      const buffer = await source.arrayBuffer();
+      result = (await loader.parseAsync(buffer, '')) as GLTF;
+    } else {
+      result = await loader.loadAsync(source);
+    }
+
+    cachedGltf.current.set(source as string, result);
+    return result;
+  }, [source]);
+};
 
 export function usePersistantRotation(scene: Group) {
   const refToPreviousScene = useRef(scene);
