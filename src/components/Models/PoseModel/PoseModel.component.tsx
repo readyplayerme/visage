@@ -22,7 +22,8 @@ export const PoseModel: FC<PoseModelProps> = ({
   emotion,
   setModelFallback,
   onLoaded,
-  bloom
+  bloom,
+  materialConfig
 }) => {
   const { scene } = useGltfLoader(modelSrc);
   const { nodes } = useGraph(scene);
@@ -33,5 +34,14 @@ export const PoseModel: FC<PoseModelProps> = ({
   useEmotion(nodes, emotion);
   useFallback(nodes, setModelFallback);
 
-  return <Model modelRef={modelRef} scene={scene} scale={scale} onLoaded={onLoaded} bloom={bloom} />;
+  return (
+    <Model
+      modelRef={modelRef}
+      scene={scene}
+      scale={scale}
+      onLoaded={onLoaded}
+      bloom={bloom}
+      materialConfig={materialConfig}
+    />
+  );
 };

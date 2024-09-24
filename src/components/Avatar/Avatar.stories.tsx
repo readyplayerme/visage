@@ -44,6 +44,7 @@ Static.args = {
     color: 'rgb(9,20,26)'
   },
   style: {},
+  materialConfig: { emissiveIntensity: 3.3 },
   /* eslint-disable no-console */
   onLoaded: () => console.info('EVENT: static avatar loaded'),
   onLoading: () => console.info('EVENT: loading static avatar'),
