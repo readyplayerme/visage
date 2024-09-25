@@ -5,7 +5,7 @@ import { CameraControls } from 'src/components/Scene/CameraControls.component';
 import { Environment } from 'src/components/Scene/Environment.component';
 import { BaseModelProps, EnvironmentProps, SpawnState, EffectConfiguration, LightingProps } from 'src/types';
 import { BaseCanvas } from 'src/components/BaseCanvas';
-import { AnimationModel, HalfBodyModel, StaticModel, PoseModel } from 'src/components/Models';
+import { AnimationModel, HalfBodyModel, StaticModel, PoseModel, MultipleAnimationModel } from 'src/components/Models';
 import { isValidFormat, triggerCallback } from 'src/services';
 import { Dpr } from '@react-three/fiber';
 import { BrightnessContrast, EffectComposer, HueSaturation, SSAO, Vignette } from '@react-three/postprocessing';
@@ -17,7 +17,6 @@ import Loader from 'src/components/Loader';
 import Bloom from 'src/components/Bloom/Bloom.component';
 import { BlendFunction } from 'postprocessing';
 import Lights from 'src/components/Lights/Lights.component';
-import { MultipleAnimationModel } from 'src/components/Models/MultipleAnimationModel/MultipleAnimationModel.component';
 import { spawnState } from 'src/state/spawnAtom';
 
 export const CAMERA = {
