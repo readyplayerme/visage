@@ -1,12 +1,12 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { useFrame, useGraph } from '@react-three/fiber';
-import { AnimationAction, AnimationClip, AnimationMixer, Group } from 'three';
-import { GLTFLoader } from 'three-stdlib';
+import { AnimationAction, AnimationClip, AnimationMixer } from 'three';
 
 import { Model } from 'src/components/Models/Model';
 import { BaseModelProps } from 'src/types';
 import { useEmotion, useFallback, useGltfCachedLoader, useIdleExpression } from 'src/services';
 import { Emotion } from 'src/components/Avatar/Avatar.component';
+import { loadAnimationClip } from 'src/services/Animation.service';
 
 export interface MultipleAnimationModelProps extends BaseModelProps {
   modelSrc: string | Blob;
@@ -26,7 +26,6 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
   emotion,
   bloom
 }) => {
-  const groupRef = useRef<Group>(null);
   const mixerRef = useRef<AnimationMixer | null>(null);
   const activeActionRef = useRef<AnimationAction | null>(null);
   const animationTimeRef = useRef<number>(0);
@@ -37,8 +36,26 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
   const { nodes } = useGraph(scene);
 
   useEffect(() => {
-    if (scene && groupRef.current) {
+    const loadAllAnimations = async () => {
+      const clips: Record<string, AnimationClip> = {};
+
+      await Promise.all(
+        Object.keys(animations).map(async (name) => {
+          const newClip = await loadAnimationClip(animations[name]);
+          clips[name] = newClip;
+        })
+      );
+
+      setLoadedAnimations(clips);
+    };
+
+    loadAllAnimations();
+  }, [animations]);
+
+  useEffect(() => {
+    if (scene) {
       const mixer = new AnimationMixer(scene);
+      mixerRef.current = mixer;
 
       if (activeActionRef.current) {
         const newAction = mixer.clipAction(activeActionRef.current.getClip());
@@ -48,27 +65,13 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
 
         activeActionRef.current = newAction;
       }
-
-      mixerRef.current = mixer;
     }
 
     return () => {
       mixerRef.current?.stopAllAction();
+      mixerRef.current?.uncacheRoot(scene);
     };
   }, [scene]);
-
-  useEffect(() => {
-    const loader = new GLTFLoader();
-    Object.keys(animations).forEach((name) => {
-      loader.load(animations[name], (gltf) => {
-        const newClip = gltf.animations[0];
-        setLoadedAnimations((prev) => ({
-          ...prev,
-          [name]: newClip
-        }));
-      });
-    });
-  }, [animations]);
 
   useEffect(() => {
     const mixer = mixerRef.current;
@@ -79,6 +82,7 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
     if (prevAction && prevAction.getClip().name === newClip.name) return;
 
     const newAction = mixer.clipAction(newClip);
+    activeActionRef.current = newAction;
 
     if (prevAction) {
       newAction.reset();
@@ -86,7 +90,6 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
     }
 
     newAction.play();
-    activeActionRef.current = newAction;
   }, [activeAnimation, loadedAnimations]);
 
   useFrame((state, delta) => {
@@ -98,5 +101,5 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
   useIdleExpression('blink', nodes);
   useFallback(nodes, setModelFallback);
 
-  return <Model modelRef={groupRef} scene={scene} scale={scale} onLoaded={onLoaded} bloom={bloom} />;
+  return <Model scene={scene} scale={scale} onLoaded={onLoaded} bloom={bloom} />;
 };
