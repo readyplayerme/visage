@@ -1,6 +1,6 @@
 import React, { useRef, FC, useMemo, useState } from 'react';
 import { useFrame, useGraph } from '@react-three/fiber';
-import { AnimationAction, AnimationMixer, Group } from 'three';
+import { AnimationMixer, Group } from 'three';
 
 import { Model } from 'src/components/Models/Model';
 import { useHeadMovement, useGltfLoader, useFallback, useIdleExpression, useEmotion } from 'src/services';
@@ -37,8 +37,7 @@ export const AnimationModel: FC<AnimationModelProps> = ({
   const onSpawnAnimationFinish = () => {
     setAnimationRunning(false);
   };
-  const animationTimeRef = useRef<number>(0);
-  const actionRef = useRef<AnimationAction | null>(null);
+
   const { scene } = useGltfLoader(modelSrc);
   const { nodes } = useGraph(scene);
 
@@ -54,16 +53,13 @@ export const AnimationModel: FC<AnimationModelProps> = ({
     animation.fadeIn(0);
     animation.play();
 
-    mixer.update(animationTimeRef.current);
-
-    actionRef.current = animation;
+    mixer.update(0);
 
     return mixer;
   }, [animationRunning, animationClip, nodes.Armature]);
 
   useFrame(async (state, delta) => {
     (await animationMixer)?.update(delta);
-    animationTimeRef.current = actionRef.current?.time || 0;
 
     if (!idleRotation) {
       return;
