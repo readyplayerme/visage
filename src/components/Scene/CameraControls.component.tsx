@@ -81,10 +81,6 @@ export const CameraControls: FC<CameraControlsProps> = ({
         controls.update();
       }
     }
-
-    return () => {
-      controls?.dispose();
-    };
   }, [cameraInitialDistance, camera, gl.domElement, cameraZoomTarget]);
 
   useFrame((_, delta) => {
