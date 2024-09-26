@@ -3,7 +3,7 @@ import { useFrame, useGraph } from '@react-three/fiber';
 import { AnimationAction, AnimationClip, AnimationMixer } from 'three';
 
 import { Model } from 'src/components/Models/Model';
-import { BaseModelProps } from 'src/types';
+import { AnimationConfiguration, BaseModelProps } from 'src/types';
 import { useEmotion, useFallback, useGltfCachedLoader, useIdleExpression } from 'src/services';
 import { Emotion } from 'src/components/Avatar/Avatar.component';
 import { loadAnimationClip } from 'src/services/Animation.service';
@@ -14,6 +14,7 @@ export interface MultipleAnimationModelProps extends BaseModelProps {
   activeAnimation: string;
   scale?: number;
   emotion?: Emotion;
+  animationConfig?: AnimationConfiguration;
 }
 
 export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
@@ -24,7 +25,8 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
   setModelFallback,
   onLoaded,
   emotion,
-  bloom
+  bloom,
+  animationConfig
 }) => {
   const mixerRef = useRef<AnimationMixer | null>(null);
   const activeActionRef = useRef<AnimationAction | null>(null);
@@ -86,7 +88,7 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
 
     if (prevAction) {
       newAction.reset();
-      newAction.crossFadeFrom(prevAction, 0.5, true);
+      newAction.crossFadeFrom(prevAction, animationConfig?.crossfadeDuration ?? 0.5, true);
     }
 
     newAction.play();

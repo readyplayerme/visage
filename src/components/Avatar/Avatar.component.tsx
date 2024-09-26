@@ -3,9 +3,16 @@ import { Vector3 } from 'three';
 import { ContactShadows } from '@react-three/drei';
 import { CameraControls } from 'src/components/Scene/CameraControls.component';
 import { Environment } from 'src/components/Scene/Environment.component';
-import { BaseModelProps, EnvironmentProps, SpawnState, EffectConfiguration, LightingProps } from 'src/types';
+import {
+  BaseModelProps,
+  EnvironmentProps,
+  SpawnState,
+  EffectConfiguration,
+  LightingProps,
+  AnimationConfiguration
+} from 'src/types';
 import { BaseCanvas } from 'src/components/BaseCanvas';
-import { AnimationModel, HalfBodyModel, StaticModel, PoseModel, MultipleAnimationModel } from 'src/components/Models';
+import { AnimationModel, HalfBodyModel, StaticModel, PoseModel } from 'src/components/Models';
 import { isValidFormat, triggerCallback } from 'src/services';
 import { Dpr } from '@react-three/fiber';
 import { BrightnessContrast, EffectComposer, HueSaturation, SSAO, Vignette } from '@react-three/postprocessing';
@@ -18,6 +25,7 @@ import Bloom from 'src/components/Bloom/Bloom.component';
 import { BlendFunction } from 'postprocessing';
 import Lights from 'src/components/Lights/Lights.component';
 import { spawnState } from 'src/state/spawnAtom';
+import { MultipleAnimationModel } from '../Models/MultipleAnimationModel/MultipleAnimationModel.component';
 
 export const CAMERA = {
   TARGET: {
@@ -147,6 +155,7 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
   children?: ReactNode;
   animations?: Record<string, string>;
   activeAnimation?: string;
+  animationConfig?: AnimationConfiguration;
 }
 
 /**
@@ -190,7 +199,8 @@ const Avatar: FC<AvatarProps> = ({
   backLightColor,
   backLightPosition,
   lightTarget,
-  fov = 50
+  fov = 50,
+  animationConfig
 }) => {
   const setSpawnState = useSetAtom(spawnState);
 
@@ -213,6 +223,7 @@ const Avatar: FC<AvatarProps> = ({
           scale={scale}
           onLoaded={onLoaded}
           bloom={effects?.bloom}
+          animationConfig={animationConfig}
         />
       );
     }
@@ -274,7 +285,8 @@ const Avatar: FC<AvatarProps> = ({
     emotion,
     effects?.bloom,
     idleRotation,
-    headMovement
+    headMovement,
+    animationConfig
   ]);
 
   useEffect(() => triggerCallback(onLoading), [modelSrc, animationSrc, onLoading]);
