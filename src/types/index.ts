@@ -162,6 +162,13 @@ export type EffectConfiguration = {
   vignette?: boolean;
 };
 
+export type AnimationConfiguration = {
+  /**
+   * Duration of the crossfade between animations.
+   */
+  crossfadeDuration?: number;
+};
+
 export interface SpawnState {
   /**
    * Add a custom loaded effect like particles when avatar is loaded, animate them with a custom animation.

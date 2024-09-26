@@ -9,6 +9,7 @@ import {
   SpawnState,
   EffectConfiguration,
   LightingProps,
+  AnimationConfiguration,
   MaterialConfiguration
 } from 'src/types';
 import { BaseCanvas } from 'src/components/BaseCanvas';
@@ -156,6 +157,10 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
   animations?: Record<string, string>;
   activeAnimation?: string;
   /**
+   * Control properties of animations.
+   */
+  animationConfig?: AnimationConfiguration;
+  /**
    * Control properties of materials.
    */
   materialConfig?: MaterialConfiguration;
@@ -203,6 +208,7 @@ const Avatar: FC<AvatarProps> = ({
   backLightPosition,
   lightTarget,
   fov = 50,
+  animationConfig,
   materialConfig
 }) => {
   const setSpawnState = useSetAtom(spawnState);
@@ -226,6 +232,7 @@ const Avatar: FC<AvatarProps> = ({
           scale={scale}
           onLoaded={onLoaded}
           bloom={effects?.bloom}
+          animationConfig={animationConfig}
           materialConfig={materialConfig}
         />
       );
@@ -299,6 +306,7 @@ const Avatar: FC<AvatarProps> = ({
     effects?.bloom,
     idleRotation,
     headMovement,
+    animationConfig,
     materialConfig
   ]);
 
