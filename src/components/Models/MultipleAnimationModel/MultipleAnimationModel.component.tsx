@@ -26,8 +26,7 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
   onLoaded,
   emotion,
   bloom,
-  animationConfig,
-  materialConfig
+  animationConfig
 }) => {
   const mixerRef = useRef<AnimationMixer | null>(null);
   const activeActionRef = useRef<AnimationAction | null>(null);
@@ -104,5 +103,5 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
   useIdleExpression('blink', nodes);
   useFallback(nodes, setModelFallback);
 
-  return <Model scene={scene} scale={scale} onLoaded={onLoaded} bloom={bloom} materialConfig={materialConfig} />;
+  return <Model scene={scene} scale={scale} onLoaded={onLoaded} bloom={bloom} />;
 };

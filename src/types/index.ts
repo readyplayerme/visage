@@ -52,7 +52,6 @@ export interface BaseModelProps {
   onLoading?: () => void;
   setModelFallback?: (fallback: JSX.Element) => void;
   bloom?: BloomConfiguration;
-  materialConfig?: MaterialConfiguration;
 }
 
 export type HeadBlendShapeType =
@@ -187,10 +186,3 @@ export interface SpawnState {
     loop?: number | null;
   } | null;
 }
-
-export type MaterialConfiguration = {
-  /**
-   * Emissive material intensity.
-   */
-  emissiveIntensity?: number;
-};

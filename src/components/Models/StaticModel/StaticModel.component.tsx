@@ -20,8 +20,7 @@ export const StaticModel: FC<StaticModelProps> = ({
   setModelFallback,
   onLoaded,
   emotion,
-  bloom,
-  materialConfig
+  bloom
 }) => {
   const { scene } = useGltfLoader(modelSrc);
   const { nodes } = useGraph(scene);
@@ -29,14 +28,5 @@ export const StaticModel: FC<StaticModelProps> = ({
   useEmotion(nodes, emotion);
   useFallback(nodes, setModelFallback);
 
-  return (
-    <Model
-      modelRef={modelRef}
-      scene={scene}
-      scale={scale}
-      onLoaded={onLoaded}
-      bloom={bloom}
-      materialConfig={materialConfig}
-    />
-  );
+  return <Model modelRef={modelRef} scene={scene} scale={scale} onLoaded={onLoaded} bloom={bloom} />;
 };

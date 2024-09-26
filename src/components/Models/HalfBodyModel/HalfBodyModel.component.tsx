@@ -26,8 +26,7 @@ export const HalfBodyModel: FC<HalfBodyModelProps> = ({
   setModelFallback,
   onLoaded,
   headMovement = false,
-  bloom,
-  materialConfig
+  bloom
 }) => {
   const ref = useRef<Group>(null);
   const { scene } = useGltfLoader(modelSrc);
@@ -64,14 +63,5 @@ export const HalfBodyModel: FC<HalfBodyModelProps> = ({
   useEmotion(nodes, emotion);
   useFallback(nodes, setModelFallback);
 
-  return (
-    <Model
-      modelRef={ref}
-      scene={scene}
-      scale={scale}
-      onLoaded={onLoaded}
-      bloom={bloom}
-      materialConfig={materialConfig}
-    />
-  );
+  return <Model modelRef={ref} scene={scene} scale={scale} onLoaded={onLoaded} bloom={bloom} />;
 };
