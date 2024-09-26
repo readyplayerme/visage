@@ -15,7 +15,15 @@ interface ModelProps extends BaseModelProps {
 
 const ROTATION_STEP = 0.005;
 
-export const Model: FC<ModelProps> = ({ scene, scale = 1, modelRef, onLoaded, onSpawnAnimationFinish, bloom }) => {
+export const Model: FC<ModelProps> = ({
+  scene,
+  scale = 1,
+  modelRef,
+  onLoaded,
+  onSpawnAnimationFinish,
+  bloom,
+  materialConfig
+}) => {
   const { materials } = useGraph(scene);
   const { gl } = useThree();
   const [isTouching, setIsTouching] = useState(false);
@@ -53,7 +61,7 @@ export const Model: FC<ModelProps> = ({ scene, scale = 1, modelRef, onLoaded, on
     [isTouching, touchEvent, scene]
   );
 
-  normaliseMaterialsConfig(materials, bloom);
+  normaliseMaterialsConfig(materials, bloom, materialConfig);
   scene.traverse((object) => {
     const node = object;
 
