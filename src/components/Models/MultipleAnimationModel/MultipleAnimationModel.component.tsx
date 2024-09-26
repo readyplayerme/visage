@@ -26,7 +26,8 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
   onLoaded,
   emotion,
   bloom,
-  animationConfig
+  animationConfig,
+  materialConfig
 }) => {
   const mixerRef = useRef<AnimationMixer | null>(null);
   const activeActionRef = useRef<AnimationAction | null>(null);
@@ -92,7 +93,7 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
     }
 
     newAction.play();
-  }, [activeAnimation, loadedAnimations]);
+  }, [activeAnimation, loadedAnimations, animationConfig]);
 
   useFrame((state, delta) => {
     mixerRef.current?.update(delta);
@@ -103,5 +104,5 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
   useIdleExpression('blink', nodes);
   useFallback(nodes, setModelFallback);
 
-  return <Model scene={scene} scale={scale} onLoaded={onLoaded} bloom={bloom} />;
+  return <Model scene={scene} scale={scale} onLoaded={onLoaded} bloom={bloom} materialConfig={materialConfig} />;
 };

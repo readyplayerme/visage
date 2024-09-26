@@ -9,7 +9,8 @@ import {
   SpawnState,
   EffectConfiguration,
   LightingProps,
-  AnimationConfiguration
+  AnimationConfiguration,
+  MaterialConfiguration
 } from 'src/types';
 import { BaseCanvas } from 'src/components/BaseCanvas';
 import { AnimationModel, HalfBodyModel, StaticModel, PoseModel } from 'src/components/Models';
@@ -155,7 +156,14 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
   children?: ReactNode;
   animations?: Record<string, string>;
   activeAnimation?: string;
+  /**
+   * Control properties of animations.
+   */
   animationConfig?: AnimationConfiguration;
+  /**
+   * Control properties of materials.
+   */
+  materialConfig?: MaterialConfiguration;
 }
 
 /**
@@ -200,7 +208,8 @@ const Avatar: FC<AvatarProps> = ({
   backLightPosition,
   lightTarget,
   fov = 50,
-  animationConfig
+  animationConfig,
+  materialConfig
 }) => {
   const setSpawnState = useSetAtom(spawnState);
 
@@ -224,6 +233,7 @@ const Avatar: FC<AvatarProps> = ({
           onLoaded={onLoaded}
           bloom={effects?.bloom}
           animationConfig={animationConfig}
+          materialConfig={materialConfig}
         />
       );
     }
@@ -239,6 +249,7 @@ const Avatar: FC<AvatarProps> = ({
           onLoaded={onLoaded}
           headMovement={headMovement}
           bloom={effects?.bloom}
+          materialConfig={materialConfig}
         />
       );
     }
@@ -253,6 +264,7 @@ const Avatar: FC<AvatarProps> = ({
           onLoaded={onLoaded}
           headMovement={headMovement}
           bloom={effects?.bloom}
+          materialConfig={materialConfig}
         />
       );
     }
@@ -266,12 +278,20 @@ const Avatar: FC<AvatarProps> = ({
           poseSrc={poseSrc!}
           onLoaded={onLoaded}
           bloom={effects?.bloom}
+          materialConfig={materialConfig}
         />
       );
     }
 
     return (
-      <StaticModel modelSrc={modelSrc} scale={scale} onLoaded={onLoaded} emotion={emotion} bloom={effects?.bloom} />
+      <StaticModel
+        modelSrc={modelSrc}
+        scale={scale}
+        onLoaded={onLoaded}
+        emotion={emotion}
+        bloom={effects?.bloom}
+        materialConfig={materialConfig}
+      />
     );
   }, [
     modelSrc,
@@ -286,7 +306,8 @@ const Avatar: FC<AvatarProps> = ({
     effects?.bloom,
     idleRotation,
     headMovement,
-    animationConfig
+    animationConfig,
+    materialConfig
   ]);
 
   useEffect(() => triggerCallback(onLoading), [modelSrc, animationSrc, onLoading]);

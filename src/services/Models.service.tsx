@@ -17,7 +17,7 @@ import type { ObjectMap, SkinnedMeshProps } from '@react-three/fiber';
 import { GLTF, GLTFLoader, DRACOLoader } from 'three-stdlib';
 import { suspend } from 'suspend-react';
 import { Emotion } from 'src/components/Avatar/Avatar.component';
-import { BloomConfiguration } from 'src/types';
+import { BloomConfiguration, MaterialConfiguration } from 'src/types';
 import { MeshoptDecoder } from './meshopt_decoder';
 
 export interface CustomNode extends Object3D {
@@ -75,7 +75,11 @@ export const lerp = (start: number, end: number, time = 0.05): number => start *
 /**
  * Avoid texture pixelation and add depth effect.
  */
-export const normaliseMaterialsConfig = (materials: Record<string, Material>, bloomConfig?: BloomConfiguration) => {
+export const normaliseMaterialsConfig = (
+  materials: Record<string, Material>,
+  bloomConfig?: BloomConfiguration,
+  materialConfig?: MaterialConfiguration
+) => {
   Object.values(materials).forEach((material) => {
     const mat = material as MeshStandardMaterial;
     if (mat.map) {
@@ -88,7 +92,7 @@ export const normaliseMaterialsConfig = (materials: Record<string, Material>, bl
     }
 
     if (mat.emissiveMap) {
-      mat.emissiveIntensity = bloomConfig?.materialIntensity || 3.3;
+      mat.emissiveIntensity = bloomConfig?.materialIntensity ?? materialConfig?.emissiveIntensity ?? 3.3;
     }
   });
 };
