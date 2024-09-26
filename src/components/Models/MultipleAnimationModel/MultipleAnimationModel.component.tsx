@@ -23,7 +23,8 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
   scale = 1,
   onLoaded,
   emotion,
-  bloom
+  bloom,
+  materialConfig
 }) => {
   const groupRef = useRef<Group>(null);
   const mixerRef = useRef<AnimationMixer | null>(null);
@@ -83,5 +84,14 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
   useEmotion(nodes, emotion);
   useIdleExpression('blink', nodes);
 
-  return <Model modelRef={groupRef} scene={scene} scale={scale} onLoaded={onLoaded} bloom={bloom} />;
+  return (
+    <Model
+      modelRef={groupRef}
+      scene={scene}
+      scale={scale}
+      onLoaded={onLoaded}
+      bloom={bloom}
+      materialConfig={materialConfig}
+    />
+  );
 };

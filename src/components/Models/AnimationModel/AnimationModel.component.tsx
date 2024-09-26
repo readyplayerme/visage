@@ -30,7 +30,8 @@ export const AnimationModel: FC<AnimationModelProps> = ({
   onLoaded,
   headMovement = false,
   emotion,
-  bloom
+  bloom,
+  materialConfig
 }) => {
   const ref = useRef<Group>(null);
   const [animationRunning, setAnimationRunning] = useState(true);
@@ -84,6 +85,7 @@ export const AnimationModel: FC<AnimationModelProps> = ({
       onLoaded={onLoaded}
       onSpawnAnimationFinish={onSpawnAnimationFinish}
       bloom={bloom}
+      materialConfig={materialConfig}
     />
   );
 };
