@@ -1,6 +1,7 @@
 import { AnimationClip, Group } from 'three';
 
 import { FBXLoader, GLTFLoader } from 'three-stdlib';
+import { suspend } from 'suspend-react';
 import { MeshoptDecoder } from './meshopt_decoder';
 
 interface ClipWithType {
@@ -64,8 +65,23 @@ const loadPathFile = async (source: string): Promise<ClipWithType> => {
     };
   }
 };
+
 export const loadAnimationClip = async (source: Blob | string): Promise<AnimationClip> => {
   const animation = source instanceof Blob ? await loadBlobFile(source) : await loadPathFile(source);
 
   return animation.isFbx ? normaliseFbxAnimation(animation.group) : animation.group.animations[0];
 };
+
+export const useAnimations = (animations: Record<string, string>) =>
+  suspend(async (): Promise<Record<string, AnimationClip>> => {
+    const clips: Record<string, AnimationClip> = {};
+
+    await Promise.all(
+      Object.keys(animations).map(async (name) => {
+        const newClip = await loadAnimationClip(animations[name]);
+        clips[name] = newClip;
+      })
+    );
+
+    return clips;
+  }, [animations]);
