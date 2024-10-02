@@ -1,12 +1,12 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useRef } from 'react';
 import { useFrame, useGraph } from '@react-three/fiber';
-import { AnimationAction, AnimationClip, AnimationMixer } from 'three';
+import { AnimationAction, AnimationMixer } from 'three';
 
 import { Model } from 'src/components/Models/Model';
 import { AnimationConfiguration, BaseModelProps } from 'src/types';
 import { useEmotion, useFallback, useGltfCachedLoader, useIdleExpression } from 'src/services';
 import { Emotion } from 'src/components/Avatar/Avatar.component';
-import { loadAnimationClip } from 'src/services/Animation.service';
+import { useAnimations } from 'src/services/Animation.service';
 
 export interface MultipleAnimationModelProps extends BaseModelProps {
   modelSrc: string | Blob;
@@ -33,27 +33,9 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
   const activeActionRef = useRef<AnimationAction | null>(null);
   const animationTimeRef = useRef<number>(0);
 
-  const [loadedAnimations, setLoadedAnimations] = useState<Record<string, AnimationClip>>({});
-
+  const loadedAnimations = useAnimations(animations);
   const { scene } = useGltfCachedLoader(modelSrc);
   const { nodes } = useGraph(scene);
-
-  useEffect(() => {
-    const loadAllAnimations = async () => {
-      const clips: Record<string, AnimationClip> = {};
-
-      await Promise.all(
-        Object.keys(animations).map(async (name) => {
-          const newClip = await loadAnimationClip(animations[name]);
-          clips[name] = newClip;
-        })
-      );
-
-      setLoadedAnimations(clips);
-    };
-
-    loadAllAnimations();
-  }, [animations]);
 
   useEffect(() => {
     if (scene) {
@@ -93,6 +75,7 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
     }
 
     newAction.play();
+    mixer.update(0);
   }, [activeAnimation, loadedAnimations, animationConfig]);
 
   useFrame((state, delta) => {

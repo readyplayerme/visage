@@ -14,9 +14,9 @@ const animations: Record<string, string> = {
 };
 
 const modelOneUrl =
-  'https://api.readyplayer.dev/v3/avatars/66e02a5804466d05776a8f80.glb?meshCompression=true&textureQuality=medium&meshLOD=0&morphTargetsGroup=Basic expressions';
+  'https://api.readyplayer.dev/v3/avatars/66fa76b8fdea89a183c01341.glb?meshCompression=true&textureQuality=low&meshLOD=1&morphTargetsGroup=Basic expressions';
 const modelTwoUrl =
-  'https://api.readyplayer.dev/v3/avatars/66e00aca4ec56c8f76e5da75.glb?meshCompression=true&textureQuality=medium&meshLOD=0&morphTargetsGroup=Basic expressions';
+  'https://api.readyplayer.dev/v3/avatars/66fa77cbfdea89a183c0134d.glb?meshCompression=true&textureQuality=low&meshLOD=1&morphTargetsGroup=Basic expressions';
 
 const models: Record<string, string> = {
   one: modelOneUrl,
