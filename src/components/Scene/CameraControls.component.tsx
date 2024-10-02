@@ -75,6 +75,8 @@ export const CameraControls: FC<CameraControlsProps> = ({
 
     const controls = controlsRef.current;
     if (controls) {
+      controls.update();
+
       // TODO: Look for a better distance initialiser, without progress value check it conflicts with cameraZoomTarget which also can update camera position.z
       if (cameraInitialDistance && progressRef.current === Number.POSITIVE_INFINITY) {
         camera.position.z = cameraInitialDistance;
