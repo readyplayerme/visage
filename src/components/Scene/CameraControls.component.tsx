@@ -75,6 +75,7 @@ export const CameraControls: FC<CameraControlsProps> = ({
 
     const controls = controlsRef.current;
     if (controls) {
+      controls.target.set(0, fallbackCameraTarget, 0);
       controls.update();
 
       // TODO: Look for a better distance initialiser, without progress value check it conflicts with cameraZoomTarget which also can update camera position.z
@@ -83,7 +84,7 @@ export const CameraControls: FC<CameraControlsProps> = ({
         controls.update();
       }
     }
-  }, [cameraInitialDistance, camera, gl.domElement, cameraZoomTarget]);
+  }, [cameraInitialDistance, camera, gl.domElement, cameraZoomTarget, fallbackCameraTarget]);
 
   useFrame((_, delta) => {
     if (updateCameraTargetOnZoom && controlsRef.current) {
