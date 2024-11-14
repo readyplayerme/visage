@@ -11,7 +11,7 @@ export const Box: FC<Background> = ({ src = '', ...baseProps }) => {
 
   return (
     <mesh ref={ref} castShadow receiveShadow {...baseProps}>
-      <boxBufferGeometry />
+      <boxGeometry />
       <meshPhysicalMaterial map={texture} />
     </mesh>
   );
