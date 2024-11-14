@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { AvatarDevelop } from './components/Develop';
 import { AvatarTest } from './components/Test';
 import { AvatarNova } from './components/Nova';
+import { AvatarCapture } from './components/Capture';
 
 import styles from './App.module.scss';
 
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
   {
     path: '/nova',
     element: <AvatarNova />
+  },
+  {
+    path: '/capture-canvas',
+    element: <AvatarCapture />
   }
 ]);
 
