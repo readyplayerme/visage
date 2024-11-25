@@ -92,6 +92,7 @@ const disposeGltfNodes = (nodes: Nodes) => {
     if (node instanceof SkinnedMesh && node.skeleton) {
       node.geometry.dispose();
       node.skeleton.dispose();
+
       if (node.material) {
         disposeMaterial(node.material);
       }
@@ -373,12 +374,12 @@ export const useFallback = (nodes: Nodes, setter?: (fallback: JSX.Element) => vo
   const previousNodesRef = useRef<Nodes>();
 
   useEffect(() => {
-    if (previousNodesRef.current) {
-      disposeGltfNodes(previousNodesRef.current);
-    }
-
     if (typeof setter === 'function') {
       setter(buildFallback(nodes));
+    }
+
+    if (previousNodesRef.current) {
+      disposeGltfNodes(previousNodesRef.current);
     }
 
     previousNodesRef.current = nodes;
