@@ -10,7 +10,8 @@ import {
   Vector3,
   BufferGeometry,
   Skeleton,
-  Group
+  Group,
+  Texture
 } from 'three';
 import { useFrame } from '@react-three/fiber';
 import type { ObjectMap, SkinnedMeshProps } from '@react-three/fiber';
@@ -71,6 +72,32 @@ export const isValidFormat = (source: Source): source is Blob | string => {
 export const clamp = (value: number, max: number, min: number): number => Math.min(Math.max(min, value), max);
 
 export const lerp = (start: number, end: number, time = 0.05): number => start * (1 - time) + end * time;
+
+const disposeMaterial = (material: Material | Material[]) => {
+  if (Array.isArray(material)) {
+    material.forEach(disposeMaterial);
+  } else {
+    Object.values(material).forEach((value) => {
+      if (value instanceof Texture) {
+        value.dispose();
+      }
+    });
+
+    material.dispose();
+  }
+};
+
+const disposeGltfNodes = (nodes: Nodes) => {
+  Object.values(nodes).forEach((node) => {
+    if (node instanceof SkinnedMesh && node.skeleton) {
+      node.geometry.dispose();
+      node.skeleton.dispose();
+      if (node.material) {
+        disposeMaterial(node.material);
+      }
+    }
+  });
+};
 
 /**
  * Avoid texture pixelation and add depth effect.
@@ -237,25 +264,32 @@ export const useGltfLoader = (source: Blob | string): GLTF =>
   );
 
 export const useGltfCachedLoader = (source: Blob | string): GLTF => {
-  const cachedGltf = useRef<Map<string, GLTF>>(new Map<string, GLTF>());
+  const cachedGltf = useRef<GLTF | null>(null);
+  const prevSource = useRef<Blob | string | null>(null);
 
-  return suspend(async (): Promise<GLTF> => {
-    if (cachedGltf.current.has(source as string)) {
-      return cachedGltf.current.get(source as string)!;
-    }
-    let result: GLTF;
-    if (source instanceof Blob) {
-      const buffer = await source.arrayBuffer();
-      result = (await loader.parseAsync(buffer, '')) as GLTF;
-    } else {
-      result = await loader.loadAsync(source);
-    }
+  return suspend(
+    async (): Promise<GLTF> => {
+      if (source === prevSource.current && cachedGltf.current) {
+        return cachedGltf.current;
+      }
 
-    cachedGltf.current.set(source as string, result);
-    return result;
-  }, [source]);
+      let gltf: GLTF;
+      if (source instanceof Blob) {
+        const buffer = await source.arrayBuffer();
+        gltf = (await loader.parseAsync(buffer, '')) as GLTF;
+      } else {
+        gltf = await loader.loadAsync(source);
+      }
+
+      cachedGltf.current = gltf;
+      prevSource.current = source;
+
+      return gltf;
+    },
+    [source],
+    { lifespan: 100 }
+  );
 };
-
 export function usePersistantRotation(scene: Group) {
   const refToPreviousScene = useRef(scene);
 
@@ -335,12 +369,27 @@ function buildFallback(nodes: Nodes, transform: Transform = new Transform()): JS
   );
 }
 
-export const useFallback = (nodes: Nodes, setter?: (fallback: JSX.Element) => void) =>
+export const useFallback = (nodes: Nodes, setter?: (fallback: JSX.Element) => void) => {
+  const previousNodesRef = useRef<Nodes>();
+
   useEffect(() => {
+    if (previousNodesRef.current) {
+      disposeGltfNodes(previousNodesRef.current);
+    }
+
     if (typeof setter === 'function') {
       setter(buildFallback(nodes));
     }
-  }, [setter, nodes]);
+
+    previousNodesRef.current = nodes;
+
+    return () => {
+      if (previousNodesRef.current) {
+        disposeGltfNodes(previousNodesRef.current);
+      }
+    };
+  }, [nodes, setter]);
+};
 
 export const triggerCallback = (callback?: () => void) => {
   if (typeof callback === 'function') {
