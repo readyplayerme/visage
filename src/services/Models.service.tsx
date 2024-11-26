@@ -269,9 +269,11 @@ export const useGltfLoader = (source: Blob | string): GLTF =>
   suspend(
     async () => {
       let result;
+
       if (source instanceof Blob) {
-        const buffer = await source.arrayBuffer();
-        result = (await loader.parseAsync(buffer, '')) as unknown as GLTF;
+        const url = URL.createObjectURL(source);
+        result = await loader.loadAsync(url);
+        URL.revokeObjectURL(url);
       } else {
         result = await loader.loadAsync(source);
       }
@@ -293,8 +295,9 @@ export const useGltfCachedLoader = (source: Blob | string): GLTF => {
 
       let gltf: GLTF;
       if (source instanceof Blob) {
-        const buffer = await source.arrayBuffer();
-        gltf = (await loader.parseAsync(buffer, '')) as GLTF;
+        const url = URL.createObjectURL(source);
+        gltf = await loader.loadAsync(url);
+        URL.revokeObjectURL(url);
       } else {
         gltf = await loader.loadAsync(source);
       }
@@ -434,7 +437,7 @@ export const useIdleExpression = (expression: keyof typeof expressions, scene: G
         for (let i = 0; i < selectedExpression.length; i++) {
           const section = selectedExpression[i];
 
-          if (section.morphTargetIndex !== undefined) {
+          if (section.morphTargetIndex !== undefined && headMesh.morphTargetInfluences !== undefined) {
             if (duration.current < section.duration + section.offset) {
               if (duration.current > section.offset) {
                 const pivot = ((duration.current - section.offset) / section.duration) * Math.PI;
