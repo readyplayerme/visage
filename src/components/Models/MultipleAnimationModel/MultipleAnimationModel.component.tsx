@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useRef } from 'react';
-import { useFrame, useGraph } from '@react-three/fiber';
+import { useFrame } from '@react-three/fiber';
 import { AnimationAction, AnimationMixer } from 'three';
 
 import { Model } from 'src/components/Models/Model';
@@ -35,7 +35,6 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
 
   const loadedAnimations = useAnimations(animations);
   const { scene } = useGltfCachedLoader(modelSrc);
-  const { nodes } = useGraph(scene);
 
   useEffect(() => {
     if (scene) {
@@ -55,6 +54,7 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
     return () => {
       mixerRef.current?.stopAllAction();
       mixerRef.current?.uncacheRoot(scene);
+      mixerRef.current = null;
     };
   }, [scene]);
 
@@ -83,9 +83,9 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
     animationTimeRef.current = activeActionRef.current?.time || 0;
   });
 
-  useEmotion(nodes, emotion);
-  useIdleExpression('blink', nodes);
-  useFallback(nodes, setModelFallback);
+  useEmotion(scene, emotion);
+  useIdleExpression('blink', scene);
+  useFallback(scene, setModelFallback);
 
   return <Model scene={scene} scale={scale} onLoaded={onLoaded} bloom={bloom} materialConfig={materialConfig} />;
 };

@@ -14,7 +14,7 @@ export const EnvironmentModel: FC<EnvironmentModelProps> = ({ environment, scale
   const { scene } = useGltfLoader(environment);
   const { nodes } = useGraph(scene);
 
-  useFallback(nodes, setModelFallback);
+  useFallback(scene, setModelFallback);
   useEffect(() => triggerCallback(onLoaded), [scene, onLoaded]);
 
   return (

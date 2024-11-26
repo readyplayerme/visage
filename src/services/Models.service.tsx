@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   LinearFilter,
   MeshStandardMaterial,
@@ -11,7 +11,9 @@ import {
   BufferGeometry,
   Skeleton,
   Group,
-  Texture
+  Texture,
+  Mesh,
+  Object3DEventMap
 } from 'three';
 import { useFrame } from '@react-three/fiber';
 import type { ObjectMap, SkinnedMeshProps } from '@react-three/fiber';
@@ -73,10 +75,28 @@ export const clamp = (value: number, max: number, min: number): number => Math.m
 
 export const lerp = (start: number, end: number, time = 0.05): number => start * (1 - time) + end * time;
 
-const disposeMaterial = (material: Material | Material[]) => {
-  if (Array.isArray(material)) {
-    material.forEach(disposeMaterial);
-  } else {
+function traverseMaterials(object: Object3D, callback: (material: Material) => void) {
+  object.traverse((node) => {
+    const mesh = node as Mesh;
+    if (!mesh.geometry) return;
+    const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+    materials.forEach(callback);
+  });
+}
+
+const disposeGltfScene = (scene: Group<Object3DEventMap>) => {
+  scene.traverse((node) => {
+    if (node instanceof SkinnedMesh && node.skeleton) {
+      node.geometry.dispose();
+      node.skeleton.dispose();
+    }
+
+    if (node instanceof Mesh) {
+      node.geometry.dispose();
+    }
+  });
+
+  traverseMaterials(scene, (material: Material) => {
     Object.values(material).forEach((value) => {
       if (value instanceof Texture) {
         value.dispose();
@@ -84,31 +104,20 @@ const disposeMaterial = (material: Material | Material[]) => {
     });
 
     material.dispose();
-  }
-};
-
-const disposeGltfNodes = (nodes: Nodes) => {
-  Object.values(nodes).forEach((node) => {
-    if (node instanceof SkinnedMesh && node.skeleton) {
-      node.geometry.dispose();
-      node.skeleton.dispose();
-
-      if (node.material) {
-        disposeMaterial(node.material);
-      }
-    }
   });
+
+  scene.clear();
 };
 
 /**
  * Avoid texture pixelation and add depth effect.
  */
 export const normaliseMaterialsConfig = (
-  materials: Record<string, Material>,
+  scene: Group<Object3DEventMap>,
   bloomConfig?: BloomConfiguration,
   materialConfig?: MaterialConfiguration
 ) => {
-  Object.values(materials).forEach((material) => {
+  traverseMaterials(scene, (material: Material) => {
     const mat = material as MeshStandardMaterial;
     if (mat.map) {
       mat.map.minFilter = LinearFilter;
@@ -212,35 +221,41 @@ export const mutatePose = (targetNodes?: ObjectMap['nodes'], sourceNodes?: Objec
   }
 };
 
-export const useEmotion = (nodes: ObjectMap['nodes'], emotion?: Emotion) => {
-  // @ts-ignore
-  const meshes = Object.values(nodes).filter((item: SkinnedMesh) => item?.morphTargetInfluences) as SkinnedMesh[];
+export const useEmotion = (scene: Group, emotion?: Emotion) => {
+  useEffect(() => {
+    const meshes: SkinnedMesh[] = [];
 
-  const resetEmotions = (resetMeshes: Array<SkinnedMesh>) => {
-    resetMeshes.forEach((mesh) => {
-      mesh?.morphTargetInfluences?.forEach((_, index) => {
-        mesh!.morphTargetInfluences![index] = 0;
-      });
+    // Traverse the scene to find SkinnedMesh objects with morphTargetInfluences
+    scene.traverse((object) => {
+      if (object instanceof SkinnedMesh && object.morphTargetInfluences) {
+        meshes.push(object);
+      }
     });
-  };
 
-  useFrame(() => {
+    const resetEmotions = () => {
+      meshes.forEach((mesh) => {
+        if (mesh.morphTargetInfluences) {
+          mesh.morphTargetInfluences.fill(0);
+        }
+      });
+    };
+
     if (emotion) {
-      resetEmotions(meshes);
+      resetEmotions();
 
       meshes.forEach((mesh) => {
         Object.entries(emotion).forEach(([shape, value]) => {
-          const shapeId = mesh?.morphTargetDictionary?.[shape];
+          const shapeId = mesh.morphTargetDictionary?.[shape];
 
-          if (shapeId) {
-            mesh!.morphTargetInfluences![shapeId] = value;
+          if (shapeId !== undefined) {
+            mesh.morphTargetInfluences![shapeId] = value;
           }
         });
       });
     } else {
-      resetEmotions(meshes);
+      resetEmotions();
     }
-  });
+  }, [emotion, scene]);
 };
 
 const loader = new GLTFLoader();
@@ -253,12 +268,14 @@ loader.setDRACOLoader(dracoLoader);
 export const useGltfLoader = (source: Blob | string): GLTF =>
   suspend(
     async () => {
+      let result;
       if (source instanceof Blob) {
         const buffer = await source.arrayBuffer();
-        return (await loader.parseAsync(buffer, '')) as unknown as GLTF;
+        result = (await loader.parseAsync(buffer, '')) as unknown as GLTF;
+      } else {
+        result = await loader.loadAsync(source);
       }
-
-      return loader.loadAsync(source);
+      return result;
     },
     [source],
     { lifespan: 100 }
@@ -321,75 +338,33 @@ export class Transform {
  * Builds a fallback model for given nodes.
  * Useful for displaying as the suspense fallback object.
  */
-function buildFallback(nodes: Nodes, transform: Transform = new Transform()): JSX.Element {
+function buildFallback(scene: Group<Object3DEventMap>, transform: Transform = new Transform()) {
   return (
-    <group>
-      {Object.keys(nodes).map((key) => {
-        const node = nodes[key] as CustomNode;
-        if (node.type === 'SkinnedMesh') {
-          return (
-            <skinnedMesh
-              castShadow
-              receiveShadow
-              key={node.name}
-              scale={transform.scale}
-              position={transform.position}
-              rotation={transform.rotation}
-              geometry={node.geometry}
-              material={node.material}
-              skeleton={node.skeleton}
-              morphTargetInfluences={node.morphTargetInfluences || []}
-            />
-          );
-        }
-
-        if (node.type === 'Mesh') {
-          return (
-            <mesh
-              attach={(parent, self) => {
-                parent.add(self);
-                self.parent = node.parent;
-                return () => parent.remove(self);
-              }}
-              castShadow
-              receiveShadow
-              key={node.name}
-              scale={node.scale}
-              position={node.position}
-              rotation={node.rotation}
-              geometry={node.geometry}
-              material={node.material}
-              morphTargetInfluences={node.morphTargetInfluences || []}
-            />
-          );
-        }
-
-        return null;
-      })}
-    </group>
+    <primitive object={scene} scale={transform.scale} rotation={transform.rotation} position={transform.position} />
   );
 }
 
-export const useFallback = (nodes: Nodes, setter?: (fallback: JSX.Element) => void) => {
-  const previousNodesRef = useRef<Nodes>();
+export const useFallback = (scene: Group<Object3DEventMap>, setter?: (fallback: JSX.Element) => void) => {
+  const previousSceneRef = useRef<Group<Object3DEventMap>>();
 
   useEffect(() => {
+    const newScene = scene.clone();
     if (typeof setter === 'function') {
-      setter(buildFallback(nodes));
+      setter(buildFallback(newScene));
     }
 
-    if (previousNodesRef.current) {
-      disposeGltfNodes(previousNodesRef.current);
+    if (previousSceneRef.current) {
+      disposeGltfScene(previousSceneRef.current);
     }
 
-    previousNodesRef.current = nodes;
+    previousSceneRef.current = newScene;
 
     return () => {
-      if (previousNodesRef.current) {
-        disposeGltfNodes(previousNodesRef.current);
+      if (previousSceneRef.current) {
+        disposeGltfScene(previousSceneRef.current);
       }
     };
-  }, [nodes, setter]);
+  }, [scene, setter]);
 };
 
 export const triggerCallback = (callback?: () => void) => {
@@ -424,64 +399,59 @@ export const expressions = {
 /**
  * Animates avatars facial expressions when morphTargets=ARKit,Eyes Extra is provided with the avatar.
  */
-export const useIdleExpression = (expression: keyof typeof expressions, nodes: Nodes) => {
-  const headMesh = (nodes.Wolf3D_Head || nodes.Wolf3D_Avatar || nodes.head) as unknown as SkinnedMeshProps;
+export const useIdleExpression = (expression: keyof typeof expressions, scene: Group<Object3DEventMap>) => {
+  const headMesh = (scene.getObjectByName('Wolf3D_Head') ||
+    scene.getObjectByName('Wolf3D_Avatar') ||
+    scene.getObjectByName('head')) as unknown as SkinnedMeshProps;
+
   const selectedExpression = expression in expressions ? expressions[expression] : undefined;
-  const timeout = useRef<NodeJS.Timeout>();
-  const duration = useRef<number>(Number.POSITIVE_INFINITY);
+
+  // Refs to hold mutable values across renders
+  const timeUntilNextExpression = useRef<number>(0);
+  const duration = useRef<number>(0);
+  const maxExpressionDuration = useRef<number>(0);
 
   useEffect(() => {
     if (headMesh?.morphTargetDictionary && selectedExpression) {
       for (let i = 0; i < selectedExpression.length; i++) {
         selectedExpression[i].morphTargetIndex = headMesh.morphTargetDictionary[selectedExpression[i].morphTarget];
       }
+
+      maxExpressionDuration.current = Math.max(...selectedExpression.map((e) => e.duration + e.offset));
+
+      timeUntilNextExpression.current = Math.random() * 3 + 3;
+      duration.current = 0;
     }
   }, [selectedExpression, headMesh?.morphTargetDictionary]);
 
-  const animateExpression = useCallback(
-    (delta: number) => {
-      if (headMesh?.morphTargetInfluences && selectedExpression) {
+  useFrame((_, delta) => {
+    if (headMesh && selectedExpression) {
+      timeUntilNextExpression.current -= delta;
+
+      if (timeUntilNextExpression.current <= 0) {
         duration.current += delta;
 
         for (let i = 0; i < selectedExpression.length; i++) {
           const section = selectedExpression[i];
 
-          if (duration.current < section.duration + section.offset) {
-            if (duration.current > section.offset) {
-              const pivot = ((duration.current - section.offset) / section.duration) * Math.PI;
-              const morphInfluence = Math.sin(pivot);
-              headMesh.morphTargetInfluences[section.morphTargetIndex] = morphInfluence;
+          if (section.morphTargetIndex !== undefined) {
+            if (duration.current < section.duration + section.offset) {
+              if (duration.current > section.offset) {
+                const pivot = ((duration.current - section.offset) / section.duration) * Math.PI;
+                const morphInfluence = Math.sin(pivot);
+                headMesh.morphTargetInfluences![section.morphTargetIndex] = morphInfluence;
+              }
+            } else {
+              headMesh.morphTargetInfluences![section.morphTargetIndex] = 0;
             }
-          } else {
-            headMesh.morphTargetInfluences[section.morphTargetIndex] = 0;
           }
         }
+
+        if (duration.current >= maxExpressionDuration.current) {
+          duration.current = 0;
+          timeUntilNextExpression.current = Math.random() * 3 + 3;
+        }
       }
-    },
-    [headMesh?.morphTargetInfluences, selectedExpression, duration.current, timeout.current]
-  );
-
-  const setNextInterval = () => {
-    duration.current = 0;
-    const delay = Math.random() * 3000 + 3000;
-
-    clearTimeout(timeout.current);
-    timeout.current = setTimeout(setNextInterval, delay);
-  };
-
-  useEffect(() => {
-    if (selectedExpression) {
-      timeout.current = setTimeout(setNextInterval, 3000);
-    }
-
-    return () => {
-      clearTimeout(timeout.current);
-    };
-  }, [selectedExpression]);
-
-  useFrame((_, delta) => {
-    if (headMesh && selectedExpression) {
-      animateExpression(delta);
     }
   });
 };

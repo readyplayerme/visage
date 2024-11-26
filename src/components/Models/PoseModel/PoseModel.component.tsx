@@ -31,8 +31,8 @@ export const PoseModel: FC<PoseModelProps> = ({
   const { nodes: sourceNodes } = useGraph(pose.scene);
 
   mutatePose(nodes, sourceNodes);
-  useEmotion(nodes, emotion);
-  useFallback(nodes, setModelFallback);
+  useEmotion(scene, emotion);
+  useFallback(scene, setModelFallback);
 
   return (
     <Model

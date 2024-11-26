@@ -2,7 +2,7 @@ import React, { FC, Ref } from 'react';
 import { Model } from 'src/components/Models/Model';
 import { useEmotion, useFallback, useGltfLoader } from 'src/services';
 import { Group } from 'three';
-import { useGraph } from '@react-three/fiber';
+
 import { BaseModelProps } from 'src/types';
 import { Emotion } from '../../Avatar/Avatar.component';
 
@@ -24,10 +24,8 @@ export const StaticModel: FC<StaticModelProps> = ({
   materialConfig
 }) => {
   const { scene } = useGltfLoader(modelSrc);
-  const { nodes } = useGraph(scene);
-
-  useEmotion(nodes, emotion);
-  useFallback(nodes, setModelFallback);
+  useEmotion(scene, emotion);
+  useFallback(scene, setModelFallback);
 
   return (
     <Model

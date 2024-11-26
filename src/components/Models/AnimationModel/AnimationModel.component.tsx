@@ -73,9 +73,9 @@ export const AnimationModel: FC<AnimationModelProps> = ({
   });
 
   useHeadMovement({ nodes, enabled: headMovement });
-  useEmotion(nodes, emotion);
-  useIdleExpression('blink', nodes);
-  useFallback(nodes, setModelFallback);
+  useEmotion(scene, emotion);
+  useIdleExpression('blink', scene);
+  useFallback(scene, setModelFallback);
 
   return (
     <Model
