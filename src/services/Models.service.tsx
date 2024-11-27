@@ -225,12 +225,6 @@ export const useEmotionScene = (scene: Group, emotion?: Emotion) => {
   useEffect(() => {
     const meshes: SkinnedMesh[] = [];
 
-    scene.traverse((object) => {
-      if (object instanceof SkinnedMesh && object.morphTargetInfluences) {
-        meshes.push(object);
-      }
-    });
-
     const resetEmotions = () => {
       meshes.forEach((mesh) => {
         if (mesh.morphTargetInfluences) {
@@ -257,21 +251,31 @@ export const useEmotionScene = (scene: Group, emotion?: Emotion) => {
   }, [emotion, scene]);
 };
 
-export const useEmotion = (nodes: ObjectMap['nodes'], emotion?: Emotion) => {
-  // @ts-ignore
-  const meshes = Object.values(nodes).filter((item: SkinnedMesh) => item?.morphTargetInfluences) as SkinnedMesh[];
+export const useEmotion = (nodes: ObjectMap['nodes'] | Group, emotion?: Emotion) => {
+  useEffect(() => {
+    const meshes: SkinnedMesh[] = [];
 
-  const resetEmotions = (resetMeshes: Array<SkinnedMesh>) => {
-    resetMeshes.forEach((mesh) => {
-      mesh?.morphTargetInfluences?.forEach((_, index) => {
-        mesh!.morphTargetInfluences![index] = 0;
+    if (nodes instanceof Group) {
+      nodes.traverse((object) => {
+        if (object instanceof SkinnedMesh && object.morphTargetInfluences) {
+          meshes.push(object);
+        }
       });
-    });
-  };
+    } else {
+      // @ts-ignore
+      meshes = Object.values(nodes).filter((item: SkinnedMesh) => item?.morphTargetInfluences) as SkinnedMesh[];
+    }
 
-  useFrame(() => {
+    const resetEmotions = () => {
+      meshes.forEach((mesh) => {
+        if (mesh.morphTargetInfluences) {
+          mesh.morphTargetInfluences.fill(0);
+        }
+      });
+    };
+
     if (emotion) {
-      resetEmotions(meshes);
+      resetEmotions();
 
       meshes.forEach((mesh) => {
         Object.entries(emotion).forEach(([shape, value]) => {
@@ -283,9 +287,9 @@ export const useEmotion = (nodes: ObjectMap['nodes'], emotion?: Emotion) => {
         });
       });
     } else {
-      resetEmotions(meshes);
+      resetEmotions();
     }
-  });
+  }, [emotion, nodes]);
 };
 
 const loader = new GLTFLoader();
@@ -375,7 +379,7 @@ export class Transform {
 }
 
 /**
- * Builds a fallback model for given nodes.
+ * Builds a fallback model for given scene.
  * Useful for displaying as the suspense fallback object.
  */
 function buildFallbackScene(scene: Group, transform: Transform = new Transform()) {
@@ -389,6 +393,7 @@ export const useFallbackScene = (scene: Group, setter?: (fallback: JSX.Element) 
 
   useEffect(() => {
     const newScene = scene.clone();
+
     if (typeof setter === 'function') {
       setter(buildFallbackScene(newScene));
     }
@@ -407,6 +412,10 @@ export const useFallbackScene = (scene: Group, setter?: (fallback: JSX.Element) 
   }, [scene, setter]);
 };
 
+/**
+ * Builds a fallback model for given nodes.
+ * Useful for displaying as the suspense fallback object.
+ */
 function buildFallback(nodes: Nodes, transform: Transform = new Transform()): JSX.Element {
   return (
     <group>
@@ -495,65 +504,16 @@ export const expressions = {
 /**
  * Animates avatars facial expressions when morphTargets=ARKit,Eyes Extra is provided with the avatar.
  */
-export const useIdleExpressionScene = (expression: keyof typeof expressions, scene: Group<Object3DEventMap>) => {
-  const headMesh = (scene.getObjectByName('Wolf3D_Head') ||
-    scene.getObjectByName('Wolf3D_Avatar') ||
-    scene.getObjectByName('head')) as unknown as SkinnedMeshProps;
+export const useIdleExpression = (expression: keyof typeof expressions, nodes: Nodes | Group) => {
+  let headMesh: SkinnedMeshProps;
 
-  const selectedExpression = expression in expressions ? expressions[expression] : undefined;
-
-  // Refs to hold mutable values across renders
-  const timeUntilNextExpression = useRef<number>(0);
-  const duration = useRef<number>(0);
-  const maxExpressionDuration = useRef<number>(0);
-
-  useEffect(() => {
-    if (headMesh?.morphTargetDictionary && selectedExpression) {
-      for (let i = 0; i < selectedExpression.length; i++) {
-        selectedExpression[i].morphTargetIndex = headMesh.morphTargetDictionary[selectedExpression[i].morphTarget];
-      }
-
-      maxExpressionDuration.current = Math.max(...selectedExpression.map((e) => e.duration + e.offset));
-
-      timeUntilNextExpression.current = Math.random() * 3 + 3;
-      duration.current = 0;
-    }
-  }, [selectedExpression, headMesh?.morphTargetDictionary]);
-
-  useFrame((_, delta) => {
-    if (headMesh && selectedExpression) {
-      timeUntilNextExpression.current -= delta;
-
-      if (timeUntilNextExpression.current <= 0) {
-        duration.current += delta;
-
-        for (let i = 0; i < selectedExpression.length; i++) {
-          const section = selectedExpression[i];
-
-          if (section.morphTargetIndex && headMesh.morphTargetInfluences) {
-            if (duration.current < section.duration + section.offset) {
-              if (duration.current > section.offset) {
-                const pivot = ((duration.current - section.offset) / section.duration) * Math.PI;
-                const morphInfluence = Math.sin(pivot);
-                headMesh.morphTargetInfluences![section.morphTargetIndex] = morphInfluence;
-              }
-            } else {
-              headMesh.morphTargetInfluences![section.morphTargetIndex] = 0;
-            }
-          }
-        }
-
-        if (duration.current >= maxExpressionDuration.current) {
-          duration.current = 0;
-          timeUntilNextExpression.current = Math.random() * 3 + 3;
-        }
-      }
-    }
-  });
-};
-
-export const useIdleExpression = (expression: keyof typeof expressions, nodes: Nodes) => {
-  const headMesh = (nodes.Wolf3D_Head || nodes.Wolf3D_Avatar || nodes.head) as unknown as SkinnedMeshProps;
+  if (nodes instanceof Group) {
+    headMesh = (nodes.getObjectByName('Wolf3D_Head') ||
+      nodes.getObjectByName('Wolf3D_Avatar') ||
+      nodes.getObjectByName('head')) as unknown as SkinnedMeshProps;
+  } else {
+    headMesh = (nodes.Wolf3D_Head || nodes.Wolf3D_Avatar || nodes.head) as unknown as SkinnedMeshProps;
+  }
 
   const selectedExpression = expression in expressions ? expressions[expression] : undefined;
   const timeout = useRef<NodeJS.Timeout>();
