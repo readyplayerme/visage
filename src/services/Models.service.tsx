@@ -272,8 +272,11 @@ export const useGltfLoader = (source: Blob | string): GLTF =>
 
       if (source instanceof Blob) {
         const url = URL.createObjectURL(source);
-        result = await loader.loadAsync(url);
-        URL.revokeObjectURL(url);
+        try {
+          result = await loader.loadAsync(url);
+        } finally {
+          URL.revokeObjectURL(url);
+        }
       } else {
         result = await loader.loadAsync(source);
       }
@@ -287,7 +290,7 @@ export const useGltfCachedLoader = (source: Blob | string): GLTF => {
   const cachedGltf = useRef<GLTF | null>(null);
   const prevSource = useRef<Blob | string | null>(null);
 
-  return suspend(
+  const scene = suspend(
     async (): Promise<GLTF> => {
       if (source === prevSource.current && cachedGltf.current) {
         return cachedGltf.current;
@@ -296,8 +299,11 @@ export const useGltfCachedLoader = (source: Blob | string): GLTF => {
       let gltf: GLTF;
       if (source instanceof Blob) {
         const url = URL.createObjectURL(source);
-        gltf = await loader.loadAsync(url);
-        URL.revokeObjectURL(url);
+        try {
+          gltf = await loader.loadAsync(url);
+        } finally {
+          URL.revokeObjectURL(url);
+        }
       } else {
         gltf = await loader.loadAsync(source);
       }
@@ -310,6 +316,17 @@ export const useGltfCachedLoader = (source: Blob | string): GLTF => {
     [source],
     { lifespan: 100 }
   );
+
+  useEffect(
+    () => () => {
+      if (scene) {
+        disposeGltfScene(scene.scene);
+      }
+    },
+    [scene]
+  );
+
+  return scene;
 };
 export function usePersistantRotation(scene: Group) {
   const refToPreviousScene = useRef(scene);
