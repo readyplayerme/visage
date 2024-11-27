@@ -225,7 +225,6 @@ export const useEmotionScene = (scene: Group, emotion?: Emotion) => {
   useEffect(() => {
     const meshes: SkinnedMesh[] = [];
 
-    // Traverse the scene to find SkinnedMesh objects with morphTargetInfluences
     scene.traverse((object) => {
       if (object instanceof SkinnedMesh && object.morphTargetInfluences) {
         meshes.push(object);
@@ -245,10 +244,10 @@ export const useEmotionScene = (scene: Group, emotion?: Emotion) => {
 
       meshes.forEach((mesh) => {
         Object.entries(emotion).forEach(([shape, value]) => {
-          const shapeId = mesh.morphTargetDictionary?.[shape];
+          const shapeId = mesh?.morphTargetDictionary?.[shape];
 
           if (shapeId) {
-            mesh.morphTargetInfluences![shapeId] = value;
+            mesh!.morphTargetInfluences![shapeId] = value;
           }
         });
       });
@@ -296,26 +295,29 @@ const dracoLoader = new DRACOLoader();
 dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.5/');
 loader.setDRACOLoader(dracoLoader);
 
-export const useGltfLoader = (source: Blob | string): GLTF =>
-  suspend(
-    async () => {
-      let result;
+async function loadGltf(source: Blob | string, onDispose?: () => void): Promise<GLTF> {
+  let gltf: GLTF;
 
-      if (source instanceof Blob) {
-        const url = URL.createObjectURL(source);
-        try {
-          result = await loader.loadAsync(url);
-        } finally {
-          URL.revokeObjectURL(url);
-        }
-      } else {
-        result = await loader.loadAsync(source);
-      }
-      return result;
-    },
-    [source],
-    { lifespan: 100 }
-  );
+  if (source instanceof Blob) {
+    const url = URL.createObjectURL(source);
+    try {
+      gltf = await loader.loadAsync(url);
+    } finally {
+      URL.revokeObjectURL(url);
+    }
+  } else {
+    gltf = await loader.loadAsync(source);
+  }
+
+  if (onDispose) {
+    onDispose();
+  }
+
+  return gltf;
+}
+
+export const useGltfLoader = (source: Blob | string): GLTF =>
+  suspend(async () => loadGltf(source), [source], { lifespan: 100 });
 
 export const useGltfCachedLoader = (source: Blob | string): GLTF => {
   const cachedGltf = useRef<GLTF | null>(null);
@@ -327,17 +329,12 @@ export const useGltfCachedLoader = (source: Blob | string): GLTF => {
         return cachedGltf.current;
       }
 
-      let gltf: GLTF;
-      if (source instanceof Blob) {
-        const url = URL.createObjectURL(source);
-        try {
-          gltf = await loader.loadAsync(url);
-        } finally {
-          URL.revokeObjectURL(url);
+      const gltf = await loadGltf(source, () => {
+        if (cachedGltf.current) {
+          disposeGltfScene(cachedGltf.current.scene);
         }
-      } else {
-        gltf = await loader.loadAsync(source);
-      }
+        cachedGltf.current = null;
+      });
 
       cachedGltf.current = gltf;
       prevSource.current = source;
@@ -348,17 +345,9 @@ export const useGltfCachedLoader = (source: Blob | string): GLTF => {
     { lifespan: 100 }
   );
 
-  useEffect(
-    () => () => {
-      if (scene) {
-        disposeGltfScene(scene.scene);
-      }
-    },
-    [scene]
-  );
-
   return scene;
 };
+
 export function usePersistantRotation(scene: Group) {
   const refToPreviousScene = useRef(scene);
 
@@ -389,14 +378,14 @@ export class Transform {
  * Builds a fallback model for given nodes.
  * Useful for displaying as the suspense fallback object.
  */
-function buildFallbackScene(scene: Group<Object3DEventMap>, transform: Transform = new Transform()) {
+function buildFallbackScene(scene: Group, transform: Transform = new Transform()) {
   return (
     <primitive object={scene} scale={transform.scale} rotation={transform.rotation} position={transform.position} />
   );
 }
 
-export const useFallbackScene = (scene: Group<Object3DEventMap>, setter?: (fallback: JSX.Element) => void) => {
-  const previousSceneRef = useRef<Group<Object3DEventMap>>();
+export const useFallbackScene = (scene: Group, setter?: (fallback: JSX.Element) => void) => {
+  const previousSceneRef = useRef<Group>();
 
   useEffect(() => {
     const newScene = scene.clone();
@@ -565,6 +554,7 @@ export const useIdleExpressionScene = (expression: keyof typeof expressions, sce
 
 export const useIdleExpression = (expression: keyof typeof expressions, nodes: Nodes) => {
   const headMesh = (nodes.Wolf3D_Head || nodes.Wolf3D_Avatar || nodes.head) as unknown as SkinnedMeshProps;
+
   const selectedExpression = expression in expressions ? expressions[expression] : undefined;
   const timeout = useRef<NodeJS.Timeout>();
   const duration = useRef<number>(Number.POSITIVE_INFINITY);

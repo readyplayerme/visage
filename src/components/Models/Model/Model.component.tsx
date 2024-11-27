@@ -100,7 +100,7 @@ export const Model: FC<ModelProps> = ({
 
   const spawnComponent = useMemo(
     () => <Spawn avatar={scene} onSpawnFinish={onSpawnAnimationFinish} />,
-    [onSpawnAnimationFinish, scene]
+    [onSpawnAnimationFinish]
   );
 
   return (
