@@ -104,7 +104,7 @@ export const Model: FC<ModelProps> = ({
   );
 
   return (
-    <group ref={modelRef} rotation={[0, 0, 0]}>
+    <group ref={modelRef} dispose={null} rotation={[0, 0, 0]}>
       <primitive object={scene} scale={scale} />
       {spawnComponent}
     </group>
