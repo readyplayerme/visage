@@ -269,7 +269,7 @@ const dracoLoader = new DRACOLoader();
 dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.5/');
 loader.setDRACOLoader(dracoLoader);
 
-async function loadGltf(source: Blob | string, onDispose?: () => void): Promise<GLTF> {
+async function loadGltf(source: Blob | string): Promise<GLTF> {
   let gltf: GLTF;
 
   if (source instanceof Blob) {
@@ -281,10 +281,6 @@ async function loadGltf(source: Blob | string, onDispose?: () => void): Promise<
     }
   } else {
     gltf = await loader.loadAsync(source);
-  }
-
-  if (onDispose) {
-    onDispose();
   }
 
   return gltf;
@@ -303,12 +299,7 @@ export const useGltfCachedLoader = (source: Blob | string): GLTF => {
         return cachedGltf.current;
       }
 
-      const gltf = await loadGltf(source, () => {
-        if (cachedGltf.current) {
-          disposeGltfScene(cachedGltf.current.scene);
-        }
-        cachedGltf.current = null;
-      });
+      const gltf = await loadGltf(source);
 
       cachedGltf.current = gltf;
       prevSource.current = source;
@@ -317,6 +308,15 @@ export const useGltfCachedLoader = (source: Blob | string): GLTF => {
     },
     [source],
     { lifespan: 100 }
+  );
+
+  useEffect(
+    () => () => {
+      if (scene) {
+        disposeGltfScene(scene.scene);
+      }
+    },
+    [scene]
   );
 
   return scene;
