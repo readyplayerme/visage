@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import {
   LinearFilter,
   MeshStandardMaterial,
@@ -221,7 +221,7 @@ export const mutatePose = (targetNodes?: ObjectMap['nodes'], sourceNodes?: Objec
   }
 };
 
-export const useEmotion = (scene: Group, emotion?: Emotion) => {
+export const useEmotionScene = (scene: Group, emotion?: Emotion) => {
   useEffect(() => {
     const meshes: SkinnedMesh[] = [];
 
@@ -247,7 +247,7 @@ export const useEmotion = (scene: Group, emotion?: Emotion) => {
         Object.entries(emotion).forEach(([shape, value]) => {
           const shapeId = mesh.morphTargetDictionary?.[shape];
 
-          if (shapeId !== undefined) {
+          if (shapeId) {
             mesh.morphTargetInfluences![shapeId] = value;
           }
         });
@@ -256,6 +256,37 @@ export const useEmotion = (scene: Group, emotion?: Emotion) => {
       resetEmotions();
     }
   }, [emotion, scene]);
+};
+
+export const useEmotion = (nodes: ObjectMap['nodes'], emotion?: Emotion) => {
+  // @ts-ignore
+  const meshes = Object.values(nodes).filter((item: SkinnedMesh) => item?.morphTargetInfluences) as SkinnedMesh[];
+
+  const resetEmotions = (resetMeshes: Array<SkinnedMesh>) => {
+    resetMeshes.forEach((mesh) => {
+      mesh?.morphTargetInfluences?.forEach((_, index) => {
+        mesh!.morphTargetInfluences![index] = 0;
+      });
+    });
+  };
+
+  useFrame(() => {
+    if (emotion) {
+      resetEmotions(meshes);
+
+      meshes.forEach((mesh) => {
+        Object.entries(emotion).forEach(([shape, value]) => {
+          const shapeId = mesh?.morphTargetDictionary?.[shape];
+
+          if (shapeId) {
+            mesh!.morphTargetInfluences![shapeId] = value;
+          }
+        });
+      });
+    } else {
+      resetEmotions(meshes);
+    }
+  });
 };
 
 const loader = new GLTFLoader();
@@ -358,19 +389,19 @@ export class Transform {
  * Builds a fallback model for given nodes.
  * Useful for displaying as the suspense fallback object.
  */
-function buildFallback(scene: Group<Object3DEventMap>, transform: Transform = new Transform()) {
+function buildFallbackScene(scene: Group<Object3DEventMap>, transform: Transform = new Transform()) {
   return (
     <primitive object={scene} scale={transform.scale} rotation={transform.rotation} position={transform.position} />
   );
 }
 
-export const useFallback = (scene: Group<Object3DEventMap>, setter?: (fallback: JSX.Element) => void) => {
+export const useFallbackScene = (scene: Group<Object3DEventMap>, setter?: (fallback: JSX.Element) => void) => {
   const previousSceneRef = useRef<Group<Object3DEventMap>>();
 
   useEffect(() => {
     const newScene = scene.clone();
     if (typeof setter === 'function') {
-      setter(buildFallback(newScene));
+      setter(buildFallbackScene(newScene));
     }
 
     if (previousSceneRef.current) {
@@ -386,6 +417,62 @@ export const useFallback = (scene: Group<Object3DEventMap>, setter?: (fallback: 
     };
   }, [scene, setter]);
 };
+
+function buildFallback(nodes: Nodes, transform: Transform = new Transform()): JSX.Element {
+  return (
+    <group>
+      {Object.keys(nodes).map((key) => {
+        const node = nodes[key] as CustomNode;
+        if (node.type === 'SkinnedMesh') {
+          return (
+            <skinnedMesh
+              castShadow
+              receiveShadow
+              key={node.name}
+              scale={transform.scale}
+              position={transform.position}
+              rotation={transform.rotation}
+              geometry={node.geometry}
+              material={node.material}
+              skeleton={node.skeleton}
+              morphTargetInfluences={node.morphTargetInfluences || []}
+            />
+          );
+        }
+
+        if (node.type === 'Mesh') {
+          return (
+            <mesh
+              attach={(parent, self) => {
+                parent.add(self);
+                self.parent = node.parent;
+                return () => parent.remove(self);
+              }}
+              castShadow
+              receiveShadow
+              key={node.name}
+              scale={node.scale}
+              position={node.position}
+              rotation={node.rotation}
+              geometry={node.geometry}
+              material={node.material}
+              morphTargetInfluences={node.morphTargetInfluences || []}
+            />
+          );
+        }
+
+        return null;
+      })}
+    </group>
+  );
+}
+
+export const useFallback = (nodes: Nodes, setter?: (fallback: JSX.Element) => void) =>
+  useEffect(() => {
+    if (typeof setter === 'function') {
+      setter(buildFallback(nodes));
+    }
+  }, [setter, nodes]);
 
 export const triggerCallback = (callback?: () => void) => {
   if (typeof callback === 'function') {
@@ -419,7 +506,7 @@ export const expressions = {
 /**
  * Animates avatars facial expressions when morphTargets=ARKit,Eyes Extra is provided with the avatar.
  */
-export const useIdleExpression = (expression: keyof typeof expressions, scene: Group<Object3DEventMap>) => {
+export const useIdleExpressionScene = (expression: keyof typeof expressions, scene: Group<Object3DEventMap>) => {
   const headMesh = (scene.getObjectByName('Wolf3D_Head') ||
     scene.getObjectByName('Wolf3D_Avatar') ||
     scene.getObjectByName('head')) as unknown as SkinnedMeshProps;
@@ -454,7 +541,7 @@ export const useIdleExpression = (expression: keyof typeof expressions, scene: G
         for (let i = 0; i < selectedExpression.length; i++) {
           const section = selectedExpression[i];
 
-          if (section.morphTargetIndex !== undefined && headMesh.morphTargetInfluences !== undefined) {
+          if (section.morphTargetIndex && headMesh.morphTargetInfluences) {
             if (duration.current < section.duration + section.offset) {
               if (duration.current > section.offset) {
                 const pivot = ((duration.current - section.offset) / section.duration) * Math.PI;
@@ -472,6 +559,68 @@ export const useIdleExpression = (expression: keyof typeof expressions, scene: G
           timeUntilNextExpression.current = Math.random() * 3 + 3;
         }
       }
+    }
+  });
+};
+
+export const useIdleExpression = (expression: keyof typeof expressions, nodes: Nodes) => {
+  const headMesh = (nodes.Wolf3D_Head || nodes.Wolf3D_Avatar || nodes.head) as unknown as SkinnedMeshProps;
+  const selectedExpression = expression in expressions ? expressions[expression] : undefined;
+  const timeout = useRef<NodeJS.Timeout>();
+  const duration = useRef<number>(Number.POSITIVE_INFINITY);
+
+  useEffect(() => {
+    if (headMesh?.morphTargetDictionary && selectedExpression) {
+      for (let i = 0; i < selectedExpression.length; i++) {
+        selectedExpression[i].morphTargetIndex = headMesh.morphTargetDictionary[selectedExpression[i].morphTarget];
+      }
+    }
+  }, [selectedExpression, headMesh?.morphTargetDictionary]);
+
+  const animateExpression = useCallback(
+    (delta: number) => {
+      if (headMesh?.morphTargetInfluences && selectedExpression) {
+        duration.current += delta;
+
+        for (let i = 0; i < selectedExpression.length; i++) {
+          const section = selectedExpression[i];
+
+          if (duration.current < section.duration + section.offset) {
+            if (duration.current > section.offset) {
+              const pivot = ((duration.current - section.offset) / section.duration) * Math.PI;
+              const morphInfluence = Math.sin(pivot);
+              headMesh.morphTargetInfluences[section.morphTargetIndex] = morphInfluence;
+            }
+          } else {
+            headMesh.morphTargetInfluences[section.morphTargetIndex] = 0;
+          }
+        }
+      }
+    },
+    [headMesh?.morphTargetInfluences, selectedExpression, duration.current, timeout.current]
+  );
+
+  const setNextInterval = () => {
+    duration.current = 0;
+    const delay = Math.random() * 3000 + 3000;
+
+    clearTimeout(timeout.current);
+    timeout.current = setTimeout(setNextInterval, delay);
+  };
+
+  useEffect(() => {
+    if (selectedExpression) {
+      timeout.current = setTimeout(setNextInterval, 3000);
+    }
+
+    return () => {
+      clearTimeout(timeout.current);
+    };
+  }, [selectedExpression]);
+
+  useFrame((_, delta) => {
+    if (headMesh && selectedExpression) {
+      animateExpression(delta);
     }
   });
 };

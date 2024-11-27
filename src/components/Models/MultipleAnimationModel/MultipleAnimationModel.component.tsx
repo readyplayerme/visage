@@ -4,7 +4,7 @@ import { AnimationAction, AnimationMixer } from 'three';
 
 import { Model } from 'src/components/Models/Model';
 import { AnimationConfiguration, BaseModelProps } from 'src/types';
-import { useEmotion, useFallback, useGltfCachedLoader, useIdleExpression } from 'src/services';
+import { useEmotionScene, useFallbackScene, useGltfCachedLoader, useIdleExpressionScene } from 'src/services';
 import { Emotion } from 'src/components/Avatar/Avatar.component';
 import { useAnimations } from 'src/services/Animation.service';
 
@@ -83,9 +83,9 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
     animationTimeRef.current = activeActionRef.current?.time || 0;
   });
 
-  useEmotion(scene, emotion);
-  useIdleExpression('blink', scene);
-  useFallback(scene, setModelFallback);
+  useEmotionScene(scene, emotion);
+  useIdleExpressionScene('blink', scene);
+  useFallbackScene(scene, setModelFallback);
 
   return <Model scene={scene} scale={scale} onLoaded={onLoaded} bloom={bloom} materialConfig={materialConfig} />;
 };

@@ -60,9 +60,9 @@ export const HalfBodyModel: FC<HalfBodyModelProps> = ({
   });
 
   useHeadMovement({ nodes, isHalfBody: true, enabled: headMovement });
-  useIdleExpression('blink', scene);
-  useEmotion(scene, emotion);
-  useFallback(scene, setModelFallback);
+  useIdleExpression('blink', nodes);
+  useEmotion(nodes, emotion);
+  useFallback(nodes, setModelFallback);
 
   return (
     <Model

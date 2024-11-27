@@ -4,6 +4,7 @@ import { useEmotion, useFallback, useGltfLoader } from 'src/services';
 import { Group } from 'three';
 
 import { BaseModelProps } from 'src/types';
+import { useGraph } from '@react-three/fiber';
 import { Emotion } from '../../Avatar/Avatar.component';
 
 export interface StaticModelProps extends BaseModelProps {
@@ -24,8 +25,10 @@ export const StaticModel: FC<StaticModelProps> = ({
   materialConfig
 }) => {
   const { scene } = useGltfLoader(modelSrc);
-  useEmotion(scene, emotion);
-  useFallback(scene, setModelFallback);
+  const { nodes } = useGraph(scene);
+
+  useEmotion(nodes, emotion);
+  useFallback(nodes, setModelFallback);
 
   return (
     <Model
