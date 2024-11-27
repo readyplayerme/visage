@@ -253,7 +253,7 @@ export const useEmotionScene = (scene: Group, emotion?: Emotion) => {
 
 export const useEmotion = (nodes: ObjectMap['nodes'] | Group, emotion?: Emotion) => {
   useEffect(() => {
-    const meshes: SkinnedMesh[] = [];
+    let meshes: SkinnedMesh[] = [];
 
     if (nodes instanceof Group) {
       nodes.traverse((object) => {
