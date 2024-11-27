@@ -32,7 +32,7 @@ export const PoseModel: FC<PoseModelProps> = ({
 
   mutatePose(nodes, sourceNodes);
   useEmotion(nodes, emotion);
-  useFallback(scene, setModelFallback);
+  useFallback(nodes, setModelFallback);
 
   return (
     <Model

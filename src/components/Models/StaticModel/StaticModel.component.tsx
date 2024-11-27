@@ -2,9 +2,8 @@ import React, { FC, Ref } from 'react';
 import { Model } from 'src/components/Models/Model';
 import { useEmotion, useFallback, useGltfLoader } from 'src/services';
 import { Group } from 'three';
-
-import { BaseModelProps } from 'src/types';
 import { useGraph } from '@react-three/fiber';
+import { BaseModelProps } from 'src/types';
 import { Emotion } from '../../Avatar/Avatar.component';
 
 export interface StaticModelProps extends BaseModelProps {
