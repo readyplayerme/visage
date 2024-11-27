@@ -221,36 +221,6 @@ export const mutatePose = (targetNodes?: ObjectMap['nodes'], sourceNodes?: Objec
   }
 };
 
-export const useEmotionScene = (scene: Group, emotion?: Emotion) => {
-  useEffect(() => {
-    const meshes: SkinnedMesh[] = [];
-
-    const resetEmotions = () => {
-      meshes.forEach((mesh) => {
-        if (mesh.morphTargetInfluences) {
-          mesh.morphTargetInfluences.fill(0);
-        }
-      });
-    };
-
-    if (emotion) {
-      resetEmotions();
-
-      meshes.forEach((mesh) => {
-        Object.entries(emotion).forEach(([shape, value]) => {
-          const shapeId = mesh?.morphTargetDictionary?.[shape];
-
-          if (shapeId) {
-            mesh!.morphTargetInfluences![shapeId] = value;
-          }
-        });
-      });
-    } else {
-      resetEmotions();
-    }
-  }, [emotion, scene]);
-};
-
 export const useEmotion = (nodes: ObjectMap['nodes'] | Group, emotion?: Emotion) => {
   useEffect(() => {
     let meshes: SkinnedMesh[] = [];
