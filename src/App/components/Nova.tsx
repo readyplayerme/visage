@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { StatsGl } from '@react-three/drei';
 
 import { Avatar, CAMERA } from 'src/components/Avatar';
@@ -8,24 +8,25 @@ import { SettingsPanel } from './SettingsPanel';
 const idleUrl = 'https://readyplayerme-assets.s3.amazonaws.com/animations/nova-male-idle.glb';
 const victoryUrl = 'https://readyplayerme-assets.s3.amazonaws.com/animations/nova-victory-03.glb';
 
-const animations: Record<string, string> = {
-  idle: idleUrl,
-  victory: victoryUrl
-};
-
-const modelOneUrl =
-  'https://api.readyplayer.dev/v3/avatars/66fa76b8fdea89a183c01341.glb?meshCompression=true&textureQuality=low&meshLOD=1&morphTargetsGroup=Basic expressions';
-const modelTwoUrl =
-  'https://api.readyplayer.dev/v3/avatars/66fa77cbfdea89a183c0134d.glb?meshCompression=true&textureQuality=low&meshLOD=1&morphTargetsGroup=Basic expressions';
-
 const models: Record<string, string> = {
-  one: modelOneUrl,
-  two: modelTwoUrl
+  one: 'https://avatars.readyplayer.me/673dc84d6874800e1db46095.glb?meshCompression=true&textureQuality=low&meshLOD=1&morphTargetsGroup=Basic expressions',
+  two: 'https://avatars.readyplayer.me/673f109553f9ed9312fafe70.glb?meshCompression=true&textureQuality=low&meshLOD=1&morphTargetsGroup=Basic expressions',
+  three:
+    'https://avatars.readyplayer.me/6745ca78c6e2d65e7b99d8e1.glb?meshCompression=true&textureQuality=low&meshLOD=1&morphTargetsGroup=Basic expressions',
+  four: 'https://avatars.readyplayer.me/6745df2bd7ae3ba1d340d019.glb?meshCompression=true&textureQuality=low&meshLOD=1&morphTargetsGroup=Basic expressions'
 };
 
 export const AvatarNova: React.FC = () => {
   const [activeAnimation, setActiveAnimation] = React.useState<string>('idle');
   const [modelSrc, setModelSrc] = React.useState<string>(models.one);
+
+  const animations = useMemo(
+    () => ({
+      idle: idleUrl,
+      victory: victoryUrl
+    }),
+    []
+  );
 
   return (
     <>
@@ -41,6 +42,12 @@ export const AvatarNova: React.FC = () => {
         </button>
         <button type="button" onClick={() => setModelSrc(models.two)}>
           Set Model2
+        </button>
+        <button type="button" onClick={() => setModelSrc(models.three)}>
+          Set Model3
+        </button>
+        <button type="button" onClick={() => setModelSrc(models.four)}>
+          Set Model4
         </button>
       </SettingsPanel>
       <Avatar

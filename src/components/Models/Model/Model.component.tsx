@@ -1,7 +1,7 @@
 import React, { FC, Ref, useEffect, useState, useCallback, useMemo } from 'react';
 import { Group, Mesh } from 'three';
 import { normaliseMaterialsConfig, triggerCallback, usePersistantRotation } from 'src/services';
-import { useGraph, useThree } from '@react-three/fiber';
+import { useThree } from '@react-three/fiber';
 import { hasWindow } from 'src/services/Client.service';
 import { BaseModelProps } from 'src/types';
 import { Spawn } from '../../Spawn/Spawn';
@@ -24,7 +24,6 @@ export const Model: FC<ModelProps> = ({
   bloom,
   materialConfig
 }) => {
-  const { materials } = useGraph(scene);
   const { gl } = useThree();
   const [isTouching, setIsTouching] = useState(false);
   const [touchEvent, setTouchEvent] = useState<TouchEvent | null>(null);
@@ -61,7 +60,8 @@ export const Model: FC<ModelProps> = ({
     [isTouching, touchEvent, scene]
   );
 
-  normaliseMaterialsConfig(materials, bloom, materialConfig);
+  normaliseMaterialsConfig(scene, bloom, materialConfig);
+
   scene.traverse((object) => {
     const node = object;
 
@@ -74,7 +74,7 @@ export const Model: FC<ModelProps> = ({
     }
   });
 
-  useEffect(() => triggerCallback(onLoaded), [scene, materials, onLoaded]);
+  useEffect(() => triggerCallback(onLoaded), [scene, onLoaded]);
 
   useEffect(() => {
     gl.domElement.addEventListener('mousedown', setTouchingOn);

@@ -1,4 +1,5 @@
 import React, { FC, Suspense, useState } from 'react';
+
 import { MultipleAnimationModel, MultipleAnimationModelProps } from './MultipleAnimationModel.component';
 
 /**

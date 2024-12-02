@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import {
   LinearFilter,
   MeshStandardMaterial,
@@ -10,7 +10,10 @@ import {
   Vector3,
   BufferGeometry,
   Skeleton,
-  Group
+  Group,
+  Texture,
+  Mesh,
+  Object3DEventMap
 } from 'three';
 import { useFrame } from '@react-three/fiber';
 import type { ObjectMap, SkinnedMeshProps } from '@react-three/fiber';
@@ -72,15 +75,49 @@ export const clamp = (value: number, max: number, min: number): number => Math.m
 
 export const lerp = (start: number, end: number, time = 0.05): number => start * (1 - time) + end * time;
 
+function traverseMaterials(object: Object3D, callback: (material: Material) => void) {
+  object.traverse((node) => {
+    const mesh = node as Mesh;
+    if (!mesh.geometry) return;
+    const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+    materials.forEach(callback);
+  });
+}
+
+const disposeGltfScene = (scene: Group<Object3DEventMap>) => {
+  scene.traverse((node) => {
+    if (node instanceof SkinnedMesh && node.skeleton) {
+      node.geometry.dispose();
+      node.skeleton.dispose();
+    }
+
+    if (node instanceof Mesh) {
+      node.geometry.dispose();
+    }
+  });
+
+  traverseMaterials(scene, (material: Material) => {
+    Object.values(material).forEach((value) => {
+      if (value instanceof Texture) {
+        value.dispose();
+      }
+    });
+
+    material.dispose();
+  });
+
+  scene.clear();
+};
+
 /**
  * Avoid texture pixelation and add depth effect.
  */
 export const normaliseMaterialsConfig = (
-  materials: Record<string, Material>,
+  scene: Group<Object3DEventMap>,
   bloomConfig?: BloomConfiguration,
   materialConfig?: MaterialConfiguration
 ) => {
-  Object.values(materials).forEach((material) => {
+  traverseMaterials(scene, (material: Material) => {
     const mat = material as MeshStandardMaterial;
     if (mat.map) {
       mat.map.minFilter = LinearFilter;
@@ -184,21 +221,31 @@ export const mutatePose = (targetNodes?: ObjectMap['nodes'], sourceNodes?: Objec
   }
 };
 
-export const useEmotion = (nodes: ObjectMap['nodes'], emotion?: Emotion) => {
-  // @ts-ignore
-  const meshes = Object.values(nodes).filter((item: SkinnedMesh) => item?.morphTargetInfluences) as SkinnedMesh[];
+export const useEmotion = (nodes: ObjectMap['nodes'] | Group, emotion?: Emotion) => {
+  useEffect(() => {
+    let meshes: SkinnedMesh[] = [];
 
-  const resetEmotions = (resetMeshes: Array<SkinnedMesh>) => {
-    resetMeshes.forEach((mesh) => {
-      mesh?.morphTargetInfluences?.forEach((_, index) => {
-        mesh!.morphTargetInfluences![index] = 0;
+    if (nodes instanceof Group) {
+      nodes.traverse((object) => {
+        if (object instanceof SkinnedMesh && object.morphTargetInfluences) {
+          meshes.push(object);
+        }
       });
-    });
-  };
+    } else {
+      // @ts-ignore
+      meshes = Object.values(nodes).filter((item: SkinnedMesh) => item?.morphTargetInfluences) as SkinnedMesh[];
+    }
 
-  useFrame(() => {
+    const resetEmotions = () => {
+      meshes.forEach((mesh) => {
+        if (mesh.morphTargetInfluences) {
+          mesh.morphTargetInfluences.fill(0);
+        }
+      });
+    };
+
     if (emotion) {
-      resetEmotions(meshes);
+      resetEmotions();
 
       meshes.forEach((mesh) => {
         Object.entries(emotion).forEach(([shape, value]) => {
@@ -210,9 +257,9 @@ export const useEmotion = (nodes: ObjectMap['nodes'], emotion?: Emotion) => {
         });
       });
     } else {
-      resetEmotions(meshes);
+      resetEmotions();
     }
-  });
+  }, [emotion, nodes]);
 };
 
 const loader = new GLTFLoader();
@@ -222,38 +269,57 @@ const dracoLoader = new DRACOLoader();
 dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.5/');
 loader.setDRACOLoader(dracoLoader);
 
+async function loadGltf(source: Blob | string): Promise<GLTF> {
+  let gltf: GLTF;
+
+  if (source instanceof Blob) {
+    const url = URL.createObjectURL(source);
+    try {
+      gltf = await loader.loadAsync(url);
+    } finally {
+      URL.revokeObjectURL(url);
+    }
+  } else {
+    gltf = await loader.loadAsync(source);
+  }
+
+  return gltf;
+}
+
 export const useGltfLoader = (source: Blob | string): GLTF =>
-  suspend(
-    async () => {
-      if (source instanceof Blob) {
-        const buffer = await source.arrayBuffer();
-        return (await loader.parseAsync(buffer, '')) as unknown as GLTF;
+  suspend(async () => loadGltf(source), [source], { lifespan: 100 });
+
+export const useGltfCachedLoader = (source: Blob | string): GLTF => {
+  const cachedGltf = useRef<GLTF | null>(null);
+  const prevSource = useRef<Blob | string | null>(null);
+
+  const scene = suspend(
+    async (): Promise<GLTF> => {
+      if (source === prevSource.current && cachedGltf.current) {
+        return cachedGltf.current;
       }
 
-      return loader.loadAsync(source);
+      const gltf = await loadGltf(source);
+
+      cachedGltf.current = gltf;
+      prevSource.current = source;
+
+      return gltf;
     },
     [source],
     { lifespan: 100 }
   );
 
-export const useGltfCachedLoader = (source: Blob | string): GLTF => {
-  const cachedGltf = useRef<Map<string, GLTF>>(new Map<string, GLTF>());
+  useEffect(
+    () => () => {
+      if (scene) {
+        disposeGltfScene(scene.scene);
+      }
+    },
+    [scene]
+  );
 
-  return suspend(async (): Promise<GLTF> => {
-    if (cachedGltf.current.has(source as string)) {
-      return cachedGltf.current.get(source as string)!;
-    }
-    let result: GLTF;
-    if (source instanceof Blob) {
-      const buffer = await source.arrayBuffer();
-      result = (await loader.parseAsync(buffer, '')) as GLTF;
-    } else {
-      result = await loader.loadAsync(source);
-    }
-
-    cachedGltf.current.set(source as string, result);
-    return result;
-  }, [source]);
+  return scene;
 };
 
 export function usePersistantRotation(scene: Group) {
@@ -281,6 +347,40 @@ export class Transform {
 
   position: Vector3;
 }
+
+/**
+ * Builds a fallback model for given scene.
+ * Useful for displaying as the suspense fallback object.
+ */
+function buildFallbackScene(scene: Group, transform: Transform = new Transform()) {
+  return (
+    <primitive object={scene} scale={transform.scale} rotation={transform.rotation} position={transform.position} />
+  );
+}
+
+export const useFallbackScene = (scene: Group, setter?: (fallback: JSX.Element) => void) => {
+  const previousSceneRef = useRef<Group>();
+
+  useEffect(() => {
+    const newScene = scene.clone();
+
+    if (typeof setter === 'function') {
+      setter(buildFallbackScene(newScene));
+    }
+
+    if (previousSceneRef.current) {
+      disposeGltfScene(previousSceneRef.current);
+    }
+
+    previousSceneRef.current = newScene;
+
+    return () => {
+      if (previousSceneRef.current) {
+        disposeGltfScene(previousSceneRef.current);
+      }
+    };
+  }, [scene, setter]);
+};
 
 /**
  * Builds a fallback model for given nodes.
@@ -374,8 +474,17 @@ export const expressions = {
 /**
  * Animates avatars facial expressions when morphTargets=ARKit,Eyes Extra is provided with the avatar.
  */
-export const useIdleExpression = (expression: keyof typeof expressions, nodes: Nodes) => {
-  const headMesh = (nodes.Wolf3D_Head || nodes.Wolf3D_Avatar || nodes.head) as unknown as SkinnedMeshProps;
+export const useIdleExpression = (expression: keyof typeof expressions, nodes: Nodes | Group) => {
+  let headMesh: SkinnedMeshProps;
+
+  if (nodes instanceof Group) {
+    headMesh = (nodes.getObjectByName('Wolf3D_Head') ||
+      nodes.getObjectByName('Wolf3D_Avatar') ||
+      nodes.getObjectByName('head')) as unknown as SkinnedMeshProps;
+  } else {
+    headMesh = (nodes.Wolf3D_Head || nodes.Wolf3D_Avatar || nodes.head) as unknown as SkinnedMeshProps;
+  }
+
   const selectedExpression = expression in expressions ? expressions[expression] : undefined;
   const timeout = useRef<NodeJS.Timeout>();
   const duration = useRef<number>(Number.POSITIVE_INFINITY);
