@@ -1,5 +1,5 @@
 import React, { Suspense, FC, useMemo, CSSProperties, ReactNode, useEffect } from 'react';
-import { Vector3 } from 'three';
+import { AnimationAction, Vector3 } from 'three';
 import { ContactShadows } from '@react-three/drei';
 import { CameraControls } from 'src/components/Scene/CameraControls.component';
 import { Environment } from 'src/components/Scene/Environment.component';
@@ -9,8 +9,8 @@ import {
   SpawnState,
   EffectConfiguration,
   LightingProps,
-  AnimationConfiguration,
-  MaterialConfiguration
+  MaterialConfiguration,
+  AnimationsT
 } from 'src/types';
 import { BaseCanvas } from 'src/components/BaseCanvas';
 import { AnimationModel, HalfBodyModel, StaticModel, PoseModel, MultipleAnimationModel } from 'src/components/Models';
@@ -153,16 +153,13 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
    * Use any three.js(fiber, post-processing) compatible components to render in the scene.
    */
   children?: ReactNode;
-  animations?: Record<string, string>;
+  animations?: AnimationsT;
   activeAnimation?: string;
-  /**
-   * Control properties of animations.
-   */
-  animationConfig?: AnimationConfiguration;
   /**
    * Control properties of materials.
    */
   materialConfig?: MaterialConfiguration;
+  onAnimationEnd?: (action: AnimationAction) => void;
 }
 
 /**
@@ -207,7 +204,7 @@ const Avatar: FC<AvatarProps> = ({
   backLightPosition,
   lightTarget,
   fov = 50,
-  animationConfig,
+  onAnimationEnd,
   materialConfig
 }) => {
   const setSpawnState = useSetAtom(spawnState);
@@ -231,7 +228,7 @@ const Avatar: FC<AvatarProps> = ({
           scale={scale}
           onLoaded={onLoaded}
           bloom={effects?.bloom}
-          animationConfig={animationConfig}
+          onAnimationEnd={onAnimationEnd}
           materialConfig={materialConfig}
         />
       );
@@ -303,10 +300,10 @@ const Avatar: FC<AvatarProps> = ({
     onLoaded,
     emotion,
     effects?.bloom,
+    materialConfig,
+    onAnimationEnd,
     idleRotation,
-    headMovement,
-    animationConfig,
-    materialConfig
+    headMovement
   ]);
 
   useEffect(() => triggerCallback(onLoading), [modelSrc, animationSrc, onLoading]);
