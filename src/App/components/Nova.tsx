@@ -16,15 +16,41 @@ export const AvatarNova: FC = () => {
 
   const animations = useMemo(
     () => ({
-      idle: getAnimation('nova-male-idle'),
-      victory: getAnimation('nova-victory-03'),
-      idle5: getAnimationNexus('compressed_idle_nova_5'),
-      idle53: getAnimationNexus('compressed_idle_nova_53'),
-      idle7: getAnimationNexus('compressed_idle_nova_7'),
-      idle80: getAnimationNexus('compressed_idle_nova_80'),
-      top: getAnimation('novamale_changetopwear_v001'),
-      bottom: getAnimation('novamale_changebottomwear_01_v001'),
-      foot: getAnimation('NovaMale_ChangeFootwear_v002')
+      idle: {
+        source: getAnimation('nova-male-idle')
+      },
+      victory: {
+        source: getAnimation('nova-victory-03'),
+        repeat: 1
+      },
+      idle5: {
+        source: getAnimationNexus('compressed_idle_nova_5'),
+        repeat: 1
+      },
+      idle53: {
+        source: getAnimationNexus('compressed_idle_nova_53'),
+        repeat: 1
+      },
+      idle7: {
+        source: getAnimationNexus('compressed_idle_nova_7'),
+        repeat: 1
+      },
+      idle80: {
+        source: getAnimationNexus('compressed_idle_nova_80'),
+        repeat: 1
+      },
+      top: {
+        source: getAnimation('novamale_changetopwear_v001'),
+        repeat: 1
+      },
+      bottom: {
+        source: getAnimation('novamale_changebottomwear_01_v001'),
+        repeat: 1
+      },
+      foot: {
+        source: getAnimation('NovaMale_ChangeFootwear_v002'),
+        repeat: 1
+      }
     }),
     []
   );
@@ -44,7 +70,10 @@ export const AvatarNova: FC = () => {
         animations={animations}
         activeAnimation={activeAnimation}
         shadows
-        onAnimationEnd={(action) => action}
+        onAnimationEnd={(action) => {
+          console.log('action', action);
+          setActiveAnimation('idle');
+        }}
         style={{ background: 'rgb(9,20,26)' }}
         fov={45}
         cameraInitialDistance={CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE}

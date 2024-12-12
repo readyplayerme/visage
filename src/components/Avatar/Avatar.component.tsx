@@ -9,8 +9,8 @@ import {
   SpawnState,
   EffectConfiguration,
   LightingProps,
-  AnimationConfiguration,
-  MaterialConfiguration
+  MaterialConfiguration,
+  AnimationsT
 } from 'src/types';
 import { BaseCanvas } from 'src/components/BaseCanvas';
 import { AnimationModel, HalfBodyModel, StaticModel, PoseModel, MultipleAnimationModel } from 'src/components/Models';
@@ -153,18 +153,13 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
    * Use any three.js(fiber, post-processing) compatible components to render in the scene.
    */
   children?: ReactNode;
-  animations?: Record<string, string>;
+  animations?: AnimationsT;
   activeAnimation?: string;
-  /**
-   * Control properties of animations.
-   */
-  animationConfig?: AnimationConfiguration;
   /**
    * Control properties of materials.
    */
   materialConfig?: MaterialConfiguration;
   onAnimationEnd?: (action: AnimationAction) => void;
-  idleAnimation?: string;
 }
 
 /**
@@ -209,9 +204,7 @@ const Avatar: FC<AvatarProps> = ({
   backLightPosition,
   lightTarget,
   fov = 50,
-  animationConfig,
   onAnimationEnd,
-  idleAnimation,
   materialConfig
 }) => {
   const setSpawnState = useSetAtom(spawnState);
@@ -234,10 +227,8 @@ const Avatar: FC<AvatarProps> = ({
           activeAnimation={activeAnimation}
           scale={scale}
           onLoaded={onLoaded}
-          idleAnimation={idleAnimation}
           bloom={effects?.bloom}
           onAnimationEnd={onAnimationEnd}
-          animationConfig={animationConfig}
           materialConfig={materialConfig}
         />
       );
@@ -310,9 +301,7 @@ const Avatar: FC<AvatarProps> = ({
     emotion,
     effects?.bloom,
     materialConfig,
-    idleAnimation,
     onAnimationEnd,
-    animationConfig,
     idleRotation,
     headMovement
   ]);

@@ -3,20 +3,18 @@ import { useFrame } from '@react-three/fiber';
 import { AnimationAction, AnimationMixer, LoopOnce, LoopRepeat } from 'three';
 
 import { Model } from 'src/components/Models/Model';
-import { AnimationConfiguration, BaseModelProps } from 'src/types';
+import { AnimationsT, BaseModelProps } from 'src/types';
 import { useEmotion, useFallbackScene, useGltfCachedLoader, useIdleExpression } from 'src/services';
 import { Emotion } from 'src/components/Avatar/Avatar.component';
 import { useAnimations } from 'src/services/Animation.service';
 
 export interface MultipleAnimationModelProps extends BaseModelProps {
   modelSrc: string | Blob;
-  animations: Record<string, string>;
+  animations: AnimationsT;
   activeAnimation: string;
   scale?: number;
   emotion?: Emotion;
-  animationConfig?: AnimationConfiguration;
   onAnimationEnd?: (action: AnimationAction) => void;
-  idleAnimation?: string;
 }
 
 export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
@@ -28,10 +26,8 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
   onLoaded,
   emotion,
   bloom,
-  animationConfig,
   materialConfig,
-  onAnimationEnd,
-  idleAnimation = 'idle'
+  onAnimationEnd
 }) => {
   const mixerRef = useRef<AnimationMixer | null>(null);
   const activeActionRef = useRef<AnimationAction | null>(null);
@@ -65,37 +61,28 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
     const mixer = mixerRef.current;
     const prevAction = activeActionRef.current;
     const newClip = loadedAnimations[activeAnimation];
+    const animationConfig = animations[activeAnimation];
 
-    if (!newClip || !mixer) return;
-    if (prevAction && prevAction.getClip().name === newClip.name && activeAnimation !== idleAnimation) return;
+    if (!newClip || !mixer || !animationConfig) return;
+    if (prevAction && prevAction.getClip().name === newClip.name) return;
 
     const newAction = mixer.clipAction(newClip);
-    if (activeAnimation === idleAnimation) {
-      newAction.setLoop(LoopRepeat, Infinity);
-    } else {
-      newAction.setLoop(LoopOnce, 1);
-      newAction.clampWhenFinished = true;
-    }
+    const loopCount = animationConfig.repeat ?? Infinity;
+    const fadeTime = animationConfig.fadeTime ?? 0.5;
+
+    newAction.setLoop(loopCount === Infinity ? LoopRepeat : LoopOnce, loopCount);
 
     const handleAnimationEnd = (event: { action: AnimationAction }) => {
       if (event.action === newAction) {
         onAnimationEnd?.(newAction);
-        if (activeAnimation !== idleAnimation) {
-          const idleClip = loadedAnimations[idleAnimation];
-          if (idleClip) {
-            const idleAction = mixer.clipAction(idleClip);
-            idleAction.reset().setLoop(LoopRepeat, Infinity).fadeIn(0.5).play();
-            activeActionRef.current = idleAction;
-          }
-        }
       }
     };
 
     mixer.addEventListener('finished', handleAnimationEnd);
 
     if (prevAction) {
-      prevAction.fadeOut(0.5);
-      newAction.reset().fadeIn(0.5);
+      prevAction.fadeOut(fadeTime);
+      newAction.reset().fadeIn(fadeTime);
     } else {
       newAction.reset();
     }
@@ -107,7 +94,7 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
     return () => {
       mixer.removeEventListener('finished', handleAnimationEnd);
     };
-  }, [activeAnimation, loadedAnimations, animationConfig, onAnimationEnd, idleAnimation]);
+  }, [activeAnimation, animations, loadedAnimations, onAnimationEnd]);
 
   useFrame((state, delta) => {
     mixerRef.current?.update(delta);

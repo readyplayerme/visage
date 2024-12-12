@@ -194,3 +194,12 @@ export type MaterialConfiguration = {
    */
   emissiveIntensity?: number;
 };
+
+export type AnimationsT = Record<
+  string,
+  {
+    source: string;
+    repeat?: number;
+    fadeTime?: number;
+  }
+>;
