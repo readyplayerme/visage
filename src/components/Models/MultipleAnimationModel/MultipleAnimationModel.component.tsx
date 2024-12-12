@@ -71,6 +71,7 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
     const fadeTime = animationConfig.fadeTime ?? 0.5;
 
     newAction.setLoop(loopCount === Infinity ? LoopRepeat : LoopOnce, loopCount);
+    newAction.clampWhenFinished = true;
 
     const handleAnimationEnd = (event: { action: AnimationAction }) => {
       if (event.action === newAction) {
