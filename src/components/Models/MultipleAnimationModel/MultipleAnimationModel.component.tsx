@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { AnimationAction, AnimationMixer } from 'three';
+import { AnimationAction, AnimationMixer, LoopOnce, LoopRepeat } from 'three';
 
 import { Model } from 'src/components/Models/Model';
 import { AnimationConfiguration, BaseModelProps } from 'src/types';
@@ -15,6 +15,8 @@ export interface MultipleAnimationModelProps extends BaseModelProps {
   scale?: number;
   emotion?: Emotion;
   animationConfig?: AnimationConfiguration;
+  onAnimationEnd?: (action: AnimationAction) => void;
+  idleAnimation?: string;
 }
 
 export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
@@ -27,7 +29,9 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
   emotion,
   bloom,
   animationConfig,
-  materialConfig
+  materialConfig,
+  onAnimationEnd,
+  idleAnimation = 'idle'
 }) => {
   const mixerRef = useRef<AnimationMixer | null>(null);
   const activeActionRef = useRef<AnimationAction | null>(null);
@@ -43,7 +47,6 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
 
       if (activeActionRef.current) {
         const newAction = mixer.clipAction(activeActionRef.current.getClip());
-
         newAction.play();
         mixer.update(animationTimeRef.current);
 
@@ -64,19 +67,47 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
     const newClip = loadedAnimations[activeAnimation];
 
     if (!newClip || !mixer) return;
-    if (prevAction && prevAction.getClip().name === newClip.name) return;
+    if (prevAction && prevAction.getClip().name === newClip.name && activeAnimation !== idleAnimation) return;
 
     const newAction = mixer.clipAction(newClip);
-    activeActionRef.current = newAction;
+    if (activeAnimation === idleAnimation) {
+      newAction.setLoop(LoopRepeat, Infinity);
+    } else {
+      newAction.setLoop(LoopOnce, 1);
+      newAction.clampWhenFinished = true;
+    }
+
+    const handleAnimationEnd = (event: { action: AnimationAction }) => {
+      if (event.action === newAction) {
+        onAnimationEnd?.(newAction);
+        if (activeAnimation !== idleAnimation) {
+          const idleClip = loadedAnimations[idleAnimation];
+          if (idleClip) {
+            const idleAction = mixer.clipAction(idleClip);
+            idleAction.reset().setLoop(LoopRepeat, Infinity).fadeIn(0.5).play();
+            activeActionRef.current = idleAction;
+          }
+        }
+      }
+    };
+
+    mixer.addEventListener('finished', handleAnimationEnd);
 
     if (prevAction) {
+      prevAction.fadeOut(0.5);
+      newAction.reset().fadeIn(0.5);
+    } else {
       newAction.reset();
-      newAction.crossFadeFrom(prevAction, animationConfig?.crossfadeDuration ?? 0.5, true);
     }
 
     newAction.play();
-    mixer.update(0);
-  }, [activeAnimation, loadedAnimations, animationConfig]);
+    activeActionRef.current = newAction;
+
+    // eslint-disable-next-line consistent-return
+    return () => {
+      mixer.removeEventListener('finished', handleAnimationEnd);
+    };
+  }, [activeAnimation, loadedAnimations, animationConfig, onAnimationEnd, idleAnimation]);
 
   useFrame((state, delta) => {
     mixerRef.current?.update(delta);

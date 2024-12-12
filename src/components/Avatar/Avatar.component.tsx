@@ -1,5 +1,5 @@
 import React, { Suspense, FC, useMemo, CSSProperties, ReactNode, useEffect } from 'react';
-import { Vector3 } from 'three';
+import { AnimationAction, Vector3 } from 'three';
 import { ContactShadows } from '@react-three/drei';
 import { CameraControls } from 'src/components/Scene/CameraControls.component';
 import { Environment } from 'src/components/Scene/Environment.component';
@@ -163,6 +163,8 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
    * Control properties of materials.
    */
   materialConfig?: MaterialConfiguration;
+  onAnimationEnd?: (action: AnimationAction) => void;
+  idleAnimation?: string;
 }
 
 /**
@@ -208,6 +210,8 @@ const Avatar: FC<AvatarProps> = ({
   lightTarget,
   fov = 50,
   animationConfig,
+  onAnimationEnd,
+  idleAnimation,
   materialConfig
 }) => {
   const setSpawnState = useSetAtom(spawnState);
@@ -230,7 +234,9 @@ const Avatar: FC<AvatarProps> = ({
           activeAnimation={activeAnimation}
           scale={scale}
           onLoaded={onLoaded}
+          idleAnimation={idleAnimation}
           bloom={effects?.bloom}
+          onAnimationEnd={onAnimationEnd}
           animationConfig={animationConfig}
           materialConfig={materialConfig}
         />
@@ -303,10 +309,12 @@ const Avatar: FC<AvatarProps> = ({
     onLoaded,
     emotion,
     effects?.bloom,
-    idleRotation,
-    headMovement,
+    materialConfig,
+    idleAnimation,
+    onAnimationEnd,
     animationConfig,
-    materialConfig
+    idleRotation,
+    headMovement
   ]);
 
   useEffect(() => triggerCallback(onLoading), [modelSrc, animationSrc, onLoading]);
