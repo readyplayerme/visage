@@ -1,0 +1,6 @@
+/**
+ * postprocessing v6.35.6 build Fri Jul 05 2024
+ * https://github.com/pmndrs/postprocessing
+ * Copyright 2015-2024 Raoul van Rüschen
+ * @license Zlib
+ */
