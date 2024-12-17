@@ -160,7 +160,8 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
    */
   materialConfig?: MaterialConfiguration;
   onAnimationEnd?: (action: AnimationAction) => void;
-  disableZoom?: boolean;
+  controlsMinDistance?: number;
+  controlsMaxDistance?: number;
 }
 
 /**
@@ -207,7 +208,8 @@ const Avatar: FC<AvatarProps> = ({
   fov = 50,
   onAnimationEnd,
   materialConfig,
-  disableZoom
+  controlsMinDistance,
+  controlsMaxDistance
 }) => {
   const setSpawnState = useSetAtom(spawnState);
 
@@ -230,7 +232,6 @@ const Avatar: FC<AvatarProps> = ({
           scale={scale}
           onLoaded={onLoaded}
           bloom={effects?.bloom}
-          disableZoom={disableZoom}
           onAnimationEnd={onAnimationEnd}
           materialConfig={materialConfig}
         />
@@ -306,8 +307,7 @@ const Avatar: FC<AvatarProps> = ({
     materialConfig,
     onAnimationEnd,
     idleRotation,
-    headMovement,
-    disableZoom
+    headMovement
   ]);
 
   useEffect(() => triggerCallback(onLoading), [modelSrc, animationSrc, onLoading]);
@@ -328,8 +328,8 @@ const Avatar: FC<AvatarProps> = ({
         cameraTarget={cameraTarget}
         cameraInitialDistance={cameraInitialDistance}
         cameraZoomTarget={cameraZoomTarget}
-        controlsMinDistance={halfBody ? CAMERA.CONTROLS.HALF_BODY.MIN_DISTANCE : CAMERA.CONTROLS.FULL_BODY.MIN_DISTANCE}
-        controlsMaxDistance={halfBody ? CAMERA.CONTROLS.HALF_BODY.MAX_DISTANCE : CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE}
+        controlsMinDistance={controlsMinDistance}
+        controlsMaxDistance={controlsMaxDistance}
         updateCameraTargetOnZoom={!halfBody}
       />
       {AvatarModel}
