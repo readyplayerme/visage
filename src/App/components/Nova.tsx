@@ -65,6 +65,7 @@ export const AvatarNova: FC = () => {
         ))}
       </SettingsPanel>
       <Avatar
+        disableZoom
         modelSrc={modelSrc}
         emotion={emotions.smile}
         animations={animations}

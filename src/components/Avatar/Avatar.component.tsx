@@ -160,6 +160,7 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
    */
   materialConfig?: MaterialConfiguration;
   onAnimationEnd?: (action: AnimationAction) => void;
+  disableZoom?: boolean;
 }
 
 /**
@@ -205,7 +206,8 @@ const Avatar: FC<AvatarProps> = ({
   lightTarget,
   fov = 50,
   onAnimationEnd,
-  materialConfig
+  materialConfig,
+  disableZoom
 }) => {
   const setSpawnState = useSetAtom(spawnState);
 
@@ -228,6 +230,7 @@ const Avatar: FC<AvatarProps> = ({
           scale={scale}
           onLoaded={onLoaded}
           bloom={effects?.bloom}
+          disableZoom={disableZoom}
           onAnimationEnd={onAnimationEnd}
           materialConfig={materialConfig}
         />
@@ -303,7 +306,8 @@ const Avatar: FC<AvatarProps> = ({
     materialConfig,
     onAnimationEnd,
     idleRotation,
-    headMovement
+    headMovement,
+    disableZoom
   ]);
 
   useEffect(() => triggerCallback(onLoading), [modelSrc, animationSrc, onLoading]);

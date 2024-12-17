@@ -14,11 +14,13 @@ export interface MultipleAnimationModelProps extends BaseModelProps {
   activeAnimation: string;
   scale?: number;
   emotion?: Emotion;
+  disableZoom?: boolean;
   onAnimationEnd?: (action: AnimationAction) => void;
 }
 
 export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
   modelSrc,
+  disableZoom,
   animations,
   activeAnimation,
   scale = 1,
@@ -106,5 +108,14 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
   useIdleExpression('blink', scene);
   useFallbackScene(scene, setModelFallback);
 
-  return <Model scene={scene} scale={scale} onLoaded={onLoaded} bloom={bloom} materialConfig={materialConfig} />;
+  return (
+    <Model
+      scene={scene}
+      scale={scale}
+      disableZoom={disableZoom}
+      onLoaded={onLoaded}
+      bloom={bloom}
+      materialConfig={materialConfig}
+    />
+  );
 };

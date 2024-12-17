@@ -10,6 +10,7 @@ interface ModelProps extends BaseModelProps {
   scene: Group;
   modelRef?: Ref<Group>;
   scale?: number;
+  disableZoom?: boolean;
   onSpawnAnimationFinish?: () => void;
 }
 
@@ -17,6 +18,7 @@ const ROTATION_STEP = 0.005;
 
 export const Model: FC<ModelProps> = ({
   scene,
+  disableZoom,
   scale = 1,
   modelRef,
   onLoaded,
@@ -77,6 +79,13 @@ export const Model: FC<ModelProps> = ({
   useEffect(() => triggerCallback(onLoaded), [scene, onLoaded]);
 
   useEffect(() => {
+    const disableZoomHandler = (e: WheelEvent) => {
+      if (disableZoom) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+
     gl.domElement.addEventListener('mousedown', setTouchingOn);
     gl.domElement.addEventListener('touchstart', setTouchingOn, { passive: true });
     window.addEventListener('mouseup', setTouchingOff);
@@ -85,6 +94,10 @@ export const Model: FC<ModelProps> = ({
 
     window.addEventListener('mousemove', onTouchMove);
     gl.domElement.addEventListener('touchmove', onTouchMove, { passive: true });
+
+    if (disableZoom) {
+      gl.domElement.addEventListener('wheel', disableZoomHandler, { passive: false });
+    }
 
     return () => {
       gl.domElement.removeEventListener('mousedown', setTouchingOn);
@@ -95,8 +108,12 @@ export const Model: FC<ModelProps> = ({
 
       window.removeEventListener('mousemove', onTouchMove);
       gl.domElement.removeEventListener('touchmove', onTouchMove);
+
+      if (disableZoom) {
+        gl.domElement.removeEventListener('wheel', disableZoomHandler);
+      }
     };
-  });
+  }, [disableZoom, gl.domElement, onTouchMove]);
 
   const spawnComponent = useMemo(
     () => <Spawn avatar={scene} onSpawnFinish={onSpawnAnimationFinish} />,
