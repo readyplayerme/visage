@@ -320,7 +320,7 @@ const Avatar: FC<AvatarProps> = ({
 
     return halfBody ? CAMERA.CONTROLS.HALF_BODY.MIN_DISTANCE : CAMERA.CONTROLS.FULL_BODY.MIN_DISTANCE;
   }, [controlsMinDistance, halfBody]);
-  const cameraControlsMsxDistance = useMemo(() => {
+  const cameraControlsMaxDistance = useMemo(() => {
     if (controlsMaxDistance) {
       return controlsMaxDistance;
     }
@@ -343,7 +343,7 @@ const Avatar: FC<AvatarProps> = ({
         cameraInitialDistance={cameraInitialDistance}
         cameraZoomTarget={cameraZoomTarget}
         controlsMinDistance={cameraControlsMinDistance}
-        controlsMaxDistance={cameraControlsMsxDistance}
+        controlsMaxDistance={cameraControlsMaxDistance}
         updateCameraTargetOnZoom={!halfBody}
       />
       {AvatarModel}
