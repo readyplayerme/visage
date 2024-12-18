@@ -71,6 +71,7 @@ export const Model: FC<ModelProps> = ({
 
     if (node.type === 'SkinnedMesh') {
       node.receiveShadow = true;
+      node.frustumCulled = false;
     }
   });
 
