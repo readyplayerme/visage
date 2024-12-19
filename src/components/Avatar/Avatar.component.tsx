@@ -17,7 +17,7 @@ import { BaseCanvas } from 'src/components/BaseCanvas';
 import { AnimationModel, HalfBodyModel, StaticModel, PoseModel, MultipleAnimationModel } from 'src/components/Models';
 import { isValidFormat, triggerCallback } from 'src/services';
 import { Dpr } from '@react-three/fiber';
-import { EffectComposer, HueSaturation, N8AO, Vignette } from '@react-three/postprocessing';
+import { BrightnessContrast, EffectComposer, HueSaturation, N8AO, Vignette } from '@react-three/postprocessing';
 import { Provider, useSetAtom } from 'jotai';
 import Capture, { CaptureType } from 'src/components/Capture/Capture.component';
 import { Box, Background } from 'src/components/Background/Box/Box.component';
@@ -377,7 +377,7 @@ const Avatar: FC<AvatarProps> = ({
               />
             )}
             {effects?.vignette && <Vignette eskil={false} offset={0.5} darkness={0.5} />}
-
+            <BrightnessContrast brightness={0.025} contrast={0.05} />
             <HueSaturation hue={0} saturation={-0.2} />
           </>
         </EffectComposer>
