@@ -377,8 +377,8 @@ const Avatar: FC<AvatarProps> = ({
               />
             )}
             {effects?.vignette && <Vignette eskil={false} offset={0.5} darkness={0.5} />}
-            <BrightnessContrast brightness={0.025} contrast={0.05} />
-            <HueSaturation hue={0} saturation={-0.2} />
+            <BrightnessContrast brightness={0.025} contrast={0.1} />
+            <HueSaturation hue={0} saturation={-0.1} />
           </>
         </EffectComposer>
       )}
