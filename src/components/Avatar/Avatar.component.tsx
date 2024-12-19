@@ -161,6 +161,8 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
    */
   materialConfig?: MaterialConfiguration;
   onAnimationEnd?: (action: AnimationAction) => void;
+  controlsMinDistance?: number;
+  controlsMaxDistance?: number;
   /**
    * Control properties of the BaseCanvas.
    */
@@ -211,6 +213,8 @@ const Avatar: FC<AvatarProps> = ({
   fov = 50,
   onAnimationEnd,
   materialConfig,
+  controlsMinDistance,
+  controlsMaxDistance,
   canvasConfig
 }) => {
   const setSpawnState = useSetAtom(spawnState);
@@ -315,6 +319,20 @@ const Avatar: FC<AvatarProps> = ({
   useEffect(() => triggerCallback(onLoading), [modelSrc, animationSrc, onLoading]);
 
   const enablePostProcessing = Boolean(effects?.ambientOcclusion || effects?.bloom || effects?.vignette);
+  const cameraControlsMinDistance = useMemo(() => {
+    if (controlsMinDistance) {
+      return controlsMinDistance;
+    }
+
+    return halfBody ? CAMERA.CONTROLS.HALF_BODY.MIN_DISTANCE : CAMERA.CONTROLS.FULL_BODY.MIN_DISTANCE;
+  }, [controlsMinDistance, halfBody]);
+  const cameraControlsMaxDistance = useMemo(() => {
+    if (controlsMaxDistance) {
+      return controlsMaxDistance;
+    }
+
+    return halfBody ? CAMERA.CONTROLS.HALF_BODY.MAX_DISTANCE : CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE;
+  }, [controlsMaxDistance, halfBody]);
 
   return (
     <BaseCanvas
@@ -331,8 +349,8 @@ const Avatar: FC<AvatarProps> = ({
         cameraTarget={cameraTarget}
         cameraInitialDistance={cameraInitialDistance}
         cameraZoomTarget={cameraZoomTarget}
-        controlsMinDistance={halfBody ? CAMERA.CONTROLS.HALF_BODY.MIN_DISTANCE : CAMERA.CONTROLS.FULL_BODY.MIN_DISTANCE}
-        controlsMaxDistance={halfBody ? CAMERA.CONTROLS.HALF_BODY.MAX_DISTANCE : CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE}
+        controlsMinDistance={cameraControlsMinDistance}
+        controlsMaxDistance={cameraControlsMaxDistance}
         updateCameraTargetOnZoom={!halfBody}
       />
       {AvatarModel}

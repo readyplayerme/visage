@@ -65,6 +65,8 @@ export const AvatarNova: FC = () => {
         ))}
       </SettingsPanel>
       <Avatar
+        controlsMinDistance={CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE}
+        controlsMaxDistance={CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE}
         modelSrc={modelSrc}
         emotion={emotions.smile}
         animations={animations}
