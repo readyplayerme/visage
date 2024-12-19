@@ -18,6 +18,7 @@ export const AvatarDevelop: React.FC = () => (
       effects={{
         ambientOcclusion: true
       }}
+      canvasConfig={{ alpha: false }}
     >
       <StatsGl />
       <EnvironmentModel environment="spaceStation" scale={1} />

@@ -67,9 +67,6 @@ export const Model: FC<ModelProps> = ({
 
     if ((node as Mesh).isMesh) {
       node.castShadow = true;
-    }
-
-    if (node.type === 'SkinnedMesh') {
       node.receiveShadow = true;
     }
   });
