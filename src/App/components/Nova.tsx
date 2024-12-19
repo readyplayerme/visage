@@ -76,6 +76,9 @@ export const AvatarNova: FC = () => {
         style={{ background: 'rgb(9,20,26)' }}
         fov={45}
         cameraInitialDistance={CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE}
+        effects={{
+          ambientOcclusion: false
+        }}
       >
         <StatsGl />
       </Avatar>

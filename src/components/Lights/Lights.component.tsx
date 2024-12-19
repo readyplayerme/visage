@@ -84,7 +84,6 @@ const Lights: FC<LightingProps> = (lightingProps) => {
         angle={LIGHT_CONFIG.keyLightAngle}
         color={keyLightColor}
         intensity={keyLightIntensity}
-        castShadow
       />
       {/* Lift light that creates soft light on body and shoes. */}
       <spotLight
@@ -93,7 +92,6 @@ const Lights: FC<LightingProps> = (lightingProps) => {
         angle={LIGHT_CONFIG.keyLightAngle}
         color={keyLightColor}
         intensity={keyLightIntensity * 0.25}
-        castShadow
       />
       {/* Silhouette light on arms and legs. */}
       <spotLight
@@ -102,7 +100,6 @@ const Lights: FC<LightingProps> = (lightingProps) => {
         angle={LIGHT_CONFIG.silhouetteLightAngle}
         color={keyLightColor}
         intensity={keyLightIntensity * 0.25}
-        castShadow
       />
     </group>
   );
