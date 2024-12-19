@@ -41,7 +41,7 @@ export const BaseCanvas: FC<BaseCanvasProps> = ({
     dpr={dpr}
     camera={{ fov, position }}
     resize={{ scroll: true, debounce: { scroll: 50, resize: 0 } }}
-    style={{ ...style, background: 'transparent' }}
+    style={{ ...style, background: canvasConfig.alpha ? 'transparent' : style?.background }}
   >
     {children}
   </Canvas>

@@ -68,7 +68,6 @@ export const Model: FC<ModelProps> = ({
     if ((node as Mesh).isMesh) {
       node.castShadow = true;
       node.receiveShadow = true;
-      node.frustumCulled = false;
     }
   });
 
