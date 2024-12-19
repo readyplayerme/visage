@@ -10,7 +10,8 @@ import {
   EffectConfiguration,
   LightingProps,
   MaterialConfiguration,
-  AnimationsT
+  AnimationsT,
+  CanvasConfiguration
 } from 'src/types';
 import { BaseCanvas } from 'src/components/BaseCanvas';
 import { AnimationModel, HalfBodyModel, StaticModel, PoseModel, MultipleAnimationModel } from 'src/components/Models';
@@ -160,6 +161,10 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
    */
   materialConfig?: MaterialConfiguration;
   onAnimationEnd?: (action: AnimationAction) => void;
+  /**
+   * Control properties of the BaseCanvas.
+   */
+  canvasConfig?: CanvasConfiguration;
 }
 
 /**
@@ -205,7 +210,8 @@ const Avatar: FC<AvatarProps> = ({
   lightTarget,
   fov = 50,
   onAnimationEnd,
-  materialConfig
+  materialConfig,
+  canvasConfig
 }) => {
   const setSpawnState = useSetAtom(spawnState);
 
@@ -318,6 +324,7 @@ const Avatar: FC<AvatarProps> = ({
       style={style}
       dpr={dpr}
       className={className}
+      canvasConfig={canvasConfig}
     >
       <Environment environment={environment} enablePostProcessing={enablePostProcessing} />
       <CameraControls
@@ -338,7 +345,7 @@ const Avatar: FC<AvatarProps> = ({
         <EffectComposer autoClear enableNormalPass={effects?.ambientOcclusion}>
           <>
             {effects?.ambientOcclusion && (
-             <N8AO quality='performance' aoRadius={5} distanceFalloff={0.25} intensity={3} screenSpaceRadius halfRes />
+              <N8AO quality="performance" aoRadius={5} distanceFalloff={0.25} intensity={3} screenSpaceRadius halfRes />
             )}
             {effects?.bloom && (
               <Bloom
