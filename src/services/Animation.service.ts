@@ -80,6 +80,7 @@ export const useAnimations = (animations: AnimationsT) =>
     await Promise.all(
       Object.keys(animations).map(async (name) => {
         const newClip = await loadAnimationClip(animations[name].source);
+        newClip.name = name;
         clips[name] = newClip;
       })
     );
