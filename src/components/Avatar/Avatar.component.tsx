@@ -10,20 +10,21 @@ import {
   EffectConfiguration,
   LightingProps,
   MaterialConfiguration,
-  AnimationsT
+  AnimationsT,
+  CanvasConfiguration
 } from 'src/types';
 import { BaseCanvas } from 'src/components/BaseCanvas';
 import { AnimationModel, HalfBodyModel, StaticModel, PoseModel, MultipleAnimationModel } from 'src/components/Models';
 import { isValidFormat, triggerCallback } from 'src/services';
 import { Dpr } from '@react-three/fiber';
-import { BrightnessContrast, EffectComposer, HueSaturation, SSAO, Vignette } from '@react-three/postprocessing';
+import { BrightnessContrast, EffectComposer, HueSaturation, N8AO, Vignette } from '@react-three/postprocessing';
 import { Provider, useSetAtom } from 'jotai';
 import Capture, { CaptureType } from 'src/components/Capture/Capture.component';
 import { Box, Background } from 'src/components/Background/Box/Box.component';
 import { BackgroundColor } from 'src/components/Background';
 import Loader from 'src/components/Loader';
 import Bloom from 'src/components/Bloom/Bloom.component';
-import { BlendFunction } from 'postprocessing';
+
 import Lights from 'src/components/Lights/Lights.component';
 import { spawnState } from 'src/state/spawnAtom';
 
@@ -162,6 +163,10 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
   onAnimationEnd?: (action: AnimationAction) => void;
   controlsMinDistance?: number;
   controlsMaxDistance?: number;
+  /**
+   * Control properties of the BaseCanvas.
+   */
+  canvasConfig?: CanvasConfiguration;
 }
 
 /**
@@ -209,7 +214,8 @@ const Avatar: FC<AvatarProps> = ({
   onAnimationEnd,
   materialConfig,
   controlsMinDistance,
-  controlsMaxDistance
+  controlsMaxDistance,
+  canvasConfig
 }) => {
   const setSpawnState = useSetAtom(spawnState);
 
@@ -336,6 +342,7 @@ const Avatar: FC<AvatarProps> = ({
       style={style}
       dpr={dpr}
       className={className}
+      canvasConfig={canvasConfig}
     >
       <Environment environment={environment} enablePostProcessing={enablePostProcessing} />
       <CameraControls
@@ -348,28 +355,17 @@ const Avatar: FC<AvatarProps> = ({
       />
       {AvatarModel}
       {children}
-      {shadows && <ContactShadows position={[0, 0, 0]} opacity={2} scale={10} blur={1.0} far={1.0} />}
+      {shadows && (
+        <ContactShadows opacity={effects?.ambientOcclusion ? 1.25 : 2} scale={4} blur={2} far={1.0} resolution={256} />
+      )}
       {background?.src && <Box {...background} />}
       {capture && <Capture {...capture} />}
       {background?.color && <BackgroundColor color={background.color} />}
       {enablePostProcessing && (
-        <EffectComposer autoClear multisampling={4} enableNormalPass={effects?.ambientOcclusion}>
+        <EffectComposer autoClear>
           <>
             {effects?.ambientOcclusion && (
-              <SSAO
-                blendFunction={BlendFunction.MULTIPLY}
-                distanceScaling={false}
-                radius={0.08}
-                bias={0.01}
-                intensity={3}
-                samples={31}
-                worldDistanceThreshold={24}
-                worldDistanceFalloff={0}
-                worldProximityThreshold={0}
-                worldProximityFalloff={6}
-                fade={0.02}
-                rings={8}
-              />
+              <N8AO quality="performance" aoRadius={0.08} distanceFalloff={1} intensity={5} screenSpaceRadius halfRes />
             )}
             {effects?.bloom && (
               <Bloom
@@ -381,8 +377,8 @@ const Avatar: FC<AvatarProps> = ({
               />
             )}
             {effects?.vignette && <Vignette eskil={false} offset={0.5} darkness={0.5} />}
-            <BrightnessContrast brightness={0.025} contrast={0.25} />
-            <HueSaturation hue={0} saturation={-0.2} />
+            <BrightnessContrast brightness={0.025} contrast={0.1} />
+            <HueSaturation hue={0} saturation={-0.1} />
           </>
         </EffectComposer>
       )}

@@ -203,3 +203,7 @@ export type AnimationsT = Record<
     fadeTime?: number;
   }
 >;
+
+export type CanvasConfiguration = {
+  alpha?: boolean
+}
