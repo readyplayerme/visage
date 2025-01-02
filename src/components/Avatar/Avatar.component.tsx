@@ -356,7 +356,7 @@ const Avatar: FC<AvatarProps> = ({
       {AvatarModel}
       {children}
       {shadows && (
-        <ContactShadows opacity={effects?.ambientOcclusion ? 1 : 2} scale={4} blur={2} far={1.0} resolution={256} />
+        <ContactShadows opacity={effects?.ambientOcclusion ? 1.25 : 2} scale={4} blur={2} far={1.0} resolution={256} />
       )}
       {background?.src && <Box {...background} />}
       {capture && <Capture {...capture} />}
