@@ -365,7 +365,7 @@ const Avatar: FC<AvatarProps> = ({
         <EffectComposer autoClear>
           <>
             {effects?.ambientOcclusion && (
-              <N8AO quality="performance" aoRadius={5} distanceFalloff={0.25} intensity={3} screenSpaceRadius halfRes />
+              <N8AO quality="performance" aoRadius={0.08} distanceFalloff={1} intensity={5} screenSpaceRadius halfRes />
             )}
             {effects?.bloom && (
               <Bloom
