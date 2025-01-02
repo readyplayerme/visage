@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sparkles, StatsGl } from '@react-three/drei';
+import { StatsGl } from '@react-three/drei';
 
 import { Avatar } from 'src/components/Avatar';
 import { EnvironmentModel } from 'src/components/Models';
@@ -18,11 +18,9 @@ export const AvatarDevelop: React.FC = () => (
       effects={{
         ambientOcclusion: true
       }}
-      canvasConfig={{ alpha: false }}
     >
       <StatsGl />
       <EnvironmentModel environment="spaceStation" scale={1} />
-      <Sparkles count={70} scale={3} size={3} speed={1} opacity={0.04} color="#ccff00" />
     </Avatar>
   </>
 );

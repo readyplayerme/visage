@@ -362,7 +362,7 @@ const Avatar: FC<AvatarProps> = ({
       {capture && <Capture {...capture} />}
       {background?.color && <BackgroundColor color={background.color} />}
       {enablePostProcessing && (
-        <EffectComposer autoClear enableNormalPass={effects?.ambientOcclusion}>
+        <EffectComposer autoClear>
           <>
             {effects?.ambientOcclusion && (
               <N8AO quality="performance" aoRadius={5} distanceFalloff={0.25} intensity={3} screenSpaceRadius halfRes />
