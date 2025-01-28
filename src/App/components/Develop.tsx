@@ -4,11 +4,13 @@ import { StatsGl } from '@react-three/drei';
 import { Avatar } from 'src/components/Avatar';
 import { EnvironmentModel } from 'src/components/Models';
 
+import { AnimatedMaterialModel } from 'src/components/Models/AnimatedMaterialModel/AnimatedMaterialModel.component';
 import { SettingsPanel } from './SettingsPanel';
 
 export const AvatarDevelop: React.FC = () => (
   <>
     <SettingsPanel />
+    
     <Avatar
       modelSrc="https://models.readyplayer.me/64d61e9e17883fd73ebe5eb7.glb?morphTargets=ARKit,Eyes Extra&textureAtlas=none&lod=0"
       shadows
@@ -19,6 +21,7 @@ export const AvatarDevelop: React.FC = () => (
         ambientOcclusion: true
       }}
     >
+      <AnimatedMaterialModel modelSrc="neutral-animated-mask.glb"/>
       <StatsGl />
       <EnvironmentModel environment="spaceStation" scale={1} />
     </Avatar>
