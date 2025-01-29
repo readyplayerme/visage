@@ -65,7 +65,6 @@ class GLTFAnimationPointerExtension {
 		// "node" is the Animator component in our case
 		// "path" is the animated property path, just with translated material names.
 		PropertyBinding.findNode = function ( node, path ) {
-
 			if ( path.startsWith( '.materials.' ) ) {
 
 				if ( _animationPointerDebug ) console.log( 'FIND', path );
@@ -73,10 +72,10 @@ class GLTFAnimationPointerExtension {
 				const remainingPath = path.substring( '.materials.'.length ).substring( path.indexOf( '.' ) );
 				const nextIndex = remainingPath.indexOf( '.' );
 				const uuid = nextIndex < 0 ? remainingPath : remainingPath.substring( 0, nextIndex );
+
 				let res = null;
 				node.traverse( x => {
-
-					if ( res !== null || x.type !== 'Mesh' ) return;
+					if ( res !== null || !x.isMesh ) return;
 					if ( x.material && (x.material.uuid === uuid || x.material.name === uuid )) {
 
 						res = x.material;
@@ -90,13 +89,12 @@ class GLTFAnimationPointerExtension {
 
 							// TODO other texture slots only make sense if three.js actually supports them
 							// (currently only .map can have repeat/offset)
-
+							
 						}
 
 					}
-
 				} );
-
+				
 				return res;
 
 			} if ( path.startsWith( '.nodes.' ) || path.startsWith( '.lights.' ) || path.startsWith( '.cameras.' ) ) {

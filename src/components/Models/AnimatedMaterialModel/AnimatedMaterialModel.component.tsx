@@ -4,7 +4,7 @@
 import { useFrame } from '@react-three/fiber';
 import React, { FC, useEffect } from 'react';
 import { useGltfLoader } from 'src/services';
-import { AnimationMixer, LoopRepeat, MeshStandardMaterial } from 'three';
+import { AnimationMixer, LoopRepeat, MeshStandardMaterial, PropertyBinding } from 'three';
 
 export interface AnimatedMaterialModelProps {
   modelSrc: string | Blob;
@@ -22,30 +22,25 @@ export const AnimatedMaterialModel: FC<AnimatedMaterialModelProps> = ({
   useEffect(() => {
     if(!animations) return;
 
-    const customObjects = [];
+    // WIP index 0 track and only one animation in the list
+    const material = PropertyBinding.findNode(scene, animations[0].tracks[0].name);
+
+    const targetObjects = [];
     scene.traverse((object) => {
-      if (object.isMesh && object.name === "custom") {
-        customObjects.push(object);
-      }
+      if (object.isMesh && object.material === material) {
+        targetObjects.push(object);
+      } 
     });
 
-    console.log("custom objects:", customObjects);
-
-    const targetObject = customObjects[0];
-    console.log("target object name:", targetObject.name);
+    const targetObject = targetObjects[0];
 
     const mixer = new AnimationMixer(targetObject);
+    const actions = animations.map((clip) => mixer.clipAction(clip));
 
-    const actions = animations.map((clip) => 
-      mixer.clipAction(clip)
-    );
-
-    actions.forEach((action) => {     
+    actions.forEach((action) => {
       for(const propertyMixer of action._propertyBindings) {
-        propertyMixer.binding.node = targetObject;
+        propertyMixer.binding.node = propertyMixer.binding.rootNode;
       }
-
-      console.log("action:", action);
 
       action.setLoop(LoopRepeat);
       action.play();
