@@ -1,4 +1,4 @@
-import { AnimationClip, Group } from 'three';
+import { AnimationClip, AnimationMixer, Group, LoopRepeat, Mesh, PropertyBinding, Scene } from 'three';
 
 import { FBXLoader, GLTFLoader } from 'three-stdlib';
 import { suspend } from 'suspend-react';
@@ -72,6 +72,71 @@ export const loadAnimationClip = async (source: Blob | string): Promise<Animatio
 
   return animation.isFbx ? normaliseFbxAnimation(animation.group) : animation.group.animations[0];
 };
+
+export const playAssetIdleAnimation = (scene: Scene, animations: Array<AnimationClip>): AnimationMixer | null => {
+  if(!scene || !animations.length) {
+    console.log('No scene or animations found');
+    return null;
+  }
+
+  const idleAnimations = animations.filter((animation) => animation.name === 'idle');
+
+  if(!idleAnimations.length) { 
+    console.error('No idle animations found');
+    return null;
+  }
+
+  const defaultIdleAnimation = idleAnimations[0];
+
+  if(!defaultIdleAnimation.tracks.length) { 
+    console.error('No tracks found');
+    return null;
+  }
+
+  const defaultIdleAnimationTrack = defaultIdleAnimation.tracks[0];
+  const encodedPropertyPath = defaultIdleAnimationTrack.name;
+
+  const animatedMaterial = PropertyBinding.findNode(scene, encodedPropertyPath);
+
+  if(!animatedMaterial) { 
+    console.error('No animated material found');
+    return null;
+  }
+  const targetMeshes: Array<Mesh> = [];
+
+  scene.traverse((object) => {
+    const mesh = object as Mesh;
+
+    if (mesh.isMesh && mesh.material === animatedMaterial) {
+      targetMeshes.push(mesh);
+    } 
+  });
+
+  if(!targetMeshes.length) {
+    console.error('No target meshes found');
+    return null;
+  }
+  const animatedMesh = targetMeshes[0];
+
+  const assetMixer = new AnimationMixer(animatedMesh);               
+  const defaultIdleAction = assetMixer.clipAction(defaultIdleAnimation);
+
+  // @ts-expect-error property binding exists
+  // eslint-disable-next-line no-underscore-dangle 
+  const propertyMixers = defaultIdleAction._propertyBindings as unknown as Array<PropertyMixer>;
+  if(!propertyMixers.length) {
+    console.error('No property mixers found');
+    return null;
+  } 
+
+  const defaultPropertyMixer = propertyMixers[0];
+  defaultPropertyMixer.binding.node = defaultPropertyMixer.binding.rootNode;
+
+  defaultIdleAction.setLoop(LoopRepeat, Infinity);
+  defaultIdleAction.play();
+
+  return assetMixer;             
+}
 
 export const useAnimations = (animations: AnimationsT) =>
   suspend(async (): Promise<Record<string, AnimationClip>> => {

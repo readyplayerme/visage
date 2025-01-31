@@ -1,11 +1,11 @@
-import React, { useRef, FC, useMemo, useState } from 'react';
+import React, { useRef, FC, useMemo, useState, useEffect } from 'react';
 import { useFrame, useGraph } from '@react-three/fiber';
-import { AnimationMixer, Group } from 'three';
+import { AnimationMixer, Group, Scene } from 'three';
 
 import { Model } from 'src/components/Models/Model';
 import { useHeadMovement, useGltfLoader, useFallback, useIdleExpression, useEmotion } from 'src/services';
 import { BaseModelProps } from 'src/types';
-import { loadAnimationClip } from 'src/services/Animation.service';
+import { loadAnimationClip, playAssetIdleAnimation } from 'src/services/Animation.service';
 import { Emotion } from 'src/components/Avatar/Avatar.component';
 
 export interface AnimationModelProps extends BaseModelProps {
@@ -39,8 +39,20 @@ export const AnimationModel: FC<AnimationModelProps> = ({
     setAnimationRunning(false);
   };
 
-  const { scene } = useGltfLoader(modelSrc);
+  const { scene, animations: embeddedAnimations } = useGltfLoader(modelSrc);
   const { nodes } = useGraph(scene);
+
+  const assetMixerRef = useRef<AnimationMixer | null>(null);
+
+  useEffect(() => {
+    assetMixerRef.current = playAssetIdleAnimation(scene as unknown as Scene, embeddedAnimations);
+
+    return () => {
+      assetMixerRef.current?.stopAllAction();
+      assetMixerRef.current?.uncacheRoot(scene);
+      assetMixerRef.current = null;
+    };
+  }, [scene]);  
 
   const animationClip = useMemo(async () => loadAnimationClip(animationSrc), [animationSrc]);
 
@@ -60,6 +72,10 @@ export const AnimationModel: FC<AnimationModelProps> = ({
   }, [animationRunning, animationClip, nodes.Armature]);
 
   useFrame(async (state, delta) => {
+    if(assetMixerRef.current) {
+      assetMixerRef.current.update(delta);
+    }
+
     (await animationMixer)?.update(delta);
 
     if (!idleRotation) {
@@ -69,7 +85,7 @@ export const AnimationModel: FC<AnimationModelProps> = ({
     if (ref?.current) {
       currentRotation += delta * 0.2;
       ref.current.rotation.y = rotation + Math.sin(currentRotation) / 3;
-    }
+    }    
   });
 
   useHeadMovement({ nodes, enabled: headMovement });

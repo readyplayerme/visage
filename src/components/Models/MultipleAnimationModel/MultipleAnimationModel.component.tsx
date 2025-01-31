@@ -1,12 +1,12 @@
 import React, { FC, useEffect, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { AnimationAction, AnimationMixer, LoopOnce, LoopRepeat } from 'three';
+import { AnimationAction, AnimationMixer, LoopOnce, LoopRepeat, Scene } from 'three';
 
 import { Model } from 'src/components/Models/Model';
 import { AnimationsT, BaseModelProps } from 'src/types';
 import { useEmotion, useFallbackScene, useGltfCachedLoader, useIdleExpression } from 'src/services';
 import { Emotion } from 'src/components/Avatar/Avatar.component';
-import { useAnimations } from 'src/services/Animation.service';
+import { playAssetIdleAnimation, useAnimations } from 'src/services/Animation.service';
 
 export interface MultipleAnimationModelProps extends BaseModelProps {
   modelSrc: string | Blob;
@@ -29,36 +29,43 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
   materialConfig,
   onAnimationEnd
 }) => {
-  const mixerRef = useRef<AnimationMixer | null>(null);
+  const armatureMixerRef = useRef<AnimationMixer | null>(null);
+  const assetMixerRef = useRef<AnimationMixer | null>(null);
   const activeActionRef = useRef<AnimationAction | null>(null);
   const animationTimeRef = useRef<number>(0);
 
   const loadedAnimations = useAnimations(animations);
-  const { scene } = useGltfCachedLoader(modelSrc);
+  const { scene, animations: embeddedAnimations } = useGltfCachedLoader(modelSrc);
 
   useEffect(() => {
     if (scene) {
-      const mixer = new AnimationMixer(scene);
-      mixerRef.current = mixer;
+      const armatureMixer = new AnimationMixer(scene);
+      armatureMixerRef.current = armatureMixer;
 
       if (activeActionRef.current) {
-        const newAction = mixer.clipAction(activeActionRef.current.getClip());
+        const newAction = armatureMixer.clipAction(activeActionRef.current.getClip());
         newAction.play();
-        mixer.update(animationTimeRef.current);
+        armatureMixer.update(animationTimeRef.current);
 
         activeActionRef.current = newAction;
       }
+
+      assetMixerRef.current = playAssetIdleAnimation(scene as unknown as Scene, embeddedAnimations);
     }
 
     return () => {
-      mixerRef.current?.stopAllAction();
-      mixerRef.current?.uncacheRoot(scene);
-      mixerRef.current = null;
+      armatureMixerRef.current?.stopAllAction();
+      armatureMixerRef.current?.uncacheRoot(scene);
+      armatureMixerRef.current = null;
+
+      assetMixerRef.current?.stopAllAction();
+      assetMixerRef.current?.uncacheRoot(scene);
+      assetMixerRef.current = null;
     };
   }, [scene]);
 
   useEffect(() => {
-    const mixer = mixerRef.current;
+    const mixer = armatureMixerRef.current;
     const prevAction = activeActionRef.current;
     const newClip = loadedAnimations[activeAnimation];
     const animationConfig = animations[activeAnimation];
@@ -98,8 +105,10 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
   }, [activeAnimation, animations, loadedAnimations, onAnimationEnd]);
 
   useFrame((state, delta) => {
-    mixerRef.current?.update(delta);
+    armatureMixerRef.current?.update(delta);
     animationTimeRef.current = activeActionRef.current?.time || 0;
+
+    assetMixerRef.current?.update(delta);
   });
 
   useEmotion(scene, emotion);
