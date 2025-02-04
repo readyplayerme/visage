@@ -73,13 +73,15 @@ export const loadAnimationClip = async (source: Blob | string): Promise<Animatio
   return animation.isFbx ? normaliseFbxAnimation(animation.group) : animation.group.animations[0];
 };
 
+const IDLE_ANIMATION_NAME = 'idle';
+
 export const playAssetIdleAnimation = (scene: Scene, animations: Array<AnimationClip>): AnimationMixer | null => {
   if(!scene || !animations.length) {
     console.log('No scene or animations found');
     return null;
   }
 
-  const idleAnimations = animations.filter((animation) => animation.name === 'idle');
+  const idleAnimations = animations.filter((animation) => animation.name === IDLE_ANIMATION_NAME);
 
   if(!idleAnimations.length) { 
     console.error('No idle animations found');
