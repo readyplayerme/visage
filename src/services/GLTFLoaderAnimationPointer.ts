@@ -75,6 +75,7 @@ class GLTFAnimationPointerExtension {
 
 				let res = null;
 				node.traverse( x => {
+					// NOTE: Changed x.type to x.isMesh for better competability
 					if ( res !== null || !x.isMesh ) return;
 					if ( x.material && (x.material.uuid === uuid || x.material.name === uuid )) {
 
