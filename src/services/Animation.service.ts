@@ -1,4 +1,4 @@
-import { AnimationClip, AnimationMixer, Group, LoopRepeat, Mesh, PropertyBinding, Scene } from 'three';
+import { AnimationClip, AnimationMixer, Group, LoopRepeat, Mesh, Object3D, PropertyBinding } from 'three';
 
 import { FBXLoader, GLTFLoader } from 'three-stdlib';
 import { suspend } from 'suspend-react';
@@ -75,8 +75,8 @@ export const loadAnimationClip = async (source: Blob | string): Promise<Animatio
 
 const IDLE_ANIMATION_NAME = 'idle';
 
-export const playAssetIdleAnimation = (scene: Scene, animations: Array<AnimationClip>): AnimationMixer | null => {
-  if(!scene || !animations.length) {
+export const playAssetIdleAnimation = (root: Object3D, animations: Array<AnimationClip>): Array<AnimationMixer> | null => {
+  if(!root || !animations.length) {
     console.log('No scene or animations found');
     return null;
   }
@@ -88,56 +88,88 @@ export const playAssetIdleAnimation = (scene: Scene, animations: Array<Animation
     return null;
   }
 
-  const defaultIdleAnimation = idleAnimations[0];
+  const assetMixers: Array<AnimationMixer> = [];
 
-  if(!defaultIdleAnimation.tracks.length) { 
-    console.error('No tracks found');
-    return null;
-  }
+  // eslint-disable-next-line no-restricted-syntax
+  for(const idleAnimation of idleAnimations) {
+    if(!idleAnimation.tracks.length) { 
+      console.error('No tracks found');
+      return null;
+    }
 
-  const defaultIdleAnimationTrack = defaultIdleAnimation.tracks[0];
-  const encodedPropertyPath = defaultIdleAnimationTrack.name;
+    const defaultIdleAnimationTrack = idleAnimation.tracks[0];
+    const encodedPropertyPath = defaultIdleAnimationTrack.name;
 
-  const animatedMaterial = PropertyBinding.findNode(scene, encodedPropertyPath);
+    const animatedMaterial = PropertyBinding.findNode(root, encodedPropertyPath);
 
-  if(!animatedMaterial) { 
-    console.error('No animated material found');
-    return null;
-  }
-  const targetMeshes: Array<Mesh> = [];
+    if(!animatedMaterial) { 
+      console.error('No animated material found');
+      return null;
+    }
+    const targetMeshes: Array<Mesh> = [];
 
-  scene.traverse((object) => {
-    const mesh = object as Mesh;
+    root.traverse((object) => {
+      const mesh = object as Mesh;
 
-    if (mesh.isMesh && mesh.material === animatedMaterial) {
-      targetMeshes.push(mesh);
+      if (mesh.isMesh && mesh.material === animatedMaterial) {
+        targetMeshes.push(mesh);
+      } 
+    });
+
+    if(!targetMeshes.length) {
+      console.error('No target meshes found');
+      return null;
+    }
+    const animatedMesh = targetMeshes[0];
+
+    const assetMixer = new AnimationMixer(animatedMesh);               
+    const defaultIdleAction = assetMixer.clipAction(idleAnimation);
+
+    // @ts-expect-error property binding exists
+    // eslint-disable-next-line no-underscore-dangle 
+    const propertyMixers = defaultIdleAction._propertyBindings as unknown as Array<PropertyMixer>;
+    if(!propertyMixers.length) {
+      console.error('No property mixers found');
+      return null;
     } 
-  });
 
-  if(!targetMeshes.length) {
-    console.error('No target meshes found');
-    return null;
+    const defaultPropertyMixer = propertyMixers[0];
+    defaultPropertyMixer.binding.node = defaultPropertyMixer.binding.rootNode;
+
+    defaultIdleAction.setLoop(LoopRepeat, Infinity);
+    defaultIdleAction.play();
+
+    assetMixers.push(assetMixer);
   }
-  const animatedMesh = targetMeshes[0];
 
-  const assetMixer = new AnimationMixer(animatedMesh);               
-  const defaultIdleAction = assetMixer.clipAction(defaultIdleAnimation);
+  return assetMixers;             
+}
 
-  // @ts-expect-error property binding exists
-  // eslint-disable-next-line no-underscore-dangle 
-  const propertyMixers = defaultIdleAction._propertyBindings as unknown as Array<PropertyMixer>;
-  if(!propertyMixers.length) {
-    console.error('No property mixers found');
-    return null;
-  } 
+export const updateAssetAnimations = (mixers: Array<AnimationMixer> | null, delta: number): boolean => {
+  if(!mixers) {
+    return false;
+  }
+  
+  // eslint-disable-next-line no-restricted-syntax
+  for(const mixer of mixers) {
+    mixer.update(delta);
+  }
 
-  const defaultPropertyMixer = propertyMixers[0];
-  defaultPropertyMixer.binding.node = defaultPropertyMixer.binding.rootNode;
+  return true;
+};
 
-  defaultIdleAction.setLoop(LoopRepeat, Infinity);
-  defaultIdleAction.play();
+export const disposeAssetAnimations = (mixers: Array<AnimationMixer> | null, root: Object3D): boolean => {
+  if(!mixers || !root) {
+    return false;
+  }
 
-  return assetMixer;             
+  // eslint-disable-next-line no-restricted-syntax
+  for(const mixer of mixers) {
+    mixer.stopAllAction();
+    mixer.uncacheRoot(root);
+  }
+
+  return true;
 }
 
 export const useAnimations = (animations: AnimationsT) =>

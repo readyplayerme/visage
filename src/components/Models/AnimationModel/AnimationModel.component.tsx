@@ -5,7 +5,7 @@ import { AnimationMixer, Group, Scene } from 'three';
 import { Model } from 'src/components/Models/Model';
 import { useHeadMovement, useGltfLoader, useFallback, useIdleExpression, useEmotion } from 'src/services';
 import { BaseModelProps } from 'src/types';
-import { loadAnimationClip, playAssetIdleAnimation } from 'src/services/Animation.service';
+import { disposeAssetAnimations, loadAnimationClip, playAssetIdleAnimation, updateAssetAnimations } from 'src/services/Animation.service';
 import { Emotion } from 'src/components/Avatar/Avatar.component';
 
 export interface AnimationModelProps extends BaseModelProps {
@@ -42,14 +42,14 @@ export const AnimationModel: FC<AnimationModelProps> = ({
   const { scene, animations: embeddedAnimations } = useGltfLoader(modelSrc);
   const { nodes } = useGraph(scene);
 
-  const assetMixerRef = useRef<AnimationMixer | null>(null);
+  const assetMixerRef = useRef<Array<AnimationMixer> | null>(null);
 
   useEffect(() => {
     assetMixerRef.current = playAssetIdleAnimation(scene as unknown as Scene, embeddedAnimations);
 
     return () => {
-      assetMixerRef.current?.stopAllAction();
-      assetMixerRef.current?.uncacheRoot(scene);
+      disposeAssetAnimations(assetMixerRef.current, scene as unknown as Scene);
+
       assetMixerRef.current = null;
     };
   }, [scene]);  
@@ -72,9 +72,7 @@ export const AnimationModel: FC<AnimationModelProps> = ({
   }, [animationRunning, animationClip, nodes.Armature]);
 
   useFrame(async (state, delta) => {
-    if(assetMixerRef.current) {
-      assetMixerRef.current.update(delta);
-    }
+    updateAssetAnimations(assetMixerRef.current, delta);
 
     (await animationMixer)?.update(delta);
 

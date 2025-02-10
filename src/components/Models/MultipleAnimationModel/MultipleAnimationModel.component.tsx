@@ -1,12 +1,12 @@
 import React, { FC, useEffect, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { AnimationAction, AnimationMixer, LoopOnce, LoopRepeat, Scene } from 'three';
+import { AnimationAction, AnimationMixer, LoopOnce, LoopRepeat } from 'three';
 
 import { Model } from 'src/components/Models/Model';
 import { AnimationsT, BaseModelProps } from 'src/types';
 import { useEmotion, useFallbackScene, useGltfCachedLoader, useIdleExpression } from 'src/services';
 import { Emotion } from 'src/components/Avatar/Avatar.component';
-import { playAssetIdleAnimation, useAnimations } from 'src/services/Animation.service';
+import { disposeAssetAnimations, playAssetIdleAnimation, updateAssetAnimations, useAnimations } from 'src/services/Animation.service';
 
 export interface MultipleAnimationModelProps extends BaseModelProps {
   modelSrc: string | Blob;
@@ -30,7 +30,7 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
   onAnimationEnd
 }) => {
   const armatureMixerRef = useRef<AnimationMixer | null>(null);
-  const assetMixerRef = useRef<AnimationMixer | null>(null);
+  const assetMixerRef = useRef<Array<AnimationMixer> | null>(null);
   const activeActionRef = useRef<AnimationAction | null>(null);
   const animationTimeRef = useRef<number>(0);
 
@@ -50,7 +50,7 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
         activeActionRef.current = newAction;
       }
 
-      assetMixerRef.current = playAssetIdleAnimation(scene as unknown as Scene, embeddedAnimations);
+      assetMixerRef.current = playAssetIdleAnimation(scene, embeddedAnimations);
     }
 
     return () => {
@@ -58,8 +58,7 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
       armatureMixerRef.current?.uncacheRoot(scene);
       armatureMixerRef.current = null;
 
-      assetMixerRef.current?.stopAllAction();
-      assetMixerRef.current?.uncacheRoot(scene);
+      disposeAssetAnimations(assetMixerRef.current, scene);
       assetMixerRef.current = null;
     };
   }, [scene]);
@@ -108,7 +107,7 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
     armatureMixerRef.current?.update(delta);
     animationTimeRef.current = activeActionRef.current?.time || 0;
 
-    assetMixerRef.current?.update(delta);
+    updateAssetAnimations(assetMixerRef.current, delta);
   });
 
   useEmotion(scene, emotion);
