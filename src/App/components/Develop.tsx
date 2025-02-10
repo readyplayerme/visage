@@ -11,7 +11,7 @@ import { SettingsPanel } from './SettingsPanel';
 export const AvatarDevelop: React.FC = () => (
   <>
     <SettingsPanel />
-    
+
     <Avatar
       modelSrc="neutral-animated-mask-two.glb"
       shadows

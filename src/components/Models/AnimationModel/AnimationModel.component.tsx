@@ -5,7 +5,12 @@ import { AnimationMixer, Group, Scene } from 'three';
 import { Model } from 'src/components/Models/Model';
 import { useHeadMovement, useGltfLoader, useFallback, useIdleExpression, useEmotion } from 'src/services';
 import { BaseModelProps } from 'src/types';
-import { disposeAssetAnimations, loadAnimationClip, playAssetIdleAnimation, updateAssetAnimations } from 'src/services/Animation.service';
+import {
+  disposeAssetAnimations,
+  loadAnimationClip,
+  playAssetIdleAnimation,
+  updateAssetAnimations
+} from 'src/services/Animation.service';
 import { Emotion } from 'src/components/Avatar/Avatar.component';
 
 export interface AnimationModelProps extends BaseModelProps {
@@ -52,7 +57,7 @@ export const AnimationModel: FC<AnimationModelProps> = ({
 
       assetMixerRef.current = null;
     };
-  }, [scene]);  
+  }, [scene]);
 
   const animationClip = useMemo(async () => loadAnimationClip(animationSrc), [animationSrc]);
 
@@ -83,7 +88,7 @@ export const AnimationModel: FC<AnimationModelProps> = ({
     if (ref?.current) {
       currentRotation += delta * 0.2;
       ref.current.rotation.y = rotation + Math.sin(currentRotation) / 3;
-    }    
+    }
   });
 
   useHeadMovement({ nodes, enabled: headMovement });

@@ -6,7 +6,12 @@ import { Model } from 'src/components/Models/Model';
 import { AnimationsT, BaseModelProps } from 'src/types';
 import { useEmotion, useFallbackScene, useGltfCachedLoader, useIdleExpression } from 'src/services';
 import { Emotion } from 'src/components/Avatar/Avatar.component';
-import { disposeAssetAnimations, playAssetIdleAnimation, updateAssetAnimations, useAnimations } from 'src/services/Animation.service';
+import {
+  disposeAssetAnimations,
+  playAssetIdleAnimation,
+  updateAssetAnimations,
+  useAnimations
+} from 'src/services/Animation.service';
 
 export interface MultipleAnimationModelProps extends BaseModelProps {
   modelSrc: string | Blob;

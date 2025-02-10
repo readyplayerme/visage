@@ -205,5 +205,5 @@ export type AnimationsT = Record<
 >;
 
 export type CanvasConfiguration = {
-  alpha?: boolean
-}
+  alpha?: boolean;
+};

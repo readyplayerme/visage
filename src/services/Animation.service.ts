@@ -75,25 +75,25 @@ export const loadAnimationClip = async (source: Blob | string): Promise<Animatio
 
 const IDLE_ANIMATION_NAME = 'idle';
 
-export const playAssetIdleAnimation = (root: Object3D, animations: Array<AnimationClip>): Array<AnimationMixer> | null => {
-  if(!root || !animations.length) {
-    console.log('No scene or animations found');
+export const playAssetIdleAnimation = (
+  root: Object3D,
+  animations: Array<AnimationClip>
+): Array<AnimationMixer> | null => {
+  if (!root || !animations.length) {
     return null;
   }
 
   const idleAnimations = animations.filter((animation) => animation.name === IDLE_ANIMATION_NAME);
 
-  if(!idleAnimations.length) { 
-    console.error('No idle animations found');
+  if (!idleAnimations.length) {
     return null;
   }
 
   const assetMixers: Array<AnimationMixer> = [];
 
   // eslint-disable-next-line no-restricted-syntax
-  for(const idleAnimation of idleAnimations) {
-    if(!idleAnimation.tracks.length) { 
-      console.error('No tracks found');
+  for (const idleAnimation of idleAnimations) {
+    if (!idleAnimation.tracks.length) {
       return null;
     }
 
@@ -102,8 +102,7 @@ export const playAssetIdleAnimation = (root: Object3D, animations: Array<Animati
 
     const animatedMaterial = PropertyBinding.findNode(root, encodedPropertyPath);
 
-    if(!animatedMaterial) { 
-      console.error('No animated material found');
+    if (!animatedMaterial) {
       return null;
     }
     const targetMeshes: Array<Mesh> = [];
@@ -113,25 +112,23 @@ export const playAssetIdleAnimation = (root: Object3D, animations: Array<Animati
 
       if (mesh.isMesh && mesh.material === animatedMaterial) {
         targetMeshes.push(mesh);
-      } 
+      }
     });
 
-    if(!targetMeshes.length) {
-      console.error('No target meshes found');
+    if (!targetMeshes.length) {
       return null;
     }
     const animatedMesh = targetMeshes[0];
 
-    const assetMixer = new AnimationMixer(animatedMesh);               
+    const assetMixer = new AnimationMixer(animatedMesh);
     const defaultIdleAction = assetMixer.clipAction(idleAnimation);
 
     // @ts-expect-error property binding exists
-    // eslint-disable-next-line no-underscore-dangle 
+    // eslint-disable-next-line no-underscore-dangle
     const propertyMixers = defaultIdleAction._propertyBindings as unknown as Array<PropertyMixer>;
-    if(!propertyMixers.length) {
-      console.error('No property mixers found');
+    if (!propertyMixers.length) {
       return null;
-    } 
+    }
 
     const defaultPropertyMixer = propertyMixers[0];
     defaultPropertyMixer.binding.node = defaultPropertyMixer.binding.rootNode;
@@ -142,16 +139,16 @@ export const playAssetIdleAnimation = (root: Object3D, animations: Array<Animati
     assetMixers.push(assetMixer);
   }
 
-  return assetMixers;             
-}
+  return assetMixers;
+};
 
 export const updateAssetAnimations = (mixers: Array<AnimationMixer> | null, delta: number): boolean => {
-  if(!mixers) {
+  if (!mixers) {
     return false;
   }
-  
+
   // eslint-disable-next-line no-restricted-syntax
-  for(const mixer of mixers) {
+  for (const mixer of mixers) {
     mixer.update(delta);
   }
 
@@ -159,18 +156,18 @@ export const updateAssetAnimations = (mixers: Array<AnimationMixer> | null, delt
 };
 
 export const disposeAssetAnimations = (mixers: Array<AnimationMixer> | null, root: Object3D): boolean => {
-  if(!mixers || !root) {
+  if (!mixers || !root) {
     return false;
   }
 
   // eslint-disable-next-line no-restricted-syntax
-  for(const mixer of mixers) {
+  for (const mixer of mixers) {
     mixer.stopAllAction();
     mixer.uncacheRoot(root);
   }
 
   return true;
-}
+};
 
 export const useAnimations = (animations: AnimationsT) =>
   suspend(async (): Promise<Record<string, AnimationClip>> => {
