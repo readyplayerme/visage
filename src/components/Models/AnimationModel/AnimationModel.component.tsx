@@ -50,10 +50,10 @@ export const AnimationModel: FC<AnimationModelProps> = ({
   const assetMixerRef = useRef<Array<AnimationMixer> | null>(null);
 
   useEffect(() => {
-    assetMixerRef.current = playAssetIdleAnimation(scene as unknown as Scene, embeddedAnimations);
+    assetMixerRef.current = playAssetIdleAnimation(scene, embeddedAnimations);
 
     return () => {
-      disposeAssetAnimations(assetMixerRef.current, scene as unknown as Scene);
+      disposeAssetAnimations(assetMixerRef.current, scene);
 
       assetMixerRef.current = null;
     };
