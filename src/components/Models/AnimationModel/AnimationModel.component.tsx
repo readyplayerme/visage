@@ -1,6 +1,6 @@
 import React, { useRef, FC, useMemo, useState, useEffect } from 'react';
 import { useFrame, useGraph } from '@react-three/fiber';
-import { AnimationMixer, Group, Scene } from 'three';
+import { AnimationMixer, Group } from 'three';
 
 import { Model } from 'src/components/Models/Model';
 import { useHeadMovement, useGltfLoader, useFallback, useIdleExpression, useEmotion } from 'src/services';
