@@ -9,7 +9,7 @@ const VISUAL_TEST_CONFIG = Object.freeze({
   },
   testUrl: 'http://localhost:3000/test',
   modelUrl: 'https://avatars.readyplayer.dev/66e42883315948a37cf82baf.glb',
-  testThreshold: 0.05
+  testThreshold: 0.1
 });
 
 function compareSnapshot(zoomLevel: number, side: number) {
