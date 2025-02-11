@@ -17,11 +17,12 @@ import {
 } from 'three';
 import { useFrame } from '@react-three/fiber';
 import type { ObjectMap, SkinnedMeshProps } from '@react-three/fiber';
-import { GLTF, GLTFLoader, DRACOLoader } from 'three-stdlib';
+import { GLTF, GLTFLoader, DRACOLoader, GLTFLoaderPlugin } from 'three-stdlib';
 import { suspend } from 'suspend-react';
 import { Emotion } from 'src/components/Avatar/Avatar.component';
 import { BloomConfiguration, MaterialConfiguration } from 'src/types';
 import { MeshoptDecoder } from './meshopt_decoder';
+import { GLTFAnimationPointerExtension } from './GLTFLoaderAnimationPointer';
 
 export interface CustomNode extends Object3D {
   geometry: BufferGeometry;
@@ -264,6 +265,8 @@ export const useEmotion = (nodes: ObjectMap['nodes'] | Group, emotion?: Emotion)
 
 const loader = new GLTFLoader();
 loader.setMeshoptDecoder(MeshoptDecoder);
+
+loader.register((parser) => new GLTFAnimationPointerExtension(parser) as unknown as GLTFLoaderPlugin);
 
 const dracoLoader = new DRACOLoader();
 dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.5/');

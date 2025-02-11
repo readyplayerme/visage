@@ -1,4 +1,4 @@
-import { AnimationClip, Group } from 'three';
+import { AnimationClip, AnimationMixer, Group, LoopRepeat, Mesh, Object3D, PropertyBinding } from 'three';
 
 import { FBXLoader, GLTFLoader } from 'three-stdlib';
 import { suspend } from 'suspend-react';
@@ -71,6 +71,102 @@ export const loadAnimationClip = async (source: Blob | string): Promise<Animatio
   const animation = source instanceof Blob ? await loadBlobFile(source) : await loadPathFile(source);
 
   return animation.isFbx ? normaliseFbxAnimation(animation.group) : animation.group.animations[0];
+};
+
+const IDLE_ANIMATION_NAME = 'idle';
+
+export const playAssetIdleAnimation = (
+  root: Object3D,
+  animations: Array<AnimationClip>
+): Array<AnimationMixer> | null => {
+  if (!root || !animations.length) {
+    return null;
+  }
+
+  const idleAnimations = animations.filter((animation) => animation.name === IDLE_ANIMATION_NAME);
+
+  if (!idleAnimations.length) {
+    return null;
+  }
+
+  const assetMixers: Array<AnimationMixer> = [];
+
+  // eslint-disable-next-line no-restricted-syntax
+  for (const idleAnimation of idleAnimations) {
+    if (!idleAnimation.tracks.length) {
+      return null;
+    }
+
+    const defaultIdleAnimationTrack = idleAnimation.tracks[0];
+    const encodedPropertyPath = defaultIdleAnimationTrack.name;
+
+    const animatedMaterial = PropertyBinding.findNode(root, encodedPropertyPath);
+
+    if (!animatedMaterial) {
+      return null;
+    }
+    const targetMeshes: Array<Mesh> = [];
+
+    root.traverse((object) => {
+      const mesh = object as Mesh;
+
+      if (mesh.isMesh && mesh.material === animatedMaterial) {
+        targetMeshes.push(mesh);
+      }
+    });
+
+    if (!targetMeshes.length) {
+      return null;
+    }
+    const animatedMesh = targetMeshes[0];
+
+    const assetMixer = new AnimationMixer(animatedMesh);
+    const defaultIdleAction = assetMixer.clipAction(idleAnimation);
+
+    // @ts-expect-error property binding exists
+    // eslint-disable-next-line no-underscore-dangle
+    const propertyMixers = defaultIdleAction._propertyBindings as unknown as Array<PropertyMixer>;
+    if (!propertyMixers.length) {
+      return null;
+    }
+
+    const defaultPropertyMixer = propertyMixers[0];
+    defaultPropertyMixer.binding.node = defaultPropertyMixer.binding.rootNode;
+
+    defaultIdleAction.setLoop(LoopRepeat, Infinity);
+    defaultIdleAction.play();
+
+    assetMixers.push(assetMixer);
+  }
+
+  return assetMixers;
+};
+
+export const updateAssetAnimations = (mixers: Array<AnimationMixer> | null, delta: number): boolean => {
+  if (!mixers) {
+    return false;
+  }
+
+  // eslint-disable-next-line no-restricted-syntax
+  for (const mixer of mixers) {
+    mixer.update(delta);
+  }
+
+  return true;
+};
+
+export const disposeAssetAnimations = (mixers: Array<AnimationMixer> | null, root: Object3D): boolean => {
+  if (!mixers || !root) {
+    return false;
+  }
+
+  // eslint-disable-next-line no-restricted-syntax
+  for (const mixer of mixers) {
+    mixer.stopAllAction();
+    mixer.uncacheRoot(root);
+  }
+
+  return true;
 };
 
 export const useAnimations = (animations: AnimationsT) =>
