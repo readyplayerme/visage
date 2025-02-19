@@ -1,4 +1,4 @@
-import { AnimationClip, AnimationMixer, Group, LoopRepeat, Mesh, Object3D, PropertyBinding } from 'three';
+import { AnimationAction, AnimationClip, AnimationMixer, Group, LoopRepeat, Mesh, Object3D, PropertyBinding } from 'three';
 
 import { FBXLoader, GLTFLoader } from 'three-stdlib';
 import { suspend } from 'suspend-react';
@@ -100,43 +100,55 @@ export const playAssetIdleAnimation = (
     const defaultIdleAnimationTrack = idleAnimation.tracks[0];
     const encodedPropertyPath = defaultIdleAnimationTrack.name;
 
-    const animatedMaterial = PropertyBinding.findNode(root, encodedPropertyPath);
+    const isMorphTargetAnimation = encodedPropertyPath.endsWith("morphTargetInfluences");
 
-    if (!animatedMaterial) {
-      return null;
-    }
-    const targetMeshes: Array<Mesh> = [];
+    let assetMixer: AnimationMixer | null = null;
+    let defaultIdleAction: AnimationAction | null = null;
+    if (isMorphTargetAnimation) {
+        assetMixer = new AnimationMixer(root);
+        defaultIdleAction = assetMixer.clipAction(idleAnimation);
+    } else {
+      const targetNode = PropertyBinding.findNode(root, encodedPropertyPath);
 
-    root.traverse((object) => {
-      const mesh = object as Mesh;
-
-      if (mesh.isMesh && mesh.material === animatedMaterial) {
-        targetMeshes.push(mesh);
+      if (!targetNode) {
+        return null;
       }
-    });
-
-    if (!targetMeshes.length) {
-      return null;
+  
+      const targetMeshes: Array<Mesh> = [];
+  
+      root.traverse((object) => {
+        const mesh = object as Mesh;
+  
+        if (mesh.isMesh && mesh.material === targetNode) {
+          targetMeshes.push(mesh);
+        }
+      });
+  
+      if (!targetMeshes.length) {
+        return null;
+      }
+      const animatedMesh = targetMeshes[0];
+  
+      assetMixer = new AnimationMixer(animatedMesh);
+      defaultIdleAction = assetMixer.clipAction(idleAnimation);
+  
+      // @ts-expect-error property binding exists
+      // eslint-disable-next-line no-underscore-dangle
+      const propertyMixers = defaultIdleAction._propertyBindings as unknown as Array<PropertyMixer>;
+      if (!propertyMixers.length) {
+        return null;
+      }
+  
+      const defaultPropertyMixer = propertyMixers[0];
+      defaultPropertyMixer.binding.node = defaultPropertyMixer.binding.rootNode;
     }
-    const animatedMesh = targetMeshes[0];
 
-    const assetMixer = new AnimationMixer(animatedMesh);
-    const defaultIdleAction = assetMixer.clipAction(idleAnimation);
+    if(defaultIdleAction && assetMixer) {
+      defaultIdleAction.setLoop(LoopRepeat, Infinity);
+      defaultIdleAction.play();
 
-    // @ts-expect-error property binding exists
-    // eslint-disable-next-line no-underscore-dangle
-    const propertyMixers = defaultIdleAction._propertyBindings as unknown as Array<PropertyMixer>;
-    if (!propertyMixers.length) {
-      return null;
-    }
-
-    const defaultPropertyMixer = propertyMixers[0];
-    defaultPropertyMixer.binding.node = defaultPropertyMixer.binding.rootNode;
-
-    defaultIdleAction.setLoop(LoopRepeat, Infinity);
-    defaultIdleAction.play();
-
-    assetMixers.push(assetMixer);
+      assetMixers.push(assetMixer);
+    }    
   }
 
   return assetMixers;
