@@ -6,14 +6,12 @@ import { EnvironmentModel } from 'src/components/Models';
 
 import { SettingsPanel } from './SettingsPanel';
 
-// https://models.readyplayer.me/64d61e9e17883fd73ebe5eb7.glb?morphTargets=ARKit,Eyes Extra&textureAtlas=none&lod=0
-
 export const AvatarDevelop: React.FC = () => (
   <>
     <SettingsPanel />
 
     <Avatar
-      modelSrc="neutral-animated-shib.glb"
+      modelSrc="https://models.readyplayer.me/64d61e9e17883fd73ebe5eb7.glb?morphTargets=ARKit,Eyes Extra&textureAtlas=none&lod=0"
       shadows
       animationSrc="/male-idle-2.fbx"
       style={{ background: 'rgb(9,20,26)' }}
