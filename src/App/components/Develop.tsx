@@ -13,7 +13,7 @@ export const AvatarDevelop: React.FC = () => (
     <SettingsPanel />
 
     <Avatar
-      modelSrc="neutral-animated-asset.glb"
+      modelSrc="neutral-animated-mask-two.glb"
       shadows
       animationSrc="/male-idle-2.fbx"
       style={{ background: 'rgb(9,20,26)' }}

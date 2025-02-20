@@ -1,4 +1,4 @@
-import { AnimationAction, AnimationClip, AnimationMixer, Group, LoopRepeat, Mesh, Object3D, PropertyBinding } from 'three';
+import { AnimationClip, AnimationMixer, Group, LoopRepeat, Mesh, Object3D, PropertyBinding } from 'three';
 
 import { FBXLoader, GLTFLoader } from 'three-stdlib';
 import { suspend } from 'suspend-react';
@@ -75,6 +75,68 @@ export const loadAnimationClip = async (source: Blob | string): Promise<Animatio
 
 const IDLE_ANIMATION_NAME = 'idle';
 
+const playMorphTargetAnimation = (
+  root: Object3D,
+  animationClip: AnimationClip
+): AnimationMixer | null => {
+  if (!root || !animationClip) {
+    return null;
+  }
+
+  const assetMixer = new AnimationMixer(root);
+  const animationAction = assetMixer.clipAction(animationClip);
+
+  animationAction.setLoop(LoopRepeat, Infinity);
+  animationAction.play();
+
+  return assetMixer;
+}
+
+const playMapUvOffsetAnimation = (
+  root: Object3D,
+  animationClip: AnimationClip,
+  encodedPropertyPath: string
+): AnimationMixer | null => {
+  const targetNode = PropertyBinding.findNode(root, encodedPropertyPath);
+
+  if (!targetNode) {
+    return null;
+  }
+
+  const targetMeshes: Array<Mesh> = [];
+
+  root.traverse((object) => {
+    const mesh = object as Mesh;
+
+    if (mesh.isMesh && mesh.material === targetNode) {
+      targetMeshes.push(mesh);
+    }
+  });
+
+  if (!targetMeshes.length) {
+    return null;
+  }
+  const animatedMesh = targetMeshes[0];
+
+  const assetMixer = new AnimationMixer(animatedMesh);
+  const defaultIdleAction = assetMixer.clipAction(animationClip);
+
+  // @ts-expect-error property binding exists
+  // eslint-disable-next-line no-underscore-dangle
+  const propertyMixers = defaultIdleAction._propertyBindings as unknown as Array<PropertyMixer>;
+  if (!propertyMixers.length) {
+    return null;
+  }
+
+  const defaultPropertyMixer = propertyMixers[0];
+  defaultPropertyMixer.binding.node = defaultPropertyMixer.binding.rootNode;
+
+  defaultIdleAction.setLoop(LoopRepeat, Infinity);
+  defaultIdleAction.play();
+
+  return assetMixer;
+}
+
 export const playAssetIdleAnimation = (
   root: Object3D,
   animations: Array<AnimationClip>
@@ -100,55 +162,23 @@ export const playAssetIdleAnimation = (
     const defaultIdleAnimationTrack = idleAnimation.tracks[0];
     const encodedPropertyPath = defaultIdleAnimationTrack.name;
 
-    const isMorphTargetAnimation = encodedPropertyPath.endsWith("morphTargetInfluences");
-
     let assetMixer: AnimationMixer | null = null;
-    let defaultIdleAction: AnimationAction | null = null;
-    if (isMorphTargetAnimation) {
-        assetMixer = new AnimationMixer(root);
-        defaultIdleAction = assetMixer.clipAction(idleAnimation);
-    } else {
-      const targetNode = PropertyBinding.findNode(root, encodedPropertyPath);
 
-      if (!targetNode) {
-        return null;
-      }
-  
-      const targetMeshes: Array<Mesh> = [];
-  
-      root.traverse((object) => {
-        const mesh = object as Mesh;
-  
-        if (mesh.isMesh && mesh.material === targetNode) {
-          targetMeshes.push(mesh);
-        }
-      });
-  
-      if (!targetMeshes.length) {
-        return null;
-      }
-      const animatedMesh = targetMeshes[0];
-  
-      assetMixer = new AnimationMixer(animatedMesh);
-      defaultIdleAction = assetMixer.clipAction(idleAnimation);
-  
-      // @ts-expect-error property binding exists
-      // eslint-disable-next-line no-underscore-dangle
-      const propertyMixers = defaultIdleAction._propertyBindings as unknown as Array<PropertyMixer>;
-      if (!propertyMixers.length) {
-        return null;
-      }
-  
-      const defaultPropertyMixer = propertyMixers[0];
-      defaultPropertyMixer.binding.node = defaultPropertyMixer.binding.rootNode;
+    const MORPH_TARGET_PROPERTY_SUFFIX = "morphTargetInfluences";
+    const isMorphTargetAnimation = encodedPropertyPath.endsWith(MORPH_TARGET_PROPERTY_SUFFIX);
+    if (isMorphTargetAnimation) {
+      assetMixer = playMorphTargetAnimation(root, idleAnimation);
     }
 
-    if(defaultIdleAction && assetMixer) {
-      defaultIdleAction.setLoop(LoopRepeat, Infinity);
-      defaultIdleAction.play();
-
+    const MAP_UV_OFFSET_PROPERTY_SUFFIX = "map.offset";
+    const isMapUvOffsetAnimation = encodedPropertyPath.endsWith(MAP_UV_OFFSET_PROPERTY_SUFFIX);
+    if (isMapUvOffsetAnimation) {
+      assetMixer = playMapUvOffsetAnimation(root, idleAnimation, encodedPropertyPath);
+    }
+    
+    if(assetMixer) {
       assetMixers.push(assetMixer);
-    }    
+    }
   }
 
   return assetMixers;
