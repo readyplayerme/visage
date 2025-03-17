@@ -1,6 +1,7 @@
 import React, { Suspense, FC, useMemo, CSSProperties, ReactNode, useEffect } from 'react';
 import { AnimationAction, Vector3 } from 'three';
 import { ContactShadows } from '@react-three/drei';
+import { AnimatedCamera } from 'src/components/Scene/AnimatedCamera.component';
 import { CameraControls } from 'src/components/Scene/CameraControls.component';
 import { Environment } from 'src/components/Scene/Environment.component';
 import {
@@ -167,6 +168,7 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
    * Control properties of the BaseCanvas.
    */
   canvasConfig?: CanvasConfiguration;
+  animatedCamera?: boolean;
 }
 
 /**
@@ -184,6 +186,7 @@ const Avatar: FC<AvatarProps> = ({
   halfBody = false,
   shadows = false,
   scale = 1,
+  animatedCamera,
   cameraTarget = CAMERA.TARGET.FULL_BODY.MALE,
   cameraInitialDistance = CAMERA.INITIAL_DISTANCE.FULL_BODY,
   style,
@@ -345,14 +348,18 @@ const Avatar: FC<AvatarProps> = ({
       canvasConfig={canvasConfig}
     >
       <Environment environment={environment} enablePostProcessing={enablePostProcessing} />
-      <CameraControls
-        cameraTarget={cameraTarget}
-        cameraInitialDistance={cameraInitialDistance}
-        cameraZoomTarget={cameraZoomTarget}
-        controlsMinDistance={cameraControlsMinDistance}
-        controlsMaxDistance={cameraControlsMaxDistance}
-        updateCameraTargetOnZoom={!halfBody}
-      />
+      {animatedCamera ? (
+        <AnimatedCamera animationGlbPath={animations?.[activeAnimation || '']?.source || ''} />
+      ) : (
+        <CameraControls
+          cameraTarget={cameraTarget}
+          cameraInitialDistance={cameraInitialDistance}
+          cameraZoomTarget={cameraZoomTarget}
+          controlsMinDistance={cameraControlsMinDistance}
+          controlsMaxDistance={cameraControlsMaxDistance}
+          updateCameraTargetOnZoom={!halfBody}
+        />
+      )}
       {AvatarModel}
       {children}
       {shadows && (
