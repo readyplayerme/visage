@@ -4,12 +4,12 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { AnimationMixer, Object3D } from 'three';
 
 type AnimatedCameraProps = {
-  animationGlbPath: string;
+  animatedCameraGlbSrc: string;
 };
 
-export const AnimatedCamera: FC<AnimatedCameraProps> = ({ animationGlbPath }) => {
+export const AnimatedCamera: FC<AnimatedCameraProps> = ({ animatedCameraGlbSrc }) => {
   const { camera } = useThree();
-  const { scene, animations } = useGLTF(animationGlbPath);
+  const { scene, animations } = useGLTF(animatedCameraGlbSrc);
   const mixerRef = useRef<AnimationMixer | null>(null);
 
   useEffect(() => {
