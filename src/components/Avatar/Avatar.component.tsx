@@ -168,7 +168,7 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
    * Control properties of the BaseCanvas.
    */
   canvasConfig?: CanvasConfiguration;
-  animatedCameraGlbSrc?: string;
+  animatedCameraSrc?: string;
 }
 
 /**
@@ -186,7 +186,7 @@ const Avatar: FC<AvatarProps> = ({
   halfBody = false,
   shadows = false,
   scale = 1,
-  animatedCameraGlbSrc,
+  animatedCameraSrc,
   cameraTarget = CAMERA.TARGET.FULL_BODY.MALE,
   cameraInitialDistance = CAMERA.INITIAL_DISTANCE.FULL_BODY,
   style,
@@ -348,8 +348,8 @@ const Avatar: FC<AvatarProps> = ({
       canvasConfig={canvasConfig}
     >
       <Environment environment={environment} enablePostProcessing={enablePostProcessing} />
-      {animatedCameraGlbSrc ? (
-        <AnimatedCamera animatedCameraGlbSrc={animatedCameraGlbSrc} />
+      {animatedCameraSrc ? (
+        <AnimatedCamera animatedCameraSrc={animatedCameraSrc} />
       ) : (
         <CameraControls
           cameraTarget={cameraTarget}
