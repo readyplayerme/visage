@@ -2,12 +2,13 @@ import React, { FC, useEffect, useMemo, useRef } from 'react';
 import { AnimationMixer, Group, LoopRepeat } from 'three';
 import { useFrame, useGraph } from '@react-three/fiber';
 import { triggerCallback, useGltfLoader } from '../../../services';
-import { loadAnimationClip } from '../../../services/Animation.service';
+import { loadAnimationClips } from '../../../services/Animation.service';
 
 interface SpawnEffectProps {
   onLoadedEffectFinish: () => void;
   onLoadedEffect: { src: string; animationSrc?: string; loop?: number };
 }
+
 export const SpawnEffect: FC<SpawnEffectProps> = ({ onLoadedEffect, onLoadedEffectFinish }) => {
   const ref = useRef<Group>(null);
 
@@ -22,10 +23,11 @@ export const SpawnEffect: FC<SpawnEffectProps> = ({ onLoadedEffect, onLoadedEffe
     }
   }, [onLoadedEffectFinish, effectRunning]);
 
-  const animationLoadedEffect = useMemo(
-    async () => loadAnimationClip(onLoadedEffect?.animationSrc || onLoadedEffect.src),
-    [onLoadedEffect?.animationSrc, onLoadedEffect.src]
-  );
+  const animationLoadedEffect = useMemo(async () => {
+    const effect = await loadAnimationClips(onLoadedEffect?.animationSrc || onLoadedEffect.src);
+
+    return effect[0];
+  }, [onLoadedEffect?.animationSrc, onLoadedEffect.src]);
 
   const spawnEffectMixer = useMemo(async () => {
     const mixer = new AnimationMixer(mountEffectNode.Scene);

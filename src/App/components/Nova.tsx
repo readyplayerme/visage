@@ -5,6 +5,7 @@ import { Avatar, CAMERA } from 'src/components/Avatar';
 // import { emotions } from 'src/services/Stories.service';
 // import { Vector3 } from 'three';
 import { SettingsPanel } from './SettingsPanel';
+import { AnimationsT } from '../../types';
 
 // const getAnimation = (name: string) => `https://readyplayerme-assets.s3.amazonaws.com/animations/${name}.glb`;
 // const getAnimationNexus = (name: string) =>
@@ -16,20 +17,22 @@ const modelSrc = 'https://avatars.readyplayer.dev/675aa4ded65bc4b9fbc4808a.glb';
 type AnimationKeys = 'idle' | 'land';
 
 export const AvatarNova: FC = () => {
-  const animations = useMemo(
+  const animations: AnimationsT = useMemo(
     () => ({
       idle: {
-        source: '/take_002_iddle_out.glb'
+        source: '/take2-idle.glb',
+        key: 'Armature'
       },
       land: {
-        source: '/take_002.glb',
+        source: '/take2.glb',
+        key: 'Armature',
         repeat: 1
       }
     }),
     []
   );
 
-  const [activeAnimation, setActiveAnimation] = useState<AnimationKeys>('idle');
+  const [activeAnimation, setActiveAnimation] = useState<AnimationKeys>('land');
 
   return (
     <div style={{ width: '100%', height: '100%', background: '#444' }}>
@@ -49,6 +52,7 @@ export const AvatarNova: FC = () => {
         activeAnimation={activeAnimation}
         shadows
         animatedCameraSrc={activeAnimation === 'land' ? animations[activeAnimation].source : undefined}
+        // animatedCameraSrc={animations[activeAnimation].source}
         onAnimationEnd={() => setActiveAnimation('idle')}
         fov={45}
         cameraInitialDistance={CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE}

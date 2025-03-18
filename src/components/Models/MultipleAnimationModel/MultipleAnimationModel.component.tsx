@@ -75,7 +75,7 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
     const animationConfig = animations[activeAnimation];
 
     if (!newClip || !mixer || !animationConfig) return;
-    if (prevAction && prevAction.getClip().name === newClip.name) return;
+    if (prevAction && prevAction.getClip().uuid === newClip.uuid) return;
 
     const newAction = mixer.clipAction(newClip);
     const loopCount = animationConfig.repeat ?? Infinity;
