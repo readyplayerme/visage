@@ -75,10 +75,7 @@ export const loadAnimationClip = async (source: Blob | string): Promise<Animatio
 
 const IDLE_ANIMATION_NAME = 'idle';
 
-const playMorphTargetAnimation = (
-  root: Object3D,
-  animationClip: AnimationClip
-): AnimationMixer | null => {
+const playMorphTargetAnimation = (root: Object3D, animationClip: AnimationClip): AnimationMixer | null => {
   if (!root || !animationClip) {
     return null;
   }
@@ -90,7 +87,7 @@ const playMorphTargetAnimation = (
   animationAction.play();
 
   return assetMixer;
-}
+};
 
 const playMapUvOffsetAnimation = (
   root: Object3D,
@@ -135,7 +132,7 @@ const playMapUvOffsetAnimation = (
   defaultIdleAction.play();
 
   return assetMixer;
-}
+};
 
 export const playAssetIdleAnimation = (
   root: Object3D,
@@ -164,19 +161,19 @@ export const playAssetIdleAnimation = (
 
     let assetMixer: AnimationMixer | null = null;
 
-    const MORPH_TARGET_PROPERTY_SUFFIX = "morphTargetInfluences";
+    const MORPH_TARGET_PROPERTY_SUFFIX = 'morphTargetInfluences';
     const isMorphTargetAnimation = encodedPropertyPath.endsWith(MORPH_TARGET_PROPERTY_SUFFIX);
     if (isMorphTargetAnimation) {
       assetMixer = playMorphTargetAnimation(root, idleAnimation);
     }
 
-    const MAP_UV_OFFSET_PROPERTY_SUFFIX = "map.offset";
+    const MAP_UV_OFFSET_PROPERTY_SUFFIX = 'map.offset';
     const isMapUvOffsetAnimation = encodedPropertyPath.endsWith(MAP_UV_OFFSET_PROPERTY_SUFFIX);
     if (isMapUvOffsetAnimation) {
       assetMixer = playMapUvOffsetAnimation(root, idleAnimation, encodedPropertyPath);
     }
-    
-    if(assetMixer) {
+
+    if (assetMixer) {
       assetMixers.push(assetMixer);
     }
   }
@@ -218,7 +215,11 @@ export const useAnimations = (animations: AnimationsT) =>
     await Promise.all(
       Object.keys(animations).map(async (name) => {
         const newClip = await loadAnimationClip(animations[name].source);
-        newClip.name = name;
+
+        if (newClip?.name) {
+          newClip.name = name;
+        }
+
         clips[name] = newClip;
       })
     );
