@@ -2,16 +2,10 @@ import React, { useMemo, useState, FC } from 'react';
 import { StatsGl } from '@react-three/drei';
 
 import { Avatar, CAMERA } from 'src/components/Avatar';
-// import { emotions } from 'src/services/Stories.service';
-// import { Vector3 } from 'three';
+import { AnimationsT } from 'src/types';
+import { getAnimation } from 'src/services/Animation.service';
 import { SettingsPanel } from './SettingsPanel';
-import { AnimationsT } from '../../types';
 
-// const getAnimation = (name: string) => `https://readyplayerme-assets.s3.amazonaws.com/animations/${name}.glb`;
-// const getAnimationNexus = (name: string) =>
-//   `https://readyplayerme-assets.s3.amazonaws.com/nexus/animations/${name}.glb`;
-// const LIGHT_INTENSITY = 50.0;
-// const CAMERA_DISTANCE = 0.05;
 const modelSrc = 'https://avatars.readyplayer.dev/675aa4ded65bc4b9fbc4808a.glb';
 
 type AnimationKeys = 'idle' | 'land';
@@ -20,11 +14,11 @@ export const AvatarNova: FC = () => {
   const animations: AnimationsT = useMemo(
     () => ({
       idle: {
-        source: '/take2-idle.glb',
+        source: getAnimation('take2-idle.glb'),
         key: 'Armature'
       },
       land: {
-        source: '/take2.glb',
+        source: getAnimation('take2.glb'),
         key: 'Armature',
         repeat: 1
       }
@@ -47,12 +41,10 @@ export const AvatarNova: FC = () => {
         controlsMinDistance={CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE}
         controlsMaxDistance={CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE}
         modelSrc={modelSrc}
-        // emotion={emotions.smile}
         animations={animations}
         activeAnimation={activeAnimation}
         shadows
         animatedCameraSrc={activeAnimation === 'land' ? animations[activeAnimation].source : undefined}
-        // animatedCameraSrc={animations[activeAnimation].source}
         onAnimationEnd={() => setActiveAnimation('idle')}
         fov={45}
         cameraInitialDistance={CAMERA.CONTROLS.FULL_BODY.MAX_DISTANCE}

@@ -229,3 +229,5 @@ export const useAnimations = (animations: AnimationsT) =>
 
     return clips;
   }, [animations]);
+
+export const getAnimation = (name: string) => `https://readyplayerme-assets.s3.amazonaws.com/animations/visage/${name}`;
