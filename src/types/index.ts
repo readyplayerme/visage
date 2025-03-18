@@ -198,6 +198,7 @@ export type MaterialConfiguration = {
 export type AnimationsT = Record<
   string,
   {
+    key?: string;
     source: string;
     repeat?: number;
     fadeTime?: number;

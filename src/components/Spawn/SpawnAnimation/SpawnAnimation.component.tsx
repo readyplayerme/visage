@@ -2,7 +2,7 @@ import { useFrame, useGraph } from '@react-three/fiber';
 import React, { useMemo, useEffect, FC } from 'react';
 import { AnimationMixer, Group, LoopRepeat } from 'three';
 import { triggerCallback } from '../../../services';
-import { loadAnimationClip } from '../../../services/Animation.service';
+import { loadAnimationClips } from '../../../services/Animation.service';
 
 interface SpawnAnimationProps {
   avatar: Group;
@@ -24,7 +24,10 @@ export const SpawnAnimation: FC<SpawnAnimationProps> = ({ avatar, onLoadedAnimat
 
   const { nodes: avatarNode } = useGraph(avatar);
 
-  const animationClip = useMemo(async () => loadAnimationClip(onLoadedAnimation?.src || ''), [onLoadedAnimation?.src]);
+  const animationClip = useMemo(async () => {
+    const clips = await loadAnimationClips(onLoadedAnimation?.src || '');
+    return clips[0];
+  }, [onLoadedAnimation?.src]);
 
   const animationMixerAvatar = useMemo(async () => {
     const mixer = new AnimationMixer(avatarNode.Armature);

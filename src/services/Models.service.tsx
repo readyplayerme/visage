@@ -23,6 +23,7 @@ import { Emotion } from 'src/components/Avatar/Avatar.component';
 import { BloomConfiguration, MaterialConfiguration } from 'src/types';
 import { MeshoptDecoder } from './meshopt_decoder';
 import { GLTFAnimationPointerExtension } from './GLTFLoaderAnimationPointer';
+import { getAnimation } from './Animation.service';
 
 export interface CustomNode extends Object3D {
   geometry: BufferGeometry;
@@ -38,8 +39,7 @@ export interface Nodes {
 
 type Source = string | string[] | Blob | undefined | null;
 
-export const getStoryAssetPath = (publicAsset: string) =>
-  `${process.env.NODE_ENV === 'production' ? '/visage' : ''}/${publicAsset}`;
+export const getStoryAssetPath = (publicAsset: string) => getAnimation(publicAsset);
 
 const validateSource = (source: Source): boolean => {
   if (Array.isArray(source)) {

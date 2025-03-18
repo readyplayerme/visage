@@ -7,7 +7,7 @@ import { useHeadMovement, useGltfLoader, useFallback, useIdleExpression, useEmot
 import { BaseModelProps } from 'src/types';
 import {
   disposeAssetAnimations,
-  loadAnimationClip,
+  loadAnimationClips,
   playAssetIdleAnimation,
   updateAssetAnimations
 } from 'src/services/Animation.service';
@@ -59,7 +59,10 @@ export const AnimationModel: FC<AnimationModelProps> = ({
     };
   }, [scene]);
 
-  const animationClip = useMemo(async () => loadAnimationClip(animationSrc), [animationSrc]);
+  const animationClip = useMemo(async () => {
+    const clip = await loadAnimationClips(animationSrc);
+    return clip[0];
+  }, [animationSrc]);
 
   const animationMixer = useMemo(async () => {
     const mixer = new AnimationMixer(nodes.Armature);

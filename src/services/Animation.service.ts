@@ -18,24 +18,26 @@ const fbxLoader = new FBXLoader();
 const gltfLoader = new GLTFLoader();
 gltfLoader.setMeshoptDecoder(MeshoptDecoder);
 
-function normaliseFbxAnimation(fbx: Group, index: number = 0) {
-  const { tracks } = fbx.animations[index];
+function normaliseFbxAnimations(fbx: Group) {
+  for (let a = 0; a < fbx.animations.length; a += 1) {
+    const { tracks } = fbx.animations[a];
 
-  for (let i = 0; i < tracks.length; i += 1) {
-    const hasMixamoPrefix = tracks[i].name.includes(MIXAMO_PREFIX);
-    if (hasMixamoPrefix) {
-      tracks[i].name = tracks[i].name.replace(MIXAMO_PREFIX, '');
-    }
-    if (tracks[i].name.includes(POSITION_SUFFIX)) {
-      for (let j = 0; j < tracks[i].values.length; j += 1) {
-        // Scale the bound size down to match the size of the model
-        // eslint-disable-next-line operator-assignment
-        tracks[i].values[j] = tracks[i].values[j] * MIXAMO_SCALE;
+    for (let i = 0; i < tracks.length; i += 1) {
+      const hasMixamoPrefix = tracks[i].name.includes(MIXAMO_PREFIX);
+      if (hasMixamoPrefix) {
+        tracks[i].name = tracks[i].name.replace(MIXAMO_PREFIX, '');
+      }
+      if (tracks[i].name.includes(POSITION_SUFFIX)) {
+        for (let j = 0; j < tracks[i].values.length; j += 1) {
+          // Scale the bound size down to match the size of the model
+          // eslint-disable-next-line operator-assignment
+          tracks[i].values[j] = tracks[i].values[j] * MIXAMO_SCALE;
+        }
       }
     }
   }
 
-  return fbx.animations[index];
+  return fbx.animations;
 }
 
 const loadBlobFile = async (blob: Blob): Promise<ClipWithType> => {
@@ -67,18 +69,15 @@ const loadPathFile = async (source: string): Promise<ClipWithType> => {
   }
 };
 
-export const loadAnimationClip = async (source: Blob | string): Promise<AnimationClip> => {
+export const loadAnimationClips = async (source: Blob | string): Promise<AnimationClip[]> => {
   const animation = source instanceof Blob ? await loadBlobFile(source) : await loadPathFile(source);
 
-  return animation.isFbx ? normaliseFbxAnimation(animation.group) : animation.group.animations[0];
+  return animation.isFbx ? normaliseFbxAnimations(animation.group) : animation.group.animations;
 };
 
 const IDLE_ANIMATION_NAME = 'idle';
 
-const playMorphTargetAnimation = (
-  root: Object3D,
-  animationClip: AnimationClip
-): AnimationMixer | null => {
+const playMorphTargetAnimation = (root: Object3D, animationClip: AnimationClip): AnimationMixer | null => {
   if (!root || !animationClip) {
     return null;
   }
@@ -90,7 +89,7 @@ const playMorphTargetAnimation = (
   animationAction.play();
 
   return assetMixer;
-}
+};
 
 const playMapUvOffsetAnimation = (
   root: Object3D,
@@ -135,7 +134,7 @@ const playMapUvOffsetAnimation = (
   defaultIdleAction.play();
 
   return assetMixer;
-}
+};
 
 export const playAssetIdleAnimation = (
   root: Object3D,
@@ -164,19 +163,19 @@ export const playAssetIdleAnimation = (
 
     let assetMixer: AnimationMixer | null = null;
 
-    const MORPH_TARGET_PROPERTY_SUFFIX = "morphTargetInfluences";
+    const MORPH_TARGET_PROPERTY_SUFFIX = 'morphTargetInfluences';
     const isMorphTargetAnimation = encodedPropertyPath.endsWith(MORPH_TARGET_PROPERTY_SUFFIX);
     if (isMorphTargetAnimation) {
       assetMixer = playMorphTargetAnimation(root, idleAnimation);
     }
 
-    const MAP_UV_OFFSET_PROPERTY_SUFFIX = "map.offset";
+    const MAP_UV_OFFSET_PROPERTY_SUFFIX = 'map.offset';
     const isMapUvOffsetAnimation = encodedPropertyPath.endsWith(MAP_UV_OFFSET_PROPERTY_SUFFIX);
     if (isMapUvOffsetAnimation) {
       assetMixer = playMapUvOffsetAnimation(root, idleAnimation, encodedPropertyPath);
     }
-    
-    if(assetMixer) {
+
+    if (assetMixer) {
       assetMixers.push(assetMixer);
     }
   }
@@ -216,12 +215,19 @@ export const useAnimations = (animations: AnimationsT) =>
     const clips: Record<string, AnimationClip> = {};
 
     await Promise.all(
-      Object.keys(animations).map(async (name) => {
-        const newClip = await loadAnimationClip(animations[name].source);
-        newClip.name = name;
-        clips[name] = newClip;
+      Object.entries(animations).map(async ([name, { key }]) => {
+        const newClips = await loadAnimationClips(animations[name].source);
+        const newClip = key ? newClips.find((item) => item?.name === key) || newClips[0] : newClips[0];
+
+        if (newClip) {
+          clips[name] = newClip;
+        } else {
+          console.warn(`Could not load animation ${name}`);
+        }
       })
     );
 
     return clips;
   }, [animations]);
+
+export const getAnimation = (name: string) => `https://readyplayerme-assets.s3.amazonaws.com/animations/visage/${name}`;
