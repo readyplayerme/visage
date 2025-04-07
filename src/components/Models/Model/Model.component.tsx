@@ -11,9 +11,12 @@ interface ModelProps extends BaseModelProps {
   modelRef?: Ref<Group>;
   scale?: number;
   onSpawnAnimationFinish?: () => void;
+  lockHorizontal?: boolean;
+  lockVertical?: boolean;
 }
 
-const ROTATION_STEP = 0.005;
+const HORIZONTAL_ROTATION_STEP = 0.005;
+const VERTICAL_ROTATION_STEP = 0.0005;
 
 export const Model: FC<ModelProps> = ({
   scene,
@@ -22,7 +25,9 @@ export const Model: FC<ModelProps> = ({
   onLoaded,
   onSpawnAnimationFinish,
   bloom,
-  materialConfig
+  materialConfig,
+  lockHorizontal,
+  lockVertical
 }) => {
   const { gl } = useThree();
   const [isTouching, setIsTouching] = useState(false);
@@ -44,20 +49,35 @@ export const Model: FC<ModelProps> = ({
 
   const onTouchMove = useCallback(
     (event: MouseEvent | TouchEvent) => {
-      if (isTouching && event instanceof MouseEvent) {
-        /* eslint-disable-next-line no-param-reassign */
-        scene.rotation.y += event.movementX * ROTATION_STEP;
+      if (!isTouching) return;
+
+      let deltaX = 0;
+      let deltaY = 0;
+
+      if (event instanceof MouseEvent) {
+        deltaX = event.movementX;
+        deltaY = event.movementY;
       }
 
-      if (hasWindow && isTouching && window.TouchEvent && event instanceof TouchEvent) {
-        /* eslint-disable-next-line no-param-reassign */
-        const movementX = Math.round(event.touches[0].pageX - touchEvent!.touches[0].pageX);
-        /* eslint-disable-next-line no-param-reassign */
-        scene.rotation.y += movementX * ROTATION_STEP;
+      if (hasWindow && window.TouchEvent && event instanceof TouchEvent && touchEvent) {
+        deltaX = event.touches[0].pageX - touchEvent.touches[0].pageX;
+        deltaY = event.touches[0].pageY - touchEvent.touches[0].pageY;
         setTouchEvent(event);
       }
+
+      if (!lockHorizontal) {
+        // eslint-disable-next-line no-param-reassign
+        scene.rotation.y += deltaX * HORIZONTAL_ROTATION_STEP;
+      }
+
+      if (!lockVertical) {
+        // eslint-disable-next-line no-param-reassign
+        scene.rotation.x += deltaY * VERTICAL_ROTATION_STEP;
+        // eslint-disable-next-line no-param-reassign
+        scene.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, scene.rotation.x));
+      }
     },
-    [isTouching, touchEvent, scene]
+    [isTouching, touchEvent, lockHorizontal, lockVertical, scene]
   );
 
   normaliseMaterialsConfig(scene, bloom, materialConfig);

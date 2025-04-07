@@ -6,6 +6,7 @@ import { AvatarNova } from './components/Nova';
 import { AvatarCapture } from './components/Capture';
 
 import styles from './App.module.scss';
+import { ExhibitPage } from './components/Exhibit';
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
   {
     path: '/capture-canvas',
     element: <AvatarCapture />
+  },
+  {
+    path: '/exhibit',
+    element: <ExhibitPage />
   }
 ]);
 
