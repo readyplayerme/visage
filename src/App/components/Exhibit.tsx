@@ -15,7 +15,7 @@ export const ExhibitPage = () => (
       lockVertical={false}
       lockHorizontal
       horizontalRotation
-      modelSrc="https://readyplayerme-assets.s3.amazonaws.com/animations/visage/headwear.glb"
+      modelSrc="https://files.readyplayer.dev/asset/modelUrl/04013f17-d197-49b8-9e7e-d782976b0b6f/a26d8ce7-5dcc-4d20-847a-6c8a69c5ed1f-1731509028078.glb"
     />
   </div>
 );
