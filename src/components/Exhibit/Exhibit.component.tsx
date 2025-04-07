@@ -1,9 +1,10 @@
 import React, { Suspense, FC, CSSProperties, useMemo, useEffect } from 'react';
-import { PresentationControls, ContactShadows, Bounds } from '@react-three/drei';
+import { ContactShadows, Bounds, PresentationControls } from '@react-three/drei';
 import { Environment } from 'src/components/Scene/Environment.component';
 import { isValidFormat, triggerCallback } from 'src/services';
 import { BaseModelProps, CameraProps, EnvironmentProps } from 'src/types';
 import { FloatingModel } from 'src/components/Models/FloatingModel';
+import { RotatingModel } from 'src/components/Models/RotatingModel';
 import { StaticModel } from 'src/components/Models/StaticModel';
 import { BoundsModel } from 'src/components/Models/BoundsModel';
 import { BaseCanvas } from 'src/components/BaseCanvas';
@@ -51,6 +52,16 @@ export interface ExhibitProps extends CameraProps, EnvironmentProps, Omit<BaseMo
    * Disables vertical rotation.
    */
   lockVertical?: boolean;
+  /**
+   * Disables horizontal rotation.
+   */
+  lockHorizontal?: boolean;
+  /**
+   * Enables idle horizontal rotation
+   */
+  horizontalRotation?: boolean;
+  horizontalRotationStep?: number;
+  verticalRotationStep?: number;
 }
 
 /**
@@ -70,19 +81,45 @@ export const Exhibit: FC<ExhibitProps> = ({
   snap = false,
   lockVertical = false,
   onLoaded,
-  onLoading
+  onLoading,
+  horizontalRotation,
+  lockHorizontal = false,
+  horizontalRotationStep,
+  verticalRotationStep
 }) => {
   const model = useMemo(() => {
     if (!isValidFormat(modelSrc)) {
       return null;
     }
 
-    if (!float) {
-      return <StaticModel modelSrc={modelSrc} scale={scale} />;
+    if (float) {
+      return <FloatingModel modelSrc={modelSrc} scale={scale} />;
     }
 
-    return <FloatingModel modelSrc={modelSrc} scale={scale} />;
-  }, [float, modelSrc, scale]);
+    if (horizontalRotation) {
+      return (
+        <RotatingModel
+          verticalRotationStep={verticalRotationStep}
+          horizontalRotationStep={horizontalRotationStep}
+          modelSrc={modelSrc}
+          scale={scale}
+          lockHorizontal={lockHorizontal}
+          lockVertical={lockVertical}
+        />
+      );
+    }
+
+    return <StaticModel modelSrc={modelSrc} scale={scale} />;
+  }, [
+    float,
+    modelSrc,
+    scale,
+    horizontalRotation,
+    lockHorizontal,
+    lockVertical,
+    verticalRotationStep,
+    horizontalRotationStep
+  ]);
 
   useEffect(() => triggerCallback(onLoading), [modelSrc, onLoading]);
 
@@ -97,7 +134,7 @@ export const Exhibit: FC<ExhibitProps> = ({
           snap={snap}
           rotation={[0, -0.3, 0]}
           polar={lockVertical ? [0, 0] : [-Math.PI / 3, Math.PI / 3]}
-          azimuth={[-Infinity, Infinity]}
+          azimuth={lockHorizontal ? [0, 0] : [-Infinity, Infinity]}
         >
           {model && (
             <Bounds fit={fit} clip={fit} observe={fit}>
