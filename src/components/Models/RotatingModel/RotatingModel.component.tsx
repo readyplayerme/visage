@@ -27,11 +27,11 @@ export const RotatingModel: FC<RotatingModelProps> = ({
   const ref = useRef<Group>(null);
   const { scene } = useGltfLoader(modelSrc);
 
-  useFrame((_, delta) => {
+  useFrame((state) => {
     if (ref?.current) {
       ref.current.position.x = 0;
       ref.current.position.z = 0;
-      ref.current.rotation.y = (ref.current.rotation.y + delta * 0.5) % (Math.PI * 2);
+      ref.current.rotation.y = state.clock.getElapsedTime() * 0.5;
     }
   });
 
