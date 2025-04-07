@@ -1,7 +1,7 @@
-import React, { FC, Ref, useEffect, useState, useCallback, useMemo } from 'react';
-import { Group, Mesh } from 'three';
-import { normaliseMaterialsConfig, triggerCallback, usePersistantRotation } from 'src/services';
+import React, { FC, Ref, useEffect, useState, useCallback, useMemo, useRef } from 'react';
+import { Group, Mesh, Box3, Vector3 } from 'three';
 import { useThree } from '@react-three/fiber';
+import { normaliseMaterialsConfig, triggerCallback, usePersistantRotation } from 'src/services';
 import { hasWindow } from 'src/services/Client.service';
 import { BaseModelProps } from 'src/types';
 import { Spawn } from '../../Spawn/Spawn';
@@ -11,32 +11,42 @@ interface ModelProps extends BaseModelProps {
   modelRef?: Ref<Group>;
   scale?: number;
   onSpawnAnimationFinish?: () => void;
+  lockHorizontal?: boolean;
+  lockVertical?: boolean;
+  horizontalRotationStep?: number;
+  verticalRotationStep?: number;
 }
 
-const ROTATION_STEP = 0.005;
+const HORIZONTAL_ROTATION_STEP = 0.005;
+const VERTICAL_ROTATION_STEP = 0.0005;
 
-export const Model: FC<ModelProps> = ({
+export const CenteredModel: FC<ModelProps> = ({
   scene,
   scale = 1,
   modelRef,
   onLoaded,
   onSpawnAnimationFinish,
   bloom,
-  materialConfig
+  materialConfig,
+  lockHorizontal,
+  lockVertical,
+  horizontalRotationStep = HORIZONTAL_ROTATION_STEP,
+  verticalRotationStep = VERTICAL_ROTATION_STEP
 }) => {
   const { gl } = useThree();
   const [isTouching, setIsTouching] = useState(false);
   const [touchEvent, setTouchEvent] = useState<TouchEvent | null>(null);
+  const centerWrapperRef = useRef<Group>(null);
+
   const setTouchingOn = (e: MouseEvent | TouchEvent) => {
     if (hasWindow && window.TouchEvent && e instanceof TouchEvent) {
-      setTouchEvent(e as TouchEvent);
+      setTouchEvent(e);
     }
     setIsTouching(true);
   };
-  const setTouchingOff = (e: MouseEvent | TouchEvent) => {
-    if (hasWindow && window.TouchEvent && e instanceof TouchEvent) {
-      setTouchEvent(null);
-    }
+
+  const setTouchingOff = () => {
+    setTouchEvent(null);
     setIsTouching(false);
   };
 
@@ -44,20 +54,31 @@ export const Model: FC<ModelProps> = ({
 
   const onTouchMove = useCallback(
     (event: MouseEvent | TouchEvent) => {
-      if (isTouching && event instanceof MouseEvent) {
-        /* eslint-disable-next-line no-param-reassign */
-        scene.rotation.y += event.movementX * ROTATION_STEP;
+      if (!isTouching) return;
+
+      let deltaX = 0;
+      let deltaY = 0;
+
+      if (event instanceof MouseEvent) {
+        deltaX = event.movementX;
+        deltaY = event.movementY;
       }
 
-      if (hasWindow && isTouching && window.TouchEvent && event instanceof TouchEvent) {
-        /* eslint-disable-next-line no-param-reassign */
-        const movementX = Math.round(event.touches[0].pageX - touchEvent!.touches[0].pageX);
-        /* eslint-disable-next-line no-param-reassign */
-        scene.rotation.y += movementX * ROTATION_STEP;
+      if (hasWindow && window.TouchEvent && event instanceof TouchEvent && touchEvent) {
+        deltaX = event.touches[0].pageX - touchEvent.touches[0].pageX;
+        deltaY = event.touches[0].pageY - touchEvent.touches[0].pageY;
         setTouchEvent(event);
       }
+
+      if (!lockHorizontal && centerWrapperRef.current) {
+        centerWrapperRef.current.rotation.y += deltaX * horizontalRotationStep;
+      }
+
+      if (!lockVertical && centerWrapperRef.current) {
+        centerWrapperRef.current.rotation.x += deltaY * verticalRotationStep;
+      }
     },
-    [isTouching, touchEvent, scene]
+    [isTouching, touchEvent, lockHorizontal, lockVertical, verticalRotationStep, horizontalRotationStep]
   );
 
   normaliseMaterialsConfig(scene, bloom, materialConfig);
@@ -70,6 +91,13 @@ export const Model: FC<ModelProps> = ({
       node.receiveShadow = true;
     }
   });
+
+  useEffect(() => {
+    const boundingBox = new Box3().setFromObject(scene);
+    const center = new Vector3();
+    boundingBox.getCenter(center);
+    scene.position.sub(center);
+  }, [scene]);
 
   useEffect(() => triggerCallback(onLoaded), [scene, onLoaded]);
 
@@ -93,7 +121,7 @@ export const Model: FC<ModelProps> = ({
       window.removeEventListener('mousemove', onTouchMove);
       gl.domElement.removeEventListener('touchmove', onTouchMove);
     };
-  });
+  }, [onTouchMove]);
 
   const spawnComponent = useMemo(
     () => <Spawn avatar={scene} onSpawnFinish={onSpawnAnimationFinish} />,
@@ -101,9 +129,11 @@ export const Model: FC<ModelProps> = ({
   );
 
   return (
-    <group ref={modelRef} dispose={null} rotation={[0, 0, 0]}>
-      <primitive object={scene} scale={scale} />
-      {spawnComponent}
+    <group ref={modelRef} dispose={null}>
+      <group ref={centerWrapperRef} rotation={[0, 0, 0]}>
+        <primitive object={scene} scale={scale} />
+        {spawnComponent}
+      </group>
     </group>
   );
 };

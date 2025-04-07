@@ -1,7 +1,7 @@
 import React, { useRef, FC } from 'react';
 import { useFrame } from '@react-three/fiber';
 import type { Group } from 'three';
-import { Model } from 'src/components/Models/Model';
+import { CenteredModel } from 'src/components/Models/CenteredModel';
 import { useGltfLoader } from 'src/services';
 import { BaseModelProps } from 'src/types';
 
@@ -36,7 +36,7 @@ export const RotatingModel: FC<RotatingModelProps> = ({
   });
 
   return (
-    <Model
+    <CenteredModel
       verticalRotationStep={verticalRotationStep}
       horizontalRotationStep={horizontalRotationStep}
       lockHorizontal={lockHorizontal}
