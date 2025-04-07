@@ -13,6 +13,8 @@ interface ModelProps extends BaseModelProps {
   onSpawnAnimationFinish?: () => void;
   lockHorizontal?: boolean;
   lockVertical?: boolean;
+  horizontalRotationStep?: number;
+  verticalRotationStep?: number;
 }
 
 const HORIZONTAL_ROTATION_STEP = 0.005;
@@ -27,7 +29,9 @@ export const Model: FC<ModelProps> = ({
   bloom,
   materialConfig,
   lockHorizontal,
-  lockVertical
+  lockVertical,
+  horizontalRotationStep = HORIZONTAL_ROTATION_STEP,
+  verticalRotationStep = VERTICAL_ROTATION_STEP
 }) => {
   const { gl } = useThree();
   const [isTouching, setIsTouching] = useState(false);
@@ -67,17 +71,15 @@ export const Model: FC<ModelProps> = ({
 
       if (!lockHorizontal) {
         // eslint-disable-next-line no-param-reassign
-        scene.rotation.y += deltaX * HORIZONTAL_ROTATION_STEP;
+        scene.rotation.y += deltaX * horizontalRotationStep;
       }
 
       if (!lockVertical) {
         // eslint-disable-next-line no-param-reassign
-        scene.rotation.x += deltaY * VERTICAL_ROTATION_STEP;
-        // eslint-disable-next-line no-param-reassign
-        scene.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, scene.rotation.x));
+        scene.rotation.x += deltaY * verticalRotationStep;
       }
     },
-    [isTouching, touchEvent, lockHorizontal, lockVertical, scene]
+    [isTouching, touchEvent, lockHorizontal, lockVertical, scene, verticalRotationStep, horizontalRotationStep]
   );
 
   normaliseMaterialsConfig(scene, bloom, materialConfig);

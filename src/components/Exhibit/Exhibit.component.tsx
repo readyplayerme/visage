@@ -60,6 +60,8 @@ export interface ExhibitProps extends CameraProps, EnvironmentProps, Omit<BaseMo
    * Enables idle horizontal rotation
    */
   horizontalRotation?: boolean;
+  horizontalRotationStep?: number;
+  verticalRotationStep?: number;
 }
 
 /**
@@ -81,7 +83,9 @@ export const Exhibit: FC<ExhibitProps> = ({
   onLoaded,
   onLoading,
   horizontalRotation,
-  lockHorizontal = false
+  lockHorizontal = false,
+  horizontalRotationStep,
+  verticalRotationStep
 }) => {
   const model = useMemo(() => {
     if (!isValidFormat(modelSrc)) {
@@ -94,12 +98,28 @@ export const Exhibit: FC<ExhibitProps> = ({
 
     if (horizontalRotation) {
       return (
-        <RotatingModel modelSrc={modelSrc} scale={scale} lockHorizontal={lockHorizontal} lockVertical={lockVertical} />
+        <RotatingModel
+          verticalRotationStep={verticalRotationStep}
+          horizontalRotationStep={horizontalRotationStep}
+          modelSrc={modelSrc}
+          scale={scale}
+          lockHorizontal={lockHorizontal}
+          lockVertical={lockVertical}
+        />
       );
     }
 
     return <StaticModel modelSrc={modelSrc} scale={scale} />;
-  }, [float, modelSrc, scale, horizontalRotation, lockHorizontal, lockVertical]);
+  }, [
+    float,
+    modelSrc,
+    scale,
+    horizontalRotation,
+    lockHorizontal,
+    lockVertical,
+    verticalRotationStep,
+    horizontalRotationStep
+  ]);
 
   useEffect(() => triggerCallback(onLoading), [modelSrc, onLoading]);
 
