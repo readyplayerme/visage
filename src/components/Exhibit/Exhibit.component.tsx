@@ -124,13 +124,6 @@ export const Exhibit: FC<ExhibitProps> = ({
             </Bounds>
           )}
         </PresentationControls>
-        {model && (
-          <Bounds fit={fit} clip={fit} observe={fit}>
-            <BoundsModel modelSrc={modelSrc} fit={fit} onLoaded={onLoaded}>
-              {model}
-            </BoundsModel>
-          </Bounds>
-        )}
         {shadows && <ContactShadows position={[0, -1.0, 0]} opacity={0.75} scale={10} blur={2.6} far={2} />}
         <Environment environment={environment} />
       </Suspense>
