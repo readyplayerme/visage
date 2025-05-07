@@ -1,6 +1,6 @@
-import React, { useRef, FC } from 'react';
+import React, { useRef, FC, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
-import type { Group } from 'three';
+import { AnimationMixer, Group } from 'three';
 import { CenteredModel } from 'src/components/Models/CenteredModel';
 import { useGltfLoader } from 'src/services';
 import { BaseModelProps } from 'src/types';
@@ -25,14 +25,28 @@ export const RotatingModel: FC<RotatingModelProps> = ({
   verticalRotationStep
 }) => {
   const ref = useRef<Group>(null);
-  const { scene } = useGltfLoader(modelSrc);
+  const mixerRef = useRef<AnimationMixer>();
+  const { scene, animations } = useGltfLoader(modelSrc);
 
-  useFrame((state) => {
-    if (ref?.current) {
+  useEffect(() => {
+    if (animations.length && ref.current) {
+      mixerRef.current = new AnimationMixer(scene);
+      const action = mixerRef.current.clipAction(animations[0]);
+      action.play();
+    }
+    return () => {
+      mixerRef.current?.stopAllAction();
+      mixerRef.current?.uncacheRoot(scene);
+    };
+  }, [animations, scene]);
+
+  useFrame((state, delta) => {
+    if (ref.current) {
       ref.current.position.x = 0;
       ref.current.position.z = 0;
       ref.current.rotation.y = state.clock.getElapsedTime() * 0.5;
     }
+    mixerRef.current?.update(delta);
   });
 
   return (

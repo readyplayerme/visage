@@ -15,7 +15,7 @@ export const ExhibitPage = () => (
       lockVertical={false}
       lockHorizontal
       horizontalRotation
-      modelSrc="https://files.readyplayer.dev/asset/modelUrl/04013f17-d197-49b8-9e7e-d782976b0b6f/a26d8ce7-5dcc-4d20-847a-6c8a69c5ed1f-1731509028078.glb"
+      modelSrc="https://files.readyplayer.dev/asset/previewModelUrl/68990f29-d852-447b-a372-d81a997ede97/1c824b9e-2490-44fe-ab98-8d40bcf2e8a1-1746536677903.glb"
     />
   </div>
 );
