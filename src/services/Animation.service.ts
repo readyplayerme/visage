@@ -158,26 +158,28 @@ export const playAssetIdleAnimation = (
       return null;
     }
 
-    const defaultIdleAnimationTrack = idleAnimation.tracks[0];
-    const encodedPropertyPath = defaultIdleAnimationTrack.name;
+    idleAnimation.tracks?.forEach((defaultIdleAnimationTrack) => {
+      const encodedPropertyPath = defaultIdleAnimationTrack.name;
 
-    let assetMixer: AnimationMixer | null = null;
+      let assetMixer: AnimationMixer | null = null;
 
-    const MORPH_TARGET_PROPERTY_SUFFIX = 'morphTargetInfluences';
-    const isMorphTargetAnimation = encodedPropertyPath.endsWith(MORPH_TARGET_PROPERTY_SUFFIX);
-    if (isMorphTargetAnimation) {
-      assetMixer = playMorphTargetAnimation(root, idleAnimation);
-    }
+      const MORPH_TARGET_PROPERTY_SUFFIX = 'morphTargetInfluences';
+      const isMorphTargetAnimation = encodedPropertyPath.endsWith(MORPH_TARGET_PROPERTY_SUFFIX);
+      if (isMorphTargetAnimation) {
+        assetMixer = playMorphTargetAnimation(root, idleAnimation);
+      }
 
-    const MAP_UV_OFFSET_PROPERTY_SUFFIX = 'map.offset';
-    const isMapUvOffsetAnimation = encodedPropertyPath.endsWith(MAP_UV_OFFSET_PROPERTY_SUFFIX);
-    if (isMapUvOffsetAnimation) {
-      assetMixer = playMapUvOffsetAnimation(root, idleAnimation, encodedPropertyPath);
-    }
+      const MAP_UV_OFFSET_PROPERTY_SUFFIX = 'map.offset';
+      const isMapUvOffsetAnimation = encodedPropertyPath.endsWith(MAP_UV_OFFSET_PROPERTY_SUFFIX);
 
-    if (assetMixer) {
-      assetMixers.push(assetMixer);
-    }
+      if (isMapUvOffsetAnimation) {
+        assetMixer = playMapUvOffsetAnimation(root, idleAnimation, encodedPropertyPath);
+      }
+
+      if (assetMixer) {
+        assetMixers.push(assetMixer);
+      }
+    });
   }
 
   return assetMixers;
