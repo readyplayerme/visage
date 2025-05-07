@@ -144,7 +144,7 @@ export const playAssetIdleAnimation = (
     return null;
   }
 
-  const idleAnimations = animations.filter((animation) => animation.name === IDLE_ANIMATION_NAME);
+  const idleAnimations = animations.filter((animation) => animation.name.toLowerCase().includes(IDLE_ANIMATION_NAME));
 
   if (!idleAnimations.length) {
     return null;
