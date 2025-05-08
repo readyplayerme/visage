@@ -62,6 +62,9 @@ export interface ExhibitProps extends CameraProps, EnvironmentProps, Omit<BaseMo
   horizontalRotation?: boolean;
   horizontalRotationStep?: number;
   verticalRotationStep?: number;
+  children?: any;
+  disableInitialLight?: boolean;
+  disableEnvironment?: boolean;
 }
 
 /**
@@ -85,7 +88,10 @@ export const Exhibit: FC<ExhibitProps> = ({
   horizontalRotation,
   lockHorizontal = false,
   horizontalRotationStep,
-  verticalRotationStep
+  verticalRotationStep,
+  children,
+  disableInitialLight,
+  disableEnvironment
 }) => {
   const model = useMemo(() => {
     if (!isValidFormat(modelSrc)) {
@@ -126,8 +132,12 @@ export const Exhibit: FC<ExhibitProps> = ({
   return (
     <BaseCanvas position={position} style={style} className={className}>
       <Suspense fallback={null}>
-        <ambientLight intensity={0.5} />
-        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} shadow-mapSize={[512, 512]} castShadow />
+        {!disableInitialLight && (
+          <>
+            <ambientLight intensity={0.5} />
+            <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} shadow-mapSize={[512, 512]} castShadow />
+          </>
+        )}
         <PresentationControls
           global
           config={{ mass: 2, tension: 500 }}
@@ -144,8 +154,9 @@ export const Exhibit: FC<ExhibitProps> = ({
             </Bounds>
           )}
         </PresentationControls>
+        {children}
         {shadows && <ContactShadows position={[0, -1.0, 0]} opacity={0.75} scale={10} blur={2.6} far={2} />}
-        <Environment environment={environment} />
+        {!disableEnvironment && <Environment environment={environment} />}
       </Suspense>
       {capture && <Capture {...capture} />}
       {style?.background && <BackgroundColor color={style.background as string} />}

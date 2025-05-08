@@ -5,17 +5,17 @@ import { Exhibit } from 'src/components/Exhibit';
 export const ExhibitPage = () => (
   <div style={{ width: '100%', height: '100%', background: '#444' }}>
     <Exhibit
-      scale={2}
+      scale={1}
       environment="hub"
       position={new Vector3(0, 1, 5)}
       fit
       float={false}
       shadows={false}
       snap={false}
-      lockVertical={false}
-      lockHorizontal
+      lockVertical
+      lockHorizontal={false}
       horizontalRotation
-      modelSrc="https://files.readyplayer.dev/asset/modelUrl/04013f17-d197-49b8-9e7e-d782976b0b6f/a26d8ce7-5dcc-4d20-847a-6c8a69c5ed1f-1731509028078.glb"
+      modelSrc="https://files.readyplayer.dev/asset/previewModelUrl/bb715b27-635e-4c09-8ea9-f16a2bc085bf/668009a1-b417-4a1e-90e0-2055775b0abd-1746632664732.glb"
     />
   </div>
 );
