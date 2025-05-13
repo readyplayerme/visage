@@ -62,11 +62,16 @@ export const RotatingModel: FC<RotatingModelProps> = ({
       return mixer;
     }
 
-    const animation = mixer.clipAction(await animationClip);
-    animation.fadeIn(0);
-    animation.play();
+    const mixerAnimationClip = await animationClip;
 
-    mixer.update(0);
+    if (mixerAnimationClip) {
+      const animation = mixer.clipAction(mixerAnimationClip);
+
+      animation.fadeIn(0);
+      animation.play();
+
+      mixer.update(0);
+    }
 
     return mixer;
   }, [animationRunning, animationClip, nodes.Armature]);
