@@ -99,7 +99,7 @@ export const Exhibit: FC<ExhibitProps> = ({
     }
 
     if (float) {
-      return <FloatingModel modelSrc={modelSrc} scale={scale} />;
+      return <FloatingModel modelSrc={modelSrc} scale={scale} onLoaded={onLoaded} />;
     }
 
     if (horizontalRotation) {
@@ -109,14 +109,16 @@ export const Exhibit: FC<ExhibitProps> = ({
           horizontalRotationStep={horizontalRotationStep}
           modelSrc={modelSrc}
           scale={scale}
+          onLoaded={onLoaded}
           lockHorizontal={lockHorizontal}
           lockVertical={lockVertical}
         />
       );
     }
 
-    return <StaticModel modelSrc={modelSrc} scale={scale} />;
+    return <StaticModel modelSrc={modelSrc} scale={scale} onLoaded={onLoaded} />;
   }, [
+    onLoaded,
     float,
     modelSrc,
     scale,

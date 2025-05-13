@@ -4,7 +4,7 @@ import { useThree } from '@react-three/fiber';
 import { normaliseMaterialsConfig, triggerCallback, usePersistantRotation } from 'src/services';
 import { hasWindow } from 'src/services/Client.service';
 import { BaseModelProps } from 'src/types';
-import { Spawn } from '../../Spawn/Spawn';
+import { Spawn } from 'src/components/Spawn/Spawn';
 
 interface ModelProps extends BaseModelProps {
   scene: Group;
