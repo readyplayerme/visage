@@ -1,30 +1,30 @@
-import React, { Suspense, FC, useMemo, CSSProperties, ReactNode, useEffect } from 'react';
-import { AnimationAction, Vector3 } from 'three';
 import { ContactShadows } from '@react-three/drei';
-import { AnimatedCamera } from 'src/components/Scene/AnimatedCamera.component';
-import { CameraControls } from 'src/components/Scene/CameraControls.component';
-import { Environment } from 'src/components/Scene/Environment.component';
-import {
-  BaseModelProps,
-  EnvironmentProps,
-  SpawnState,
-  EffectConfiguration,
-  LightingProps,
-  MaterialConfiguration,
-  AnimationsT,
-  CanvasConfiguration
-} from 'src/types';
-import { BaseCanvas } from 'src/components/BaseCanvas';
-import { AnimationModel, HalfBodyModel, StaticModel, PoseModel, MultipleAnimationModel } from 'src/components/Models';
-import { isValidFormat, triggerCallback } from 'src/services';
 import { Dpr } from '@react-three/fiber';
 import { BrightnessContrast, EffectComposer, HueSaturation, N8AO, Vignette } from '@react-three/postprocessing';
 import { Provider, useSetAtom } from 'jotai';
-import Capture, { CaptureType } from 'src/components/Capture/Capture.component';
-import { Box, Background } from 'src/components/Background/Box/Box.component';
+import React, { CSSProperties, FC, ReactNode, Suspense, useEffect, useMemo } from 'react';
 import { BackgroundColor } from 'src/components/Background';
-import Loader from 'src/components/Loader';
+import { Background, Box } from 'src/components/Background/Box/Box.component';
+import { BaseCanvas } from 'src/components/BaseCanvas';
 import Bloom from 'src/components/Bloom/Bloom.component';
+import Capture, { CaptureType } from 'src/components/Capture/Capture.component';
+import Loader from 'src/components/Loader';
+import { AnimationModel, HalfBodyModel, MultipleAnimationModel, PoseModel, StaticModel } from 'src/components/Models';
+import { AnimatedCamera } from 'src/components/Scene/AnimatedCamera.component';
+import { CameraControls } from 'src/components/Scene/CameraControls.component';
+import { Environment } from 'src/components/Scene/Environment.component';
+import { isValidFormat, triggerCallback } from 'src/services';
+import {
+  AnimationsT,
+  BaseModelProps,
+  CanvasConfiguration,
+  EffectConfiguration,
+  EnvironmentProps,
+  LightingProps,
+  MaterialConfiguration,
+  SpawnState
+} from 'src/types';
+import { AnimationAction, Vector3 } from 'three';
 
 import Lights from 'src/components/Lights/Lights.component';
 import { spawnState } from 'src/state/spawnAtom';
@@ -77,6 +77,16 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
    * Enable rendering shadows on ground.
    */
   shadows?: boolean;
+  /**
+   * Shadow properties. Requires shadows to be enabled.
+   */
+  shadowProperties?: {
+    opacity?: number;
+    scale?: number;
+    blur?: number;
+    far?: number;
+    resolution?: number;
+  }
   /**
    * Size of the rendered GLB model.
    */
@@ -185,6 +195,7 @@ const Avatar: FC<AvatarProps> = ({
   environment = 'soft',
   halfBody = false,
   shadows = false,
+  shadowProperties,
   scale = 1,
   animatedCameraSrc,
   cameraTarget = CAMERA.TARGET.FULL_BODY.MALE,
@@ -363,7 +374,7 @@ const Avatar: FC<AvatarProps> = ({
       {AvatarModel}
       {children}
       {shadows && (
-        <ContactShadows opacity={effects?.ambientOcclusion ? 1.25 : 2} scale={4} blur={2} far={1.0} resolution={256} />
+        <ContactShadows opacity={effects?.ambientOcclusion ? 1.25 : 2} scale={4} blur={2} far={1.0} resolution={256} {...shadowProperties} />
       )}
       {background?.src && <Box {...background} />}
       {capture && <Capture {...capture} />}
