@@ -86,7 +86,7 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
     blur?: number;
     far?: number;
     resolution?: number;
-  }
+  };
   /**
    * Size of the rendered GLB model.
    */
@@ -374,7 +374,14 @@ const Avatar: FC<AvatarProps> = ({
       {AvatarModel}
       {children}
       {shadows && (
-        <ContactShadows opacity={effects?.ambientOcclusion ? 1.25 : 2} blur={2} scale={4} far={1.0} resolution={256} {...shadowProperties} />
+        <ContactShadows
+          opacity={effects?.ambientOcclusion ? 1.25 : 2}
+          blur={2}
+          scale={4}
+          far={1.0}
+          resolution={256}
+          {...shadowProperties}
+        />
       )}
       {background?.src && <Box {...background} />}
       {capture && <Capture {...capture} />}

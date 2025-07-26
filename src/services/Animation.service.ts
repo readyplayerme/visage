@@ -218,7 +218,14 @@ export const useAnimations = (animations: AnimationsT) =>
 
     await Promise.all(
       Object.entries(animations).map(async ([name, { key }]) => {
-        const newClips = await loadAnimationClips(animations[name].source);
+        const animation = animations[name];
+
+        if (!animation?.source) {
+          console.warn(`Could not load animation ${name}`);
+          return;
+        }
+
+        const newClips = await loadAnimationClips(animation.source);
         const newClip = key ? newClips.find((item) => item?.name === key) || newClips[0] : newClips[0];
 
         if (newClip) {

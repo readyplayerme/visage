@@ -199,7 +199,7 @@ export type AnimationsT = Record<
   string,
   {
     key?: string;
-    source: string;
+    source?: string;
     repeat?: number;
     fadeTime?: number;
   }
