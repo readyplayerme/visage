@@ -116,7 +116,8 @@ const disposeGltfScene = (scene: Group<Object3DEventMap>) => {
 export const normaliseMaterialsConfig = (
   scene: Group<Object3DEventMap>,
   bloomConfig?: BloomConfiguration,
-  materialConfig?: MaterialConfiguration
+  materialConfig?: MaterialConfiguration,
+  customCallback?: (material: MeshStandardMaterial) => void
 ) => {
   traverseMaterials(scene, (material: Material) => {
     const mat = material as MeshStandardMaterial;
@@ -131,6 +132,10 @@ export const normaliseMaterialsConfig = (
 
     if (mat.emissiveMap) {
       mat.emissiveIntensity = bloomConfig?.materialIntensity ?? materialConfig?.emissiveIntensity ?? 3.3;
+    }
+
+    if (customCallback) {
+      customCallback(mat);
     }
   });
 };

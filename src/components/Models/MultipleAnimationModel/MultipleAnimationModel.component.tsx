@@ -32,7 +32,11 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
   emotion,
   bloom,
   materialConfig,
-  onAnimationEnd
+  onAnimationEnd,
+  onMeshClick,
+  onMeshHoverStart,
+  onMeshHoverEnd,
+  materialCallback
 }) => {
   const armatureMixerRef = useRef<AnimationMixer | null>(null);
   const assetMixerRef = useRef<Array<AnimationMixer> | null>(null);
@@ -66,7 +70,7 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
       disposeAssetAnimations(assetMixerRef.current, scene);
       assetMixerRef.current = null;
     };
-  }, [scene]);
+  }, [scene, embeddedAnimations]);
 
   useEffect(() => {
     const mixer = armatureMixerRef.current;
@@ -119,5 +123,17 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
   useIdleExpression('blink', scene);
   useFallbackScene(scene, setModelFallback);
 
-  return <Model scene={scene} scale={scale} onLoaded={onLoaded} bloom={bloom} materialConfig={materialConfig} />;
+  return (
+    <Model
+      scene={scene}
+      scale={scale}
+      onLoaded={onLoaded}
+      bloom={bloom}
+      materialConfig={materialConfig}
+      onMeshClick={onMeshClick}
+      onMeshHoverStart={onMeshHoverStart}
+      onMeshHoverEnd={onMeshHoverEnd}
+      materialCallback={materialCallback}
+    />
+  );
 };

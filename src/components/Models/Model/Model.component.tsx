@@ -1,7 +1,7 @@
 import React, { FC, Ref, useEffect, useState, useCallback, useMemo } from 'react';
 import { Group, Mesh } from 'three';
 import { normaliseMaterialsConfig, triggerCallback, usePersistantRotation } from 'src/services';
-import { useThree } from '@react-three/fiber';
+import { ThreeEvent, useThree } from '@react-three/fiber';
 import { hasWindow } from 'src/services/Client.service';
 import { BaseModelProps } from 'src/types';
 import { Spawn } from '../../Spawn/Spawn';
@@ -22,7 +22,11 @@ export const Model: FC<ModelProps> = ({
   onLoaded,
   onSpawnAnimationFinish,
   bloom,
-  materialConfig
+  materialConfig,
+  onMeshClick,
+  onMeshHoverStart,
+  onMeshHoverEnd,
+  materialCallback
 }) => {
   const { gl } = useThree();
   const [isTouching, setIsTouching] = useState(false);
@@ -60,7 +64,7 @@ export const Model: FC<ModelProps> = ({
     [isTouching, touchEvent, scene]
   );
 
-  normaliseMaterialsConfig(scene, bloom, materialConfig);
+  normaliseMaterialsConfig(scene, bloom, materialConfig, materialCallback);
 
   scene.traverse((object) => {
     const node = object;
@@ -70,6 +74,51 @@ export const Model: FC<ModelProps> = ({
       node.receiveShadow = true;
     }
   });
+
+  const onClick = useCallback(
+    (event: ThreeEvent<MouseEvent>) => {
+      if (!onMeshClick) {
+        return;
+      }
+
+      const mesh = event.object as Mesh;
+
+      if (mesh && mesh.isMesh) {
+        onMeshClick(mesh);
+      }
+    },
+    [onMeshClick]
+  );
+
+  const handlePointerEnter = useCallback(
+    (event: ThreeEvent<PointerEvent>) => {
+      if (!onMeshHoverStart) {
+        return;
+      }
+      const mesh = event.object as Mesh;
+
+      if (mesh && mesh.isMesh) {
+        event.stopPropagation();
+        onMeshHoverStart(mesh);
+      }
+    },
+    [onMeshHoverStart]
+  );
+
+  const handlePointerLeave = useCallback(
+    (event: ThreeEvent<PointerEvent>) => {
+      if (!onMeshHoverEnd) {
+        return;
+      }
+      const mesh = event.object as Mesh;
+
+      if (mesh && mesh.isMesh) {
+        event.stopPropagation();
+        onMeshHoverEnd(mesh);
+      }
+    },
+    [onMeshHoverEnd]
+  );
 
   useEffect(() => triggerCallback(onLoaded), [scene, onLoaded]);
 
@@ -101,7 +150,14 @@ export const Model: FC<ModelProps> = ({
   );
 
   return (
-    <group ref={modelRef} dispose={null} rotation={[0, 0, 0]}>
+    <group
+      ref={modelRef}
+      dispose={null}
+      rotation={[0, 0, 0]}
+      onClick={onClick}
+      onPointerEnter={handlePointerEnter}
+      onPointerLeave={handlePointerLeave}
+    >
       <primitive object={scene} scale={scale} />
       {spawnComponent}
     </group>

@@ -241,6 +241,10 @@ export default {
     cameraInitialDistance: { control: { type: 'range', min: 0, max: 2.5, step: 0.01 } },
     onLoaded: { control: false },
     environment: { options: Object.keys(environmentPresets), control: { type: 'select' } },
-    fov: { control: { type: 'range', min: 30, max: 100, step: 1 } }
+    fov: { control: { type: 'range', min: 30, max: 100, step: 1 } },
+    onMeshClick: { control: false },
+    onMeshHoverStart: { control: false },
+    onMeshHoverEnd: { control: false },
+    materialCallback: { control: false }
   }
 };

@@ -1,4 +1,4 @@
-import { Vector3 } from 'three';
+import { Vector3, Mesh, MeshStandardMaterial } from 'three';
 import { PresetsType } from '@react-three/drei/helpers/environment-assets';
 
 export type Required<T> = {
@@ -53,6 +53,22 @@ export interface BaseModelProps {
   setModelFallback?: (fallback: JSX.Element) => void;
   bloom?: BloomConfiguration;
   materialConfig?: MaterialConfiguration;
+  /**
+   * Callback for when a mesh is clicked.
+   */
+  onMeshClick?: (mesh: Mesh) => void;
+  /**
+   * Callback for when a mesh hover starts.
+   */
+  onMeshHoverStart?: (mesh: Mesh) => void;
+  /**
+   * Callback for when a mesh hover ends.
+   */
+  onMeshHoverEnd?: (mesh: Mesh) => void;
+  /**
+   * Callback for processing materials.
+   */
+  materialCallback?: (material: MeshStandardMaterial) => void;
 }
 
 export type HeadBlendShapeType =

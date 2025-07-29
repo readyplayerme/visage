@@ -36,7 +36,11 @@ export const AnimationModel: FC<AnimationModelProps> = ({
   headMovement = false,
   emotion,
   bloom,
-  materialConfig
+  materialConfig,
+  onMeshClick,
+  onMeshHoverStart,
+  onMeshHoverEnd,
+  materialCallback
 }) => {
   const ref = useRef<Group>(null);
   const [animationRunning, setAnimationRunning] = useState(true);
@@ -57,7 +61,7 @@ export const AnimationModel: FC<AnimationModelProps> = ({
 
       assetMixerRef.current = null;
     };
-  }, [scene]);
+  }, [scene, embeddedAnimations]);
 
   const animationClip = useMemo(async () => {
     const clip = await loadAnimationClips(animationSrc);
@@ -108,6 +112,10 @@ export const AnimationModel: FC<AnimationModelProps> = ({
       onSpawnAnimationFinish={onSpawnAnimationFinish}
       bloom={bloom}
       materialConfig={materialConfig}
+      onMeshClick={onMeshClick}
+      onMeshHoverStart={onMeshHoverStart}
+      onMeshHoverEnd={onMeshHoverEnd}
+      materialCallback={materialCallback}
     />
   );
 };
