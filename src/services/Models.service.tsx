@@ -85,6 +85,14 @@ function traverseMaterials(object: Object3D, callback: (material: Material) => v
   });
 }
 
+export function traverseMeshes(object: Object3D, callback: (material: Mesh) => void) {
+  object.traverse((node) => {
+    const mesh = node as Mesh;
+    if (!mesh.geometry || !mesh.isMesh) return;
+    callback(mesh);
+  });
+}
+
 const disposeGltfScene = (scene: Group<Object3DEventMap>) => {
   scene.traverse((node) => {
     if (node instanceof SkinnedMesh && node.skeleton) {

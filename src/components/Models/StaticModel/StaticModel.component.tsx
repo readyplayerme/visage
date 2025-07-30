@@ -21,7 +21,11 @@ export const StaticModel: FC<StaticModelProps> = ({
   onLoaded,
   emotion,
   bloom,
-  materialConfig
+  materialConfig,
+  onMeshClick,
+  onMeshHoverStart,
+  onMeshHoverEnd,
+  meshCallback
 }) => {
   const { scene } = useGltfLoader(modelSrc);
   const { nodes } = useGraph(scene);
@@ -37,6 +41,10 @@ export const StaticModel: FC<StaticModelProps> = ({
       onLoaded={onLoaded}
       bloom={bloom}
       materialConfig={materialConfig}
+      onMeshClick={onMeshClick}
+      onMeshHoverStart={onMeshHoverStart}
+      onMeshHoverEnd={onMeshHoverEnd}
+      meshCallback={meshCallback}
     />
   );
 };

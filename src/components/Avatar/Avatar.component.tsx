@@ -24,7 +24,7 @@ import {
   MaterialConfiguration,
   SpawnState
 } from 'src/types';
-import { AnimationAction, Vector3 } from 'three';
+import { AnimationAction, Vector3, Mesh } from 'three';
 
 import Lights from 'src/components/Lights/Lights.component';
 import { spawnState } from 'src/state/spawnAtom';
@@ -179,6 +179,22 @@ export interface AvatarProps extends LightingProps, EnvironmentProps, Omit<BaseM
    */
   canvasConfig?: CanvasConfiguration;
   animatedCameraSrc?: string;
+  /**
+   * Callback for when a mesh is clicked.
+   */
+  onMeshClick?: (mesh: Mesh) => void;
+  /**
+   * Callback for when a mesh hover starts.
+   */
+  onMeshHoverStart?: (mesh: Mesh) => void;
+  /**
+   * Callback for when a mesh hover ends.
+   */
+  onMeshHoverEnd?: (mesh: Mesh) => void;
+  /**
+   * Callback for processing meshes on model load.
+   */
+  meshCallback?: (mesh: Mesh) => void;
 }
 
 /**
@@ -229,7 +245,11 @@ const Avatar: FC<AvatarProps> = ({
   materialConfig,
   controlsMinDistance,
   controlsMaxDistance,
-  canvasConfig
+  canvasConfig,
+  onMeshClick,
+  onMeshHoverStart,
+  onMeshHoverEnd,
+  meshCallback
 }) => {
   const setSpawnState = useSetAtom(spawnState);
 
@@ -254,6 +274,10 @@ const Avatar: FC<AvatarProps> = ({
           bloom={effects?.bloom}
           onAnimationEnd={onAnimationEnd}
           materialConfig={materialConfig}
+          onMeshClick={onMeshClick}
+          onMeshHoverStart={onMeshHoverStart}
+          onMeshHoverEnd={onMeshHoverEnd}
+          meshCallback={meshCallback}
         />
       );
     }
@@ -270,6 +294,10 @@ const Avatar: FC<AvatarProps> = ({
           headMovement={headMovement}
           bloom={effects?.bloom}
           materialConfig={materialConfig}
+          onMeshClick={onMeshClick}
+          onMeshHoverStart={onMeshHoverStart}
+          onMeshHoverEnd={onMeshHoverEnd}
+          meshCallback={meshCallback}
         />
       );
     }
@@ -285,6 +313,10 @@ const Avatar: FC<AvatarProps> = ({
           headMovement={headMovement}
           bloom={effects?.bloom}
           materialConfig={materialConfig}
+          onMeshClick={onMeshClick}
+          onMeshHoverStart={onMeshHoverStart}
+          onMeshHoverEnd={onMeshHoverEnd}
+          meshCallback={meshCallback}
         />
       );
     }
@@ -299,6 +331,10 @@ const Avatar: FC<AvatarProps> = ({
           onLoaded={onLoaded}
           bloom={effects?.bloom}
           materialConfig={materialConfig}
+          onMeshClick={onMeshClick}
+          onMeshHoverStart={onMeshHoverStart}
+          onMeshHoverEnd={onMeshHoverEnd}
+          meshCallback={meshCallback}
         />
       );
     }
@@ -311,6 +347,10 @@ const Avatar: FC<AvatarProps> = ({
         emotion={emotion}
         bloom={effects?.bloom}
         materialConfig={materialConfig}
+        onMeshClick={onMeshClick}
+        onMeshHoverStart={onMeshHoverStart}
+        onMeshHoverEnd={onMeshHoverEnd}
+        meshCallback={meshCallback}
       />
     );
   }, [
@@ -327,7 +367,11 @@ const Avatar: FC<AvatarProps> = ({
     materialConfig,
     onAnimationEnd,
     idleRotation,
-    headMovement
+    headMovement,
+    onMeshClick,
+    onMeshHoverStart,
+    onMeshHoverEnd,
+    meshCallback
   ]);
 
   useEffect(() => triggerCallback(onLoading), [modelSrc, animationSrc, onLoading]);

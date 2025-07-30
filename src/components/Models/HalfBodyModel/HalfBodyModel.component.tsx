@@ -27,7 +27,11 @@ export const HalfBodyModel: FC<HalfBodyModelProps> = ({
   onLoaded,
   headMovement = false,
   bloom,
-  materialConfig
+  materialConfig,
+  onMeshClick,
+  onMeshHoverStart,
+  onMeshHoverEnd,
+  meshCallback
 }) => {
   const ref = useRef<Group>(null);
   const { scene } = useGltfLoader(modelSrc);
@@ -72,6 +76,10 @@ export const HalfBodyModel: FC<HalfBodyModelProps> = ({
       onLoaded={onLoaded}
       bloom={bloom}
       materialConfig={materialConfig}
+      onMeshClick={onMeshClick}
+      onMeshHoverStart={onMeshHoverStart}
+      onMeshHoverEnd={onMeshHoverEnd}
+      meshCallback={meshCallback}
     />
   );
 };
