@@ -1,6 +1,6 @@
 import React, { FC, Ref, useEffect, useState, useCallback, useMemo } from 'react';
 import { Group, Mesh } from 'three';
-import { normaliseMaterialsConfig, triggerCallback, usePersistantRotation } from 'src/services';
+import { normaliseMaterialsConfig, traverseMeshes, triggerCallback, usePersistantRotation } from 'src/services';
 import { ThreeEvent, useThree } from '@react-three/fiber';
 import { hasWindow } from 'src/services/Client.service';
 import { BaseModelProps } from 'src/types';
@@ -26,7 +26,7 @@ export const Model: FC<ModelProps> = ({
   onMeshClick,
   onMeshHoverStart,
   onMeshHoverEnd,
-  materialCallback
+  meshCallback
 }) => {
   const { gl } = useThree();
   const [isTouching, setIsTouching] = useState(false);
@@ -64,7 +64,7 @@ export const Model: FC<ModelProps> = ({
     [isTouching, touchEvent, scene]
   );
 
-  normaliseMaterialsConfig(scene, bloom, materialConfig, materialCallback);
+  normaliseMaterialsConfig(scene, bloom, materialConfig);
 
   scene.traverse((object) => {
     const node = object;
@@ -74,6 +74,10 @@ export const Model: FC<ModelProps> = ({
       node.receiveShadow = true;
     }
   });
+
+  if (meshCallback) {
+    traverseMeshes(scene, meshCallback);
+  }
 
   const onClick = useCallback(
     (event: ThreeEvent<MouseEvent>) => {

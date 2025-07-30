@@ -18,7 +18,7 @@ export const FloatingModel: FC<FloatingModelProps> = ({
   onMeshClick,
   onMeshHoverStart,
   onMeshHoverEnd,
-  materialCallback
+  meshCallback
 }) => {
   const ref = useRef<Group>(null);
   const { scene } = useGltfLoader(modelSrc);
@@ -42,7 +42,7 @@ export const FloatingModel: FC<FloatingModelProps> = ({
       onMeshClick={onMeshClick}
       onMeshHoverStart={onMeshHoverStart}
       onMeshHoverEnd={onMeshHoverEnd}
-      materialCallback={materialCallback}
+      meshCallback={meshCallback}
     />
   );
 };

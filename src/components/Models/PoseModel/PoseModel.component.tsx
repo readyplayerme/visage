@@ -27,7 +27,7 @@ export const PoseModel: FC<PoseModelProps> = ({
   onMeshClick,
   onMeshHoverStart,
   onMeshHoverEnd,
-  materialCallback
+  meshCallback
 }) => {
   const { scene } = useGltfLoader(modelSrc);
   const { nodes } = useGraph(scene);
@@ -49,7 +49,7 @@ export const PoseModel: FC<PoseModelProps> = ({
       onMeshClick={onMeshClick}
       onMeshHoverStart={onMeshHoverStart}
       onMeshHoverEnd={onMeshHoverEnd}
-      materialCallback={materialCallback}
+      meshCallback={meshCallback}
     />
   );
 };

@@ -25,7 +25,7 @@ export const StaticModel: FC<StaticModelProps> = ({
   onMeshClick,
   onMeshHoverStart,
   onMeshHoverEnd,
-  materialCallback
+  meshCallback
 }) => {
   const { scene } = useGltfLoader(modelSrc);
   const { nodes } = useGraph(scene);
@@ -44,7 +44,7 @@ export const StaticModel: FC<StaticModelProps> = ({
       onMeshClick={onMeshClick}
       onMeshHoverStart={onMeshHoverStart}
       onMeshHoverEnd={onMeshHoverEnd}
-      materialCallback={materialCallback}
+      meshCallback={meshCallback}
     />
   );
 };

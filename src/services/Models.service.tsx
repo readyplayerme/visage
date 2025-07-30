@@ -85,6 +85,14 @@ function traverseMaterials(object: Object3D, callback: (material: Material) => v
   });
 }
 
+export function traverseMeshes(object: Object3D, callback: (material: Mesh) => void) {
+  object.traverse((node) => {
+    const mesh = node as Mesh;
+    if (!mesh.geometry || !mesh.isMesh) return;
+    callback(mesh);
+  });
+}
+
 const disposeGltfScene = (scene: Group<Object3DEventMap>) => {
   scene.traverse((node) => {
     if (node instanceof SkinnedMesh && node.skeleton) {
@@ -116,8 +124,7 @@ const disposeGltfScene = (scene: Group<Object3DEventMap>) => {
 export const normaliseMaterialsConfig = (
   scene: Group<Object3DEventMap>,
   bloomConfig?: BloomConfiguration,
-  materialConfig?: MaterialConfiguration,
-  customCallback?: (material: MeshStandardMaterial) => void
+  materialConfig?: MaterialConfiguration
 ) => {
   traverseMaterials(scene, (material: Material) => {
     const mat = material as MeshStandardMaterial;
@@ -132,10 +139,6 @@ export const normaliseMaterialsConfig = (
 
     if (mat.emissiveMap) {
       mat.emissiveIntensity = bloomConfig?.materialIntensity ?? materialConfig?.emissiveIntensity ?? 3.3;
-    }
-
-    if (customCallback) {
-      customCallback(mat);
     }
   });
 };

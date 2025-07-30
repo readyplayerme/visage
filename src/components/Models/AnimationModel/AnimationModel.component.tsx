@@ -40,7 +40,7 @@ export const AnimationModel: FC<AnimationModelProps> = ({
   onMeshClick,
   onMeshHoverStart,
   onMeshHoverEnd,
-  materialCallback
+  meshCallback
 }) => {
   const ref = useRef<Group>(null);
   const [animationRunning, setAnimationRunning] = useState(true);
@@ -115,7 +115,7 @@ export const AnimationModel: FC<AnimationModelProps> = ({
       onMeshClick={onMeshClick}
       onMeshHoverStart={onMeshHoverStart}
       onMeshHoverEnd={onMeshHoverEnd}
-      materialCallback={materialCallback}
+      meshCallback={meshCallback}
     />
   );
 };

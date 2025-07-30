@@ -36,7 +36,7 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
   onMeshClick,
   onMeshHoverStart,
   onMeshHoverEnd,
-  materialCallback
+  meshCallback
 }) => {
   const armatureMixerRef = useRef<AnimationMixer | null>(null);
   const assetMixerRef = useRef<Array<AnimationMixer> | null>(null);
@@ -133,7 +133,7 @@ export const MultipleAnimationModel: FC<MultipleAnimationModelProps> = ({
       onMeshClick={onMeshClick}
       onMeshHoverStart={onMeshHoverStart}
       onMeshHoverEnd={onMeshHoverEnd}
-      materialCallback={materialCallback}
+      meshCallback={meshCallback}
     />
   );
 };

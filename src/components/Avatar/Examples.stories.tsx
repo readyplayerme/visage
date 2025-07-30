@@ -164,18 +164,19 @@ export const MouseActions: StoryFn<typeof Avatar> = (args) => {
     console.log('Clicked mesh:', mesh);
   };
 
-  const dimClothMaterials = (material: MeshStandardMaterial) => {
-    const materialWhitelist = ['Wolf3D_Outfit_Top', 'Wolf3D_Outfit_Bottom', 'Wolf3D_Hair', 'Wolf3D_Outfit_Footwear'];
+  const dimClothMaterials = (mesh: Mesh) => {
+    const meshWhitelist = ['Wolf3D_Outfit_Top', 'Wolf3D_Outfit_Bottom', 'Wolf3D_Hair', 'Wolf3D_Outfit_Footwear'];
 
-    if (!materialWhitelist.includes(material.name)) {
+    if (!meshWhitelist.includes(mesh.name)) {
       return;
     }
 
+    const material = mesh.material as MeshStandardMaterial;
     material.color.setHex(0x404040);
-    // eslint-disable-next-line no-param-reassign
     material.roughness = 0.8;
-    // eslint-disable-next-line no-param-reassign
     material.metalness = 0.1;
+    material.emissive.setHex(0xffffff);
+    material.emissiveIntensity = 0.1;
   };
 
   const onMeshHoverStart = useCallback(
@@ -217,7 +218,7 @@ export const MouseActions: StoryFn<typeof Avatar> = (args) => {
     <Avatar
       {...args}
       onMeshClick={handleModelClick}
-      materialCallback={dimClothMaterials}
+      meshCallback={dimClothMaterials}
       onMeshHoverStart={onMeshHoverStart}
       onMeshHoverEnd={onMeshHoverEnd}
     />

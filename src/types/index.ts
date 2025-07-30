@@ -1,4 +1,4 @@
-import { Vector3, Mesh, MeshStandardMaterial } from 'three';
+import { Vector3, Mesh } from 'three';
 import { PresetsType } from '@react-three/drei/helpers/environment-assets';
 
 export type Required<T> = {
@@ -66,9 +66,9 @@ export interface BaseModelProps {
    */
   onMeshHoverEnd?: (mesh: Mesh) => void;
   /**
-   * Callback for processing materials.
+   * Callback for processing meshes on model load.
    */
-  materialCallback?: (material: MeshStandardMaterial) => void;
+  meshCallback?: (material: Mesh) => void;
 }
 
 export type HeadBlendShapeType =

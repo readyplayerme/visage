@@ -245,6 +245,6 @@ export default {
     onMeshClick: { control: false },
     onMeshHoverStart: { control: false },
     onMeshHoverEnd: { control: false },
-    materialCallback: { control: false }
+    meshCallback: { control: false }
   }
 };
